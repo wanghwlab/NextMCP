@@ -7,35 +7,34 @@ server:
   reload_config_interval_seconds: 1.0
 
 auth:
-  enabled: true
+  enabled: false
   bearer_token: "replace-with-a-long-random-secret"
 
 paths:
   allowed_read_roots:
-    - /data
-    - /refs
+    - /srv/nextmcp
+    - /srv/data
+    - /srv/references
   allowed_write_roots:
-    - /data/nextmcp
-    - /data/analysis
+    - /srv/analysis
 
 state:
-  db_path: /data/nextmcp/state/processes.db
+  db_path: /srv/nextmcp/state/processes.db
 
 projects:
-  root: /data/nextmcp/projects
+  root: /srv/nextmcp/projects
 
 audit:
-  file_path: /data/nextmcp/logs/audit.log
+  file_path: /srv/nextmcp/logs/audit.log
   max_bytes: 5242880
   backup_count: 3
 
 nextflow:
   executable: /absolute/path/to/conda/envs/nextmcp/bin/nextflow
-  pipeline_roots: []
+  pipeline_roots:: []
   default_profile: docker
-  igenomes_ignore: false
   expose_pipeline_materials: false
   env:
-    NXF_HOME: /data/nextmcp/.nextflow
+    NXF_HOME: /srv/nextmcp/.nextflow
     NXF_OFFLINE: "false"
     NXF_VER: "25.10.2"
