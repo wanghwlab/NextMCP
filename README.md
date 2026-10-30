@@ -1,8 +1,8 @@
 # NextMCP
 
-**Run existing Nextflow workflows through MCP, with pipeline-specific expert skills.**
+**An agent-oriented framework built on the Model Context Protocol that separates pipeline-agnostic execution control from pipeline-specific expertise.**
 
-NextMCP connects an AI agent on a client computer to Nextflow on an analysis server.
+NextMCP connects an AI agent on a client computer to a controlled Nextflow execution interface on an analysis server.
 The server provides a common execution layer for preparing launches, tracking runs,
 inspecting outputs, and recovering from failures. Client-side expert skills guide
 pipeline-specific input selection, parameter choices, quality control, and troubleshooting.
@@ -15,10 +15,7 @@ pipeline-specific input selection, parameter choices, quality control, and troub
 
 ![NextMCP architecture: client-side skill authoring and execution, server-side Nextflow tools, and a separate evaluation procedure.](Img/nextmcp-overview.jpeg)
 
-*Expert skills guide the executing agent; MCP tools perform operations on the server.
-The upper authoring path illustrates optional inspection of local pipeline materials.
-Skills can also be authored from a separately obtained versioned checkout. The lower
-panel describes evaluation, not a prerequisite for ordinary analysis.*
+*The upper panel illustrates the client–server architecture, comprising a pipeline-agnostic execution layer for Nextflow and client-side expert skills. An authoring agent retrieves pipeline source materials through the execution layer to generate pipeline-specific expert skills, which guide the runtime agent in configuring and executing existing pipelines. The execution layer provides controlled pipeline inspection, workflow preparation, launching, monitoring and resumption, together with restricted filesystem access and persistent project-level run records. The lower panel illustrates the evaluation workflow used in this study. An evaluation-preparation agent derives visible task prompts and hidden evaluation specifications from pipeline repository materials. Visible prompts were provided to the runtime agent, whereas hidden specifications were withheld from it and used by the evaluator after execution. A separate evaluation agent assesses saved run evidence against predefined criteria for task-to-configuration fidelity, execution completion and required-output presence. Skill authoring and evaluation are performed separately from runtime workflow execution.*
 
 ## What NextMCP provides
 
@@ -38,7 +35,7 @@ selection, and scientific interpretation remain deployment or user responsibilit
 | Location | Components | Role |
 | --- | --- | --- |
 | Analysis server, normally Linux | NextMCP, Nextflow, Java, container runtime, inputs and references | Execute workflows and store run records, logs, and results |
-| Client computer | Codex or Claude Code, selected expert skills | Interpret requests and call MCP tools |
+| Client computer | Codex or Claude Code, expert skills | Interpret requests and call MCP tools |
 | SSH connection, when needed | Local port forwarding | Reach a server bound to loopback |
 
 Installing a client skill does not install a pipeline on the server. Nextflow resolves
@@ -52,29 +49,27 @@ Use Linux with Conda, Git, and a container runtime supported by the selected pip
 This example uses Java 21 and Nextflow 25.10.2:
 
 ```bash
-conda create -y -n nextmcp -c conda-forge -c bioconda \
-  python=3.12 openjdk=21 nextflow=25.10.2
+# Set Up the Environment
+conda create -y -n nextmcp -c conda-forge -c bioconda python=3.12 openjdk=21 nextflow=25.10.2
+# Activate Environment
 conda activate nextmcp
+# Install UV
 python -m pip install uv
-
+# Verify Tools
 java -version
 nextflow -version
 command -v nextflow
 ```
 
-This installation example uses Python 3.12; the package declares Python >=3.10. Validate other versions before deployment. Check each pipeline release's Nextflow
-requirements: this example is not a compatibility guarantee for every pipeline. See the
+See the
 [Nextflow installation documentation](https://docs.seqera.io/nextflow/install).
 
-Docker must already be installed and usable by the account running the service for the
-Docker configuration below:
-
 ```bash
+# Verify that Docker is installed and ready to use
 docker info
 ```
 
-If using Apptainer, arrange installation with the system administrator and select the
-pipeline's documented compatible profile. Installing Apptainer alone does not make a Docker
+Installing Apptainer alone does not make a Docker
 profile work. The nf-core CLI is optional; NextMCP does not require it to launch workflows.
 
 ### 2. Install NextMCP
@@ -181,9 +176,11 @@ After replacing paths, create the corresponding writable directories. For this e
 
 ```bash
 mkdir -p /srv/nextmcp/state /srv/nextmcp/projects /srv/nextmcp/logs /srv/nextmcp/.nextflow
-chmod 600 config/config.yaml
+# Validate config only
 uv run nextmcp --config config/config.yaml --check-config
+# Print effective config with secrets redacted
 uv run nextmcp --config config/config.yaml --dump-config
+# Run
 uv run nextmcp --config config/config.yaml
 ```
 
@@ -584,24 +581,6 @@ execution; test and authoring dependencies must be handled separately.
 
 Usage and maintenance instructions are maintained in this README and the READMEs under
 skills/experts, skills/meta, and tests, with configuration details in config/README.md.
-
-## Troubleshooting
-
-| Symptom | Check |
-| --- | --- |
-| Connection refused | Server process, effective port, and still-running SSH tunnel |
-| SSH authentication failed | Server credentials or SSH key; the MCP token does not authenticate SSH |
-| HTTP 401 | `NEXTMCP_TOKEN` matches the server token and is visible to the client process |
-| Server listed but tools fail | Make a real `server_info` call; registration is not a connection test |
-| Client command not recognized | Install the client, reopen the terminal, and check PATH |
-| PowerShell blocks a script helper | Use the direct commands above; no helper script is required |
-| Local catalogue is empty | Expected with empty `pipeline_roots`; use a remote identifier and release |
-| Preparation succeeds but launch fails | Inspect runtime, container, plugin, input, and reference errors |
-| A skill is missing | Check the client skill directory and package layout, then open a new session |
-
-Further reading: [expert packages and evaluations](skills/experts/README.md),
-[skill authoring and test helpers](skills/meta/README.md), and
-[software tests and workflow task definitions](tests/README.md).
 
 ## License
 
