@@ -1,0 +1,129 @@
+group:
+  id: reproducibility_options
+  label: Reproducibility options
+  selection_rule: Use this group for parameters defined under the `Reproducibility
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/reproducibility_options.md
+  - assets/schema-groups/reproducibility_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `reproducibility_options` for exact lookup.
+parameters:
+- group_id: reproducibility_options
+  name: megahit_fix_cpu_1
+  source_name: megahit_fix_cpu_1
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Fix number of CPUs for MEGAHIT to 1. Not increased with retries.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reproducibility options
+  raw_schema:
+    type: boolean
+    description: Fix number of CPUs for MEGAHIT to 1. Not increased with retries.
+    help_text: "MEGAHIT only generates reproducible results when run single-threaded.\
+      \ \n\nWhen using this parameter do not change the number of CPUs for the `megahit`\
+      \ process with a custom config file. This would result in an error.\n\nDefault:\
+      \ The number of CPUs is specified in the `base.config` file, and increased with\
+      \ each retry."
+- group_id: reproducibility_options
+  name: metabat_rng_seed
+  source_name: metabat_rng_seed
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: RNG seed for MetaBAT2.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reproducibility options
+  raw_schema:
+    type: integer
+    default: 1
+    description: RNG seed for MetaBAT2.
+    help_text: MetaBAT2 is run by default with a fixed seed within this pipeline,
+      thus producing reproducible results. You can set it also to any other positive
+      integer to ensure reproducibility. Set the parameter to 0 to use a random seed.
+- group_id: reproducibility_options
+  name: spades_fix_cpus
+  source_name: spades_fix_cpus
+  type: integer
+  required: false
+  default: -1
+  enum: null
+  description: Fix number of CPUs used by SPAdes. Not increased with retries.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - -1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reproducibility options
+  raw_schema:
+    type: integer
+    default: -1
+    description: Fix number of CPUs used by SPAdes. Not increased with retries.
+    help_text: 'SPAdes is designed to be deterministic for a given number of threads.
+      To generate reproducible results fix the number of CPUs using this parameter.
+
+
+      When using this parameter do not change the number of CPUs for the `spades`
+      process with a custom config file. This would result in an error.
+
+
+      Default: -1 (the number of CPUs is specified in the `base.config` or in a custom
+      config file, and increased with each retry).'
+- group_id: reproducibility_options
+  name: spadeshybrid_fix_cpus
+  source_name: spadeshybrid_fix_cpus
+  type: integer
+  required: false
+  default: -1
+  enum: null
+  description: Fix number of CPUs used by SPAdes hybrid. Not increased with retries.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - -1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reproducibility options
+  raw_schema:
+    type: integer
+    default: -1
+    description: Fix number of CPUs used by SPAdes hybrid. Not increased with retries.
+    help_text: 'SPAdes is designed to be deterministic for a given number of threads.
+      To generate reproducible results fix the number of CPUs using this parameter.
+
+
+      When using this parameter do not change the number of CPUs for the `spadeshybrid`
+      process with a custom config file. This would result in an error.
+
+
+      Default: -1 (the number of CPUs is specified in the `base.config` or in a custom
+      config file, and increased with each retry).'

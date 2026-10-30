@@ -1,0 +1,65 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","diagnosis","artifact_summary"])
+    good_signal: Run succeeded and artifact_summary lists MultiQC plus route-specific result sections.
+    bad_signal: Run failed, stalled, or reports a blocking diagnosis.
+    action: Check diagnosis and next_actions first, then inspect run_logs or explicit files named by the summary.
+
+  - id: samplesheet_and_paths
+    severity: high
+    source: prepare result or run diagnosis
+    good_signal: input, outdir, FASTQ files, FASTA, index paths, and target BED paths resolve on the nextmcp server filesystem.
+    bad_signal: Missing samplesheet, unexpanded client-local path, missing FASTQ, missing index, or missing target_regions_file.
+    action: Use fs_list(mode="manifest") on the concrete server-local path and correct params before launch.
+
+  - id: reference_index
+    severity: high
+    source: run diagnosis, alignment logs, or pipeline_info/params.json
+    good_signal: >-
+      The selected aligner has the matching reference inputs: bismark_index,
+      bwameth_index, bwamem_index, fasta, and fasta_index as required.
+    bad_signal: BWA-Meth or BWA-MEM route lacks fasta_index, Bismark route lacks bismark_index or buildable fasta, or a generated reference was not saved when reuse was expected.
+    action: Confirm reference params and use save_reference when building an index that should be reused.
+
+  - id: route_compatibility
+    severity: high
+    source: params and workflow route
+    good_signal: aligner, taps, special library flags, and targeted sequencing switches describe one supported route.
+    bad_signal: run_targeted_sequencing with taps or aligner=bwamem, slamseq without bismark_hisat, or TAPS requested with a non-bwamem route.
+    action: Switch to a compatible playbook before launch.
+
+  - id: raw_and_trimmed_read_qc
+    severity: medium
+    source: multiqc report and fastqc/trimgalore outputs
+    good_signal: FastQC and TrimGalore sections show expected read counts, acceptable quality, and adapter removal.
+    bad_signal: Strong adapter contamination after trimming, severe read loss, or unexpected single/paired-end layout.
+    action: Review trimming presets, skip_trimming_presets, clip_r1/clip_r2, length_trim, and samplesheet columns.
+
+  - id: alignment_and_deduplication
+    severity: high
+    source: aligner logs, samtools stats, Picard metrics, and MultiQC
+    good_signal: Alignment rate and duplicate metrics match the assay and expected library complexity.
+    bad_signal: Low alignment rate, very high duplicate rate outside RRBS expectations, missing BAM index, or failed duplicate marking.
+    action: Check reference choice, aligner selection, special library flags, and whether rrbs or skip_deduplication intentionally changed deduplication.
+
+  - id: methylation_calling
+    severity: high
+    source: bismark/methylation_calls, methyldackel, rastair, and M-bias outputs
+    good_signal: Route-specific methylation call files and M-bias files are present.
+    bad_signal: Missing bedGraph or call files, unexpected contexts, or strong M-bias patterns.
+    action: Check all_contexts, cytosine_report, comprehensive, methyl_kit, nomeseq, and route-specific caller outputs.
+
+  - id: targeted_metrics
+    severity: medium
+    source: targeted bedGraph and enrichment_metrics
+    good_signal: Targeted bedGraph files and optional CollectHsMetrics files are present when requested.
+    bad_signal: Missing target_regions_file, absent targeted bedGraph, or missing enrichment metrics when collecthsmetrics was requested.
+    action: Confirm target_regions_file and collecthsmetrics; do not use targeted mode with TAPS or aligner=bwamem.
+
+  - id: historical_reuse
+    severity: medium
+    source: run_get(include=["artifact_summary"]) and run_artifacts(...)
+    good_signal: artifacts.json, pipeline_fingerprint, and pipeline_info/params.json support the same route and reference setup.
+    bad_signal: Artifact fragment matches a run with a different aligner, TAPS state, targeted state, or reference.
+    action: Treat artifacts.json and pipeline_fingerprint as facts, then confirm compatibility through params.json before reuse.

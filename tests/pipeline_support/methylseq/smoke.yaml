@@ -1,0 +1,171 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: methylseq
+case_id: smoke
+description: >-
+  Minimal end-to-end MCP smoke test for methylseq using the default Bismark
+  route from the repository test profile.
+mode: profile-only
+
+source_profile:
+  profile: test
+  config: conf/test.config
+  source_files:
+    - nextflow.config
+    - conf/test.config
+    - assets/samplesheet.csv
+    - tests/default.nf.test
+    - tests/default.nf.test.snap
+    - tests/.nftignore
+  rationale: >-
+    `nextflow.config` exposes `conf/test.config` under the `test` profile,
+    `conf/test.config` plus the repo `assets/samplesheet.csv` define the full
+    default Bismark route, and `tests/default.nf.test` only adds the temporary
+    `outdir` used by nf-test for the canonical `-profile test` case.
+
+classification:
+  primary_mode: profile-only
+  modifiers:
+    - localize-remote-inputs
+    - snapshot-rich
+  evidence:
+    - >-
+      `nextflow.config` includes `conf/test.config` under the `test` profile,
+      so the canonical lightweight route is already visible in the normal
+      runtime config chain.
+    - >-
+      `conf/test.config` sets the concrete repo samplesheet path plus remote
+      `fasta` and `fasta_index` values, while the selected route keeps the
+      default `bismark` aligner from `nextflow.config`.
+    - >-
+      The repo `assets/samplesheet.csv` contains four nested remote FASTQ URLs,
+      so localization must copy and rewrite that manifest before the run.
+    - >-
+      `tests/default.nf.test` only adds the temporary `outdir` for the
+      canonical `-profile test` case and does not add any extra route-shaping
+      params.
+    - >-
+      `tests/default.nf.test.snap` and `tests/.nftignore` provide enough
+      stable output evidence to keep artifact assertions compact.
+  next_action: localize inputs first
+
+local_data_contract:
+  profile_name: test
+  localized_root: /data/nextmcp/testdata/methylseq/test
+  path_layout_rule: >-
+    copy_repo_samplesheet_then_rewrite_nested_fastq_urls_and_prefix_map_remote_references
+  rewritten_manifests:
+    - role: input_samplesheet
+      original_name: samplesheet.csv
+      localized_name: samplesheet_local.csv
+      expected_path: /data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv
+
+launch:
+  pipeline: methylseq
+  project: pipeline-support-methylseq
+  run_name: smoke
+  inputs:
+    input: /data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv
+    fasta: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz
+    fasta_index: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai
+  params:
+    aligner: bismark
+  config_files:
+    - /data/nextmcp/testdata/methylseq/test/project-files/pipeline-support-methylseq/profile_test_overrides.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/methylseq/test/project-files/pipeline-support-methylseq/profile_test_overrides.config
+      content: |
+        process {
+            resourceLimits = [
+                cpus: 4,
+                memory: '15.GB',
+                time: '1.h'
+            ]
+        }
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - Start with `nextflow_run(prepare=true)` before the real launch.
+    - Omit `profile` and rely on explicit inputs, scalar params, and one small override config.
+    - Keep the upstream `process.resourceLimits` in config scope instead of nextflow_run params.
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    required_paths:
+      - /data/nextmcp/testdata/methylseq/test/repo-assets/assets/samplesheet.csv
+      - /data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub1.fastq.gz
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub2.fastq.gz
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub3.fastq.gz
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/Ecoli_10K_methylated_R1.fastq.gz
+      - /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/Ecoli_10K_methylated_R2.fastq.gz
+  run:
+    ok: true
+    final_status: succeeded
+  observability:
+    process_get_status: succeeded
+    required_log_streams:
+      - nextflow
+  artifacts:
+    required_paths:
+      - bismark/deduplicated/Ecoli_10K_methylated.deduplicated.sorted.bam
+      - bismark/deduplicated/SRR389222_sub1.deduplicated.sorted.bam
+      - bismark/methylation_calls/methylation_coverage/SRR389222_sub1_trimmed_bismark_bt2.deduplicated.bismark.cov.gz
+      - bismark/summary/bismark_summary_report.html
+      - multiqc/bismark/multiqc_report.html
+      - multiqc/bismark/multiqc_data/multiqc_bismark_alignment.txt
+      - pipeline_info/nf_core_methylseq_software_mqc_versions.yml
+      - pipeline_info/nf_core_methylseq_topic_versions.yml
+    content_checks:
+      - path: bismark/methylation_calls/methylation_coverage/SRR389222_sub1_trimmed_bismark_bt2.deduplicated.bismark.cov.gz
+        kind: gunzip_md5
+        expected: 5377d9fff4f1bf5b98dc2310fbeb6ec9
+      - path: multiqc/bismark/multiqc_data/multiqc_bismark_alignment.txt
+        kind: md5
+        expected: 8ee2e88d6b5c1411b4665b02f82ae1b7
+      - path: multiqc/bismark/multiqc_data/multiqc_cutadapt.txt
+        kind: md5
+        expected: 883891ac4901385102be053212068732
+
+prompt_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `methylseq` lightweight example in project
+  `pipeline-withskill-methylseq`. Use the rewritten samplesheet, the local genome
+  FASTA and FASTA index, and the server-local FASTQ files referenced by the
+  samplesheet. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv`
+  - Genome FASTA: `/data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz`
+  - Genome FASTA index: `/data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai`
+  - FASTQ bundle root: `/data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata`
+  
+  ## Workflow goal
+  
+  - Run the upstream lightweight methylation-analysis route represented by the rewritten samplesheet.
+  - Keep the provided mix of single-end reads and paired-end methylated control reads.
+  - Use the listed local genome FASTA and FASTA index instead of genome lookup or igenomes lookup.
+  - Keep the default Bismark alignment, deduplication, methylation extraction, FastQC, and MultiQC
+    behavior.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/methylseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-methylseq` as project name.
+  - Do not use the `methylseq` expert skill.
+prompt_brief_path: tests/pipeline_support/methylseq/smoke.task.md
+blockers: []

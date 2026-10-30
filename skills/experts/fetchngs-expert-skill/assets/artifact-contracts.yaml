@@ -1,0 +1,46 @@
+artifacts:
+- id: fastq_reads
+  path: fastq/*.fastq.gz
+  produced_when: skip_fastq_download is false and records are downloaded by FTP, Aspera, or sratools.
+  meaning: Downloaded single-end or paired-end FASTQ files for downstream pipelines.
+- id: fastq_md5
+  path: fastq/md5/*.md5
+  produced_when: FTP or Aspera downloads provide md5 checks.
+  meaning: Checksum files used to confirm downloaded FASTQ integrity.
+- id: samplesheet
+  path: samplesheet/samplesheet.csv
+  produced_when: Always after accession metadata is resolved.
+  meaning: Main handoff table. Its columns change when nf_core_pipeline is set.
+- id: id_mappings
+  path: samplesheet/id_mappings.csv
+  produced_when: Always after samplesheet generation.
+  meaning: Mapping table from public database identifiers to more informative metadata fields.
+- id: multiqc_config
+  path: samplesheet/multiqc_config.yml
+  produced_when: sample_mapping_fields is set and MULTIQC_MAPPINGS_CONFIG runs.
+  meaning: MultiQC sample renaming config for downstream pipelines.
+- id: reformatted_runinfo
+  path: metadata/*.runinfo_ftp.tsv
+  produced_when: SRA_RUNINFO_TO_FTP runs.
+  meaning: ENA-derived run metadata reformatted with download links and md5 fields.
+- id: original_runinfo
+  path: metadata/*.runinfo.tsv
+  produced_when: SRA_IDS_TO_RUNINFO runs; source config disables direct publish for this process by default, so availability may depend on artifact capture.
+  meaning: Original ENA metadata fetched for the input accessions.
+- id: pipeline_info
+  path: pipeline_info/
+  produced_when: Always.
+  meaning: Nextflow reports, trace files, software versions, and params.json for route confirmation.
+- id: params_json
+  path: pipeline_info/params.json
+  produced_when: Always.
+  meaning: Confirms the launch parameters used for historical reuse or restart planning.
+historical_reuse:
+  preferred_fragments:
+  - samplesheet/samplesheet.csv
+  - fastq/
+  - metadata/
+  - pipeline_info/params.json
+  rules:
+  - Search old runs with run_list(project=..., pipeline="fetchngs", artifact_path_contains=...) when only a filename fragment is known.
+  - Treat artifacts.json and pipeline_fingerprint as historical facts, then confirm compatibility through pipeline_info/params.json before recommending reuse.

@@ -1,0 +1,258 @@
+group:
+  id: downstream_analysis
+  label: Downstream analysis
+  selection_rule: Use this group for parameters defined under the `Downstream analysis`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/downstream_analysis.md
+  - assets/schema-groups/downstream_analysis.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `downstream_analysis` for exact lookup.
+parameters:
+- group_id: downstream_analysis
+  name: diversity_rarefaction_depth
+  source_name: diversity_rarefaction_depth
+  type: integer
+  required: false
+  default: 500
+  enum: null
+  description: Minimum rarefaction depth for diversity analysis. Any sample below
+    that threshold will be removed.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 500
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: integer
+    default: 500
+    description: Minimum rarefaction depth for diversity analysis. Any sample below
+      that threshold will be removed.
+    fa_icon: fas fa-greater-than-equal
+- group_id: downstream_analysis
+  name: picrust
+  source_name: picrust
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If the functional potential of the bacterial community is predicted.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: boolean
+    description: If the functional potential of the bacterial community is predicted.
+- group_id: downstream_analysis
+  name: sbdiexport
+  source_name: sbdiexport
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If data should be exported in SBDI (Swedish biodiversity infrastructure)
+    Excel format.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: boolean
+    description: If data should be exported in SBDI (Swedish biodiversity infrastructure)
+      Excel format.
+- group_id: downstream_analysis
+  name: metadata_category
+  source_name: metadata_category
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Comma separated list of metadata column headers for statistics.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/metadata_category
+  example_values:
+  - <server_input_root>/metadata_category
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: string
+    description: Comma separated list of metadata column headers for statistics.
+    help_text: 'Here columns in the metadata sheet can be chosen with groupings that
+      are used for diversity indices and differential abundance analysis. By default,
+      all suitable columns in the metadata sheet will be used if this option is not
+      specified. Suitable are columns which are categorical (not numerical) and have
+      multiple different values which are not all unique. For example:
+
+
+      ```bash
+
+      --metadata_category "treatment1,treatment2"
+
+      ```
+
+
+      Please note the following requirements:
+
+
+      1. Comma separated list enclosed in quotes
+
+      2. May not contain whitespace characters
+
+      3. Each comma separated term has to match exactly one column name in the metadata
+      sheet'
+- group_id: downstream_analysis
+  name: metadata_category_barplot
+  source_name: metadata_category_barplot
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Comma separated list of metadata column headers for plotting average
+    relative abundance barplots.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/metadata_category_barplot
+  example_values:
+  - <server_input_root>/metadata_category_barplot
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: string
+    description: Comma separated list of metadata column headers for plotting average
+      relative abundance barplots.
+    help_text: 'Here columns in the metadata sheet can be chosen with groupings that
+      are used for average relative abundance barplots. Samples that have empty fields
+      for that column are discarded. For example:
+
+
+      ```bash
+
+      --metadata_category_barplot "treatment1,treatment2"
+
+      ```
+
+
+      Please note the following requirements:
+
+
+      1. Comma separated list enclosed in quotes
+
+      2. May not contain whitespace characters
+
+      3. Each comma separated term has to match exactly one column name in the metadata
+      sheet'
+- group_id: downstream_analysis
+  name: qiime_adonis_formula
+  source_name: qiime_adonis_formula
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Formula for QIIME2 ADONIS metadata feature importance test for beta
+    diversity distances
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/qiime_adonis_formula
+  example_values:
+  - <server_input_root>/qiime_adonis_formula
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: string
+    description: Formula for QIIME2 ADONIS metadata feature importance test for beta
+      diversity distances
+    help_text: 'Comma separated list of model formula(s), e.g. "treatment1,treatment2".
+      Model formula should contain only independent terms in the sample metadata.
+      These can be continuous variables or factors, and they can have interactions
+      as in a typical R formula. Essentially, columns in the metadata sheet can be
+      chosen that have no empty values, not only unique values, or not only identical
+      values.
+
+      For example, "treatment1+treatment2" tests whether the data partitions based
+      on "treatment1" and "treatment2" sample metadata. "treatment1*treatment2" test
+      both of those effects as well as their interaction.
+
+      More examples can be found in the R documentation, https://cran.r-project.org/doc/manuals/r-release/R-intro.html#Formulae-for-statistical-models'
+- group_id: downstream_analysis
+  name: tax_agglom_max
+  source_name: tax_agglom_max
+  type: integer
+  required: false
+  default: 6
+  enum: null
+  description: Maximum taxonomy agglomeration level for taxonomic classifications
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 6
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: integer
+    default: 6
+    description: Maximum taxonomy agglomeration level for taxonomic classifications
+    fa_icon: fas fa-greater-than-equal
+    help_text: Depends on the reference taxonomy database used. Most default databases
+      have genus level at 6.
+- group_id: downstream_analysis
+  name: tax_agglom_min
+  source_name: tax_agglom_min
+  type: integer
+  required: false
+  default: 2
+  enum: null
+  description: Minimum taxonomy agglomeration level for taxonomic classifications
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 2
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Downstream analysis
+  raw_schema:
+    type: integer
+    default: 2
+    description: Minimum taxonomy agglomeration level for taxonomic classifications
+    fa_icon: fas fa-greater-than-equal
+    help_text: Depends on the reference taxonomy database used.

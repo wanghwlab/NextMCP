@@ -1,0 +1,28 @@
+# Python and development output
+__pycache__/
+*.py[oc]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+build/
+dist/
+*.egg-info/
+
+# Private deployment and client settings
+/config/config.yaml
+/.codex/
+/.claude/
+/.kimi/
+/state/
+/projects/
+/logs/
+
+# Generated analysis and evaluation output
+/work/
+/.nextflow/
+/.nextflow.log*
+/evaluation-output/
+/skills/experts/*-expert-skill-workspace/
+/skills/experts/**/*.response.yaml

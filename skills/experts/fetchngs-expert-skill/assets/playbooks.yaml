@@ -1,0 +1,57 @@
+playbooks:
+- id: default_run
+  use_when: Standard fetchngs run for public SRA, ENA, DDBJ, or GEO accessions.
+  prerequisites:
+  - Confirm `input` is a server-local .csv, .tsv, or .txt file with one accession per line.
+  - Confirm `outdir` is a server-local results directory.
+  - Omit `profile` unless the user asks for a specific runtime profile or the server default is unsuitable.
+  recommended_preset: default_run
+  outputs_to_review:
+  - samplesheet/samplesheet.csv
+  - samplesheet/id_mappings.csv
+  - metadata/*.runinfo_ftp.tsv
+  - fastq/*.fastq.gz
+  - fastq/md5/*.md5
+  - pipeline_info/params.json
+- id: metadata_only
+  use_when: The user wants metadata and samplesheet output without downloading FASTQ files.
+  prerequisites:
+  - Confirm `input` and `outdir` on the nextmcp server.
+  - Explain that `skip_fastq_download=true` still creates samplesheet and metadata outputs, but FASTQ files are not expected.
+  recommended_preset: metadata_only
+  outputs_to_review:
+  - samplesheet/samplesheet.csv
+  - samplesheet/id_mappings.csv
+  - metadata/*.runinfo_ftp.tsv
+  - pipeline_info/params.json
+- id: sratools_download
+  use_when: The user asks for sratools, expects technical reads, lacks FTP links, or wants dbGaP access.
+  prerequisites:
+  - Confirm `input` and `outdir` on the nextmcp server.
+  - For dbGaP, confirm a server-local JWT cart file and that the runtime environment is supported for protected SRA downloads.
+  recommended_preset: sratools_download
+  outputs_to_review:
+  - fastq/*.fastq.gz
+  - samplesheet/samplesheet.csv
+  - pipeline_info/nf_core_fetchngs_software_mqc_versions.yml
+- id: aspera_download
+  use_when: The user explicitly wants Aspera for accessions with ENA Aspera links.
+  prerequisites:
+  - Confirm `input` and `outdir` on the nextmcp server.
+  - Warn that records without Aspera links may be routed to sratools by the workflow logic.
+  recommended_preset: aspera_download
+  outputs_to_review:
+  - fastq/*.fastq.gz
+  - fastq/md5/*.md5
+  - samplesheet/samplesheet.csv
+- id: downstream_samplesheet
+  use_when: The user wants fetchngs to write a samplesheet for another nf-core pipeline.
+  prerequisites:
+  - Choose one supported `nf_core_pipeline` enum: rnaseq, atacseq, viralrecon, or taxprofiler.
+  - For rnaseq, set `nf_core_rnaseq_strandedness` only when the default `auto` is not desired.
+  - Tell the user to manually review fields that public databases do not reliably provide, such as atacseq replicate values.
+  recommended_preset: downstream_samplesheet
+  outputs_to_review:
+  - samplesheet/samplesheet.csv
+  - samplesheet/id_mappings.csv
+  - samplesheet/multiqc_config.yml

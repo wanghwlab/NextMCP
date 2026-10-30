@@ -1,0 +1,179 @@
+group:
+  id: adapter_trimming
+  label: Adapter Trimming
+  selection_rule: Use this group for parameters defined under the `Adapter Trimming`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/adapter_trimming.md
+  - assets/schema-groups/adapter_trimming.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `adapter_trimming` for exact lookup.
+parameters:
+- group_id: adapter_trimming
+  name: length_trim
+  source_name: length_trim
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Discard reads that become shorter than INT because of either quality
+    or adapter trimming.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: integer
+    description: Discard reads that become shorter than INT because of either quality
+      or adapter trimming.
+    fa_icon: fas fa-trash-alt
+- group_id: adapter_trimming
+  name: nextseq_trim
+  source_name: nextseq_trim
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Trim bases below this quality value from the 3' end of the read, ignoring
+    high-quality G bases
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: integer
+    default: 0
+    description: Trim bases below this quality value from the 3' end of the read,
+      ignoring high-quality G bases
+- group_id: adapter_trimming
+  name: skip_trimming_presets
+  source_name: skip_trimming_presets
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip presetting trimming parameters entirely
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: boolean
+    description: Skip presetting trimming parameters entirely
+    fa_icon: fas fa-dot-circle
+- group_id: adapter_trimming
+  name: three_prime_clip_r1
+  source_name: three_prime_clip_r1
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Trim bases from the 3' end of read 1 AFTER adapter/quality trimming.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: integer
+    description: Trim bases from the 3' end of read 1 AFTER adapter/quality trimming.
+    default: 0
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming
+  name: three_prime_clip_r2
+  source_name: three_prime_clip_r2
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Trim bases from the 3' end of read 2 AFTER adapter/quality trimming
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: integer
+    description: Trim bases from the 3' end of read 2 AFTER adapter/quality trimming
+    default: 0
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming
+  name: clip_r1
+  source_name: clip_r1
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Trim bases from the 5' end of read 1 (or single-end reads).
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: integer
+    description: Trim bases from the 5' end of read 1 (or single-end reads).
+    default: 0
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming
+  name: clip_r2
+  source_name: clip_r2
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Trim bases from the 5' end of read 2 (paired-end only).
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter Trimming
+  raw_schema:
+    type: integer
+    description: Trim bases from the 5' end of read 2 (paired-end only).
+    default: 0
+    fa_icon: fas fa-cut

@@ -1,0 +1,34 @@
+version: "2026-03-19"
+
+required_sections:
+  - classification
+  - localization
+  - contract
+  - final_status
+
+final_status_values:
+  - ready
+  - blocked
+  - skip
+
+section_expectations:
+  classification:
+    description: >-
+      Output from the classification phase: primary_mode, modifiers, evidence,
+      and next_action.
+
+  localization:
+    description: >-
+      Localization result. Either `not_needed`, a concrete server-local rewrite
+      plan, or a blocker explaining why localization could not complete.
+
+  contract:
+    description: >-
+      Final smoke contract when available, or a partial contract with blockers
+      when the route is blocked or should be skipped.
+
+  final_status:
+    description: >-
+      Summary state of the builder. Use `ready` when the full contract is
+      usable, `blocked` when prerequisites are missing, and `skip` when the
+      route should not enter the standard batch.

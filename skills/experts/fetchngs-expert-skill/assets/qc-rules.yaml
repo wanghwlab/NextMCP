@@ -1,0 +1,43 @@
+checks:
+- id: run_completion
+  severity: high
+  source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+  good_signal: Run succeeded and artifact_summary lists samplesheet and pipeline_info outputs.
+  bad_signal: Run failed, stalled, or diagnosis reports missing accessions, download failures, or parameter validation errors.
+  action: Inspect next_actions first, then use run_logs or fs_read only for an explicit log path.
+- id: samplesheet_presence
+  severity: high
+  source: run_artifacts(..., section="samplesheet") or fs_read on samplesheet/samplesheet.csv after path discovery
+  good_signal: samplesheet/samplesheet.csv exists and contains rows for the expected accessions.
+  bad_signal: Missing samplesheet or too few rows.
+  action: Check metadata outputs and logs for accession resolution failures.
+- id: fastq_presence
+  severity: high
+  source: run_artifacts(..., section="fastq")
+  good_signal: fastq/*.fastq.gz files exist when skip_fastq_download is false.
+  bad_signal: No FASTQ files when a download run was expected.
+  action: Confirm skip_fastq_download is false, check download_method, and inspect transfer logs.
+- id: metadata_only_expected
+  severity: medium
+  source: pipeline_info/params.json plus artifact summary
+  good_signal: skip_fastq_download is true and samplesheet plus metadata outputs are present; missing FASTQ files are expected.
+  bad_signal: User expected FASTQ downloads but params.json shows skip_fastq_download=true.
+  action: Explain the route mismatch and plan a rerun without skip_fastq_download.
+- id: md5_integrity
+  severity: high
+  source: run_get diagnosis or download process logs
+  good_signal: FTP or Aspera md5 checks completed without reported failures.
+  bad_signal: md5sum failures, truncated FASTQ files, or transfer errors.
+  action: Retry the run from the previous run id with the same inputs, or switch download_method when the source repository route is unreliable.
+- id: downstream_samplesheet_review
+  severity: medium
+  source: samplesheet/samplesheet.csv
+  good_signal: Header matches the requested downstream nf_core_pipeline and sample rows look plausible.
+  bad_signal: Required downstream fields are absent or public metadata cannot infer fields such as atacseq replicate values.
+  action: Tell the user to manually curate the samplesheet before launching the downstream pipeline.
+- id: dbgap_prerequisite
+  severity: high
+  source: params.json and run logs
+  good_signal: download_method is sratools, dbgap_key points to a server-local JWT file, and protected downloads authenticate.
+  bad_signal: 403 errors, missing JWT file, expired JWT, or JWT generated for only part of an experiment.
+  action: Regenerate the JWT cart for all runs in the experiment and rerun on a supported cloud environment.

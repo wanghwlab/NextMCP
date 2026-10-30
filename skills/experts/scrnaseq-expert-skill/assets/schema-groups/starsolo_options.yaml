@@ -1,0 +1,117 @@
+group:
+  id: starsolo_options
+  label: STARSolo Options
+  selection_rule: Use this group for parameters defined under the `STARSolo Options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/starsolo_options.md
+  - assets/schema-groups/starsolo_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `starsolo_options` for exact lookup.
+parameters:
+- group_id: starsolo_options
+  name: star_feature
+  source_name: star_feature
+  type: string
+  required: false
+  default: Gene
+  enum: &id001
+  - Gene
+  - GeneFull
+  - Gene Velocyto
+  description: Quantification type of different transcriptomic feature. Use `GeneFull`
+    on pre-mRNA count for single-nucleus RNA-seq reads. Use `Gene Velocyto` to generate
+    RNA velocity matrix.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - Gene
+  - GeneFull
+  - Gene Velocyto
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: STARSolo Options
+  raw_schema:
+    type: string
+    default: Gene
+    enum: *id001
+    description: Quantification type of different transcriptomic feature. Use `GeneFull`
+      on pre-mRNA count for single-nucleus RNA-seq reads. Use `Gene Velocyto` to generate
+      RNA velocity matrix.
+    fa_icon: fas fa-asterisk
+- group_id: starsolo_options
+  name: seq_center
+  source_name: seq_center
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Name of sequencing center for BAM read group tag.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: STARSolo Options
+  raw_schema:
+    type: string
+    description: Name of sequencing center for BAM read group tag.
+- group_id: starsolo_options
+  name: star_ignore_sjdbgtf
+  source_name: star_ignore_sjdbgtf
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Ignore the SJDB GTF file.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: STARSolo Options
+  raw_schema:
+    type: string
+    description: Ignore the SJDB GTF file.
+- group_id: starsolo_options
+  name: star_index
+  source_name: star_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a path to the precomputed STAR index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/star_index
+  example_values:
+  - <server_reference_root>/star_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: STARSolo Options
+  raw_schema:
+    type: string
+    description: Specify a path to the precomputed STAR index.
+    help_text: '> NB: This has to be computed with STAR Version 2.7 or later, as STARsolo
+      was only first supported by STAR Version 2.7.'
+    fa_icon: fas fa-asterisk
+    format: path
+    exists: true

@@ -1,0 +1,501 @@
+group:
+  id: process_skipping_options
+  label: Process skipping options
+  selection_rule: Use this group for parameters defined under the `Process skipping
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/process_skipping_options.md
+  - assets/schema-groups/process_skipping_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `process_skipping_options` for exact lookup.
+parameters:
+- group_id: process_skipping_options
+  name: skip_alignment
+  source_name: skip_alignment
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all of the alignment-based processes within the pipeline.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip all of the alignment-based processes within the pipeline.
+- group_id: process_skipping_options
+  name: skip_bbsplit
+  source_name: skip_bbsplit
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Skip BBSplit for removal of non-reference genome reads.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_bbsplit
+  example_values:
+  - <server_reference_root>/skip_bbsplit
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    default: true
+    fa_icon: fas fa-fast-forward
+    description: Skip BBSplit for removal of non-reference genome reads.
+- group_id: process_skipping_options
+  name: skip_bigwig
+  source_name: skip_bigwig
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip bigWig file creation.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip bigWig file creation.
+- group_id: process_skipping_options
+  name: skip_biotype_qc
+  source_name: skip_biotype_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip additional featureCounts process for biotype QC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip additional featureCounts process for biotype QC.
+- group_id: process_skipping_options
+  name: skip_deseq2_qc
+  source_name: skip_deseq2_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip DESeq2 PCA and heatmap plotting.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip DESeq2 PCA and heatmap plotting.
+- group_id: process_skipping_options
+  name: skip_dupradar
+  source_name: skip_dupradar
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip dupRadar.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip dupRadar.
+- group_id: process_skipping_options
+  name: skip_fastqc
+  source_name: skip_fastqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip FastQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip FastQC.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_gtf_filter
+  source_name: skip_gtf_filter
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip filtering of GTF for valid scaffolds and/ or transcript IDs.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-forward
+    description: Skip filtering of GTF for valid scaffolds and/ or transcript IDs.
+    help_text: If you're confident in your GTF file's compatibility with the genome
+      FASTA file, or want to ignore filtering errors, enable this option.
+- group_id: process_skipping_options
+  name: skip_gtf_transcript_filter
+  source_name: skip_gtf_transcript_filter
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the 'transcript_id' checking component of the GTF filtering script
+    used in the pipeline. Ensure the GTF file is valid.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-forward
+    description: Skip the 'transcript_id' checking component of the GTF filtering
+      script used in the pipeline. Ensure the GTF file is valid.
+- group_id: process_skipping_options
+  name: skip_linting
+  source_name: skip_linting
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip linting checks during FASTQ preprocessing and filtering.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip linting checks during FASTQ preprocessing and filtering.
+- group_id: process_skipping_options
+  name: skip_markduplicates
+  source_name: skip_markduplicates
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip picard MarkDuplicates step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip picard MarkDuplicates step.
+- group_id: process_skipping_options
+  name: skip_multiqc
+  source_name: skip_multiqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip MultiQC.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_preseq
+  source_name: skip_preseq
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Skip Preseq.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip Preseq.
+    fa_icon: fas fa-fast-forward
+    default: true
+- group_id: process_skipping_options
+  name: skip_pseudo_alignment
+  source_name: skip_pseudo_alignment
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all of the pseudoalignment-based processes within the pipeline.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip all of the pseudoalignment-based processes within the pipeline.
+- group_id: process_skipping_options
+  name: skip_qc
+  source_name: skip_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all QC steps except for MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip all QC steps except for MultiQC.
+- group_id: process_skipping_options
+  name: skip_qualimap
+  source_name: skip_qualimap
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Qualimap.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip Qualimap.
+- group_id: process_skipping_options
+  name: skip_rseqc
+  source_name: skip_rseqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip RSeQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip RSeQC.
+- group_id: process_skipping_options
+  name: skip_stringtie
+  source_name: skip_stringtie
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip StringTie.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip StringTie.
+- group_id: process_skipping_options
+  name: skip_trimming
+  source_name: skip_trimming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the adapter trimming step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip the adapter trimming step.
+    help_text: Use this option if your FastQ files have already been trimmed or if
+      you're certain they contain no adapter contamination.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_umi_extract
+  source_name: skip_umi_extract
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the UMI extraction from the read in case the UMIs have been moved
+    to the headers in advance of the pipeline run.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-compress-alt
+    description: Skip the UMI extraction from the read in case the UMIs have been
+      moved to the headers in advance of the pipeline run.

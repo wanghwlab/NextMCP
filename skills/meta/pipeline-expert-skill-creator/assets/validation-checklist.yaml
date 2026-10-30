@@ -1,0 +1,296 @@
+checks:
+  - id: layout
+    severity: high
+    assert: "Directory layout follows the Agent Skills baseline and class-specific package layout."
+    fix_hint: "Add missing `assets/`, `references/`, or `SKILL.md` files before refinement."
+
+  - id: frontmatter
+    severity: high
+    assert: "`frontmatter.name` matches the directory name and `description` is trigger-ready."
+    fix_hint: "Rewrite the description to include likely user intents, not just the skill title."
+
+  - id: asset-authority
+    severity: high
+    assert: "Pipeline facts live in structured assets rather than only in prose references."
+    fix_hint: "Extract presets, artifacts, QC rules, and modes into YAML before editing markdown."
+
+  - id: full-schema-progressive-disclosure
+    severity: high
+    assert: >-
+      The package preserves full current `nextflow_schema.json` coverage through
+      progressive disclosure: a compact parameter guide for ordinary planning,
+      a schema index for discovery, and grouped schema-backed parameter assets
+      or references for exact lookup.
+    fix_hint: >-
+      Add `schema-index.yaml` plus grouped parameter files. Do not stop at
+      `param-presets.yaml` and a partial summary when exact parameter mapping
+      depends on current schema details.
+
+  - id: schema-group-completeness
+    severity: high
+    assert: >-
+      Every current schema parameter appears in exactly one grouped schema file
+      or in one explicit non-runtime bucket with a reason, so the runtime agent
+      can recover exact field definitions without scanning one monolithic dump.
+    fix_hint: >-
+      Build a complete grouped parameter inventory and wire it into the schema
+      index. Make sure each field has a stable group, required status, type,
+      defaults, enum choices when present, confidence, and mapping flags for
+      complex lookup-only fields.
+
+  - id: schema-group-generator-contract
+    severity: medium
+    assert: >-
+      The meta skill exposes one reusable schema-group generator contract:
+      stable grouping rules, an override template, and one generator entrypoint
+      that can render `schema-index.yaml` plus `schema-groups/*.yaml` without
+      hand-grouping every field.
+    fix_hint: >-
+      Add `assets/schema-grouping-rules.yaml`,
+      `assets/templates/schema-group-overrides.example.yaml`, and a generator
+      script such as `scripts/generate_schema_groups.py`.
+
+  - id: capability-audit-coverage
+    severity: high
+    assert: >-
+      The package includes `assets/capability-audit.yaml`, and each high-impact
+      capability is either covered in the listed assets or explicitly scoped
+      out with a reason.
+    fix_hint: >-
+      Run `scripts/audit_capabilities.py`, then fill playbooks, presets, step
+      recipes, artifact contracts, or QC rules for each `needs_review` item.
+
+  - id: authoring-gaps-resolved
+    severity: high
+    assert: >-
+      The package includes `assets/authoring-gaps.yaml`, and every starter
+      scaffold gap is marked `resolved` or `scoped_out`.
+    fix_hint: >-
+      Do not treat the scaffold as runtime-ready while generic artifact, QC, or
+      capability gaps remain open.
+
+  - id: runtime-tool-guidance
+    severity: high
+    assert: >-
+      The expert skill documents the runtime nextmcp subset it actually uses:
+      optional `server_info()`, optional `project_list()`, optional
+      `project_get(project)`, optional `fs_list(mode="manifest")`,
+      `nextflow_run(prepare=true)` when uncertainty still exists,
+      `nextflow_run`, `run_get(include=[...])`, `run_artifacts(...)`,
+      `run_logs`, `fs_read`, and `nextflow_list_pipelines` only when a
+      server-local pipeline path is needed.
+    fix_hint: >-
+      Add a compact runtime tool contract and step recipes that show launch,
+      state inspection, log inspection, and output-reading order.
+
+  - id: generic-tool-boundary
+    severity: medium
+    assert: >-
+      The expert skill documents only the pipeline-specific runtime tools it
+      needs instead of re-dumping unrelated nextmcp tools.
+    fix_hint: >-
+      Explain the runtime subset clearly, but do not turn the package into a
+      full server tool catalog.
+
+  - id: playbook-quality
+    severity: medium
+    assert: "Playbooks start from user intent, identify prerequisites, and name outputs to review."
+    fix_hint: "Rewrite flat feature lists into scenario-level routes."
+
+  - id: current-tool-names
+    severity: medium
+    assert: >-
+      Examples use current runtime tool names such as `nextflow_run`,
+      `run_get`, `run_artifacts`, `run_logs`, `fs_read`, `project_list`,
+      `project_get`, and `nextflow_list_pipelines` when a server-local
+      pipeline path is needed.
+    fix_hint: >-
+      Remove stale `skill_*`, `nextflow_get_schema`, `nextflow_get_pipeline`,
+      or other legacy workflow helper names.
+
+  - id: path-boundary-language
+    severity: high
+    assert: >-
+      The package states that runtime `path` values, the `project`
+      identifier, and relative path-like values in `params` or `config_files`
+      refer to the nextmcp server filesystem, avoids ambiguous bare `local
+      path` wording, and uses server-scoped placeholders where example paths
+      are needed.
+    fix_hint: >-
+      Add an explicit path-boundary rule, replace ambiguous `local path`
+      phrases with `server-local path`, and use placeholders such as
+      `<server_input_root>/...` unless a real server path is already known.
+
+  - id: no-runtime-inspect
+    severity: high
+    assert: >-
+      Ordinary planning and execution routes do not start by calling
+      `nextflow_inspect_pipeline`; that tool only appears as authoring-time
+      provenance or package-maintenance context.
+    fix_hint: >-
+      Move inspect usage into provenance notes and rewrite runtime playbooks to
+      use packaged assets plus runtime tools.
+
+  - id: capability-completeness
+    severity: high
+    assert: >-
+      Significant optional capabilities from the current schema, docs, and
+      source are either covered in structured assets and references or
+      explicitly scoped out with a reason.
+    fix_hint: >-
+      Audit booleans, enums, alternate entry scripts, and major output
+      families. Do not silently omit modes such as `with_umi`,
+      `use_sentieon_star`, preprocessing-only switches, contamination routes,
+      or index-build or assembly entries.
+
+  - id: special-runtime-prerequisites
+    severity: medium
+    assert: >-
+      Non-param runtime prerequisites such as license secrets, saved indices,
+      or server-side databases are called out when they materially change run
+      planning.
+    fix_hint: >-
+      Add the prerequisite to playbooks, presets, or troubleshooting instead
+      of hiding it in prose later.
+
+  - id: alternate-entry-coverage
+    severity: medium
+    assert: >-
+      Alternate entry scripts and step-local workflows that materially change
+      execution are represented in supported modes or step recipes.
+    fix_hint: >-
+      If the pipeline ships build-only, assembly-only, or QC-only entries, map
+      them into `pipeline-profile.yaml`, `step-recipes.yaml`, or both.
+
+  - id: provenance-map
+    severity: medium
+    assert: >-
+      The package records that `schema`, `documents`, and `source_files` fed
+      generation, and says whether authoring started from
+      `nextflow_inspect_pipeline(detail="materials")` or a repository-local
+      inspect-equivalent bundle, without presenting that collection flow as
+      runtime instructions.
+    fix_hint: >-
+      Keep source-of-truth notes concise, keep repository-local authoring
+      aligned to the same payload contract, and keep runtime guidance focused
+      on launch, status, logs, and outputs.
+
+  - id: parameter-channel-boundary
+    severity: medium
+    assert: >-
+      The package explains the `nextflow_run` parameter-channel boundaries for
+      `project`, optional `run_id` / `run_name`, `params`, `config_files`,
+      `from_run_id`, and `extra_args`, explains that `from_run_id` is the only
+      public restart route, and points to `run_get(detail="full")` for
+      `launch_spec`, `nextflow_session_uuid`, and structured
+      resume-compatibility fields instead of public resume inputs. It also
+      explains that the project-owned layout comes back through `run_layout` or
+      `run_get(detail="full")` instead of public inputs. It also keeps
+      `max_cpus`, `max_memory`, and `max_time` in a small override config passed
+      through `config_files`, and preserves source-backed config shapes such as
+      `process.resourceLimits` instead of inventing `params.max_cpus` or
+      `process.maxCpus`.
+    fix_hint: >-
+      Add a short runtime-tool section that tells the agent where user-facing
+      params belong, that restart uses only `from_run_id`, when `extra_args` is
+      justified, why resource caps stay in `config_files`, and how to keep the
+      pipeline's own override syntax.
+
+  - id: legacy-public-resume-inputs
+    severity: high
+    assert: >-
+      The package does not teach `resume` or `resume_session_id` as public
+      `nextflow_run` inputs for runtime agents.
+    fix_hint: >-
+      Rewrite restart guidance around `nextflow_run(from_run_id=...)` and use
+      `run_get(detail="full")` only to inspect `launch_spec`,
+      `nextflow_session_uuid`, and resume-compatibility metadata on the source
+      run.
+
+  - id: process-follow-up-order
+    severity: medium
+    assert: >-
+      Monitoring guidance follows `nextflow_run(prepare=true)` when needed,
+      then `nextflow_run` -> `run_get(include=[...])` -> `run_logs`
+      or `fs_read`, instead of jumping straight to raw files.
+    fix_hint: >-
+      Show that `run_get(include=[...])` is the first post-launch check and
+      use `run_logs` or `fs_read` only after the relevant paths are known.
+
+  - id: offline-eval-template
+    severity: medium
+    assert: >-
+      The first generated expert-skill eval set is one mixed-source
+      `evals/evals.json` derived from `evals/templates/expert-skill-evals.json`
+      or the scaffold generator. Each eval item records `source` and
+      `source_materials`. The default evals stay offline and test route
+      selection, parameter-channel mapping, output/QC review order, historical
+      reuse planning, and source-backed coverage.
+    fix_hint: >-
+      Include asset-derived evals plus authoring-bundle or audit-derived
+      coverage evals, then run those prompts through `skill-creator` or
+      `scripts/run_offline_evals.py`. Use the smoke-test contract workflow only
+      when the goal is actual Nextflow execution.
+
+  - id: process-summary-vs-full-boundary
+    severity: medium
+    assert: >-
+      Runtime guidance treats `run_get(include=[...])` as a summary-first
+      call and does not claim that the default summary payload already exposes
+      project-owned layout paths, `nextflow_log`, or `run_layout`. When those
+      fields matter, the skill points to `run_get(detail="full")`, `run_logs`,
+      or artifact metadata.
+    fix_hint: >-
+      Keep monitoring summary-first. Mention `run_get(detail="full")` only for
+      concrete layout paths, `nextflow_log`, or `run_layout`, and keep
+      `fs_read` for explicit files after the path is known.
+
+  - id: historical-artifact-reuse
+    severity: medium
+    assert: >-
+      If the pipeline publishes reusable historical outputs, the generated
+      expert skill explains how to recover prior runs with
+      `run_list(..., artifact_path_contains=...)`, then inspect
+      `run_get(include=["artifact_summary"])`, `run_artifacts(...)`, `artifacts.json`,
+      `pipeline_fingerprint`, and route-shaping metadata such as
+      `pipeline_info/params.json` before treating reuse as safe.
+    fix_hint: >-
+      Add one compact reuse rule grounded in artifact contracts. Prefer named
+      path fragments such as samplesheets, reports, or `pipeline_info/params.json`
+      instead of broad history scans or outdir guessing.
+
+  - id: optional-readiness-boundary
+    severity: medium
+    assert: >-
+      Optional runtime checks such as `server_info()`,
+      `fs_list(mode="manifest")`, and `nextflow_run(prepare=true)` are
+      rendered as opt-in checks for uncertainty, not as mandatory steps before
+      every run.
+    fix_hint: >-
+      Keep the default runtime route short. Use readiness checks, manifest, or prepare
+      only when server layout, path validity, or output planning is still
+      uncertain.
+
+  - id: fs-read-boundary
+    severity: medium
+    assert: >-
+      `fs_read` is described as a targeted reader for explicit runtime files
+      such as `nextflow_log`, reports, manifests, or named outputs.
+    fix_hint: >-
+      Keep `fs_read` targeted. Do not use it as a generic replacement for the
+      packaged pipeline contract.
+
+  - id: output-family-coverage
+    severity: medium
+    assert: >-
+      Artifact contracts cover the major review or reuse outputs the pipeline
+      actually publishes, not only a single count matrix or one report.
+    fix_hint: >-
+      Add reusable BAMs, TPM or normalized matrices, contamination reports,
+      assembly outputs, or other major output families when they matter for
+      user decisions.
+
+  - id: client-boundary
+    severity: high
+    assert: "The package is described as a client-side skill, not a server runtime feature."
+    fix_hint: "Remove any instruction that suggests registering the skill in nextmcp config."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pipeline Test Converter"
+  short_description: "Convert pipeline tests into hidden evaluation specs"
+  default_prompt: "Use $pipeline-test-converter to turn this pipeline test setup into a hidden evaluation spec for a lightweight test run."

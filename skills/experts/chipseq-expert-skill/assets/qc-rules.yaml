@@ -1,0 +1,70 @@
+checks:
+- id: run_completion
+  severity: high
+  source: run_get(include=["progress","diagnosis","artifact_summary"])
+  good_signal: Run succeeded and published the expected results root.
+  bad_signal: Run failed, stalled, or reported a blocking diagnosis.
+  action: Check run logs first, then inspect the relevant output section.
+- id: samplesheet_shape
+  severity: high
+  source: input samplesheet and pipeline_info/samplesheet.valid.csv
+  good_signal: Required first seven columns are present, replicates start at 1, and
+    IP rows point to matching control and control_replicate values.
+  bad_signal: Missing antibody for controlled IP rows, unmatched control sample names,
+    replicate numbering gaps, or non-gzipped FastQ paths.
+  action: Fix the server-local samplesheet before launch or rerun prepare.
+- id: alignment_qc
+  severity: high
+  source: <ALIGNER>/merged_library/samtools_stats/ and <ALIGNER>/merged_library/picard_metrics/
+  good_signal: Mapping, duplication, insert-size, and filtered BAM metrics are consistent
+    across replicates and expected for the assay.
+  bad_signal: Very low mapped reads, extreme duplication, missing BAM index, or large
+    replicate imbalance.
+  action: Inspect MultiQC alignment sections, then check aligner logs or raw FastQ
+    QC when the summary points to a sample-specific issue.
+- id: chip_enrichment
+  severity: high
+  source: <ALIGNER>/merged_library/phantompeakqualtools/ and deepTools plotFingerprint
+  good_signal: NSC is above 1.05, RSC is above 0.8, and IP samples show expected
+    enrichment relative to controls.
+  bad_signal: NSC below 1.05, RSC below 0.8, weak IP/control separation, or missing
+    SPP/deepTools sections due to skip flags.
+  action: Treat low scores as possible weak ChIP signal, shallow sequencing, poor
+    quality, or mis-mapping; compare with FastQC and alignment metrics before drawing
+    conclusions.
+- id: macs3_peak_qc
+  severity: high
+  source: <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/qc/
+  good_signal: Peak count, FRiP score, fold-change distribution, and annotation summaries
+    are plausible for the antibody or mark.
+  bad_signal: Few peaks for a factor expected to bind many sites, very low FRiP,
+    missing HOMER annotation, or mutually exclusive macs_fdr and macs_pvalue
+    both set.
+  action: Confirm peak mode, controls, macs_gsize/read_length, blacklist, and annotation
+    inputs before changing thresholds.
+- id: consensus_and_deseq2_qc
+  severity: medium
+  source: <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/ and deseq2/
+  good_signal: Consensus peak matrix, featureCounts summary, PCA, and clustering
+    separate samples as expected.
+  bad_signal: Consensus outputs missing because skip_consensus_peaks is true, poor
+    replicate clustering, or very uneven size factors.
+  action: Review per-sample peak overlap, min_reps_consensus, and sample metadata
+    before using differential binding summaries.
+- id: multiqc_presence
+  severity: medium
+  source: multiqc/<PEAK_TYPE>/multiqc_report.html
+  good_signal: MultiQC report exists and includes raw read, trimming, alignment,
+    peak, consensus, and software version sections expected for the selected route.
+  bad_signal: Report missing because skip_multiqc is true or expected sections
+    are absent due to skip flags or failed upstream tasks.
+  action: Use run_artifacts to find concrete report paths, then fs_read only after
+    a path is known.
+- id: reference_reuse
+  severity: medium
+  source: genome/index/ and pipeline_info/params.json
+  good_signal: Saved indices match the selected aligner and reference FASTA used
+    in the run.
+  bad_signal: Reusing an index without confirming reference compatibility.
+  action: Treat saved reference outputs as reusable only after checking params.json
+    and pipeline metadata.

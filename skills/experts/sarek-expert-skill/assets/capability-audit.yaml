@@ -1,0 +1,1679 @@
+pipeline_id: sarek
+status: covered
+summary:
+  total: 93
+  high_impact: 73
+  needs_review: 0
+capabilities:
+- id: documented_prerequisite_database
+  label: Documented `database` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: database
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: database
+- id: documented_prerequisite_index
+  label: Documented `index` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/README.md
+    excerpt: index
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: index
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: index
+- id: documented_prerequisite_license
+  label: Documented `license` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: license
+- id: documented_prerequisite_pre_built
+  label: Documented `pre-built` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: pre-built
+- id: documented_prerequisite_secret
+  label: Documented `secret` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: secret
+- id: documented_prerequisite_sentieon
+  label: Documented `sentieon` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/README.md
+    excerpt: sentieon
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: sentieon
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: sentieon
+- id: prerequisite_bbsplit_index
+  label: Parameter `bbsplit_index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bbsplit_index
+    excerpt: Path to directory or tar.gz archive for pre-built BBSplit index.
+- id: prerequisite_bcftools_annotations_tbi
+  label: Parameter `bcftools_annotations_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bcftools_annotations_tbi
+    excerpt: Index file for `bcftools_annotations`
+- id: prerequisite_build_only_index
+  label: Parameter `build_only_index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: build_only_index
+    excerpt: Only built references.
+- id: prerequisite_dbnsfp_tbi
+  label: Parameter `dbnsfp_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dbnsfp_tbi
+    excerpt: Path to dbNSFP tabix indexed file.
+- id: prerequisite_dbsnp_tbi
+  label: Parameter `dbsnp_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dbsnp_tbi
+    excerpt: Path to dbsnp index.
+- id: prerequisite_fasta_fai
+  label: Parameter `fasta_fai` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: fasta_fai
+    excerpt: Path to FASTA reference index.
+- id: prerequisite_germline_resource_tbi
+  label: Parameter `germline_resource_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: germline_resource_tbi
+    excerpt: Path to GATK Mutect2 Germline Resource Index.
+- id: prerequisite_known_indels_tbi
+  label: Parameter `known_indels_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: known_indels_tbi
+    excerpt: Path to known indels file index.
+- id: prerequisite_phenotypes_file_tbi
+  label: Parameter `phenotypes_file_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: phenotypes_file_tbi
+    excerpt: Path to phenotype annotation tabix indexed file.
+- id: prerequisite_pon_tbi
+  label: Parameter `pon_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pon_tbi
+    excerpt: Index of PON panel-of-normals VCF.
+- id: prerequisite_sentieon_consensus
+  label: Parameter `sentieon_consensus` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_consensus
+    excerpt: Generate consensus reads with Sentieon dedup rather than choosing one best read.
+- id: prerequisite_sentieon_dnascope_emit_mode
+  label: Parameter `sentieon_dnascope_emit_mode` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_dnascope_emit_mode
+    excerpt: Option for selecting output and emit-mode of Sentieon's Dnascope.
+- id: prerequisite_sentieon_dnascope_model
+  label: Parameter `sentieon_dnascope_model` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_dnascope_model
+    excerpt: Machine learning model for Sentieon Dnascope.
+- id: prerequisite_sentieon_dnascope_pcr_indel_model
+  label: Parameter `sentieon_dnascope_pcr_indel_model` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_dnascope_pcr_indel_model
+    excerpt: Option for selecting the PCR indel model used by Sentieon Dnascope.
+- id: prerequisite_sentieon_haplotyper_emit_mode
+  label: Parameter `sentieon_haplotyper_emit_mode` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_haplotyper_emit_mode
+    excerpt: Option for selecting output and emit-mode of Sentieon's Haplotyper.
+- id: prerequisite_snpsift_databases
+  label: Parameter `snpsift_databases` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: snpsift_databases
+    excerpt: Path to CSV samplesheet specifying SnpSift annotation databases.
+- id: prerequisite_spliceai_indel_tbi
+  label: Parameter `spliceai_indel_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: spliceai_indel_tbi
+    excerpt: Path to spliceai raw scores indel tabix indexed file.
+- id: prerequisite_spliceai_snv_tbi
+  label: Parameter `spliceai_snv_tbi` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: spliceai_snv_tbi
+    excerpt: Path to spliceai raw scores snv tabix indexed file.
+- id: schema_param_aligner
+  label: Schema parameter `aligner` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: aligner
+    excerpt: Specify aligner to be used to map reads to reference genome.
+- id: schema_param_ascat_genome
+  label: Schema parameter `ascat_genome` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ascat_genome
+    excerpt: ASCAT genome.
+- id: schema_param_build_only_index
+  label: Schema parameter `build_only_index` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: build_only_index
+    excerpt: Only built references.
+- id: schema_param_cf_contamination_adjustment
+  label: Schema parameter `cf_contamination_adjustment` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cf_contamination_adjustment
+    excerpt: Overwrite Control-FREEC contaminationAdjustement
+- id: schema_param_concatenate_vcfs
+  label: Schema parameter `concatenate_vcfs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: concatenate_vcfs
+    excerpt: Option for concatenating germline vcf-files.
+- id: schema_param_download_cache
+  label: Schema parameter `download_cache` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: download_cache
+    excerpt: Download annotation cache.
+- id: schema_param_filter_vcfs
+  label: Schema parameter `filter_vcfs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: filter_vcfs
+    excerpt: Enable filtering of VCFs with bcftools view
+- id: schema_param_group_by_umi_strategy
+  label: Schema parameter `group_by_umi_strategy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: group_by_umi_strategy
+    excerpt: Default strategy for fgbio UMI-based consensus read generation
+- id: schema_param_help
+  label: Schema parameter `help` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help
+    excerpt: Display the help message.
+- id: schema_param_help_full
+  label: Schema parameter `help_full` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help_full
+    excerpt: Display the full detailed help message.
+- id: schema_param_igenomes_ignore
+  label: Schema parameter `igenomes_ignore` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: igenomes_ignore
+    excerpt: Do not load the iGenomes reference config.
+- id: schema_param_ignore_soft_clipped_bases
+  label: Schema parameter `ignore_soft_clipped_bases` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ignore_soft_clipped_bases
+    excerpt: Do not analyze soft clipped bases in the reads for GATK Mutect2.
+- id: schema_param_joint_germline
+  label: Schema parameter `joint_germline` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: joint_germline
+    excerpt: Turn on the joint germline variant calling for GATK haplotypecaller
+- id: schema_param_joint_mutect2
+  label: Schema parameter `joint_mutect2` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: joint_mutect2
+    excerpt: Runs Mutect2 in joint (multi-sample) mode for better concordance among variant calls of tumor
+      samples from the same patient. Mutect2 outputs will be stored in a subfolder named with patient
+      ID under `variant_calling/mutect2/` folder. Only a single normal sample per patient is allowed.
+      Tumor-only mode is also supported.
+- id: schema_param_mastermind_mutations
+  label: Schema parameter `mastermind_mutations` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: mastermind_mutations
+    excerpt: Mastermind plugin mutations parameter.
+- id: schema_param_mastermind_url
+  label: Schema parameter `mastermind_url` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: mastermind_url
+    excerpt: Mastermind plugin url parameter.
+- id: schema_param_mastermind_var_iden
+  label: Schema parameter `mastermind_var_iden` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: mastermind_var_iden
+    excerpt: Mastermind plugin var_iden parameter.
+- id: schema_param_monochrome_logs
+  label: Schema parameter `monochrome_logs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: monochrome_logs
+    excerpt: Do not use coloured log outputs.
+- id: schema_param_no_intervals
+  label: Schema parameter `no_intervals` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: no_intervals
+    excerpt: Disable usage of intervals.
+- id: schema_param_normalize_vcfs
+  label: Schema parameter `normalize_vcfs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: normalize_vcfs
+    excerpt: Option for normalization of vcf-files.
+- id: schema_param_only_paired_variant_calling
+  label: Schema parameter `only_paired_variant_calling` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: only_paired_variant_calling
+    excerpt: If true, skips germline variant calling for matched normal to tumor sample. Normal samples
+      without matched tumor will still be processed through germline variant calling tools.
+- id: schema_param_plaintext_email
+  label: Schema parameter `plaintext_email` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: plaintext_email
+    excerpt: Send plain-text email instead of HTML.
+- id: schema_param_publish_dir_mode
+  label: Schema parameter `publish_dir_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: publish_dir_mode
+    excerpt: Method used to save pipeline results to output directory.
+- id: schema_param_save_bbsplit_reads
+  label: Schema parameter `save_bbsplit_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_bbsplit_reads
+    excerpt: If this option is specified, FastQ files split by reference will be saved in the results
+      directory.
+- id: schema_param_save_mapped
+  label: Schema parameter `save_mapped` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_mapped
+    excerpt: Save mapped files.
+- id: schema_param_save_output_as_bam
+  label: Schema parameter `save_output_as_bam` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_output_as_bam
+    excerpt: Saves output from mapping (if `--save_mapped`), Markduplicates & Baserecalibration as BAM
+      file instead of CRAM
+- id: schema_param_save_reference
+  label: Schema parameter `save_reference` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_reference
+    excerpt: Save built references.
+- id: schema_param_save_split_fastqs
+  label: Schema parameter `save_split_fastqs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_split_fastqs
+    excerpt: If set, publishes split FASTQ files. Intended for testing purposes.
+- id: schema_param_save_trimmed
+  label: Schema parameter `save_trimmed` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_trimmed
+    excerpt: Save trimmed FastQ file intermediates.
+- id: schema_param_sentieon_consensus
+  label: Schema parameter `sentieon_consensus` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_consensus
+    excerpt: Generate consensus reads with Sentieon dedup rather than choosing one best read.
+- id: schema_param_show_hidden
+  label: Schema parameter `show_hidden` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: show_hidden
+    excerpt: Display hidden parameters in the help message (only works when --help or --help_full are
+      provided).
+- id: schema_param_snv_consensus_calling
+  label: Schema parameter `snv_consensus_calling` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: snv_consensus_calling
+    excerpt: Enable consensus calling of multiple VCF files from one sample
+- id: schema_param_step
+  label: Schema parameter `step` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: step
+    excerpt: Starting step
+- id: schema_param_trim_fastq
+  label: Schema parameter `trim_fastq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: trim_fastq
+    excerpt: Run FastP for read trimming
+- id: schema_param_trim_nextseq
+  label: Schema parameter `trim_nextseq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: trim_nextseq
+    excerpt: Removing poly-G tails.
+- id: schema_param_umi_in_read_header
+  label: Schema parameter `umi_in_read_header` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: umi_in_read_header
+    excerpt: Move UMIs from fastq read headers to a tag prior to deduplication.
+- id: schema_param_umi_location
+  label: Schema parameter `umi_location` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: umi_location
+    excerpt: Location of the UMI(s) to be extracted with fastp.
+- id: schema_param_validate_params
+  label: Schema parameter `validate_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validate_params
+    excerpt: Boolean whether to validate parameters against the schema at runtime
+- id: schema_param_vep_condel
+  label: Schema parameter `vep_condel` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_condel
+    excerpt: Enable the use of the VEP Condel plugin.
+- id: schema_param_vep_dbnsfp
+  label: Schema parameter `vep_dbnsfp` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_dbnsfp
+    excerpt: Enable the use of the VEP dbNSFP plugin.
+- id: schema_param_vep_include_fasta
+  label: Schema parameter `vep_include_fasta` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_include_fasta
+    excerpt: Allow usage of fasta file for annotation with VEP
+- id: schema_param_vep_loftee
+  label: Schema parameter `vep_loftee` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_loftee
+    excerpt: Enable the use of the VEP LOFTEE plugin.
+- id: schema_param_vep_mastermind
+  label: Schema parameter `vep_mastermind` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_mastermind
+    excerpt: Enable the use of the VEP Mastermind plugin.
+- id: schema_param_vep_out_format
+  label: Schema parameter `vep_out_format` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_out_format
+    excerpt: VEP output-file format.
+- id: schema_param_vep_phenotypes
+  label: Schema parameter `vep_phenotypes` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_phenotypes
+    excerpt: Enable the use of the VEP Phenotypes plugin.
+- id: schema_param_vep_spliceai
+  label: Schema parameter `vep_spliceai` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_spliceai
+    excerpt: Enable the use of the VEP SpliceAI plugin.
+- id: schema_param_vep_spliceregion
+  label: Schema parameter `vep_spliceregion` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vep_spliceregion
+    excerpt: Enable the use of the VEP SpliceRegion plugin.
+- id: schema_param_version
+  label: Schema parameter `version` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: version
+    excerpt: Display version and exit.
+- id: schema_param_wes
+  label: Schema parameter `wes` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: wes
+    excerpt: Enable when exome or panel data is provided.
+- id: documented_output_bam
+  label: Documented `bam` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/README.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: bam
+- id: documented_output_contamination
+  label: Documented `contamination` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/README.md
+    excerpt: contamination
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: contamination
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: contamination
+- id: documented_output_counts
+  label: Documented `counts` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: counts
+- id: documented_output_matrix
+  label: Documented `matrix` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: matrix
+- id: documented_output_multiqc
+  label: Documented `multiqc` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/README.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: multiqc
+- id: documented_output_report
+  label: Documented `report` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/README.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/output.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/docs/usage.md
+    excerpt: report
+- id: published_outputs_main
+  label: Published outputs in `/root/key_projects/nextmcp/nf_pipeline/sarek/main.nf` should be reflected
+    in artifact contracts.
+  kind: published_outputs
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: source_files
+    path: /root/key_projects/nextmcp/nf_pipeline/sarek/main.nf
+    excerpt: publishDir or path output
+- id: schema_param_gatk_pcr_indel_model
+  label: Schema parameter `gatk_pcr_indel_model` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gatk_pcr_indel_model
+    excerpt: Option for selecting the PCR indel model used by GATK HaplotypeCaller.
+- id: schema_param_msisensor2_models
+  label: Schema parameter `msisensor2_models` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: msisensor2_models
+    excerpt: Path to models folder used with MSIsensor2.
+- id: schema_param_multiqc_methods_description
+  label: Schema parameter `multiqc_methods_description` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: multiqc_methods_description
+    excerpt: Custom MultiQC yaml file containing HTML including a methods description.
+- id: schema_param_sentieon_dnascope_emit_mode
+  label: Schema parameter `sentieon_dnascope_emit_mode` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_dnascope_emit_mode
+    excerpt: Option for selecting output and emit-mode of Sentieon's Dnascope.
+- id: schema_param_sentieon_dnascope_model
+  label: Schema parameter `sentieon_dnascope_model` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_dnascope_model
+    excerpt: Machine learning model for Sentieon Dnascope.
+- id: schema_param_sentieon_dnascope_pcr_indel_model
+  label: Schema parameter `sentieon_dnascope_pcr_indel_model` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_dnascope_pcr_indel_model
+    excerpt: Option for selecting the PCR indel model used by Sentieon Dnascope.
+- id: schema_param_sentieon_haplotyper_emit_mode
+  label: Schema parameter `sentieon_haplotyper_emit_mode` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sentieon_haplotyper_emit_mode
+    excerpt: Option for selecting output and emit-mode of Sentieon's Haplotyper.
+- id: schema_param_skip_tools
+  label: Schema parameter `skip_tools` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_tools
+    excerpt: Disable specified tools.
+- id: schema_param_umi_base_skip
+  label: Schema parameter `umi_base_skip` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: umi_base_skip
+    excerpt: Number of bases to skip after the UMI(s) in the read when extracting with fastp.
+- id: schema_param_umi_length
+  label: Schema parameter `umi_length` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: umi_length
+    excerpt: Length of the UMI(s) in the read.
+- id: schema_param_umi_read_structure
+  label: Schema parameter `umi_read_structure` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: umi_read_structure
+    excerpt: Specify UMI read structure for fgbio UMI consensus read generation
+- id: schema_param_umi_tag
+  label: Schema parameter `umi_tag` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: umi_tag
+    excerpt: Tag detailing where UMIs are present inside the bam/cram file (e.g. RX).
+- id: schema_param_use_gatk_spark
+  label: Schema parameter `use_gatk_spark` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: use_gatk_spark
+    excerpt: Enable usage of GATK Spark implementation for duplicate marking and/or base quality score
+      recalibration

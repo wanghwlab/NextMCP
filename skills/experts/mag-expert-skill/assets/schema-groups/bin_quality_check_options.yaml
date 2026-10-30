@@ -1,0 +1,640 @@
+group:
+  id: bin_quality_check_options
+  label: Bin quality check options
+  selection_rule: Use this group for parameters defined under the `Bin quality check
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/bin_quality_check_options.md
+  - assets/schema-groups/bin_quality_check_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `bin_quality_check_options` for exact lookup.
+parameters:
+- group_id: bin_quality_check_options
+  name: busco_clean
+  source_name: busco_clean
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable clean-up of temporary files created during BUSCO runs.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Enable clean-up of temporary files created during BUSCO runs.
+    help_text: By default, BUSCO creates a large number of intermediate files every
+      run. This may cause problems on some clusters which have file number limits
+      in plate, particularly with large numbers of bins. Enabling this option cleans
+      these files, reducing the total file count of the work directory.
+- group_id: bin_quality_check_options
+  name: checkm2_db
+  source_name: checkm2_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to local file of an already downloaded and uncompressed CheckM2
+    database file (.dmnd file).
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/checkm2_db
+  example_values:
+  - <server_reference_root>/checkm2_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    description: Path to local file of an already downloaded and uncompressed CheckM2
+      database file (.dmnd file).
+    help_text: The pipeline can also download this for you if not specified, and you
+      can save the resulting directory into your output directory by specifying `--save_checkm2_data`.
+      You should move this file to somewhere else on your machine (and supply back
+      to the pipeline in future runs again with `--checkm2_db`).
+    format: file-path
+    exists: true
+- group_id: bin_quality_check_options
+  name: checkm_db
+  source_name: checkm_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to local folder containing already downloaded and uncompressed
+    CheckM database.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/checkm_db
+  example_values:
+  - <server_reference_root>/checkm_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    description: Path to local folder containing already downloaded and uncompressed
+      CheckM database.
+    help_text: The pipeline can also download this for you if not specified, and you
+      can save the resulting directory into your output directory by specifying `--save_checkm_data`.
+      You should move this directory to somewhere else on your machine (and supply
+      back to the pipeline in future runs again with `--checkm_db`.
+    format: directory-path
+    exists: true
+- group_id: bin_quality_check_options
+  name: checkm_download_url
+  source_name: checkm_download_url
+  type: string
+  required: false
+  default: https://zenodo.org/records/7401545/files/checkm_data_2015_01_16.tar.gz
+  enum: null
+  description: URL pointing to checkM database for auto download, if local path not
+    supplied.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/checkm_download_url
+  example_values:
+  - <server_reference_root>/checkm_download_url
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    default: https://zenodo.org/records/7401545/files/checkm_data_2015_01_16.tar.gz
+    hidden: true
+    description: URL pointing to checkM database for auto download, if local path
+      not supplied.
+    help_text: You can use this parameter to point to an online copy of the checkM
+      database TAR archive that the pipeline will use for auto download if a local
+      path is not supplied to `--checkm_db`.
+- group_id: bin_quality_check_options
+  name: generate_bigmag_file
+  source_name: generate_bigmag_file
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Make a BIgMAG input file including GUNC results.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/generate_bigmag_file
+  example_values:
+  - <server_input_root>/generate_bigmag_file
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Make a BIgMAG input file including GUNC results.
+    help_text: It requires --run_gunc and --run_checkm2 to be executed. BINQC, GTDB-TK,
+      QUAST nor BUSCO can't be skipped.
+- group_id: bin_quality_check_options
+  name: gunc_database_type
+  source_name: gunc_database_type
+  type: string
+  required: false
+  default: progenomes
+  enum: &id001
+  - progenomes
+  - gtdb
+  - test_data
+  description: Specify which database to auto-download if not supplying own
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gunc_database_type
+  example_values:
+  - progenomes
+  - gtdb
+  - test_data
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    default: progenomes
+    description: Specify which database to auto-download if not supplying own
+    enum: *id001
+- group_id: bin_quality_check_options
+  name: gunc_db
+  source_name: gunc_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a path to a pre-downloaded GUNC dmnd database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gunc_db
+  example_values:
+  - <server_reference_root>/gunc_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    description: Specify a path to a pre-downloaded GUNC dmnd database file
+    format: file-path
+    exists: true
+- group_id: bin_quality_check_options
+  name: gunc_save_db
+  source_name: gunc_save_db
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the used GUNC reference files downloaded when not using --gunc_db
+    parameter.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gunc_save_db
+  example_values:
+  - <server_reference_root>/gunc_save_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Save the used GUNC reference files downloaded when not using --gunc_db
+      parameter.
+    help_text: If specified, the corresponding DIAMOND file downloaded from the GUNC
+      server will be stored in your output directory alongside your GUNC results.
+- group_id: bin_quality_check_options
+  name: postbinning_input
+  source_name: postbinning_input
+  type: string
+  required: false
+  default: raw_bins_only
+  enum: &id002
+  - raw_bins_only
+  - refined_bins_only
+  - both
+  description: Specify which binning output is sent for downstream annotation, taxonomic
+    classification, bin quality control etc.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/postbinning_input
+  example_values:
+  - raw_bins_only
+  - refined_bins_only
+  - both
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    default: raw_bins_only
+    description: Specify which binning output is sent for downstream annotation, taxonomic
+      classification, bin quality control etc.
+    help_text: '`raw_bins_only`: only bins (and unbinned contigs) from the binners.
+
+      `refined_bins_only`: only bins (and unbinned contigs) from the bin refinement
+      step.
+
+      `both`: bins and unbinned contigs from both the binning and bin refinement steps.'
+    enum: *id002
+- group_id: bin_quality_check_options
+  name: refine_bins_dastool
+  source_name: refine_bins_dastool
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on bin refinement using DAS Tool.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Turn on bin refinement using DAS Tool.
+- group_id: bin_quality_check_options
+  name: refine_bins_dastool_savecontig2bin
+  source_name: refine_bins_dastool_savecontig2bin
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save contig to bin maps used for bin refinement
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Specify to save contig to bin maps used for bin refinement
+- group_id: bin_quality_check_options
+  name: refine_bins_dastool_threshold
+  source_name: refine_bins_dastool_threshold
+  type: number
+  required: false
+  default: 0.5
+  enum: null
+  description: Specify single-copy gene score threshold for bin refinement.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.5
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: number
+    default: 0.5
+    description: Specify single-copy gene score threshold for bin refinement.
+    help_text: "Score threshold for single-copy gene selection algorithm to keep selecting\
+      \ bins, with a value ranging from 0-1.\n\nFor description of scoring algorithm,\
+      \ see: Sieber, Christian M. K., et al. 2018. Nature Microbiology 3 (7): 836\u2013\
+      43. https://doi.org/10.1038/s41564-018-0171-1.\n\n> Modifies DAS Tool parameter\
+      \ --score_threshold\n"
+- group_id: bin_quality_check_options
+  name: run_busco
+  source_name: run_busco
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable running BUSCO during bin QC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Enable running BUSCO during bin QC.
+- group_id: bin_quality_check_options
+  name: run_checkm
+  source_name: run_checkm
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable running CheckM during bin QC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Enable running CheckM during bin QC.
+- group_id: bin_quality_check_options
+  name: run_checkm2
+  source_name: run_checkm2
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable running CheckM2 during bin QC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Enable running CheckM2 during bin QC.
+- group_id: bin_quality_check_options
+  name: run_gunc
+  source_name: run_gunc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on GUNC genome chimerism checks
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Turn on GUNC genome chimerism checks
+- group_id: bin_quality_check_options
+  name: save_busco_db
+  source_name: save_busco_db
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the used BUSCO lineage datasets provided via `--busco_db`.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/save_busco_db
+  example_values:
+  - <server_reference_root>/save_busco_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Save the used BUSCO lineage datasets provided via `--busco_db`.
+    help_text: Useful to allow reproducibility, as BUSCO datasets are frequently updated
+      and old versions do not always remain accessible.
+- group_id: bin_quality_check_options
+  name: save_checkm2_data
+  source_name: save_checkm2_data
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the used CheckM2 reference files downloaded when not using --checkm2_db
+    parameter.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Save the used CheckM2 reference files downloaded when not using --checkm2_db
+      parameter.
+    help_text: If specified, the directories and files decompressed from the `tar.gz`
+      file downloaded from the [Zenodo repository](https://zenodo.org/records/5571251)
+      will be stored in your output directory alongside your CheckM2 results.
+- group_id: bin_quality_check_options
+  name: save_checkm_data
+  source_name: save_checkm_data
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the used CheckM reference files downloaded when not using --checkm_db
+    parameter.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Save the used CheckM reference files downloaded when not using --checkm_db
+      parameter.
+    help_text: If specified, the directories and files decompressed from the `tar.gz`
+      file downloaded from the [CheckM FTP server](https://data.ace.uq.edu.au/public/CheckM_databases/)
+      will be stored in your output directory alongside your CheckM results.
+- group_id: bin_quality_check_options
+  name: skip_binqc
+  source_name: skip_binqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Disable bin QC with BUSCO, CheckM or CheckM2.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: boolean
+    description: Disable bin QC with BUSCO, CheckM or CheckM2.
+- group_id: bin_quality_check_options
+  name: busco_db
+  source_name: busco_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Download URL, local tar.gz archive, or local uncompressed directory
+    for an *_odb10 or *_odb12 BUSCO lineage dataset.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/busco_db
+  example_values:
+  - <server_reference_root>/busco_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    description: Download URL, local tar.gz archive, or local uncompressed directory
+      for an *_odb10 or *_odb12 BUSCO lineage dataset.
+    help_text: 'E.g. https://busco-data.ezlab.org/v5/data/lineages/bacteria_odb10.2024-01-08.tar.gz,
+      `/path/to/bacteria_odb10.2024-01-08.tar.gz`.
+
+
+      For more details, check the [BUSCO section in the usage documentation](https://nf-co.re/mag/latest/docs/usage/#busco).'
+    format: path
+    exists: true
+- group_id: bin_quality_check_options
+  name: busco_db_lineage
+  source_name: busco_db_lineage
+  type: string
+  required: false
+  default: auto
+  enum: null
+  description: Name of the BUSCO *_odb10 or *_odb12 lineage to check against. Additionally
+    supports 'auto', 'auto_prok' and 'auto_euk' for automatic lineage selection mode.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/busco_db_lineage
+  example_values:
+  - <server_reference_root>/busco_db_lineage
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Bin quality check options
+  raw_schema:
+    type: string
+    description: Name of the BUSCO *_odb10 or *_odb12 lineage to check against. Additionally
+      supports 'auto', 'auto_prok' and 'auto_euk' for automatic lineage selection
+      mode.
+    help_text: 'Typically used in combination with `--busco_db`, corresponding to
+      the lineage files supplied within the `--busco_db` file or directory.
+
+
+      If supplying without a `--busco_db`, will require an internet connection to
+      work!'
+    pattern: (.*_odb(10|12))|auto(_prok|_euk)?$
+    default: auto
+- group_id: bin_quality_check_options
+  name: checkm2_db_version
+  source_name: checkm2_db_version
+  type: integer
+  required: false
+  default: 14897628
+  enum: null
+  description: CheckM2 database version number to download (Zenodo record ID, for
+    reference check the canonical reference https://zenodo.org/records/5571251, and
+    pick the Zenodo ID of the database version of your choice).
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/checkm2_db_version
+  example_values:
+  - <server_reference_root>/checkm2_db_version
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bin quality check options
+  raw_schema:
+    type: integer
+    default: 14897628
+    description: CheckM2 database version number to download (Zenodo record ID, for
+      reference check the canonical reference https://zenodo.org/records/5571251,
+      and pick the Zenodo ID of the database version of your choice).

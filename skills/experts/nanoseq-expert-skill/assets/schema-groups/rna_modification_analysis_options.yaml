@@ -1,0 +1,84 @@
+group:
+  id: rna_modification_analysis_options
+  label: RNA modification analysis options
+  selection_rule: Use this group for parameters defined under the `RNA modification
+    analysis options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/rna_modification_analysis_options.md
+  - assets/schema-groups/rna_modification_analysis_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `rna_modification_analysis_options` for exact lookup.
+parameters:
+- group_id: rna_modification_analysis_options
+  name: skip_m6anet
+  source_name: skip_m6anet
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip m6A detection with m6anet.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: RNA modification analysis options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip m6A detection with m6anet.
+- group_id: rna_modification_analysis_options
+  name: skip_modification_analysis
+  source_name: skip_modification_analysis
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip RNA modification analysis.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: RNA modification analysis options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip RNA modification analysis.
+- group_id: rna_modification_analysis_options
+  name: skip_xpore
+  source_name: skip_xpore
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip differential modification analysis with xpore.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: RNA modification analysis options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip differential modification analysis with xpore.

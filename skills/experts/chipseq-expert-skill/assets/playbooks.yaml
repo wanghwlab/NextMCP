@@ -1,0 +1,106 @@
+playbooks:
+- id: default_run
+  use_when: Standard broadPeak ChIP-seq analysis from FastQ samplesheet to MultiQC,
+    IGV, MACS3, consensus peaks, and DESeq2 exploratory QC.
+  prerequisites:
+  - Confirm project and server-local input samplesheet with nextmcp tools.
+  - Confirm the samplesheet first seven columns are sample, fastq_1, fastq_2, replicate,
+    antibody, control, and control_replicate.
+  - Confirm outdir on the nextmcp server.
+  - Confirm either a valid genome preset or server-local fasta plus gtf or
+    gff.
+  - Prefer confirmed prebuilt aligner indices for large genomes; otherwise decide
+    whether to set save_reference.
+  recommended_preset: default_run
+  nextmcp_sequence:
+  - server_info() when default profile or server layout is unknown
+  - project_list() when the project id is unknown
+  - project_get(project) when project root or previous runs matter
+  - fs_list(path=<server path>, mode="manifest") for each uncertain samplesheet,
+    reference, or index path
+  - nextflow_run(prepare=true, pipeline="chipseq", project=..., params=...)
+  - nextflow_run(pipeline="chipseq", project=..., params=...)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  outputs_to_review:
+  - multiqc/<PEAK_TYPE>/multiqc_report.html
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/
+  - igv/<PEAK_TYPE>/igv_session.xml
+  - pipeline_info/params.json
+- id: narrow_peak
+  use_when: User asks for transcription factor peaks, narrowPeak output, summits,
+    or MACS3 narrow peak mode.
+  prerequisites:
+  - Confirm the requested mark is suitable for narrowPeak mode.
+  - Confirm the same samplesheet and reference prerequisites as default_run.
+  recommended_preset: narrow_peak_run
+  params_to_set:
+    narrow_peak: true
+  outputs_to_review:
+  - <ALIGNER>/merged_library/macs3/narrowPeak/
+  - multiqc/narrowPeak/multiqc_report.html
+  - igv/narrowPeak/igv_session.xml
+- id: alternate_aligner
+  use_when: User asks for bwa, bowtie2, chromap, star, unmapped reads, or
+    aligner comparison.
+  prerequisites:
+  - Map aligner exactly to one schema enum value: bwa, bowtie2, chromap, or star.
+  - Confirm the matching prebuilt index path when available for bwa_index, bowtie2_index,
+    chromap_index, or star_index.
+  - Set save_unaligned only for Bowtie2 or STAR.
+  recommended_preset: alternate_aligner_run
+  outputs_to_review:
+  - <ALIGNER>/library/samtools_stats/
+  - <ALIGNER>/merged_library/
+  - <ALIGNER>/merged_library/bigwig/
+  - star/library/log/ when aligner is star
+- id: save_reference
+  use_when: The server lacks a matching prebuilt index and the user wants to reuse
+    indices built from FASTA.
+  prerequisites:
+  - Confirm enough storage under outdir.
+  - Confirm fasta and annotation paths before launch.
+  recommended_preset: save_reference_run
+  outputs_to_review:
+  - genome/index/bwa/
+  - genome/index/bowtie2/
+  - genome/index/chromap/
+  - genome/index/star/
+- id: saved_handoff_outputs
+  use_when: User needs trimmed FastQ, intermediate BAMs, unaligned reads, or MACS3
+    pileup files for handoff or debugging.
+  prerequisites:
+  - Explain the storage increase before launch.
+  - Use exact schema lookup for save flags when the requested file family is specific.
+  recommended_preset: saved_intermediates_run
+  outputs_to_review:
+  - trimgalore/
+  - <ALIGNER>/library/
+  - <ALIGNER>/library/unmapped/
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/
+- id: qc_light_run
+  use_when: User explicitly wants to skip selected QC for a faster exploratory run.
+  prerequisites:
+  - State which review signals will be missing before launch.
+  - Keep MultiQC unless the user explicitly says to skip it.
+  recommended_preset: qc_light_run
+  outputs_to_review:
+  - pipeline_info/params.json
+  - available sections under multiqc/<PEAK_TYPE>/multiqc_report.html
+- id: historical_reuse_or_restart
+  use_when: User asks to find previous results, compare outputs, or restart from
+    an earlier chipseq run.
+  prerequisites:
+  - Use run_list(project=..., pipeline="chipseq", artifact_path_contains=...)
+    when the user only remembers an output fragment.
+  - Use run_get(include=["artifact_summary"]), then run_artifacts(...) before
+    reading files.
+  - Treat artifacts.json and pipeline_fingerprint as historical facts.
+  - Confirm route compatibility through pipeline_info/params.json or equivalent
+    launch metadata before recommending reuse or restart.
+  - Use from_run_id as the public restart input when launching a follow-up run.
+  recommended_preset: null
+  outputs_to_review:
+  - pipeline_info/params.json
+  - multiqc/<PEAK_TYPE>/multiqc_report.html
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/

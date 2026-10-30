@@ -1,0 +1,763 @@
+status: resolved
+gaps:
+- id: documented_prerequisite_database
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: documented_prerequisite_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: documented_prerequisite_pre_built
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_cat_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_cat_db_generate
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_checkm2_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_checkm2_db_version
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_checkm_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_checkm_download_url
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_genomad_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_gtdb_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_gunc_database_type
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_gunc_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_host_fasta_bowtie2index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_metaeuk_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_metaeuk_mmseqs_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_save_cat_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_save_mmseqs_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: prerequisite_skip_gtdbtk
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_adapterremoval_trim_quality_stretch
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_ancient_dna
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_bbnorm
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_bin_concoct_donotconcatlast
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_bin_domain_classification
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_bin_metabinner_scale
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_binning_map_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_busco_clean
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_cat_allow_unofficial_lineages
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_cat_classify_unbinned
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_cat_db_generate
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_cat_no_suggestive_asterisks
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_clip_tool
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_coassemble_group
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_exclude_unbins_from_postbinning
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_fastp_save_trimmed_fail
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_fastp_trim_polyg
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_generate_bigmag_file
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_gtdbtk_pplacer_useram
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_gtdbtk_skip_aniscreen
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_gtdbtk_use_full_tree
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_gunc_database_type
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_gunc_save_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_help
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_help_full
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_host_removal_save_ids
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_host_removal_verysensitive
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_igenomes_ignore
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_keep_lambda
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_keep_phix
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_longread_adaptertrimming_tool
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_longread_filtering_tool
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_megahit_fix_cpu_1
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_metaeuk_mmseqs_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_monochrome_logs
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_plaintext_email
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_postbinning_input
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_prokka_fast_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_prokka_with_compliance
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_publish_dir_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_refine_bins_dastool
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_refine_bins_dastool_savecontig2bin
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_run_busco
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_run_checkm
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_run_checkm2
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_run_gunc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_run_virus_identification
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_assembly_mapped_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_bbnorm_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_busco_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_cat_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_checkm2_data
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_checkm_data
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_clipped_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_filtered_longreads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_hostremoved_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_lambdaremoved_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_mmseqs_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_phixremoved_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_save_porechop_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_semibin_environment
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_show_hidden
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_single_end
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_adapter_trimming
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_ale
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_ancient_damagecorrection
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_binning
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_binqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_clipping
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_comebin
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_concoct
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_flye
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_gtdbtk
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_longread_filtering
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_longread_qc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_maxbin2
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_megahit
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_metabat2
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_metabinner
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_metaeuk
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_metamdbg
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_prodigal
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_prokka
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_quast
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_semibin
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_shortread_qc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_spades
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_skip_spadeshybrid
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_spades_downstreaminput
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_validate_params
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_version
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: documented_output_bam
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: documented_output_contamination
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: documented_output_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: documented_output_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_adapterremoval_adapter1
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_adapterremoval_adapter2
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_adapterremoval_minquality
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_assembly_input
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_bowtie2_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_busco_db_lineage
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_gtdb_db
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_lambda_reference
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_multiqc_methods_description
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_phix_reference
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: schema_param_prokka_compliance_centre
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: replace_generic_artifact_contract
+  source: artifact-contracts.yaml
+  status: resolved
+  action: Replace the generic results-root contract with source-backed published outputs.
+  resolution: Covered by source-backed mag assets and references in this package.
+- id: replace_generic_qc_rule
+  source: qc-rules.yaml
+  status: resolved
+  action: Replace the generic completion check with source-backed QC and troubleshooting
+    rules.
+  resolution: Covered by source-backed mag assets and references in this package.

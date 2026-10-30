@@ -1,0 +1,121 @@
+artifacts:
+- id: fastqc_reports
+  path: fastqc/*_fastqc.html
+  produced_when: Always (unless skip_fastqc)
+  meaning: Per-sample raw read quality metrics before trimming.
+
+- id: trimgalore_logs
+  path: trimgalore/logs/*.log
+  produced_when: Always (unless skip_trimming)
+  meaning: Trim Galore! adapter-trimming logs and summary statistics.
+
+- id: trimgalore_fastqc
+  path: trimgalore/fastqc/*_fastqc.html
+  produced_when: Always (unless skip_trimming)
+  meaning: Per-sample read quality metrics after adapter trimming.
+
+- id: aligned_bam_library
+  path: <ALIGNER>/library/*.bam
+  produced_when: When save_align_intermeds is true.
+  meaning: Coordinate-sorted alignment BAMs for individual libraries.
+
+- id: aligned_bam_merged
+  path: <ALIGNER>/merged_library/*.mLb.clN.*.bam
+  produced_when: Always
+  meaning: Merged, duplicate-marked, filtered alignment BAMs per sample.
+
+- id: samtools_stats
+  path: <ALIGNER>/merged_library/samtools_stats/
+  produced_when: Always
+  meaning: SAMtools flagstat, idxstats, and stats files for QC.
+
+- id: picard_metrics
+  path: <ALIGNER>/merged_library/picard_metrics/
+  produced_when: Always (unless skip_picard_metrics)
+  meaning: Picard CollectMultipleMetrics and MarkDuplicates outputs.
+
+- id: preseq_complexity
+  path: <ALIGNER>/merged_library/preseq/*.lc_extrap.txt
+  produced_when: Always (unless skip_preseq)
+  meaning: Preseq library complexity and expected future yield estimates.
+
+- id: bigwig_tracks
+  path: <ALIGNER>/merged_library/bigwig/*.bigWig
+  produced_when: Always
+  meaning: Normalised bigWig coverage tracks scaled to 1 million mapped reads.
+
+- id: deeptools_fingerprint
+  path: <ALIGNER>/merged_library/deeptools/plotfingerprint/
+  produced_when: Always (unless skip_plot_fingerprint)
+  meaning: deepTools plotFingerprint QC for genome-wide enrichment.
+
+- id: deeptools_profile
+  path: <ALIGNER>/merged_library/deeptools/plotprofile/
+  produced_when: Always (unless skip_plot_profile)
+  meaning: deepTools plotProfile and plotHeatmap around TSS and gene body.
+
+- id: macs2_peaks
+  path: <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/*
+  produced_when: Always (unless skip_peak_qc or skip_peak_annotation)
+  meaning: MACS2 peak calls (broadPeak/narrowPeak), summits, and HOMER annotation.
+
+- id: macs2_qc
+  path: <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/qc/
+  produced_when: Always
+  meaning: MACS2 QC plots (peak count, fold-change, FRiP, feature ratios).
+
+- id: consensus_peaks
+  path: <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/consensus/
+  produced_when: Always (unless skip_consensus_peaks)
+  meaning: Consensus peak-set, featureCounts matrix, and UpSetR intersection plots.
+
+- id: deseq2_qc
+  path: <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/consensus/deseq2/
+  produced_when: Always (unless skip_deseq2_qc)
+  meaning: DESeq2 PCA, sample-distance heatmap, and normalised counts.
+
+- id: ataqv_metrics
+  path: <ALIGNER>/merged_library/ataqv/<PEAK_TYPE>/
+  produced_when: Always (unless skip_ataqv)
+  meaning: ATAC-seq specific QC metrics in JSON and HTML report format.
+
+- id: merged_replicate_analysis
+  path: <ALIGNER>/merged_replicate/
+  produced_when: When multiple replicates are present and skip_merge_replicates is false.
+  meaning: Merged replicate-level alignments, peaks, and differential analysis.
+
+- id: multiqc_report
+  path: multiqc/<PEAK_TYPE>/multiqc_report.html
+  produced_when: Always (unless skip_multiqc)
+  meaning: Aggregated MultiQC report across all samples and tools.
+
+- id: igv_session
+  path: igv/<PEAK_TYPE>/igv_session.xml
+  produced_when: Always (unless skip_igv)
+  meaning: IGV session file with bigWig tracks, peaks, and differential sites.
+
+- id: genome_index
+  path: genome/index/<ALIGNER>/
+  produced_when: When save_reference is true and index is built by the pipeline.
+  meaning: Saved aligner index for reuse in future runs.
+
+- id: pipeline_info
+  path: pipeline_info/
+  produced_when: Always
+  meaning: params.json, software versions, execution reports, and validated samplesheet.
+
+review_order:
+  - multiqc_report
+  - macs2_peaks
+  - macs2_qc
+  - consensus_peaks
+  - deseq2_qc
+  - ataqv_metrics
+  - aligned_bam_merged
+  - bigwig_tracks
+  - picard_metrics
+  - preseq_complexity
+  - deeptools_fingerprint
+  - deeptools_profile
+  - fastqc_reports
+  - pipeline_info

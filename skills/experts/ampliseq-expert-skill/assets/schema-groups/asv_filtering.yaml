@@ -1,0 +1,150 @@
+group:
+  id: asv_filtering
+  label: ASV filtering
+  selection_rule: Use this group for parameters defined under the `ASV filtering`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/asv_filtering.md
+  - assets/schema-groups/asv_filtering.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `asv_filtering` for exact lookup.
+parameters:
+- group_id: asv_filtering
+  name: exclude_taxa
+  source_name: exclude_taxa
+  type: string
+  required: false
+  default: mitochondria,chloroplast
+  enum: null
+  description: Comma separated list of unwanted taxa, to skip taxa filtering use "none"
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - mitochondria,chloroplast
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV filtering
+  raw_schema:
+    type: string
+    default: mitochondria,chloroplast
+    description: Comma separated list of unwanted taxa, to skip taxa filtering use
+      "none"
+    help_text: 'Depending on the primers used, PCR might amplify unwanted or off-target
+      DNA. By default sequences originating from mitochondria or chloroplasts are
+      removed. The taxa specified are excluded from further analysis.
+
+      For example to exclude any taxa that contain mitochondria, chloroplast, or archaea:
+
+
+      ```bash
+
+      --exclude_taxa "mitochondria,chloroplast,archaea"
+
+      ```
+
+
+      If you prefer not filtering the data, specify:
+
+
+      ```bash
+
+      --exclude_taxa "none"
+
+      ```
+
+
+      Please note the following requirements:
+
+
+      1. Comma separated list enclosed in quotes
+
+      2. May not contain whitespace characters
+
+      3. Features that contain one or several of these terms in their taxonomical
+      classification are excluded from further analysis
+
+      4. The taxonomy level is not taken into consideration
+
+      5. Taxa names should be as in Taxonomic database (Default: Silva138), example:
+      ''Bacteria'', ''Armatimonadia'', ''unidentified'', ''p__''
+
+      6. Taxon names are case-insensitive and partial match is possible.'
+- group_id: asv_filtering
+  name: min_frequency
+  source_name: min_frequency
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Abundance filtering
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV filtering
+  raw_schema:
+    type: integer
+    default: 1
+    description: Abundance filtering
+    help_text: 'Remove entries from the feature table below an absolute abundance
+      threshold (default: 1, meaning filter is disabled). Singletons are often regarded
+      as artifacts, choosing a value of 2 removes sequences with less than 2 total
+      counts from the feature table.
+
+
+      For example to remove singletons choose:
+
+
+      ```bash
+
+      --min_frequency 2
+
+      ```'
+- group_id: asv_filtering
+  name: min_samples
+  source_name: min_samples
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Prevalence filtering
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/samplesheet.csv
+  example_values:
+  - <server_input_root>/samplesheet.csv
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV filtering
+  raw_schema:
+    type: integer
+    default: 1
+    description: Prevalence filtering
+    help_text: 'Filtering low prevalent features from the feature table, e.g. keeping
+      only features that are present in at least two samples can be achived by choosing
+      a value of 2 (default: 1, meaning filter is disabled). Typically only used when
+      having replicates for all samples.
+
+
+      For example to retain features that are present in at least two sample:
+
+
+      ```bash
+
+      --min_samples 2
+
+      ```
+
+
+      Please note this is independent of abundance.'

@@ -1,0 +1,140 @@
+group:
+  id: input_output_options
+  label: Input/output options
+  selection_rule: Use this group for parameters defined under the `Input/output options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/input_output_options.md
+  - assets/schema-groups/input_output_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `input_output_options` for exact lookup.
+parameters:
+- group_id: input_output_options
+  name: input
+  source_name: input
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to comma-separated file containing information about the samples
+    in the experiment.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/input
+  example_values:
+  - <server_output_root>/input
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    description: Path to comma-separated file containing information about the samples
+      in the experiment.
+    help_text: 'A design file with information about the samples in your experiment.
+      Use this parameter to specify the location of the input files. It has to be
+      a comma-separated file with a header row. See [usage docs](https://nf-co.re/sarek/usage#input).
+
+
+      If no input file is specified, sarek will attempt to locate one in the `{outdir}`
+      directory. If no input should be supplied, i.e. when --step is supplied or --build_only_index,
+      then set --input false'
+    fa_icon: fas fa-file-csv
+    type: string
+    format: file-path
+    exists: true
+    schema: assets/schema_input.json
+    pattern: ^\S+\.(csv|tsv|yaml|yml|json)$
+- group_id: input_output_options
+  name: input_restart
+  source_name: input_restart
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Automatic retrieval for restart
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/input_restart
+  example_values:
+  - <server_output_root>/input_restart
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Automatic retrieval for restart
+    fa_icon: fas fa-file-csv
+    format: file-path
+    exists: true
+    pattern: ^\S+\.(csv|tsv|yaml|yml|json)$
+    hidden: true
+    schema: assets/schema_input.json
+- group_id: input_output_options
+  name: outdir
+  source_name: outdir
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: The output directory where the results will be saved. You have to use
+    absolute paths to storage on Cloud infrastructure.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/sarek
+  example_values:
+  - <server_output_root>/sarek
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The output directory where the results will be saved. You have to
+      use absolute paths to storage on Cloud infrastructure.
+    fa_icon: fas fa-folder-open
+- group_id: input_output_options
+  name: step
+  source_name: step
+  type: string
+  required: true
+  default: mapping
+  enum: &id001
+  - mapping
+  - markduplicates
+  - prepare_recalibration
+  - recalibrate
+  - variant_calling
+  - annotate
+  description: Starting step
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/step
+  example_values:
+  - mapping
+  - markduplicates
+  - prepare_recalibration
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    default: mapping
+    fa_icon: fas fa-play
+    description: Starting step
+    help_text: The pipeline starts from this step and then runs through the possible
+      subsequent steps.
+    enum: *id001

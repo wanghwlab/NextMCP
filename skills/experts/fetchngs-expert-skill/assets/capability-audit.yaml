@@ -1,0 +1,317 @@
+pipeline_id: fetchngs
+status: covered
+summary:
+  total: 17
+  high_impact: 15
+  needs_review: 0
+capabilities:
+- id: documented_prerequisite_database
+  label: Documented `database` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - playbooks.yaml
+  - param-presets.yaml
+  - qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/README.md
+    excerpt: database
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/docs/output.md
+    excerpt: database
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/docs/usage.md
+    excerpt: database
+- id: prerequisite_skip_fastq_download
+  label: Parameter `skip_fastq_download` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - playbooks.yaml
+  - param-presets.yaml
+  - qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_fastq_download
+    excerpt: Only download metadata for public data database ids and don't download
+      the FastQ files.
+- id: schema_param_download_method
+  label: Schema parameter `download_method` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - playbooks.yaml
+  - param-presets.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: download_method
+    excerpt: Method to download FastQ files. Available options are 'aspera', 'ftp'
+      or 'sratools'. Default is 'ftp'.
+- id: schema_param_force_sratools_download
+  label: Schema parameter `force_sratools_download` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: "Deprecated in the current schema; use `download_method: sratools`."
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: force_sratools_download
+    excerpt: This parameter has been deprecated. Please use '--download_method sratools'
+      instead.
+- id: schema_param_help
+  label: Schema parameter `help` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Help display exits without running a fetchngs analysis.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help
+    excerpt: Display help text.
+- id: schema_param_monochrome_logs
+  label: Schema parameter `monochrome_logs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Log color preference does not change route, prerequisites, or outputs.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: monochrome_logs
+    excerpt: Do not use coloured log outputs.
+- id: schema_param_nf_core_pipeline
+  label: Schema parameter `nf_core_pipeline` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - playbooks.yaml
+  - param-presets.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: nf_core_pipeline
+    excerpt: Name of supported nf-core pipeline e.g. 'rnaseq'. A samplesheet for direct
+      use with the pipeline will be created with the appropriate columns.
+- id: schema_param_plaintext_email
+  label: Schema parameter `plaintext_email` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Plain-text email formatting does not change route, prerequisites, or data outputs.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: plaintext_email
+    excerpt: Send plain-text email instead of HTML.
+- id: schema_param_publish_dir_mode
+  label: Schema parameter `publish_dir_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Publish mode is preserved in the full schema lookup layer; ordinary fetchngs playbooks use the default copy behavior.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: publish_dir_mode
+    excerpt: Method used to save pipeline results to output directory.
+- id: schema_param_skip_fastq_download
+  label: Schema parameter `skip_fastq_download` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - playbooks.yaml
+  - param-presets.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_fastq_download
+    excerpt: Only download metadata for public data database ids and don't download
+      the FastQ files.
+- id: schema_param_validate_params
+  label: Schema parameter `validate_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Parameter validation should keep the schema default for ordinary runs; exact mapping remains in grouped schema assets.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validate_params
+    excerpt: Boolean whether to validate parameters against the schema at runtime
+- id: schema_param_validationfailunrecognisedparams
+  label: Schema parameter `validationFailUnrecognisedParams` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Unrecognised-parameter validation behavior is generic validation behavior, not a fetchngs analysis route.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validationFailUnrecognisedParams
+    excerpt: Validation of parameters fails when an unrecognised parameter is found.
+- id: schema_param_validationlenientmode
+  label: Schema parameter `validationLenientMode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Lenient validation is generic schema parsing behavior, not a fetchngs analysis route.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validationLenientMode
+    excerpt: Validation of parameters in lenient more.
+- id: schema_param_validationshowhiddenparams
+  label: Schema parameter `validationShowHiddenParams` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Hidden-parameter display is not a fetchngs analysis route.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validationShowHiddenParams
+    excerpt: Show all params when using `--help`
+- id: schema_param_version
+  label: Schema parameter `version` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - param-presets.yaml
+  - playbooks.yaml
+  scope_out_reason: Version display exits without running a fetchngs analysis.
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: version
+    excerpt: Display version and exit.
+- id: documented_output_multiqc
+  label: Documented `multiqc` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/docs/output.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/docs/usage.md
+    excerpt: multiqc
+- id: documented_output_report
+  label: Documented `report` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/README.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/docs/output.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/fetchngs/docs/usage.md
+    excerpt: report

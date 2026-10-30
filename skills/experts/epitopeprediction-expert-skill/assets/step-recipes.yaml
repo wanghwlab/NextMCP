@@ -1,0 +1,62 @@
+steps:
+  - id: launch_standard_prediction
+    purpose: Confirm server-local paths, launch the main pipeline, then inspect summary artifacts before raw files.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+    tool_sequence:
+      - project_list() when the project id is unknown
+      - project_get(project) when the project root or previous runs matter
+      - fs_list(mode="manifest") when one concrete server-local input or software path needs confirmation
+      - nextflow_run(prepare=true) when launch layout, inputs, or outputs are still uncertain
+      - nextflow_run(pipeline="epitopeprediction", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(...) after the artifact summary identifies the needed section
+      - run_logs() or fs_read() only after a concrete log or output path is known
+    outputs:
+      - results/<run_id>/
+      - predictions/[sample].tsv
+      - multiqc/multiqc_report.html
+      - pipeline_info/params.json
+  - id: launch_netmhc_prediction
+    purpose: Run NetMHC predictors only after matching server-local tarball paths are confirmed.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+      - tools
+      - netmhcpan_path or netmhciipan_path
+    failure_checks:
+      - If tools contains netmhcpan without netmhcpan_path, the workflow errors before prediction.
+      - If tools contains netmhciipan without netmhciipan_path, the workflow errors before prediction.
+      - If netmhc_system is darwin on a Linux server, review the selected runtime and tarball before launch.
+    outputs:
+      - netmhcpan/[sample]_chunk_[0-9]_predicted_netmhcpan.xls
+      - netmhciipan/[sample]_chunk_[0-9]_predicted_netmhciipan.xls
+      - predictions/[sample].tsv
+  - id: launch_fasta_only_variant_output
+    purpose: Generate epytope FASTA output from variant input and skip binding prediction.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+      - fasta_output
+    failure_checks:
+      - Confirm the input rows are VCF or VCF.GZ and annotated by VEP or SnpEff.
+      - Do not promise predictions/[sample].tsv because fasta_output empties the peptide prediction channel after FASTA merge.
+    outputs:
+      - epytope/[sample].fasta
+      - pipeline_info/params.json
+  - id: restart_or_reuse
+    purpose: Recover historical outputs or plan a public nextmcp restart.
+    minimal_inputs:
+      - project
+      - previous run id or artifact filename fragment
+    tool_sequence:
+      - run_list(project=..., pipeline="epitopeprediction", artifact_path_contains=...) when only an output fragment is known
+      - run_get(include=["artifact_summary"]) before run_artifacts
+      - run_artifacts(...) to inspect artifacts.json and pipeline_fingerprint
+      - fs_read(...) for pipeline_info/params.json only after the path is known
+      - run_get(detail="full") on the source run when launch_spec, nextflow_session_uuid, or resume compatibility matters
+      - nextflow_run(from_run_id=..., params=...) when a restart is safe and requested

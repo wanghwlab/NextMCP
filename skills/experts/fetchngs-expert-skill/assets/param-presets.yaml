@@ -1,0 +1,79 @@
+presets:
+  default_run:
+    use_when: Standard public accession run using the pipeline default FTP-first route.
+    params:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs
+    placeholders:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs
+  metadata_only:
+    use_when: Create metadata and samplesheet outputs without downloading FASTQ files.
+    params:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-metadata
+      skip_fastq_download: true
+    placeholders:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-metadata
+  sratools_download:
+    use_when: Use sra-tools for accessions where FTP is incomplete, where technical reads matter, or when protected dbGaP data is used.
+    params:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-sratools
+      download_method: sratools
+    optional_params:
+      dbgap_key: <server_input_root>/cart.jwt
+    placeholders:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-sratools
+      dbgap_key: <server_input_root>/cart.jwt
+  aspera_download:
+    use_when: Try Aspera for accessions with ENA Aspera links.
+    params:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-aspera
+      download_method: aspera
+    placeholders:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-aspera
+  downstream_samplesheet:
+    use_when: Write a samplesheet shaped for a supported downstream nf-core pipeline.
+    params:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-downstream
+      nf_core_pipeline: rnaseq
+      nf_core_rnaseq_strandedness: auto
+    allowed_nf_core_pipeline_values:
+    - rnaseq
+    - atacseq
+    - viralrecon
+    - taxprofiler
+    placeholders:
+      input: <server_input_root>/ids.csv
+      outdir: <server_output_root>/fetchngs-downstream
+channel_boundaries:
+  params:
+  - input
+  - outdir
+  - ena_metadata_fields
+  - sample_mapping_fields
+  - nf_core_pipeline
+  - nf_core_rnaseq_strandedness
+  - download_method
+  - skip_fastq_download
+  - dbgap_key
+  config_files:
+  - process.resourceLimits
+  notes:
+  - Pass ordinary pipeline options under nextflow_run(params=...).
+  - Put Nextflow config files and resource caps in nextflow_run(config_files=[...]).
+    For this nf-core pipeline, resource caps should use process.resourceLimits;
+    do not invent params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.
+  - Use from_run_id for public restart planning; do not use resume or resume_session_id as nextflow_run inputs.
+resource_override_example:
+  path: <server_input_root>/fetchngs-resource-limits.config
+  content: |
+    process {
+      resourceLimits = [cpus: 8, memory: '32.GB', time: '24.h']
+    }

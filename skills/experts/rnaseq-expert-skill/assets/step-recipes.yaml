@@ -1,0 +1,99 @@
+steps:
+  - id: launch_main
+    purpose: Confirm inputs, launch the main nf-core/rnaseq workflow, then inspect status before raw files.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+    tool_sequence:
+      - project_list() when the project id is unknown
+      - project_get(project) when the project root or prior runs matter
+      - fs_list(mode="manifest") when one server-local path still needs confirmation
+      - nextflow_run(prepare=true) when launch layout is still uncertain
+      - nextflow_run(pipeline="rnaseq", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(...) after run_get reports published sections
+    outputs:
+      - run_layout
+      - results/<run_id>/
+      - status summary
+
+  - id: restart_from_previous_run
+    purpose: Restart through nextmcp without exposing raw Nextflow resume flags.
+    minimal_inputs:
+      - project
+      - from_run_id
+    tool_sequence:
+      - run_get(detail="full") on the source run
+      - nextflow_run(prepare=true, from_run_id=...)
+      - nextflow_run(from_run_id=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    outputs:
+      - resumed run id
+      - compatibility notes
+      - next actions
+
+  - id: recover_bam_reprocessing_inputs
+    purpose: Find a prior samplesheet_with_bams.csv and plan a skip_alignment rerun.
+    minimal_inputs:
+      - project
+      - prior run id or artifact clue
+    tool_sequence:
+      - run_list(artifact_path_contains="samplesheet_with_bams.csv") when the source run is unknown
+      - run_get(include=["artifact_summary"]) on likely source runs
+      - run_artifacts(...) to locate pipeline_info/samplesheet_with_bams.csv and params.json
+      - fs_list(mode="manifest") for the chosen samplesheet path
+      - >-
+        nextflow_run(pipeline="rnaseq", project=..., params={"input": ..., "skip_alignment": true, ...})
+    outputs:
+      - samplesheet_with_bams.csv
+      - source params for aligner compatibility
+
+  - id: interactive_step
+    purpose: Run one exploratory entry only through an explicitly installed custom interactive.nf extension.
+    availability: Not shipped in this repository; unavailable in the default remote-only setup.
+    prerequisite: Confirm the matching custom script and named entry on the server before planning this route.
+    minimal_inputs:
+      - project
+      - server-local interactive.nf path
+      - entry name
+      - entry-specific params
+    supported_entries:
+      - STEP_BUILD_STAR_INDEX
+      - STEP_BUILD_SALMON_INDEX
+      - STEP_BUILD_HISAT2_INDEX
+      - STEP_BUILD_RSEM_INDEX
+      - STEP_QC
+      - STEP_TRIM
+      - STEP_FILTER_RRNA
+      - STEP_ALIGN_STAR
+      - STEP_ALIGN_HISAT2
+      - STEP_QUANTIFY_SALMON
+      - STEP_QUANTIFY_RSEM
+      - STEP_ASSEMBLE_STRINGTIE
+      - STEP_QC_RSEQC
+      - STEP_QC_QUALIMAP
+      - STEP_QC_DESEQ2
+    tool_sequence:
+      - nextflow_list_pipelines() only when the server-local pipeline root is needed
+      - fs_list(mode="manifest") for the chosen intermediate input directory
+      - nextflow_run(prepare=true, extra_args=["-entry", "<STEP_NAME>"])
+      - nextflow_run(pipeline=<server_pipeline_root>/interactive.nf, project=..., params=..., extra_args=["-entry", "<STEP_NAME>"])
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    outputs:
+      - results/<run_id>/
+      - entry-specific module outputs
+
+  - id: resource_override_config
+    purpose: Apply resource caps through config_files rather than params.
+    minimal_inputs:
+      - server-local config path
+    example_config: |
+      process {
+        resourceLimits = [cpus: 32, memory: '256.GB', time: '72.h']
+      }
+    tool_sequence:
+      - fs_list(mode="manifest") for the config file path if the user supplies one
+      - nextflow_run(..., config_files=["<server_project_root>/configs/rnaseq-resources.config"])
+    outputs:
+      - launch spec with config_files

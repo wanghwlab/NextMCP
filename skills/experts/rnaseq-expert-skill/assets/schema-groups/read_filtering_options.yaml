@@ -1,0 +1,171 @@
+group:
+  id: read_filtering_options
+  label: Read filtering options
+  selection_rule: Use this group for parameters defined under the `Read filtering
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/read_filtering_options.md
+  - assets/schema-groups/read_filtering_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `read_filtering_options` for exact lookup.
+parameters:
+- group_id: read_filtering_options
+  name: bbsplit_fasta_list
+  source_name: bbsplit_fasta_list
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to comma-separated file containing a list of reference genomes
+    to filter reads against with BBSplit. You have to also explicitly set `--skip_bbsplit
+    false` if you want to use BBSplit.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read filtering options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    fa_icon: fas fa-list-alt
+    description: Path to comma-separated file containing a list of reference genomes
+      to filter reads against with BBSplit. You have to also explicitly set `--skip_bbsplit
+      false` if you want to use BBSplit.
+    help_text: 'The file should contain 2 columns: short name and full path to reference
+      genome(s), for example:
+
+      ```
+
+      mm10,/path/to/mm10.fa
+
+      ecoli,/path/to/ecoli.fa
+
+      ```'
+- group_id: read_filtering_options
+  name: remove_ribo_rna
+  source_name: remove_ribo_rna
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the removal of reads derived from ribosomal RNA using SortMeRNA.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read filtering options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-trash-alt
+    description: Enable the removal of reads derived from ribosomal RNA using SortMeRNA.
+    help_text: Any patterns found in sequences defined by the `--ribo_database_manifest`
+      parameter will be used for filtering.
+- group_id: read_filtering_options
+  name: ribo_database_manifest
+  source_name: ribo_database_manifest
+  type: string
+  required: false
+  default: ${projectDir}/workflows/rnaseq/assets/rrna-db-defaults.txt
+  enum: null
+  description: Text file containing paths to fasta files (one per line) that will
+    be used to create the database for SortMeRNA.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/manifest.tsv
+  example_values:
+  - <server_reference_root>/manifest.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read filtering options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    default: ${projectDir}/workflows/rnaseq/assets/rrna-db-defaults.txt
+    fa_icon: fas fa-database
+    description: Text file containing paths to fasta files (one per line) that will
+      be used to create the database for SortMeRNA.
+    help_text: 'By default, [rRNA databases](https://github.com/biocore/sortmerna/tree/master/data/rRNA_databases)
+      from the SortMeRNA GitHub repository are used. See the example in `assets/rrna-default-dbs.txt`.
+      Note: commercial/non-academic entities require [SILVA licensing](https://www.arb-silva.de/silva-license-information)
+      for these databases.'
+- group_id: read_filtering_options
+  name: bbsplit_index
+  source_name: bbsplit_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to directory or tar.gz archive for pre-built BBSplit index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/bbsplit_index
+  example_values:
+  - <server_reference_root>/bbsplit_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Read filtering options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    fa_icon: fas fa-bezier-curve
+    description: Path to directory or tar.gz archive for pre-built BBSplit index.
+    help_text: The BBSplit index must be built at least once with this pipeline. Use
+      `--save_reference` to save the index, which can then be provided via `--bbsplit_index`
+      for future runs.
+- group_id: read_filtering_options
+  name: sortmerna_index
+  source_name: sortmerna_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to directory or tar.gz archive for pre-built sortmerna index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/sortmerna_index
+  example_values:
+  - <server_reference_root>/sortmerna_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Read filtering options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    fa_icon: fas fa-bezier-curve
+    description: Path to directory or tar.gz archive for pre-built sortmerna index.
+    help_text: The SortMeRNA index must be built at least once with this pipeline.
+      Use `--save_reference` to save the index, which can then be provided via `--sortmerna_index`
+      for future runs.

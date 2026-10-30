@@ -1,0 +1,138 @@
+grouping_strategy: schema top-level sections from nextflow_schema.json allOf order
+  for ampliseq
+groups:
+- id: input_output_options
+  label: Main arguments
+  use_when: The runtime agent needs exact parameter mapping for the `Main arguments`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/input_output_options.yaml
+  reference_path: references/schema-groups/input_output_options.md
+  parameter_count: 10
+- id: sequencing_input
+  label: Sequencing input
+  use_when: The runtime agent needs exact parameter mapping for the `Sequencing input`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `sequencing_input`
+    for exact lookup.
+  asset_path: assets/schema-groups/sequencing_input.yaml
+  reference_path: references/schema-groups/sequencing_input.md
+  parameter_count: 10
+- id: primer_removal
+  label: Primer removal
+  use_when: The runtime agent needs exact parameter mapping for the `Primer removal`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `primer_removal`
+    for exact lookup.
+  asset_path: assets/schema-groups/primer_removal.yaml
+  reference_path: references/schema-groups/primer_removal.md
+  parameter_count: 5
+- id: read_trimming_and_quality_filtering
+  label: Read trimming and quality filtering
+  use_when: The runtime agent needs exact parameter mapping for the `Read trimming
+    and quality filtering` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `read_trimming_and_quality_filtering`
+    for exact lookup.
+  asset_path: assets/schema-groups/read_trimming_and_quality_filtering.yaml
+  reference_path: references/schema-groups/read_trimming_and_quality_filtering.md
+  parameter_count: 9
+- id: amplicon_sequence_variants_asv_calculation
+  label: Amplicon Sequence Variants (ASV) calculation
+  use_when: The runtime agent needs exact parameter mapping for the `Amplicon Sequence
+    Variants (ASV) calculation` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `amplicon_sequence_variants_asv_calculation`
+    for exact lookup.
+  asset_path: assets/schema-groups/amplicon_sequence_variants_asv_calculation.yaml
+  reference_path: references/schema-groups/amplicon_sequence_variants_asv_calculation.md
+  parameter_count: 8
+- id: asv_post_processing
+  label: ASV post processing
+  use_when: The runtime agent needs exact parameter mapping for the `ASV post processing`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `asv_post_processing`
+    for exact lookup.
+  asset_path: assets/schema-groups/asv_post_processing.yaml
+  reference_path: references/schema-groups/asv_post_processing.md
+  parameter_count: 10
+- id: taxonomic_assignment
+  label: Taxonomic assignment
+  use_when: The runtime agent needs exact parameter mapping for the `Taxonomic assignment`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `taxonomic_assignment`
+    for exact lookup.
+  asset_path: assets/schema-groups/taxonomic_assignment.yaml
+  reference_path: references/schema-groups/taxonomic_assignment.md
+  parameter_count: 26
+- id: multiregion_taxonomic_database
+  label: Multi-region taxonomic database
+  use_when: The runtime agent needs exact parameter mapping for the `Multi-region
+    taxonomic database` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `multiregion_taxonomic_database`
+    for exact lookup.
+  asset_path: assets/schema-groups/multiregion_taxonomic_database.yaml
+  reference_path: references/schema-groups/multiregion_taxonomic_database.md
+  parameter_count: 7
+- id: asv_filtering
+  label: ASV filtering
+  use_when: The runtime agent needs exact parameter mapping for the `ASV filtering`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `asv_filtering`
+    for exact lookup.
+  asset_path: assets/schema-groups/asv_filtering.yaml
+  reference_path: references/schema-groups/asv_filtering.md
+  parameter_count: 3
+- id: downstream_analysis
+  label: Downstream analysis
+  use_when: The runtime agent needs exact parameter mapping for the `Downstream analysis`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `downstream_analysis`
+    for exact lookup.
+  asset_path: assets/schema-groups/downstream_analysis.yaml
+  reference_path: references/schema-groups/downstream_analysis.md
+  parameter_count: 8
+- id: differential_abundance_analysis
+  label: Differential abundance analysis
+  use_when: The runtime agent needs exact parameter mapping for the `Differential
+    abundance analysis` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `differential_abundance_analysis`
+    for exact lookup.
+  asset_path: assets/schema-groups/differential_abundance_analysis.yaml
+  reference_path: references/schema-groups/differential_abundance_analysis.md
+  parameter_count: 7
+- id: pipeline_report
+  label: Pipeline summary report
+  use_when: The runtime agent needs exact parameter mapping for the `Pipeline summary
+    report` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `pipeline_report`
+    for exact lookup.
+  asset_path: assets/schema-groups/pipeline_report.yaml
+  reference_path: references/schema-groups/pipeline_report.md
+  parameter_count: 5
+- id: skipping_specific_steps
+  label: Skipping specific steps
+  use_when: The runtime agent needs exact parameter mapping for the `Skipping specific
+    steps` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `skipping_specific_steps`
+    for exact lookup.
+  asset_path: assets/schema-groups/skipping_specific_steps.yaml
+  reference_path: references/schema-groups/skipping_specific_steps.md
+  parameter_count: 17
+- id: generic_options
+  label: Generic options
+  use_when: The runtime agent needs exact parameter mapping for the `Generic options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `generic_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/generic_options.yaml
+  reference_path: references/schema-groups/generic_options.md
+  parameter_count: 17
+- id: institutional_config_options
+  label: Institutional config options
+  use_when: The runtime agent needs exact parameter mapping for the `Institutional
+    config options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `institutional_config_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/institutional_config_options.yaml
+  reference_path: references/schema-groups/institutional_config_options.md
+  parameter_count: 7

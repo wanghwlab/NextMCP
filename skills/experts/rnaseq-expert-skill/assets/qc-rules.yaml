@@ -1,0 +1,77 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+    good_signal: Run succeeded and artifact_summary lists multiqc, pipeline_info, and selected route outputs.
+    bad_signal: Run failed, stalled, or reports a blocking diagnosis.
+    action: Read next_actions first, then run_logs or a named log file only after the path is known.
+
+  - id: reference_and_index_compatibility
+    severity: high
+    source: pipeline_info/params.json and route-specific logs.
+    good_signal: Genome, annotation, transcriptome, and pre-built indices match the selected aligner or pseudoaligner.
+    bad_signal: Index version mismatch, missing transcriptome, missing GTF, or incompatible source BAM route.
+    action: Rebuild or replace the index; for BAM reprocessing, use params from the source run.
+
+  - id: sentieon_secret
+    severity: high
+    source: run diagnosis and Nextflow stderr.
+    good_signal: use_sentieon_star runs with an existing SENTIEON_LICENSE_BASE64 secret.
+    bad_signal: Missing secret, invalid base64, or license server connection error.
+    action: Ask the user to configure the server-side Nextflow secret; do not put the license in params or git.
+
+  - id: sortmerna_license_and_database
+    severity: medium
+    source: params.json and sortmerna logs.
+    good_signal: remove_ribo_rna uses a confirmed ribo_database_manifest or sortmerna_index appropriate for the user context.
+    bad_signal: Missing database, unexpected rRNA depletion, or unreviewed default database license in commercial use.
+    action: Confirm the manifest and license status, then rerun with explicit server-local paths if needed.
+
+  - id: alignment_rate
+    severity: high
+    source: MultiQC STAR, RSEM, HISAT2, or SAMtools sections.
+    good_signal: Most reads are uniquely mapped and few reads are unmapped for the organism and library type.
+    bad_signal: Low unique mapping, high unmapped reads, or samples below min_mapped_reads.
+    action: Check reference choice, strandedness, contamination, trimming, and whether the selected aligner is appropriate.
+
+  - id: strandedness
+    severity: high
+    source: RSeQC infer_experiment and MultiQC strandedness status.
+    good_signal: Inferred strandedness matches samplesheet values or auto assignment.
+    bad_signal: Samples fail to match the declared strandedness.
+    action: Correct the samplesheet strandedness and rerun affected samples.
+
+  - id: quantification_outputs
+    severity: high
+    source: run_artifacts for star_salmon, star_rsem, salmon, or kallisto output sections.
+    good_signal: Expected gene and transcript matrices plus per-sample quantification files exist.
+    bad_signal: HISAT2 selected when user expected counts, or pseudoalignment outputs missing.
+    action: Explain HISAT2 limitation or rerun with star_salmon, star_rsem, salmon, or kallisto.
+
+  - id: bam_reprocessing_safety
+    severity: high
+    source: pipeline_info/samplesheet_with_bams.csv and source run params.json.
+    good_signal: BAM samplesheet comes from nf-core/rnaseq and aligner route matches the source run.
+    bad_signal: Arbitrary external BAMs, mixed quantifier routes, or skip_alignment omitted.
+    action: Prefer the documented two-step workflow and keep the aligner route compatible.
+
+  - id: umi_consistency
+    severity: medium
+    source: UMI-tools or UMICollapse outputs and MultiQC.
+    good_signal: UMI extraction and deduplication complete with the expected pattern.
+    bad_signal: Empty UMI fields, wrong regex, unexpected deduplication collapse, or missing separator.
+    action: Confirm kit-specific UMI position and update UMI params before rerun.
+
+  - id: contamination_screening
+    severity: medium
+    source: BBSplit, SortMeRNA, Kraken2/Bracken, and MultiQC sections.
+    good_signal: Database choices match the expected host and contaminant search space.
+    bad_signal: Large unexpected contaminant fraction or database missing host genome.
+    action: Check bbsplit_fasta_list, ribo_database_manifest, kraken_db, and bracken_precision.
+
+  - id: qualimap_known_limit
+    severity: low
+    source: Qualimap and RSeQC read_distribution.
+    good_signal: Qualimap feature distribution broadly agrees with RSeQC.
+    bad_signal: Qualimap reports feature-assigned reads above total reads.
+    action: Cross-check RSeQC and consider skip_qualimap if the known Qualimap issue blocks interpretation.

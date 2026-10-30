@@ -1,0 +1,217 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Mixed-source offline evals for chipseq-expert-skill. These evals test runtime planning, parameter mapping, route selection, output review, historical reuse, and source-backed coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch",
+    "sources": {
+      "asset": "Tests whether the agent uses packaged expert skill assets correctly.",
+      "authoring_bundle": "Tests whether source-derived facts are covered or explicitly scoped out.",
+      "audit": "Tests high-impact capability and authoring-gap handling."
+    }
+  },
+  "summary": {
+    "eval_count": 10,
+    "asset_eval_count": 3,
+    "authoring_bundle_eval_count": 4,
+    "audit_eval_count": 3
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the chipseq-expert-skill, draft the nextmcp launch plan for nf-core/chipseq ChIP-seq. The project is my-project. The user confirmed the server-local input at /data/samplesheet.csv and wants results under /results/chipseq. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and the nextflow_run argument shape.",
+      "expected_output": "A launch plan that keeps project as a top-level nextflow_run argument, puts ordinary pipeline options under params, puts resource caps in a server-local override config passed through config_files using process.resourceLimits, omits profile by default, and avoids nextflow_inspect_pipeline.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument, not inside params.",
+        "Mentions input and outdir under params.",
+        "Mentions resource caps under config_files or an override config using process.resourceLimits, not params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Uses nextflow_run(prepare=true) only as an optional check when launch uncertainty remains."
+      ],
+      "files": []
+    },
+    {
+      "id": "source-coverage-required-inputs",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "authoring_bundle.schema",
+        "assets/schema-index.yaml",
+        "assets/schema-groups/*.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the chipseq-expert-skill, explain how to prepare a dry run for nf-core/chipseq ChIP-seq when the source schema requires or commonly uses these fields: input, outdir, fasta. Do not launch anything. State which schema lookup assets you would open to confirm exact names, defaults, and placeholder values.",
+      "expected_output": "A schema-backed preparation plan that mentions the required or common input fields, uses schema-index.yaml plus the matching schema group for exact lookup, and keeps server-local paths inside params.",
+      "assertions": [
+        "Uses schema-index or grouped schema assets for exact mapping when needed.",
+        "Mentions input and outdir under params.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the chipseq-expert-skill, answer a user who says: 'The nf-core/chipseq ChIP-seq run finished, and I need to review the main published outputs and QC reports. What nextmcp calls should I make first, and which artifact or report paths should I inspect?' Do not assume concrete paths that have not come from nextmcp.",
+      "expected_output": "A post-run review plan that starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then uses run_artifacts for relevant sections, then fs_read only for explicit report or table paths. It should use artifact contracts and QC rules instead of guessing output paths.",
+      "assertions": [
+        "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) or equivalent summary-first call.",
+        "Uses run_artifacts before reading individual output files.",
+        "Uses fs_read only after an explicit path is known.",
+        "Grounds output choices in artifact-contracts.yaml or QC rules.",
+        "Does not jump straight to raw logs as the default first step."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the chipseq-expert-skill, plan how to recover a previous nf-core/chipseq ChIP-seq run when the user only remembers one output filename fragment. The project is my-project. Do not launch anything; return the search and compatibility-check sequence.",
+      "expected_output": "A historical reuse plan that searches with run_list(project=..., pipeline=\"chipseq\", artifact_path_contains=...), inspects run_get(include=[\"artifact_summary\"]), uses run_artifacts, treats artifacts.json and pipeline_fingerprint as historical facts, and confirms route compatibility through pipeline_info/params.json or equivalent metadata before recommending reuse.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains when only an artifact fragment is known.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires route compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+        "Does not guess old output directories as the default safe path."
+      ],
+      "files": []
+    },
+    {
+      "id": "homer-annotation-scope",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "assets/playbooks.yaml",
+        "assets/qc-rules.yaml",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/chipseq/docs/output.md"
+      ],
+      "prompt": "Using the chipseq-expert-skill, answer a user who asks whether nf-core/chipseq needs a separate HOMER database path before launch. Do not inspect the pipeline source at runtime. Return the packaged playbook, parameter, or scope note that handles this.",
+      "expected_output": "A source-backed answer that says the current skill does not expose a separate HOMER database parameter, explains that annotation is tied to supplied GTF/GFF and peak files, and points to the reference genome guidance and schema lookup.",
+      "assertions": [
+        "Mentions there is no separate HOMER database parameter in the current schema.",
+        "Mentions GTF/GFF annotation.",
+        "Uses packaged scope or parameter assets rather than runtime source inspection."
+      ],
+      "files": []
+    },
+    {
+      "id": "aligner-index-selection",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "assets/playbooks.yaml",
+        "authoring_bundle.schema"
+      ],
+      "prompt": "Using the chipseq-expert-skill, plan a run where the user wants Bowtie2 instead of BWA and has a server-local Bowtie2 index at /refs/hg38/bowtie2. Do not launch anything; return the params shape, path checks, and outputs to review.",
+      "expected_output": "A plan that sets aligner to bowtie2, confirms bowtie2_index, keeps both in params, uses prepare when needed, and reviews bowtie2/library, bowtie2/merged_library, and downstream peak outputs.",
+      "assertions": [
+        "Sets aligner to bowtie2 exactly.",
+        "Mentions bowtie2_index under params.",
+        "Uses fs_list or prepare to confirm server-local paths.",
+        "Does not invent unsupported aligner values."
+      ],
+      "files": []
+    },
+    {
+      "id": "narrow-peak-rerun",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "assets/playbooks.yaml",
+        "assets/qc-rules.yaml",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/chipseq/README.md",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/chipseq/docs/output.md",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/chipseq/docs/usage.md"
+      ],
+      "prompt": "Using the chipseq-expert-skill, plan a follow-up run to add narrowPeak results after a broadPeak nf-core/chipseq run. The user wants to reuse compatible previous work where possible. Do not launch anything.",
+      "expected_output": "A plan that sets narrow_peak true, checks prior run compatibility through params.json or launch metadata, uses from_run_id for restart planning, and points review to macs3/narrowPeak, multiqc/narrowPeak, and igv/narrowPeak.",
+      "assertions": [
+        "Sets narrow_peak true under params.",
+        "Mentions compatibility check through pipeline_info/params.json or launch metadata.",
+        "Uses from_run_id for restart planning.",
+        "Mentions narrowPeak output paths."
+      ],
+      "files": []
+    },
+    {
+      "id": "saved-handoff-outputs",
+      "source": "audit",
+      "category": "negative_scope",
+      "source_materials": [
+        "assets/authoring-gaps.yaml",
+        "assets/capability-audit.yaml"
+      ],
+      "prompt": "Using the chipseq-expert-skill, plan a run where the user needs trimmed FastQ files, intermediate BAMs, and MACS3 pileup files for handoff. Do not launch anything; explain the parameter choices and expected output paths.",
+      "expected_output": "A plan that sets save_trimmed, save_align_intermeds, and save_macs_pileup in params, warns about storage, and points to trimgalore, <ALIGNER>/library, and MACS3 output paths.",
+      "assertions": [
+        "Mentions save_trimmed under params.",
+        "Mentions save_align_intermeds under params.",
+        "Mentions save_macs_pileup under params.",
+        "Warns about larger output size."
+      ],
+      "files": []
+    },
+    {
+      "id": "skip-flag-impact",
+      "source": "audit",
+      "category": "negative_scope",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/authoring-gaps.yaml"
+      ],
+      "prompt": "Using the chipseq-expert-skill, answer a user who wants to skip consensus peaks and MultiQC to save time. Do not launch anything; explain what outputs and review signals will be missing.",
+      "expected_output": "A cautious answer that explains skip_consensus_peaks removes consensus, featureCounts, and DESeq2 QC outputs, skip_multiqc removes the main aggregate report, and asks for confirmation before using those params.",
+      "assertions": [
+        "Mentions skip_consensus_peaks consequences.",
+        "Mentions skip_multiqc consequences.",
+        "Keeps skip flags in params.",
+        "Does not pretend missing outputs will still be available."
+      ],
+      "files": []
+    },
+    {
+      "id": "chip-enrichment-qc",
+      "source": "audit",
+      "category": "negative_scope",
+      "source_materials": [
+        "assets/authoring-gaps.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the chipseq-expert-skill, explain how to interpret low NSC and RSC values in a completed nf-core/chipseq run. Start from nextmcp artifact review, not raw source inspection.",
+      "expected_output": "A QC answer that starts with run_get and run_artifacts, points to phantompeakqualtools and MultiQC, mentions NSC 1.05 and RSC 0.8 thresholds, and suggests checking FastQC, alignment, duplication, and peak metrics before conclusions.",
+      "assertions": [
+        "Mentions run_get summary-first review.",
+        "Mentions phantompeakqualtools or MultiQC.",
+        "Mentions NSC > 1.05 and RSC > 0.8 as useful signals.",
+        "Mentions checking other QC before conclusions."
+      ],
+      "files": []
+    }
+  ]
+}

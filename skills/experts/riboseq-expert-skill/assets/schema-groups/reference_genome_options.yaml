@@ -1,0 +1,438 @@
+group:
+  id: reference_genome_options
+  label: Reference genome options
+  selection_rule: Use this group for parameters defined under the `Reference genome options` top-level
+    schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/reference_genome_options.md
+  - assets/schema-groups/reference_genome_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section `reference_genome_options`
+    for exact lookup.
+parameters:
+- group_id: reference_genome_options
+  name: additional_fasta
+  source_name: additional_fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: FASTA file to concatenate to genome FASTA file e.g. containing spike-in sequences.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.fn?a(sta)?(\.gz)?$
+    fa_icon: far fa-file-code
+    description: FASTA file to concatenate to genome FASTA file e.g. containing spike-in sequences.
+    help_text: If provided, the sequences in this file will get concatenated to the existing genome
+      FASTA file, a GTF file will be automatically created using the entire sequence as the gene,
+      transcript, and exon features, and any alignment index will get created from the combined FASTA
+      and GTF. It is recommended to save the reference with `--save_reference` to re-use the index
+      for future runs so you do not need to create it again.
+- group_id: reference_genome_options
+  name: canonical_gtf
+  source_name: canonical_gtf
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Optional one-transcript-per-gene canonical GTF used as the annotation backbone for
+    the genome-coordinate ORF callers (Ribo-TISH, Ribotricer), plastid P-site quantification and DTE.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.gtf(\.gz)?$
+    description: Optional one-transcript-per-gene canonical GTF used as the annotation backbone for
+      the genome-coordinate ORF callers (Ribo-TISH, Ribotricer), plastid P-site quantification and
+      DTE.
+    fa_icon: fas fa-code-branch
+    help_text: 'When supplied, this GTF replaces the full multi-isoform `--gtf` as the annotation
+      backbone for the genome-coordinate ORF callers (Ribo-TISH, Ribotricer), plastid P-site quantification
+      and the translational-efficiency analysis. The full `--gtf` is retained both for genome-guided
+      alignment (STAR/Salmon) and for the transcriptome-coordinate tools (RiboCode, riboWaltz, Salmon),
+      whose input is the reference-transcriptome BAM and so must match the full multi-isoform transcript
+      set. When omitted, the pipeline falls back to AGAT longest-CDS-isoform extraction from the full
+      GTF; if that is unavailable, the full GTF is used as the backbone (with a multi-isoform ambiguity
+      warning). Recommended sources: MANE Select for human (https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/current/),
+      or `grep ''tag "Ensembl_canonical"'' input.gtf > canonical.gtf` for any Ensembl organism at
+      release ≥104.'
+- group_id: reference_genome_options
+  name: fasta
+  source_name: fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to FASTA genome file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.fn?a(sta)?(\.gz)?$
+    description: Path to FASTA genome file.
+    help_text: This parameter is *mandatory* if `--genome` is not specified. If you don't have the
+      appropriate alignment index available this will be generated for you automatically. Combine
+      with `--save_reference` to save alignment index for future runs.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: gencode
+  source_name: gencode
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify if your GTF annotation is in GENCODE format.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-code-branch
+    description: Specify if your GTF annotation is in GENCODE format.
+- group_id: reference_genome_options
+  name: gff
+  source_name: gff
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to GFF3 annotation file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gff
+  example_values:
+  - <server_reference_root>/gff
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.gff(\.gz)?$
+    fa_icon: fas fa-code-branch
+    description: Path to GFF3 annotation file.
+    help_text: This parameter must be specified if `--genome` or `--gtf` are not specified.
+- group_id: reference_genome_options
+  name: gtf
+  source_name: gtf
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to GTF annotation file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.gtf(\.gz)?$
+    description: Path to GTF annotation file.
+    fa_icon: fas fa-code-branch
+    help_text: This parameter is *mandatory* if `--genome` is not specified.
+- group_id: reference_genome_options
+  name: kallisto_index
+  source_name: kallisto_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to a pre-built kallisto index file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/kallisto_index
+  example_values:
+  - <server_reference_root>/kallisto_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    fa_icon: fas fa-bezier-curve
+    description: Path to a pre-built kallisto index file.
+    help_text: Only used with `--pseudo_aligner kallisto` and `--te_quantification_method pseudo`.
+      This is the single index file written by `kallisto index -i`, not a directory. It must have
+      been built with a k-mer size appropriate for Ribo-seq read lengths; see `--pseudo_aligner_kmer_size`.
+- group_id: reference_genome_options
+  name: transcript_fasta
+  source_name: transcript_fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to FASTA transcriptome file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.fn?a(sta)?(\.gz)?$
+    fa_icon: far fa-file-code
+    description: Path to FASTA transcriptome file.
+- group_id: reference_genome_options
+  name: genome
+  source_name: genome
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Name of iGenomes reference.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: Name of iGenomes reference.
+    fa_icon: fas fa-book
+    help_text: "If using a reference genome configured in the pipeline using iGenomes (not recommended),\
+      \ use this parameter to give the ID for the reference. This is then used to build the full paths\
+      \ for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website\
+      \ docs](https://nf-co.re/usage/reference_genomes) for more details."
+- group_id: reference_genome_options
+  name: gtf_extra_attributes
+  source_name: gtf_extra_attributes
+  type: string
+  required: false
+  default: gene_name
+  enum: null
+  description: By default, the pipeline uses the `gene_name` field to obtain additional gene identifiers
+    from the input GTF file when running Salmon.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - gene_name
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    default: gene_name
+    fa_icon: fas fa-plus-square
+    description: By default, the pipeline uses the `gene_name` field to obtain additional gene identifiers
+      from the input GTF file when running Salmon.
+    help_text: 'This behaviour can be modified by specifying `--gtf_extra_attributes` when running
+      the pipeline. Note that you can also specify more than one desired value, separated by a comma
+      e.g. `--gtf_extra_attributes gene_id,...`.
+
+      '
+- group_id: reference_genome_options
+  name: gtf_group_features
+  source_name: gtf_group_features
+  type: string
+  required: false
+  default: gene_id
+  enum: null
+  description: Define the attribute type used to group features in the GTF file when running Salmon.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - gene_id
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    default: gene_id
+    description: Define the attribute type used to group features in the GTF file when running Salmon.
+    fa_icon: fas fa-layer-group
+- group_id: reference_genome_options
+  name: salmon_index
+  source_name: salmon_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to directory or tar.gz archive for pre-built Salmon index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/salmon_index
+  example_values:
+  - <server_reference_root>/salmon_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    fa_icon: fas fa-bezier-curve
+    description: Path to directory or tar.gz archive for pre-built Salmon index.
+- group_id: reference_genome_options
+  name: star_index
+  source_name: star_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to directory or tar.gz archive for pre-built STAR index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/star_index
+  example_values:
+  - <server_reference_root>/star_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    fa_icon: fas fa-bezier-curve
+    description: Path to directory or tar.gz archive for pre-built STAR index.
+- group_id: reference_genome_options
+  name: igenomes_base
+  source_name: igenomes_base
+  type: string
+  required: false
+  default: s3://ngi-igenomes/igenomes/
+  enum: null
+  description: The base path to the igenomes reference files
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - s3://ngi-igenomes/igenomes/
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary nextmcp runtime
+    planning unless the user explicitly asks for this helper or metadata field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: The base path to the igenomes reference files
+    fa_icon: fas fa-ban
+    hidden: true
+    default: s3://ngi-igenomes/igenomes/
+- group_id: reference_genome_options
+  name: igenomes_ignore
+  source_name: igenomes_ignore
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Do not load the iGenomes reference config.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary nextmcp runtime
+    planning unless the user explicitly asks for this helper or metadata field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    description: Do not load the iGenomes reference config.
+    fa_icon: fas fa-ban
+    hidden: true
+    help_text: Do not load `igenomes.config` when running the pipeline. You may choose this option
+      if you observe clashes between custom parameters and those supplied in `igenomes.config`.

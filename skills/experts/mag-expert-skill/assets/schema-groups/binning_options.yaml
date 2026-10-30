@@ -1,0 +1,731 @@
+group:
+  id: binning_options
+  label: Binning options
+  selection_rule: Use this group for parameters defined under the `Binning options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/binning_options.md
+  - assets/schema-groups/binning_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `binning_options` for exact lookup.
+parameters:
+- group_id: binning_options
+  name: bin_concoct_donotconcatlast
+  source_name: bin_concoct_donotconcatlast
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to not append the last contig less than sub-contig length to
+    the last correct length contig
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Specify to not append the last contig less than sub-contig length
+      to the last correct length contig
+- group_id: binning_options
+  name: bin_domain_classification
+  source_name: bin_domain_classification
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable domain-level (prokaryote or eukaryote) classification of bins
+    using Tiara. Processes which are domain-specific will then only receive bins matching
+    the domain requirement.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Enable domain-level (prokaryote or eukaryote) classification of bins
+      using Tiara. Processes which are domain-specific will then only receive bins
+      matching the domain requirement.
+    help_text: Enable this if it is likely that your metagenome samples contain a
+      mixture of eukaryotic and prokaryotic genomes. This will ensure that prokaryote-only
+      steps only receive putatively prokaryotic genomes, and vice-versa. Additionally,
+      may improve the performance of DAS Tool by ensuring it only receives prokaryotic
+      genomes.
+- group_id: binning_options
+  name: bin_metabinner_scale
+  source_name: bin_metabinner_scale
+  type: string
+  required: false
+  default: large
+  enum: &id001
+  - small
+  - large
+  - huge
+  description: Dataset scale for MetaBinner
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - small
+  - large
+  - huge
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: string
+    default: large
+    enum: *id001
+    description: Dataset scale for MetaBinner
+    help_text: Dataset scale; eg. small,large,huge (default:large); Users can choose
+      `huge` to run MetaBinner on huge datasets with lower memory requirements.
+- group_id: binning_options
+  name: binning_map_mode
+  source_name: binning_map_mode
+  type: string
+  required: false
+  default: group
+  enum: &id002
+  - all
+  - group
+  - own
+  description: Defines mapping strategy to compute co-abundances for binning, i.e.
+    which samples will be mapped against the assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - all
+  - group
+  - own
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: string
+    default: group
+    description: Defines mapping strategy to compute co-abundances for binning, i.e.
+      which samples will be mapped against the assembly.
+    help_text: 'Available: `all`, `group` or `own`. Note that `own` cannot be specified
+      in combination with `--coassemble_group`.
+
+
+      Note that specifying `all` without additionally specifying `--coassemble_group`
+      results in `n^2` mapping processes for each assembly method, where `n` is the
+      number of samples.'
+    enum: *id002
+- group_id: binning_options
+  name: bowtie2_mode
+  source_name: bowtie2_mode
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify alternative Bowtie2 settings for aligning reads back against
+    the assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Binning options
+  raw_schema:
+    type: string
+    description: Specify alternative Bowtie2 settings for aligning reads back against
+      the assembly.
+    help_text: 'You can specify here Bowtie2 alignment options. For example: `--very-fast`
+      , `--very-sensitive-local -N 1` , ... Must be used like this: --bowtie2_mode="--very-sensitive".
+      By default no settings are defined, thus Bowtie2 runs with it''s own internal
+      defaults (e.g. end-to-end alignment)'
+    pattern: ^[-\w]*$
+- group_id: binning_options
+  name: exclude_unbins_from_postbinning
+  source_name: exclude_unbins_from_postbinning
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Exclude unbinned contigs in the post-binning steps (bin QC, taxonomic
+    classification, and annotation steps).
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/exclude_unbins_from_postbinning
+  example_values:
+  - <server_reference_root>/exclude_unbins_from_postbinning
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Exclude unbinned contigs in the post-binning steps (bin QC, taxonomic
+      classification, and annotation steps).
+    help_text: If you're not interested in assemby results that are not considered
+      'genome level', excluding unbinned contigs can greatly speed up downstream steps
+      such as Prokka, that can be quite slow and spin up many tasks.
+- group_id: binning_options
+  name: save_assembly_mapped_reads
+  source_name: save_assembly_mapped_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the output of mapping raw reads back to assembled contigs
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_assembly_mapped_reads
+  example_values:
+  - <server_input_root>/save_assembly_mapped_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Save the output of mapping raw reads back to assembled contigs
+    help_text: Specify to save the BAM and BAI files generated when mapping input
+      reads back to the assembled contigs (performed in preparation for binning and
+      contig depth estimations).
+- group_id: binning_options
+  name: semibin_environment
+  source_name: semibin_environment
+  type: string
+  required: false
+  default: global
+  enum: &id003
+  - human_gut
+  - dog_gut
+  - ocean
+  - soil
+  - cat_gut
+  - human_oral
+  - mouse_gut
+  - pig_gut
+  - built_environment
+  - wastewater
+  - chicken_caecum
+  - global
+  description: Pre-trained model for SemiBin2 for single sample assemblies
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - human_gut
+  - dog_gut
+  - ocean
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: string
+    default: global
+    enum: *id003
+    description: Pre-trained model for SemiBin2 for single sample assemblies
+    help_text: SemiBin2 can use a pre-trained model when working with an assembly
+      of a single sample (i.e. without `--coassemble_group` and with `--binning_map_mode
+      own`). The model will be ignored when several samples are used for one assembly.
+      Choose a model that fits your environment best. Default is `global`, a generic
+      model.
+- group_id: binning_options
+  name: skip_binning
+  source_name: skip_binning
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip metagenome binning entirely
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip metagenome binning entirely
+- group_id: binning_options
+  name: skip_comebin
+  source_name: skip_comebin
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip COMEBin Binning
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip COMEBin Binning
+- group_id: binning_options
+  name: skip_concoct
+  source_name: skip_concoct
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip CONCOCT Binning
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip CONCOCT Binning
+- group_id: binning_options
+  name: skip_maxbin2
+  source_name: skip_maxbin2
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MaxBin2 Binning
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip MaxBin2 Binning
+- group_id: binning_options
+  name: skip_metabat2
+  source_name: skip_metabat2
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MetaBAT2 Binning
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip MetaBAT2 Binning
+- group_id: binning_options
+  name: skip_metabinner
+  source_name: skip_metabinner
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MetaBinner Binning
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip MetaBinner Binning
+- group_id: binning_options
+  name: skip_semibin
+  source_name: skip_semibin
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip SemiBin2 Binning
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: boolean
+    description: Skip SemiBin2 Binning
+- group_id: binning_options
+  name: bin_concoct_chunksize
+  source_name: bin_concoct_chunksize
+  type: integer
+  required: false
+  default: 10000
+  enum: null
+  description: Specify length of sub-contigs cut up prior CONCOCT binning
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 10000
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 10000
+    description: Specify length of sub-contigs cut up prior CONCOCT binning
+- group_id: binning_options
+  name: bin_concoct_overlap
+  source_name: bin_concoct_overlap
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Specify the overlap between each sub-contig prior CONCOCT binning
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 0
+    description: Specify the overlap between each sub-contig prior CONCOCT binning
+- group_id: binning_options
+  name: bin_domain_classification_tool
+  source_name: bin_domain_classification_tool
+  type: string
+  required: false
+  default: tiara
+  enum: null
+  description: Specify which tool to use for domain classification of bins. Currently
+    only 'tiara' is implemented.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - tiara
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: string
+    default: tiara
+    description: Specify which tool to use for domain classification of bins. Currently
+      only 'tiara' is implemented.
+    hidden: true
+- group_id: binning_options
+  name: bin_max_size
+  source_name: bin_max_size
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Specify the longest length a bin should be to retain for downstream
+    processing (in base pairs). By default no limit.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    description: Specify the longest length a bin should be to retain for downstream
+      processing (in base pairs). By default no limit.
+    help_text: This can speed up downstream processing by removing 'nonsense' bins
+      (e.g. badly binned single short-contig bins, or unnaturally large bins). By
+      default there is no upper limit on size of bins allowed to pass.
+- group_id: binning_options
+  name: bin_min_size
+  source_name: bin_min_size
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Specify the shortest length a bin should be to retain for downstream
+    processing (in base pairs)
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 0
+    minimum: 0
+    description: Specify the shortest length a bin should be to retain for downstream
+      processing (in base pairs)
+    help_text: This can speed up downstream processing by removing 'nonsense' bins
+      (e.g. badly binned single short-contig bins, or unnaturally large bins). By
+      default there is no lower limit the size of bins allowed to pass.
+- group_id: binning_options
+  name: longread_percentidentity
+  source_name: longread_percentidentity
+  type: number
+  required: false
+  default: null
+  enum: null
+  description: Specify a minimum percent identity filter for long reads mapping back
+    to assembled contigs.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: number
+    description: Specify a minimum percent identity filter for long reads mapping
+      back to assembled contigs.
+    help_text: If specified, this parameter sets the `--percentIdentity` flag of the
+      `metabat2 jgisummarizebamcontigdepths` command that is used to generate a read-depth
+      per contig depth post assembly mapping. It can be useful in some cases to get
+      more accurate depth coverages for binning by removing spurious alignments that
+      can inflate coverage.
+- group_id: binning_options
+  name: max_unbinned_contigs
+  source_name: max_unbinned_contigs
+  type: integer
+  required: false
+  default: 100
+  enum: null
+  description: Maximal number of contigs that are not part of any bin but treated
+    as individual genome.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 100
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 100
+    description: Maximal number of contigs that are not part of any bin but treated
+      as individual genome.
+    help_text: Contigs that do not fulfill the thresholds of `--min_length_unbinned_contigs`
+      and `--max_unbinned_contigs` are pooled for downstream analysis and reporting,
+      except contigs that also do not fulfill `--min_contig_size` are not considered
+      further.
+- group_id: binning_options
+  name: min_contig_size
+  source_name: min_contig_size
+  type: integer
+  required: false
+  default: 1500
+  enum: null
+  description: Minimum contig size to be considered for binning and for bin quality
+    check.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1500
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 1500
+    description: Minimum contig size to be considered for binning and for bin quality
+      check.
+    help_text: For forwarding into downstream analysis, i.e. QUAST and BUSCO, and
+      reporting.
+- group_id: binning_options
+  name: min_length_unbinned_contigs
+  source_name: min_length_unbinned_contigs
+  type: integer
+  required: false
+  default: 1000000
+  enum: null
+  description: Minimal length of contigs that are not part of any bin but treated
+    as individual genome.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1000000
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 1000000
+    description: Minimal length of contigs that are not part of any bin but treated
+      as individual genome.
+    help_text: Contigs that do not fulfill the thresholds of `--min_length_unbinned_contigs`
+      and `--max_unbinned_contigs` are pooled for downstream analysis and reporting,
+      except contigs that also do not fulfill `--min_contig_size` are not considered
+      further.
+- group_id: binning_options
+  name: semibin_rng_seed
+  source_name: semibin_rng_seed
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: RNG seed for SemiBin2.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 1
+    description: RNG seed for SemiBin2.
+    help_text: SemiBin2 is run by default with a fixed seed within this pipeline,
+      thus producing reproducible results. You can set it also to any other positive
+      integer to ensure reproducibility. Set the parameter to 0 to use a random seed.
+- group_id: binning_options
+  name: shortread_percentidentity
+  source_name: shortread_percentidentity
+  type: number
+  required: false
+  default: null
+  enum: null
+  description: Specify a minimum percent identity filter for short reads mapping back
+    to assembled contigs.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: number
+    description: Specify a minimum percent identity filter for short reads mapping
+      back to assembled contigs.
+    help_text: If specified, this parameter sets the `--percentIdentity` flag of the
+      `metabat2 jgisummarizebamcontigdepths` command that is used to generate a read-depth
+      per contig depth post assembly mapping. It can be useful in some cases to get
+      more accurate depth coverages for binning by removing spurious alignments that
+      can inflate coverage.
+- group_id: binning_options
+  name: tiara_min_length
+  source_name: tiara_min_length
+  type: integer
+  required: false
+  default: 3000
+  enum: null
+  description: Minimum contig length for Tiara to use for domain classification. For
+    accurate classification, should be longer than 3000 bp.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 3000
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Binning options
+  raw_schema:
+    type: integer
+    default: 3000
+    description: Minimum contig length for Tiara to use for domain classification.
+      For accurate classification, should be longer than 3000 bp.

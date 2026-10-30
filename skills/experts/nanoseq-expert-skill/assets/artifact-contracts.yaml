@@ -1,0 +1,87 @@
+artifacts:
+  - id: results_root
+    path: results/<run_id>/
+    produced_when: The main pipeline entry finishes successfully.
+    meaning: Project-owned published results root for review and downstream handoff.
+  - id: qcat_demultiplexed_fastq
+    path: qcat/fastq/<barcode*>.fastq.gz
+    produced_when: skip_demultiplexing is false.
+    meaning: Per-barcode FASTQ files and none.fastq.gz for unassigned reads.
+  - id: nanolyse_filtered_fastq
+    path: nanolyse/<SAMPLE>.fastq.gz
+    produced_when: run_nanolyse is true.
+    meaning: FASTQ reads after contaminant filtering.
+  - id: read_qc
+    path: nanoplot/fastq/ and fastqc/
+    produced_when: skip_qc is false, with skip_nanoplot and skip_fastqc controlling individual
+      reports.
+    meaning: Raw-read quality, read length, and FastQC summaries.
+  - id: alignment_bam
+    path: <ALIGNER>/<SAMPLE>.sorted.bam
+    produced_when: skip_alignment is false.
+    meaning: Coordinate-sorted BAM for each sample, plus BAI index and SAMtools mapping metrics.
+  - id: coverage_tracks
+    path: <ALIGNER>/bigwig/ and <ALIGNER>/bigbed/
+    produced_when: skip_bigwig and skip_bigbed are false; bigBed is relevant for cDNA/directRNA.
+    meaning: Browser-ready coverage and exon-interval tracks for visual review.
+  - id: dna_short_variants
+    path: variant_calling/medaka_variant/ or variant_calling/deepvariant/ or
+      variant_calling/margin_pepper_deepvariant/
+    produced_when: protocol is DNA, call_variants is true, and skip_vc is false.
+    meaning: Small variant VCF outputs and indexes from the selected short-variant caller.
+  - id: dna_structural_variants
+    path: variant_calling/sniffles/ or variant_calling/cutesv/
+    produced_when: protocol is DNA, call_variants is true, and skip_sv is false.
+    meaning: Structural variant VCF outputs and indexes from the selected structural caller.
+  - id: bambu_quantification
+    path: bambu/
+    produced_when: protocol is cDNA or directRNA, skip_quantification is false, and
+      quantification_method is bambu.
+    meaning: Extended transcript annotation plus gene and transcript count tables.
+  - id: stringtie2_quantification
+    path: stringtie2/
+    produced_when: protocol is cDNA or directRNA, skip_quantification is false, and
+      quantification_method is stringtie2.
+    meaning: Per-sample StringTie2 annotations, merged GTF, and featureCounts gene/transcript
+      tables.
+  - id: differential_expression
+    path: <QUANTIFICATION_METHOD>/deseq2/deseq2.results.txt and
+      <QUANTIFICATION_METHOD>/dexseq/dexseq.results.txt
+    produced_when: quantification runs and skip_differential_analysis is false.
+    meaning: Differential gene and transcript/exon analysis tables.
+  - id: rna_modifications
+    path: rna_modifications/xpore/ and rna_modifications/m6anet/
+    produced_when: protocol is directRNA and skip_modification_analysis is false.
+    meaning: xPore differential modification table and m6Anet m6A site table.
+  - id: rna_fusions
+    path: jaffal/
+    produced_when: protocol is cDNA or directRNA and skip_fusion_analysis is false.
+    meaning: JAFFAL fusion CSV and FASTA outputs.
+  - id: multiqc_report
+    path: multiqc/multiqc_report.html
+    produced_when: skip_multiqc is false.
+    meaning: Primary QC summary across FastQC, SAMtools, featureCounts, software versions, and
+      workflow metadata.
+  - id: pipeline_info
+    path: pipeline_info/
+    produced_when: Every completed run.
+    meaning: Nextflow execution timeline, report, trace, DAG, software versions, validated
+      samplesheet, and optional email reports.
+  - id: pipeline_params
+    path: pipeline_info/params.json
+    produced_when: Available through run artifacts or pipeline metadata for completed runs.
+    meaning: Run parameters used to confirm route compatibility for reruns and historical reuse.
+reuse_guidance:
+  search_with_artifact_path_contains:
+    - multiqc/multiqc_report.html
+    - pipeline_info/params.json
+    - variant_calling/medaka_variant
+    - bambu/counts_gene.txt
+    - stringtie2/stringtie.merged.gtf
+    - rna_modifications/xpore/diffmod/diffmod_outputs/diffmod.table
+    - jaffal/jaffa_results.csv
+  required_confirmation:
+    - Read run_get(include=["artifact_summary"]) before raw files.
+    - Use run_artifacts to inspect artifacts.json and pipeline_fingerprint.
+    - Read pipeline_info/params.json or equivalent run metadata before deciding that a previous
+      artifact is route-compatible.

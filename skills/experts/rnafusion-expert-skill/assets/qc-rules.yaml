@@ -1,0 +1,55 @@
+checks:
+- id: run_completion
+  severity: high
+  source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+  good_signal: Run succeeded and artifact summary contains expected rnafusion sections.
+  bad_signal: Run failed, stalled, or diagnosis reports missing inputs, missing references, or a process failure.
+  action: Use run_get(detail="full") only when layout, launch_spec, or restart fields are needed; otherwise inspect run_logs for the named failed process.
+- id: reference_prerequisites
+  severity: high
+  source: params and early Nextflow validation
+  good_signal: genomes_base resolves and tool-specific reference paths exist for selected tools.
+  bad_signal: Errors mention missing fusioncatcher_ref, arriba_ref_blacklist, arriba_ref_cytobands, arriba_ref_known_fusions, arriba_ref_protein_domains, starfusion_ref, or database/index files.
+  action: Confirm references with fs_list(mode="manifest") and either build references or pass exact server-local reference params.
+- id: cosmic_license_route
+  severity: high
+  source: reference-building params
+  good_signal: COSMIC credentials are provided only when the user confirms license coverage, or no_cosmic=true is used.
+  bad_signal: Reference build needs COSMIC but credentials are absent, wrong provider is selected, or license status is unclear.
+  action: Use no_cosmic_reference_build unless the user supplies licensed COSMIC credentials; use qiagen=true only for QIAGEN credentials.
+- id: caller_supports_input
+  severity: high
+  source: samplesheet and workflow input routing
+  good_signal: FASTQ, BAM/CRAM, junctions, and splice_junctions columns satisfy the selected tools.
+  bad_signal: Error says no FASTQ files were found when alignment is needed, or FusionInspector has no valid fusion input.
+  action: Check samplesheet columns and selected tools; provide FASTQ or matching BAM/CRAM/junction inputs as needed.
+- id: fusionreport_review
+  severity: medium
+  source: fusionreport/<sample>/
+  good_signal: fusionreport_filtered.tsv and HTML index exist; FII interpretation accounts for active tools and database availability.
+  bad_signal: fusionreport is absent because no caller produced fusions, skip_vis is true, or fusionreport was not selected.
+  action: Review selected tools, tools_cutoff, skip_vis, and caller outputs.
+- id: fusioninspector_review
+  severity: medium
+  source: fusioninspector/<sample>/
+  good_signal: FusionInspector fusions TSV and web report exist for the expected samples.
+  bad_signal: FusionInspector errors because fusioninspector_fusions is missing and no upstream fusionreport input was generated.
+  action: Provide a GENE1--GENE2 fusion list or enable upstream callers plus fusionreport with visualization.
+- id: qc_report_review
+  severity: medium
+  source: multiqc/multiqc_report.html and related QC directories
+  good_signal: MultiQC is present when skip_qc is false; FastQC, Picard, and selected fastp reports are available.
+  bad_signal: MultiQC is missing unexpectedly, or Picard/FastQC reports are absent for a route that should produce QC.
+  action: Confirm skip_qc and selected tools, then inspect the relevant artifact sections before raw files.
+- id: fusioncatcher_read_length
+  severity: medium
+  source: fastp and fusioncatcher outputs
+  good_signal: trim_tail_fusioncatcher is used when long reads need trimming toward 100 bp for FusionCatcher.
+  bad_signal: FusionCatcher performance or failure is suspected with long reads and no FusionCatcher-specific trimming was configured.
+  action: Add fastp and set trim_tail_fusioncatcher to the intended number of 3-prime bases.
+- id: conda_ctatsplicing
+  severity: high
+  source: workflow profile validation
+  good_signal: ctatsplicing is run with a supported container/runtime profile.
+  bad_signal: Error says Conda or Mamba runs are not supported with ctatsplicing.
+  action: Omit explicit profile by default or choose a supported container profile if the user requests one.

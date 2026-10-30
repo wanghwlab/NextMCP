@@ -1,0 +1,146 @@
+artifacts:
+  - id: pipeline_info
+    path: pipeline_info/
+    produced_when: Every completed run.
+    meaning: Nextflow reports, software versions, validated samplesheet, and parameter record.
+    review_order: high
+    key_files:
+      - pipeline_info/params.json
+      - pipeline_info/software_versions.yml
+      - pipeline_info/execution_report.html
+      - pipeline_info/execution_trace.txt
+      - pipeline_info/samplesheet.valid.csv
+    reuse_notes: Use pipeline_info/params.json to confirm aligner, protocol, reference, and
+      route compatibility before reusing old outputs.
+  - id: multiqc_report
+    path: multiqc/multiqc_report.html
+    produced_when: skip_multiqc is false or omitted.
+    meaning: Aggregated QC report across FastQC, aligner reports, tool versions, and workflow
+      summary.
+    review_order: high
+    key_files:
+      - multiqc/multiqc_report.html
+      - multiqc/multiqc_data/
+      - multiqc/multiqc_plots/
+  - id: fastqc_outputs
+    path: fastqc/
+    produced_when: skip_fastqc is false or omitted.
+    meaning: Raw read QC. Barcode and UMI segments may affect FastQC profiles for single-cell
+      libraries.
+    review_order: medium
+    key_files:
+      - fastqc/*.html
+      - fastqc/*.zip
+  - id: simpleaf_outputs
+    path: simpleaf/
+    produced_when: aligner is simpleaf.
+    meaning: Simpleaf mapping and quantification output plus AlevinQC reports.
+    review_order: high
+    key_files:
+      - simpleaf/<sample>/simpleaf_quant/af_quant/alevin/
+      - simpleaf/<sample>/simpleaf_quant/af_map/
+      - simpleaf/<sample>/simpleaf_qc_report_<sample>.html
+      - simpleaf/simpleaf_index/
+  - id: starsolo_outputs
+    path: star/
+    produced_when: aligner is star.
+    meaning: STARsolo matrices, metrics, and optional BAM outputs.
+    review_order: high
+    key_files:
+      - star/<sample>/
+      - star/genome_generate/
+      - star/mtx_conversions/
+  - id: kallisto_outputs
+    path: kallisto/
+    produced_when: aligner is kallisto.
+    meaning: BUS data, count matrices, metrics, and optional Kallisto reference output.
+    review_order: high
+    key_files:
+      - kallisto/raw_bus/
+      - kallisto/sort_bus/
+      - kallisto/bustools_counts/
+      - kallisto/bustools_metrics/
+      - kallisto/kallisto_index/
+      - kallisto/mtx_conversions/
+  - id: cellranger_outputs
+    path: cellranger/
+    produced_when: aligner is cellranger.
+    meaning: Cell Ranger count outputs, web summaries, matrices, BAMs when requested, and
+      reference build outputs when needed.
+    review_order: high
+    key_files:
+      - cellranger/count/
+      - cellranger/count/<sample>/outs/web_summary.html
+      - cellranger/count/<sample>/outs/filtered_feature_bc_matrix/
+      - cellranger/count/<sample>/outs/raw_feature_bc_matrix/
+      - cellranger/mkref/
+      - cellranger/mtx_conversions/
+  - id: cellrangerarc_outputs
+    path: cellrangerarc/
+    produced_when: aligner is cellrangerarc.
+    meaning: Cell Ranger ARC multiome outputs for GEX and ATAC linkage.
+    review_order: high
+    key_files:
+      - cellrangerarc/count/
+      - cellrangerarc/count/<sample>/outs/
+      - cellrangerarc/mkref/
+  - id: cellrangermulti_outputs
+    path: cellrangermulti/
+    produced_when: aligner is cellrangermulti.
+    meaning: Cell Ranger Multi outputs, including aggregate multi outputs and per-sample
+      demultiplexed outputs.
+    review_order: high
+    key_files:
+      - cellrangermulti/count/<sample>/outs/multi/
+      - cellrangermulti/count/<sample>/outs/per_sample_outs/
+      - cellrangermulti/count/<sample>/outs/per_sample_outs/<multiplexed_sample>/web_summary.html
+      - cellrangermulti/count/<sample>/outs/per_sample_outs/<multiplexed_sample>/metrics_summary.csv
+      - cellrangermulti/mkref/
+      - cellrangermulti/mkvdjref/
+  - id: matrix_conversions
+    path: <aligner>/mtx_conversions/
+    produced_when: Matrix outputs are converted to AnnData and R object formats.
+    meaning: Per-sample and combined h5ad/rds matrices for downstream analysis.
+    review_order: high
+    key_files:
+      - <aligner>/mtx_conversions/<sample>/*_raw_matrix.h5ad
+      - <aligner>/mtx_conversions/<sample>/*_filtered_matrix.h5ad
+      - <aligner>/mtx_conversions/combined_*_matrix.h5ad
+      - <aligner>/mtx_conversions/*_matrix.seurat.rds
+      - <aligner>/mtx_conversions/*_matrix.sce.rds
+  - id: cellbender_outputs
+    path: <aligner>/<sample>/cellbender_removebackground/
+    produced_when: skip_cellbender is false and aligner is not cellrangerarc.
+    meaning: CellBender remove-background filtered matrices and converted h5ad output with
+      cellbender_filter provenance.
+    review_order: medium
+    key_files:
+      - <aligner>/<sample>/cellbender_removebackground/
+      - <aligner>/mtx_conversions/<sample>/*_cellbender_filter_matrix.h5ad
+  - id: reference_outputs
+    path: reference-like output directories under the selected aligner.
+    produced_when: save_reference is true or the route builds Cell Ranger references.
+    meaning: Reusable indices or reference directories for later runs.
+    review_order: medium
+    key_files:
+      - simpleaf/simpleaf_index/
+      - star/genome_generate/
+      - kallisto/kallisto_index/
+      - cellranger/mkref/
+      - cellrangerarc/mkref/
+      - cellrangermulti/mkref/
+      - cellrangermulti/mkvdjref/
+historical_reuse:
+  search_fragments:
+    - pipeline_info/params.json
+    - multiqc/multiqc_report.html
+    - simpleaf_qc_report
+    - bustools_counts
+    - web_summary.html
+    - metrics_summary.csv
+    - mtx_conversions/combined_
+    - cellbender_removebackground
+  compatibility_checks:
+    - Inspect run_get(include=["artifact_summary"]) before run_artifacts.
+    - Treat artifacts.json and pipeline_fingerprint as historical facts.
+    - Read pipeline_info/params.json or equivalent metadata before recommending reuse.

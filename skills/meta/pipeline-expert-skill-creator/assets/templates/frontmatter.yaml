@@ -1,0 +1,16 @@
+name: <pipeline>-expert-skill
+description: >-
+  Use when the user wants to plan, run, interpret, or troubleshoot <pipeline>
+  analyses through nextmcp, especially when they mention <inputs>, <default
+  modes>, <special modes such as UMI, licensed acceleration, or
+  preprocessing-only>, <outputs>, <interactive entries>, or <recovery tasks>.
+compatibility: >-
+  Requires access to the nextmcp tool docstrings plus
+  server_info, project_list, project_get, fs_list, nextflow_run, run_list,
+  run_get, run_artifacts, run_logs, fs_read, and nextflow_list_pipelines when
+  the runtime needs a server-local pipeline path for an alternate entry script.
+metadata:
+  skill-class: expert
+  pipeline-id: <pipeline>
+  pipeline-version: <version>
+  generated-from: <inspect payload or repository-local inspect-equivalent source-basis>

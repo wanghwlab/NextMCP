@@ -1,0 +1,43 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+    good_signal: Run succeeded and artifact summary includes predictions, multiqc, and pipeline_info for prediction routes, or epytope FASTA plus pipeline_info for FASTA-only routes.
+    bad_signal: Run failed, stalled, or reported a blocking diagnosis.
+    action: Use run_get summary first, then run_logs only when the diagnosis is insufficient.
+  - id: samplesheet_shape
+    severity: high
+    source: samplesheet and pipeline validation
+    good_signal: Samplesheet has sample, alleles, mhc_class, and filename columns; mhc_class values are I or II; filename extensions are VCF/VCF.GZ, FASTA/FA, or TSV.
+    bad_signal: Missing columns, unsupported file extension, invalid mhc_class, or client-local paths in filename cells.
+    action: Ask for a corrected server-local samplesheet and confirm paths with fs_list(mode="manifest") when needed.
+  - id: annotated_variant_input
+    severity: high
+    source: docs/usage.md and epytope output
+    good_signal: VCF input was annotated with SnpEff or VEP and epytope emits mutated peptide TSVs or expected FASTA output.
+    bad_signal: Epytope output is absent or empty for expected variant rows.
+    action: Confirm annotation source, genome_reference, proteome_reference, and VCF content before rerun.
+  - id: netmhc_prerequisites
+    severity: high
+    source: tools, netmhcpan_path, netmhciipan_path, run logs
+    good_signal: Every NetMHC predictor named in tools has a matching server-local .tar.gz path and unpack step completes.
+    bad_signal: Error says netmhcpan_path or netmhciipan_path was not specified, tarball is missing, or checksum/software metadata mismatch occurs.
+    action: Confirm licensed tarball paths on the nextmcp server filesystem and rerun with matching tools and path params.
+  - id: unsupported_alleles_or_lengths
+    severity: medium
+    source: multiqc/multiqc_report.html and predictor raw outputs
+    good_signal: MultiQC shows expected predicted and skipped counts; predictor directories contain outputs for selected tools.
+    bad_signal: Empty cells in prediction tables or missing predictor outputs for expected alleles and peptide lengths.
+    action: Check assets/supported_alleles.json knowledge from pipeline docs, selected tools, mhc_class, and peptide length bounds.
+  - id: binder_and_rank_interpretation
+    severity: medium
+    source: predictions/[sample].tsv
+    good_signal: Prediction tables include BA, rank, binder, predictor, allele, and peptide columns.
+    bad_signal: User treats BA and rank as directly interchangeable across predictors or forgets binder_only filtering.
+    action: Explain that rank is the preferred binder selection measure in docs, while MHCnuggets-specific rank handling has caveats.
+  - id: reporting_shape
+    severity: medium
+    source: predictions/[sample].tsv and multiqc/
+    good_signal: Output shape matches binder_only and wide_format_output choices.
+    bad_signal: Downstream parser expects long format but wide_format_output was used, or expects all peptides but binder_only removed non-binders.
+    action: Confirm reporting_shape preset and rerun only if downstream shape needs changing.

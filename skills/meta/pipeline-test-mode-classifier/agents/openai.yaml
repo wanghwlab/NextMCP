@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pipeline Test Classifier"
+  short_description: "Classify pipeline test materials for smoke evals"
+  default_prompt: "Use $pipeline-test-mode-classifier to classify this pipeline into a smoke-eval extraction mode."

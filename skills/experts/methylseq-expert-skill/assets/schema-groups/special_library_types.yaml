@@ -1,0 +1,252 @@
+group:
+  id: special_library_types
+  label: Special library types
+  selection_rule: Use this group for parameters defined under the `Special library
+    types` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/special_library_types.md
+  - assets/schema-groups/special_library_types.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `special_library_types` for exact lookup.
+parameters:
+- group_id: special_library_types
+  name: accel
+  source_name: accel
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Trimming preset for the Accel kit.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-cut
+    help_text: Equivalent to `--clip_r1 10` `--clip_r2 15` `--three_prime_clip_r1
+      10` `--three_prime_clip_r2 10`
+    description: Trimming preset for the Accel kit.
+- group_id: special_library_types
+  name: em_seq
+  source_name: em_seq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Preset for EM-seq libraries.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-cubes
+    description: Preset for EM-seq libraries.
+    help_text: 'Equivalent to `--clip_r1 10` `--clip_r2 10` `--three_prime_clip_r1
+      10` `--three_prime_clip_r2 10`.
+
+
+      Also sets the `--maxins` flag to `1000` for Bismark.'
+- group_id: special_library_types
+  name: pbat
+  source_name: pbat
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Preset for working with PBAT libraries.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-outdent
+    description: Preset for working with PBAT libraries.
+    help_text: 'Specify this parameter when working with PBAT _(Post Bisulfite Adapter
+      Tagging)_ libraries.
+
+
+      Using this parameter sets the `--pbat` flag when aligning with Bismark. This
+      tells Bismark to align complementary strands (the opposite of `--directional`).
+
+
+      Additionally, this is a trimming preset equivalent to `--clip_r1 8` `--clip_r2
+      8` `--three_prime_clip_r1 8` `--three_prime_clip_r2 8`, unless `--skip_trimming_presets`
+      is set to `true`'
+- group_id: special_library_types
+  name: rrbs
+  source_name: rrbs
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on if dealing with MspI digested material.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    description: Turn on if dealing with MspI digested material.
+    help_text: 'Use this parameter when working with RRBS _(Reduced Representation
+      Bisulfite Sequencing)_ data, that is digested using MspI.
+
+
+      Specifying `--rrbs` will pass on the `--rrbs` parameter to TrimGalore! See the
+      [TrimGalore! documentation](https://github.com/FelixKrueger/TrimGalore/blob/master/Docs/Trim_Galore_User_Guide.md#rrbs-specific-options-mspi-digested-material)
+      to read more about the effects of this option.
+
+
+      This parameter also makes the pipeline skip the deduplication step.'
+    fa_icon: fas fa-compress
+- group_id: special_library_types
+  name: single_cell
+  source_name: single_cell
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Trimming preset for single-cell bisulfite libraries.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-cut
+    description: Trimming preset for single-cell bisulfite libraries.
+    help_text: 'Equivalent to `--clip_r1 6` `--clip_r2 6` `--three_prime_clip_r1 6`
+      `--three_prime_clip_r2 6`.
+
+
+      Also sets the `--non_directional` flag for Bismark.'
+- group_id: special_library_types
+  name: slamseq
+  source_name: slamseq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run bismark in SLAM-seq mode.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    description: Run bismark in SLAM-seq mode.
+    fa_icon: fas fa-wave-square
+    help_text: "Specify to run Bismark with the `--slam` flag to run bismark in [SLAM-seq\
+      \ mode](https://github.com/FelixKrueger/Bismark/blob/master/CHANGELOG.md#slam-seq-mode)\
+      \ \n\n> NB: Only works with when using the `bismark_hisat` aligner (`--aligner\
+      \ bismark_hisat`)"
+- group_id: special_library_types
+  name: taps
+  source_name: taps
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Preset for working with TET-assisted pyridine borane sequencing (TAPS)
+    libraries.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-outdent
+    description: Preset for working with TET-assisted pyridine borane sequencing (TAPS)
+      libraries.
+    help_text: 'Specify this parameter when working with TAPS libraries.
+
+
+      This is also set if you set the aligner to `bwamem`.'
+- group_id: special_library_types
+  name: zymo
+  source_name: zymo
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Trimming preset for the Zymo kit.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Special library types
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-cut
+    description: Trimming preset for the Zymo kit.
+    help_text: 'Equivalent to `--clip_r1 10` `--clip_r2 10` `--three_prime_clip_r1
+      10` `--three_prime_clip_r2 10`.
+
+
+      Also sets the `--non_directional` flag for Bismark.'

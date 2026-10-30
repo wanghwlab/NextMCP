@@ -1,0 +1,657 @@
+group:
+  id: quality_control_for_short_reads_options
+  label: Quality control for short reads options
+  selection_rule: Use this group for parameters defined under the `Quality control
+    for short reads options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/quality_control_for_short_reads_options.md
+  - assets/schema-groups/quality_control_for_short_reads_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `quality_control_for_short_reads_options` for exact lookup.
+parameters:
+- group_id: quality_control_for_short_reads_options
+  name: adapterremoval_minquality
+  source_name: adapterremoval_minquality
+  type: integer
+  required: false
+  default: 2
+  enum: null
+  description: The minimum base quality for low-quality base trimming by AdapterRemoval.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 2
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: integer
+    default: 2
+    description: The minimum base quality for low-quality base trimming by AdapterRemoval.
+- group_id: quality_control_for_short_reads_options
+  name: adapterremoval_trim_quality_stretch
+  source_name: adapterremoval_trim_quality_stretch
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on quality trimming by consecutive stretch of low quality bases,
+    rather than by window.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Turn on quality trimming by consecutive stretch of low quality bases,
+      rather than by window.
+    help_text: 'Default base-quality trimming is set to trim by ''windows'', as in
+      FastP. Specifying this flag will use trim via contiguous stretch of low quality
+      bases (Ns) instead.
+
+
+      > Replaces --trimwindows 4 with --trimqualities in AdapterRemoval'
+- group_id: quality_control_for_short_reads_options
+  name: bbnorm
+  source_name: bbnorm
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run BBnorm to normalize sequence depth.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Run BBnorm to normalize sequence depth.
+- group_id: quality_control_for_short_reads_options
+  name: clip_tool
+  source_name: clip_tool
+  type: string
+  required: false
+  default: fastp
+  enum: &id001
+  - fastp
+  - adapterremoval
+  - trimmomatic
+  description: Specify which adapter clipping tool to use.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - fastp
+  - adapterremoval
+  - trimmomatic
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    default: fastp
+    description: Specify which adapter clipping tool to use.
+    enum: *id001
+- group_id: quality_control_for_short_reads_options
+  name: fastp_save_trimmed_fail
+  source_name: fastp_save_trimmed_fail
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save reads that fail fastp filtering in a separate file. Not used downstream.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Save reads that fail fastp filtering in a separate file. Not used
+      downstream.
+- group_id: quality_control_for_short_reads_options
+  name: fastp_trim_polyg
+  source_name: fastp_trim_polyg
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on detecting and trimming of poly-G tails
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Turn on detecting and trimming of poly-G tails
+    help_text: 'This is particularly useful when dealing with Illumina 2 colour chemistry
+      sequencing platforms, that will record ''G'' in the absence of any light emitted.
+
+
+      See [here](https://sequencing.qcfail.com/articles/illumina-2-colour-chemistry-can-overcall-high-confidence-g-bases/)
+      for more information on the artefact.'
+- group_id: quality_control_for_short_reads_options
+  name: host_fasta
+  source_name: host_fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Fasta reference file for host contamination removal.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    description: Fasta reference file for host contamination removal.
+    help_text: This parameter is mutually exclusive with `--host_genome`. The reference
+      can be masked. Host read removal is done with Bowtie2.
+    format: file-path
+    exists: true
+- group_id: quality_control_for_short_reads_options
+  name: host_fasta_bowtie2index
+  source_name: host_fasta_bowtie2index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Bowtie2 index directory corresponding to `--host_fasta` reference file
+    for host contamination removal.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    description: Bowtie2 index directory corresponding to `--host_fasta` reference
+      file for host contamination removal.
+    help_text: This parameter must be used in combination with `--host_fasta`, and
+      should be a directory containing files from the output of `bowtie2-build`, i.e.
+      files ending in `.bt2`
+    format: directory-path
+    exists: true
+- group_id: quality_control_for_short_reads_options
+  name: host_genome
+  source_name: host_genome
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Name of iGenomes reference for host contamination removal.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/host_genome
+  example_values:
+  - <server_reference_root>/host_genome
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    help_text: "This parameter is mutually exclusive with `--host_fasta`. Host read\
+      \ removal is done with Bowtie2. \nBoth the iGenomes FASTA file as well as corresponding,\
+      \ already pre-built Bowtie 2 index files will be used."
+    description: Name of iGenomes reference for host contamination removal.
+- group_id: quality_control_for_short_reads_options
+  name: host_removal_save_ids
+  source_name: host_removal_save_ids
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the read IDs of removed host reads.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Save the read IDs of removed host reads.
+- group_id: quality_control_for_short_reads_options
+  name: host_removal_verysensitive
+  source_name: host_removal_verysensitive
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Use the `--very-sensitive` instead of the`--sensitive`setting for Bowtie
+    2 to map reads against the host genome.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Use the `--very-sensitive` instead of the`--sensitive`setting for
+      Bowtie 2 to map reads against the host genome.
+- group_id: quality_control_for_short_reads_options
+  name: keep_phix
+  source_name: keep_phix
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Keep reads similar to the Illumina internal standard PhiX genome.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Keep reads similar to the Illumina internal standard PhiX genome.
+- group_id: quality_control_for_short_reads_options
+  name: phix_reference
+  source_name: phix_reference
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Genome reference used to remove Illumina PhiX contaminant reads.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/phix_reference
+  example_values:
+  - <server_input_root>/phix_reference
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    description: Genome reference used to remove Illumina PhiX contaminant reads.
+    format: file-path
+    exists: true
+    help_text: 'If not supplied, and keeping phix is turned off, an included genome
+      (GCA_002596845.1) will be used '
+- group_id: quality_control_for_short_reads_options
+  name: save_bbnorm_reads
+  source_name: save_bbnorm_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save normalized read files to output directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_bbnorm_reads
+  example_values:
+  - <server_input_root>/save_bbnorm_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Save normalized read files to output directory.
+- group_id: quality_control_for_short_reads_options
+  name: save_clipped_reads
+  source_name: save_clipped_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save the resulting clipped FASTQ files to --outdir.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_clipped_reads
+  example_values:
+  - <server_input_root>/save_clipped_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Specify to save the resulting clipped FASTQ files to --outdir.
+- group_id: quality_control_for_short_reads_options
+  name: save_hostremoved_reads
+  source_name: save_hostremoved_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save input FASTQ files with host reads removed to --outdir.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_hostremoved_reads
+  example_values:
+  - <server_input_root>/save_hostremoved_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Specify to save input FASTQ files with host reads removed to --outdir.
+- group_id: quality_control_for_short_reads_options
+  name: save_phixremoved_reads
+  source_name: save_phixremoved_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save input FASTQ files with phiX reads removed to --outdir.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_phixremoved_reads
+  example_values:
+  - <server_input_root>/save_phixremoved_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Specify to save input FASTQ files with phiX reads removed to --outdir.
+- group_id: quality_control_for_short_reads_options
+  name: skip_clipping
+  source_name: skip_clipping
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip read preprocessing using fastp or adapterremoval.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Skip read preprocessing using fastp or adapterremoval.
+- group_id: quality_control_for_short_reads_options
+  name: skip_shortread_qc
+  source_name: skip_shortread_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all default QC steps for short reads (adapter trimming, phiX removal).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: boolean
+    description: Skip all default QC steps for short reads (adapter trimming, phiX
+      removal).
+    help: Skips clipping and removal of phiX sequences. Does not affect host sequence
+      removal as this is opt in.
+- group_id: quality_control_for_short_reads_options
+  name: adapterremoval_adapter1
+  source_name: adapterremoval_adapter1
+  type: string
+  required: false
+  default: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG
+  enum: null
+  description: Forward read adapter to be trimmed by AdapterRemoval.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    default: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG
+    pattern: ^[ATGCRYKMSWBDHVN]*$
+    description: Forward read adapter to be trimmed by AdapterRemoval.
+- group_id: quality_control_for_short_reads_options
+  name: adapterremoval_adapter2
+  source_name: adapterremoval_adapter2
+  type: string
+  required: false
+  default: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+  enum: null
+  description: Reverse read adapter to be trimmed by AdapterRemoval for paired end
+    data.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: string
+    default: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+    pattern: ^[ATGCRYKMSWBDHVN]*$
+    description: Reverse read adapter to be trimmed by AdapterRemoval for paired end
+      data.
+- group_id: quality_control_for_short_reads_options
+  name: bbnorm_min
+  source_name: bbnorm_min
+  type: integer
+  required: false
+  default: 5
+  enum: null
+  description: Set BBnorm minimum depth to this number.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 5
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: integer
+    default: 5
+    description: Set BBnorm minimum depth to this number.
+- group_id: quality_control_for_short_reads_options
+  name: bbnorm_target
+  source_name: bbnorm_target
+  type: integer
+  required: false
+  default: 100
+  enum: null
+  description: Set BBnorm target maximum depth to this number.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 100
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: integer
+    default: 100
+    description: Set BBnorm target maximum depth to this number.
+- group_id: quality_control_for_short_reads_options
+  name: fastp_cut_mean_quality
+  source_name: fastp_cut_mean_quality
+  type: integer
+  required: false
+  default: 15
+  enum: null
+  description: The mean quality requirement used for per read sliding window cutting
+    by fastp.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 15
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: integer
+    default: 15
+    description: The mean quality requirement used for per read sliding window cutting
+      by fastp.
+    help: Used in combination with the fastp options '--cut_front' and '--cut_tail'.
+      If the mean quality within a window (of size 4) is below `--fastp_cut_mean_quality`,
+      the bases are dropped and the sliding window is moved further, otherwise it
+      stops.
+- group_id: quality_control_for_short_reads_options
+  name: fastp_qualified_quality
+  source_name: fastp_qualified_quality
+  type: integer
+  required: false
+  default: 15
+  enum: null
+  description: Minimum phred quality value of a base to be qualified in fastp.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 15
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: integer
+    default: 15
+    description: Minimum phred quality value of a base to be qualified in fastp.
+    help: Reads with more than 40% of unqualified bases will be discarded.
+- group_id: quality_control_for_short_reads_options
+  name: reads_minlength
+  source_name: reads_minlength
+  type: integer
+  required: false
+  default: 15
+  enum: null
+  description: The minimum length of reads must have to be retained for downstream
+    analysis.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/reads_minlength
+  example_values:
+  - <server_input_root>/reads_minlength
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for short reads options
+  raw_schema:
+    type: integer
+    default: 15
+    description: The minimum length of reads must have to be retained for downstream
+      analysis.

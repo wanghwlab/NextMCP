@@ -1,0 +1,135 @@
+playbooks:
+  - id: bismark_default
+    use_when: Standard bisulfite sequencing analysis with Bismark and Bowtie2.
+    prerequisites:
+      - Confirm project, server-local samplesheet, outdir, and reference source.
+      - Use a configured genome or provide fasta plus bismark_index. If building from fasta, use save_reference when the index should be reused.
+      - Keep aligner as bismark unless the user asks for HISAT2, BWA-Meth, or TAPS.
+    recommended_preset: bismark_default
+    tool_sequence:
+      - project_list() when the project id is unknown
+      - project_get(project) when the project root or recent runs matter
+      - fs_list(mode="manifest") for samplesheet, FASTA, index, or outdir paths that still need confirmation
+      - nextflow_run(prepare=true) before launch when inputs or target outputs still need checking
+      - nextflow_run(pipeline="methylseq", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(...) after artifact_summary names result sections
+    outputs_to_review:
+      - multiqc/bismark/multiqc_report.html
+      - bismark/methylation_calls/
+      - bismark/reports/
+      - bismark/summary/
+      - pipeline_info/params.json
+
+  - id: bismark_hisat_slamseq
+    use_when: User asks for HISAT2-backed Bismark, splice-aware alignment, or SLAM-seq.
+    prerequisites:
+      - Set aligner to bismark_hisat.
+      - For splice-aware alignment, confirm known_splices points to a server-local GTF.
+      - For SLAM-seq, set slamseq true and keep the request on the bismark_hisat route.
+    recommended_preset: bismark_hisat
+    outputs_to_review:
+      - bismark/alignments/logs/
+      - bismark/methylation_calls/
+      - multiqc/bismark/multiqc_report.html
+
+  - id: bwameth_methyldackel
+    use_when: User wants BWA-Meth alignment and MethylDackel methylation calls.
+    prerequisites:
+      - Set aligner to bwameth.
+      - Confirm fasta, fasta_index, and bwameth_index, or a configured genome that resolves them.
+      - Set use_mem2 only when the user wants the BWA-MEM2 algorithm.
+    recommended_preset: bwameth_methyldackel
+    outputs_to_review:
+      - bwameth/alignments/samtools_stats/
+      - bwameth/deduplicated/
+      - methyldackel/
+      - methyldackel/mbias/
+      - multiqc/bwameth/multiqc_report.html
+
+  - id: gpu_bwameth
+    use_when: User requests Parabricks or GPU acceleration for BWA-Meth.
+    prerequisites:
+      - Set aligner to bwameth.
+      - Confirm the server runtime supports a GPU profile and NVIDIA container runtime.
+      - Pass profile explicitly only when the user requests GPU or the server default is unsuitable.
+      - Do not use Conda or Mamba for this route.
+    recommended_preset: bwameth_mem2
+    outputs_to_review:
+      - bwameth/alignments/
+      - methyldackel/
+      - multiqc/bwameth/multiqc_report.html
+
+  - id: taps_bwamem_rastair
+    use_when: User has TAPS data or asks for BWA-MEM plus Rastair conversion analysis.
+    prerequisites:
+      - Prefer aligner=bwamem for TAPS.
+      - Set taps true for TAPS libraries; aligner=bwamem uses Rastair even without taps.
+      - Confirm fasta, fasta_index, and bwamem_index, or a configured genome that resolves them.
+      - Do not combine this route with run_targeted_sequencing.
+    recommended_preset: taps_bwamem
+    outputs_to_review:
+      - bwamem/alignments/samtools_stats/
+      - bwamem/deduplicated/picard_metrics/
+      - rastair/call/
+      - rastair/mbias/
+      - rastair/mbiasparser/
+      - rastair/methylkit/
+      - multiqc/bwamem/multiqc_report.html
+
+  - id: special_library_preset
+    use_when: User names PBAT, RRBS, single-cell bisulfite, Accel, Zymo, EM-seq, NOMe-seq, or NMT-seq.
+    prerequisites:
+      - Select the matching boolean preset: pbat, rrbs, single_cell, accel, zymo, em_seq, or nomeseq.
+      - Remember pbat, single_cell, accel, zymo, and em_seq also shape trimming presets unless skip_trimming_presets is true.
+      - RRBS skips deduplication by pipeline design.
+      - single_cell and zymo set non_directional behavior for Bismark.
+    recommended_preset: special_library
+    outputs_to_review:
+      - trimgalore/logs/
+      - bismark/methylation_calls/
+      - multiqc/*/multiqc_report.html
+
+  - id: targeted_sequencing
+    use_when: User asks for target-region methylation analysis or hybrid-capture metrics.
+    prerequisites:
+      - Set run_targeted_sequencing true.
+      - Confirm target_regions_file is a server-local BED file.
+      - Set collecthsmetrics true only when Picard hybrid-selection metrics are requested.
+      - Do not use with TAPS or aligner=bwamem.
+    recommended_preset: targeted_bismark
+    outputs_to_review:
+      - bismark/methylation_calls/bedGraph/*targeted.bedGraph
+      - methyldackel/*targeted.bedGraph
+      - enrichment_metrics/
+      - multiqc/*/multiqc_report.html
+
+  - id: optional_qc_outputs
+    use_when: User requests extra alignment QC, library complexity, saved BAMs, unmapped reads, or saved references.
+    prerequisites:
+      - Use run_qualimap for Qualimap BamQC and bamqc_regions_file when regional coverage stats matter.
+      - Use run_preseq for library complexity extrapolation.
+      - Use save_align_intermeds, save_trimmed, unmapped, or save_reference only when the user needs those extra files.
+    recommended_preset: optional_qc
+    outputs_to_review:
+      - qualimap/bamqc/
+      - preseq/
+      - trimgalore/
+      - "*/reference_genome/"
+      - "*/alignments/"
+
+  - id: historical_reuse
+    use_when: User wants to find or reuse outputs from an earlier methylseq run.
+    prerequisites:
+      - Search with a known artifact fragment before guessing old outdir paths.
+      - Treat artifacts.json and pipeline_fingerprint as historical facts.
+      - Confirm route compatibility through pipeline_info/params.json before recommending reuse.
+    history_lookup:
+      - run_list(project=..., pipeline="methylseq", artifact_path_contains=...)
+      - run_get(include=["artifact_summary"]) on candidate runs
+      - run_artifacts(...) to find params.json, MultiQC, and requested result files
+    recommended_preset: reuse_lookup
+    outputs_to_review:
+      - pipeline_info/params.json
+      - artifacts.json
+      - pipeline_fingerprint

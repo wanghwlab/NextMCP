@@ -1,0 +1,156 @@
+playbooks:
+  - id: standard_mixed_read_mag
+    use_when: User wants a normal nf-core/mag run from a samplesheet.
+    prerequisites:
+      - Confirm project id and server-local samplesheet path.
+      - Confirm each row has sample and group plus the matching short-read or long-read platform column.
+      - Confirm FastQ files are compressed and already visible to the nextmcp server.
+      - Decide whether default single assembly plus co-binning is acceptable or coassemble_group is needed.
+    recommended_preset: standard_mixed_read_mag
+    params_to_confirm:
+      - input
+      - outdir
+      - single_end when short reads are single-end
+      - coassemble_group
+      - binning_map_mode
+    prepare_first: Use nextflow_run(prepare=true) when server paths, outdir, database paths, or resource config are uncertain; inspect run_layout and layout_warnings before launch.
+    outputs_to_review:
+      - multiqc/multiqc_report.html
+      - GenomeBinning/bin_summary.tsv
+      - GenomeBinning/QC/
+      - Taxonomy/GTDB-Tk/gtdbtk_summary.tsv
+      - Taxonomy/CAT/bat_summary.tsv
+      - pipeline_info/params.json
+  - id: precomputed_assembly_binning
+    use_when: User has pre-built assemblies and wants to skip read preprocessing and assembly.
+    prerequisites:
+      - Confirm input reads CSV and assembly_input CSV are both server-local.
+      - Confirm assembly_input has id, group, assembler, and fasta.
+      - Confirm assembler values are one of MEGAHIT, SPAdes, SPAdesHybrid, Flye, or MetaMDBG.
+      - If assemblies are co-assemblies, set coassemble_group and keep group values aligned with input.
+      - Tell the user read preprocessing and assembly are skipped in this route.
+    recommended_preset: precomputed_assembly_binning
+    params_to_confirm:
+      - input
+      - assembly_input
+      - outdir
+      - coassemble_group
+      - binning_map_mode
+    outputs_to_review:
+      - GenomeBinning/
+      - GenomeBinning/bin_summary.tsv
+      - GenomeBinning/depths/
+      - Taxonomy/
+      - Annotation/
+  - id: long_read_only
+    use_when: User has only ONT or PacBio reads.
+    prerequisites:
+      - Samplesheet may omit short_reads_1 and short_reads_2 but must include long_reads and long_reads_platform.
+      - Choose Flye or MetaMDBG by skip_flye and skip_metamdbg when the user wants one assembler.
+      - Confirm long-read trimming and filtering tools before launch.
+    recommended_preset: long_read_only
+    params_to_confirm:
+      - input
+      - outdir
+      - longread_adaptertrimming_tool
+      - longread_filtering_tool
+    outputs_to_review:
+      - QC_longreads/
+      - Assembly/FLYE/
+      - Assembly/METAMDBG/
+      - GenomeBinning/
+  - id: coassembly_or_cobinning
+    use_when: User asks whether samples should be assembled or binned together.
+    decision_rules:
+      - Default behavior uses group for co-binning but assembles samples individually.
+      - Use coassemble_group when groups should also be assembled together.
+      - Use binning_map_mode to choose own, group, or all mapping behavior for coverage estimation.
+      - For ancient_dna, prefer binning_map_mode own unless the user explicitly needs co-binning.
+    recommended_preset: coassembly_or_cobinning
+    outputs_to_review:
+      - Assembly/
+      - GenomeBinning/depths/
+      - GenomeBinning/bin_summary.tsv
+  - id: database_backed_taxonomy_and_qc
+    use_when: User wants high-quality bin QC, taxonomy, or annotation with server-local databases.
+    prerequisites:
+      - Confirm BUSCO lineage cache or allow BUSCO to download lineages.
+      - Confirm GTDB-Tk database path or accept the default r226 download.
+      - Confirm CAT database path or cat_db_generate for CAT; CAT nr is very large.
+      - Confirm CheckM, CheckM2, GUNC, geNomad, and MetaEuk database paths when those tools are requested.
+      - Do not block a normal run on `checkm_db` or `checkm2_db`; run_checkm=false and run_checkm2=false in the default route, so the default route does not need them.
+      - Use fs_list(mode="manifest") for one concrete database path when existence is uncertain.
+    recommended_preset: database_backed_taxonomy_and_qc
+    params_to_confirm:
+      - busco_db
+      - busco_db_lineage
+      - checkm_db
+      - checkm2_db
+      - gunc_db
+      - gtdb_db
+      - cat_db
+      - genomad_db
+      - metaeuk_db or metaeuk_mmseqs_db
+    outputs_to_review:
+      - GenomeBinning/QC/busco_summary.tsv
+      - GenomeBinning/QC/checkm_summary.tsv
+      - GenomeBinning/QC/checkm2_summary.tsv
+      - GenomeBinning/QC/gunc_summary.tsv
+      - Taxonomy/GTDB-Tk/gtdbtk_summary.tsv
+      - Taxonomy/CAT/bat_summary.tsv
+      - Annotation/Prokka/
+      - Annotation/MetaEuk/
+  - id: ancient_dna_validation
+    use_when: User asks for ancient DNA authentication, pyDamage, or damage-aware consensus correction.
+    prerequisites:
+      - Set ancient_dna true.
+      - Prefer binning_map_mode own for reproducible pyDamage results.
+      - Decide whether skip_ancient_damagecorrection should stay false so FreeBayes and BCFtools recall contig consensus.
+    recommended_preset: ancient_dna_validation
+    outputs_to_review:
+      - Ancient_DNA/pydamage/analyze/
+      - Ancient_DNA/pydamage/filter/
+      - Ancient_DNA/variant_calling/
+      - GenomeBinning/QC/pydamage_bins_summary.tsv
+      - GenomeBinning/bin_summary.tsv
+  - id: virus_identification
+    use_when: User asks for viral or plasmid detection in assemblies.
+    prerequisites:
+      - Set run_virus_identification true.
+      - Confirm genomad_db server-local path; geNomad does not run without a database.
+    recommended_preset: virus_identification
+    outputs_to_review:
+      - VirusIdentification/geNomad/
+  - id: bigmag_summary
+    use_when: User asks for a BIgMAG dashboard input.
+    prerequisites:
+      - Set generate_bigmag_file true.
+      - Keep run_busco true and set run_checkm2 true and run_gunc true.
+      - Do not skip GTDB-Tk.
+      - Confirm the needed BUSCO, CheckM2, GUNC, and GTDB-Tk databases.
+    recommended_preset: bigmag_summary
+    outputs_to_review:
+      - GenomeBinning/BIgMAG/bigmag_summary.tsv
+  - id: historical_reuse
+    use_when: User asks to reuse a previous MAG result, database, report, bin table, or taxonomy table.
+    prerequisites:
+      - Search prior runs with run_list using artifact_path_contains for a known file fragment.
+      - Treat artifacts.json and pipeline_fingerprint as historical facts.
+      - Confirm route compatibility through pipeline_info/params.json before recommending reuse.
+    artifact_path_contains_examples:
+      - pipeline_info/params.json
+      - multiqc/multiqc_report.html
+      - GenomeBinning/bin_summary.tsv
+      - GenomeBinning/BIgMAG/bigmag_summary.tsv
+      - Taxonomy/GTDB-Tk/gtdbtk_summary.tsv
+      - Taxonomy/CAT/bat_summary.tsv
+runtime_tool_order:
+  - Optional server_info when server defaults or layout are unknown.
+  - Optional project_list or project_get when project id or project root is unknown.
+  - Optional fs_list(mode="manifest") for one concrete server-local path.
+  - nextflow_run(prepare=true) before launch when inputs, outputs, databases, resource config, or restart route are uncertain.
+  - nextflow_run to launch.
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"]) before raw logs.
+  - run_artifacts after the summary identifies relevant artifact sections.
+  - run_logs only when the summary is not enough.
+  - fs_read only for explicit logs or output files after their server-local paths are known.

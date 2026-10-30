@@ -1,0 +1,182 @@
+group:
+  id: quality_control
+  label: Quality Control
+  selection_rule: Use this group for parameters defined under the `Quality Control`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/quality_control.md
+  - assets/schema-groups/quality_control.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `quality_control` for exact lookup.
+parameters:
+- group_id: quality_control
+  name: bracken_precision
+  source_name: bracken_precision
+  type: string
+  required: false
+  default: S
+  enum: &id001
+  - D
+  - P
+  - C
+  - O
+  - F
+  - G
+  - S
+  description: Taxonomic level for Bracken abundance estimations.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - D
+  - P
+  - C
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality Control
+  raw_schema:
+    type: string
+    default: S
+    fa_icon: fas fa-tree
+    description: Taxonomic level for Bracken abundance estimations.
+    help_text: 'Use the first letter of taxonomic levels: Domain, Phylum, Class, Order,
+      Family, Genus, or Species.'
+    enum: *id001
+- group_id: quality_control
+  name: contaminant_screening
+  source_name: contaminant_screening
+  type: string
+  required: false
+  default: null
+  enum: &id002
+  - kraken2
+  - kraken2_bracken
+  description: Tool to use for detecting contaminants in unaligned reads - available
+    options are 'kraken2' and 'kraken2_bracken'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - kraken2
+  - kraken2_bracken
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality Control
+  raw_schema:
+    type: string
+    description: Tool to use for detecting contaminants in unaligned reads - available
+      options are 'kraken2' and 'kraken2_bracken'
+    fa_icon: fas fa-virus-slash
+    enum: *id002
+- group_id: quality_control
+  name: deseq2_vst
+  source_name: deseq2_vst
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Use vst transformation instead of rlog with DESeq2.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality Control
+  raw_schema:
+    type: boolean
+    description: Use vst transformation instead of rlog with DESeq2.
+    help_text: See the [DESeq2 documentation](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#data-transformations-and-visualization)
+      for details on transformations.
+    fa_icon: fas fa-dolly
+    default: true
+- group_id: quality_control
+  name: kraken_db
+  source_name: kraken_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Database when using Kraken2/Bracken for contaminant screening.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/kraken_db
+  example_values:
+  - <server_reference_root>/kraken_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality Control
+  raw_schema:
+    type: string
+    format: directory-path
+    description: Database when using Kraken2/Bracken for contaminant screening.
+    help_text: See the usage documentation for more information on setting up and
+      using Kraken2 databases.
+    fa_icon: fas fa-fish
+- group_id: quality_control
+  name: extra_fqlint_args
+  source_name: extra_fqlint_args
+  type: string
+  required: false
+  default: --disable-validator P001
+  enum: null
+  description: Extra arguments to pass to the fq lint command.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - --disable-validator P001
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality Control
+  raw_schema:
+    type: string
+    minLength: 1
+    default: --disable-validator P001
+    description: Extra arguments to pass to the fq lint command.
+    fa_icon: far fa-check-square
+- group_id: quality_control
+  name: rseqc_modules
+  source_name: rseqc_modules
+  type: string
+  required: false
+  default: bam_stat,inner_distance,infer_experiment,junction_annotation,junction_saturation,read_distribution,read_duplication
+  enum: null
+  description: Comma-separated list of RSeQC modules to run.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - bam_stat,inner_distance,infer_experiment,junction_annotation,junction_saturation,read_distribution,read_duplication
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality Control
+  raw_schema:
+    type: string
+    description: Comma-separated list of RSeQC modules to run.
+    help_text: 'Available modules include: bam_stat, inner_distance, infer_experiment,
+      junction_annotation, junction_saturation, read_distribution, read_duplication.'
+    errorMessage: The RSeQC modules must be a comma-separated list of valid module
+      names.
+    minLength: 1
+    default: bam_stat,inner_distance,infer_experiment,junction_annotation,junction_saturation,read_distribution,read_duplication
+    fa_icon: fas fa-chart-pie

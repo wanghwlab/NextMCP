@@ -1,0 +1,146 @@
+group:
+  id: general_reference_genome_options
+  label: General reference genome options
+  selection_rule: Use this group for parameters defined under the `General reference
+    genome options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/general_reference_genome_options.md
+  - assets/schema-groups/general_reference_genome_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `general_reference_genome_options` for exact lookup.
+parameters:
+- group_id: general_reference_genome_options
+  name: build_only_index
+  source_name: build_only_index
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Only built references.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/build_only_index
+  example_values:
+  - <server_reference_root>/build_only_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: General reference genome options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-download
+    description: Only built references.
+    help_text: Set this parameter, if you wish to compute and save all computed reference
+      files. No alignment or any other downstream steps will be performed.
+- group_id: general_reference_genome_options
+  name: download_cache
+  source_name: download_cache
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Download annotation cache.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/download_cache
+  example_values:
+  - <server_reference_root>/download_cache
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: General reference genome options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-download
+    description: Download annotation cache.
+    help_text: 'Set this parameter, if you wish to download annotation cache.
+
+      Using this parameter will download cache even if --snpeff_cache and --vep_cache
+      are provided.'
+- group_id: general_reference_genome_options
+  name: save_reference
+  source_name: save_reference
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save built references.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/save_reference
+  example_values:
+  - <server_reference_root>/save_reference
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: General reference genome options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-download
+    description: Save built references.
+    help_text: Set this parameter, if you wish to save all computed reference files.
+      This is useful to avoid re-computation on future runs.
+- group_id: general_reference_genome_options
+  name: igenomes_base
+  source_name: igenomes_base
+  type: string
+  required: false
+  default: s3://ngi-igenomes/igenomes/
+  enum: null
+  description: The base path to the igenomes reference files
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - s3://ngi-igenomes/igenomes/
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: General reference genome options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The base path to the igenomes reference files
+    fa_icon: fas fa-ban
+    default: s3://ngi-igenomes/igenomes/
+- group_id: general_reference_genome_options
+  name: igenomes_ignore
+  source_name: igenomes_ignore
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Do not load the iGenomes reference config.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: General reference genome options
+  raw_schema:
+    type: boolean
+    description: Do not load the iGenomes reference config.
+    fa_icon: fas fa-ban
+    help_text: Do not load `igenomes.config` when running the pipeline. You may choose
+      this option if you observe clashes between custom parameters and those supplied
+      in `igenomes.config`. **NB** You can then run `Sarek` by specifying at least
+      a FASTA genome file

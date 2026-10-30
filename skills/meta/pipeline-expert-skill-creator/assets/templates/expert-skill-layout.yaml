@@ -1,0 +1,51 @@
+layout:
+  root_required_files:
+    - SKILL.md
+
+  required_directories:
+    assets:
+      required_files:
+        - pipeline-profile.yaml
+        - playbooks.yaml
+        - step-recipes.yaml
+        - param-presets.yaml
+        - schema-index.yaml
+        - capability-audit.yaml
+        - authoring-gaps.yaml
+        - artifact-contracts.yaml
+        - qc-rules.yaml
+      required_directories:
+        schema-groups: []
+    references:
+      required_files:
+        - 01_scope_and_assumptions.md
+        - 02_playbooks.md
+        - 03_parameters.md
+        - 04_schema_lookup.md
+        - 05_outputs_and_qc.md
+        - 06_troubleshooting.md
+      required_directories:
+        schema-groups: []
+
+  optional_directories:
+    - evals/
+    - scripts/
+
+  optional_generation_support:
+    scripts:
+      optional_files:
+        - build_authoring_bundle.py
+        - generate_schema_groups.py
+        - audit_capabilities.py
+        - validate_expert_skill.py
+        - run_offline_evals.py
+    assets:
+      optional_files:
+        - schema-grouping-rules.yaml
+      templates:
+        optional_files:
+          - schema-group-overrides.example.yaml
+    evals:
+      templates:
+        optional_files:
+          - expert-skill-evals.json

@@ -1,0 +1,288 @@
+group:
+  id: peptide_prediction_options
+  label: Peptide prediction options
+  selection_rule: Use this group for parameters defined under the `Peptide prediction
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/peptide_prediction_options.md
+  - assets/schema-groups/peptide_prediction_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `peptide_prediction_options` for exact lookup.
+parameters:
+- group_id: peptide_prediction_options
+  name: binder_only
+  source_name: binder_only
+  type: boolean
+  required: false
+  default: false
+  enum: null
+  description: Filter out non-binders from the final results.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: boolean
+    default: false
+    description: Filter out non-binders from the final results.
+    help_text: When enabled, only peptides predicted as binders by at least one predictor
+      will be included in the final output file.
+- group_id: peptide_prediction_options
+  name: fasta_output
+  source_name: fasta_output
+  type: boolean
+  required: false
+  default: false
+  enum: null
+  description: Specifies that sequences of proteins, affected by provided variants,
+    will be written to a FASTA file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: boolean
+    default: false
+    description: Specifies that sequences of proteins, affected by provided variants,
+      will be written to a FASTA file.
+    help_text: 'Specifies that sequences of proteins that are affected by the provided
+      genomic variants are written to a `FASTA` file. The resulting `FASTA` file will
+      contain the wild-type and mutated protein sequences. Setting this flag will
+      skip the MHC binding prediction entirely. One can provide arbitrary values for
+      `alleles` and `mhc_class` in the samplesheet. Currently supports vcf files annotated
+      with Ensembl VEP (recommended settings: `--pick --protein --uniprot --hgvs --vcf`).'
+- group_id: peptide_prediction_options
+  name: wide_format_output
+  source_name: wide_format_output
+  type: boolean
+  required: false
+  default: false
+  enum: null
+  description: Specifies that the output file will be in wide format.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: boolean
+    default: false
+    description: Specifies that the output file will be in wide format.
+    help_text: Transforms output file such that for each predictor and allele a column
+      `predictor_allele_predictionMetric` is created.
+- group_id: peptide_prediction_options
+  name: wild_type
+  source_name: wild_type
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies whether wild-type sequences should be predicted.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: boolean
+    help_text: Specifies whether wild-type sequences of mutated peptides should be
+      predicted as well.
+    description: Specifies whether wild-type sequences should be predicted.
+- group_id: peptide_prediction_options
+  name: fasta_peptide_flanking_region_size
+  source_name: fasta_peptide_flanking_region_size
+  type: integer
+  required: false
+  default: 25
+  enum: null
+  description: Specifies the size of the flanking regions around a mutation in a peptide
+    in the FASTA file (if `fasta_output` is set to `true`).
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: integer
+    default: 25
+    hidden: true
+    description: Specifies the size of the flanking regions around a mutation in a
+      peptide in the FASTA file (if `fasta_output` is set to `true`).
+- group_id: peptide_prediction_options
+  name: max_peptide_length_classI
+  source_name: max_peptide_length_classI
+  type: integer
+  required: false
+  default: 12
+  enum: null
+  description: Specifies the maximum peptide length.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 12
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: integer
+    default: 12
+    description: Specifies the maximum peptide length.
+    help_text: 'Specifies the maximum peptide length (not applied when `--peptides`
+      is specified). Default: MHC class I: 11 aa, MHC class II: 16 aa'
+- group_id: peptide_prediction_options
+  name: max_peptide_length_classII
+  source_name: max_peptide_length_classII
+  type: integer
+  required: false
+  default: 25
+  enum: null
+  description: Specifies the maximum peptide length for MHC class II peptides.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 25
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: integer
+    default: 25
+    description: Specifies the maximum peptide length for MHC class II peptides.
+- group_id: peptide_prediction_options
+  name: min_peptide_length_classI
+  source_name: min_peptide_length_classI
+  type: integer
+  required: false
+  default: 8
+  enum: null
+  description: Specifies the minimum peptide length.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 8
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: integer
+    default: 8
+    description: Specifies the minimum peptide length.
+    help_text: 'Specifies the minimum peptide length (not applied when `--peptides`
+      is specified). Default: MCH class I: 8 aa, MHC class II: 15 aa'
+- group_id: peptide_prediction_options
+  name: min_peptide_length_classII
+  source_name: min_peptide_length_classII
+  type: integer
+  required: false
+  default: 8
+  enum: null
+  description: Specifies the minimum peptide length for MHC class II peptides.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 8
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: integer
+    default: 8
+    description: Specifies the minimum peptide length for MHC class II peptides.
+- group_id: peptide_prediction_options
+  name: peptide_col_name
+  source_name: peptide_col_name
+  type: string
+  required: false
+  default: sequence
+  enum: null
+  description: Specifies the column name in the input file that contains the peptide
+    sequences.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/peptide_col_name
+  example_values:
+  - <server_input_root>/peptide_col_name
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: string
+    default: sequence
+    description: Specifies the column name in the input file that contains the peptide
+      sequences.
+- group_id: peptide_prediction_options
+  name: tools
+  source_name: tools
+  type: string
+  required: false
+  default: mhcnuggets
+  enum: null
+  description: Specifies the prediction tool(s) to use.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - mhcnuggets
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Peptide prediction options
+  raw_schema:
+    type: string
+    default: mhcnuggets
+    help_text: 'Specifies the tool(s) to use. Multiple tools can be combined in a
+      list separated by comma.
+
+      Available are: `mhcflurry`, `mhcnuggets`, `mhcnuggetsii`,`netmhcpan`,`netmhciipan`.'
+    description: Specifies the prediction tool(s) to use.

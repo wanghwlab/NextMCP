@@ -1,0 +1,110 @@
+steps:
+  - id: plan_and_prepare
+    purpose: Confirm server-local inputs, databases, output location, and run layout before launch.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+    tool_sequence:
+      - project_list() when the project id is unknown.
+      - project_get(project) when the project root or recent runs matter.
+      - fs_list(mode="manifest") when one concrete server-local input or database path needs confirmation.
+      - nextflow_run(prepare=true) when layout, outdir, database availability, restart route, or config_files are uncertain.
+    outputs:
+      - run_layout
+      - layout_warnings
+      - project-owned run root
+      - runs/<run_id>/job
+      - runs/<run_id>/work
+      - results/<run_id>
+      - planned nextflow_run argument shape
+  - id: launch_main
+    purpose: Launch the main nf-core/mag workflow.
+    minimal_inputs:
+      - project
+      - pipeline=mag
+      - params.input
+      - params.outdir
+    tool_sequence:
+      - nextflow_run(pipeline="mag", project=..., params=..., config_files=... when needed)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    checkpoints:
+      - Confirm profile is omitted unless explicitly needed.
+      - Confirm project is top-level, not inside params.
+      - Confirm resources are in config_files, not params.
+  - id: precomputed_assemblies
+    purpose: Skip read preprocessing and assembly and begin from supplied assemblies.
+    minimal_inputs:
+      - input reads CSV
+      - assembly_input CSV
+      - outdir
+    params:
+      - assembly_input
+      - coassemble_group when assemblies are group-wise co-assemblies
+      - binning_map_mode
+    outputs:
+      - GenomeBinning/
+      - GenomeBinning/bin_summary.tsv
+      - Taxonomy/
+      - Annotation/
+    checkpoints:
+      - Reads still need to be supplied through input for downstream depth estimation.
+      - Long reads listed in input are ignored in this route.
+  - id: database_paths
+    purpose: Add server-local database paths or intentionally allow downloads.
+    minimal_inputs:
+      - One or more database params requested by the user.
+    params:
+      - busco_db
+      - busco_db_lineage
+      - cat_db
+      - cat_db_generate
+      - gtdb_db
+      - checkm_db
+      - checkm2_db
+      - gunc_db
+      - genomad_db
+      - metaeuk_db
+      - metaeuk_mmseqs_db
+      - host_fasta
+      - host_fasta_bowtie2index
+    checkpoints:
+      - Use fs_list(mode="manifest") for a specific server-local path when existence is unknown.
+      - Do not pass client-local database paths.
+      - Do not block a normal run on `checkm_db` or `checkm2_db`; run_checkm=false and run_checkm2=false in the default route, so the default route does not need them.
+      - For GTDB-Tk SquashFS, put containerOptions in a config file and pass it through config_files.
+  - id: ancient_dna
+    purpose: Run pyDamage validation and optional damage-aware consensus correction.
+    params:
+      - ancient_dna: true
+      - binning_map_mode: own
+      - skip_ancient_damagecorrection
+    outputs:
+      - Ancient_DNA/pydamage/analyze/
+      - Ancient_DNA/pydamage/filter/
+      - Ancient_DNA/variant_calling/
+      - GenomeBinning/QC/pydamage_bins_summary.tsv
+    checkpoints:
+      - Prefer binning_map_mode own for reproducibility.
+      - Use run_get(detail="full") before restart planning if a source run is involved.
+  - id: post_run_review
+    purpose: Review outputs without jumping straight to raw logs.
+    tool_sequence:
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(...) for the relevant artifact section.
+      - fs_read only for explicit output files such as pipeline_info/params.json or a named TSV after the path is known.
+      - run_logs only when diagnosis and artifact summaries are not enough.
+    outputs:
+      - status summary
+      - artifact sections
+      - explicit report and table paths
+  - id: historical_reuse
+    purpose: Recover and check an earlier run before reusing outputs.
+    tool_sequence:
+      - run_list(project=..., pipeline="mag", artifact_path_contains=...)
+      - run_get(include=["artifact_summary"])
+      - run_artifacts(...)
+      - fs_read for pipeline_info/params.json after the path is known.
+    checkpoints:
+      - Treat artifacts.json and pipeline_fingerprint as historical facts.
+      - Confirm compatibility through pipeline_info/params.json before recommending reuse.

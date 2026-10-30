@@ -1,0 +1,10 @@
+pipeline: riboseq
+version: 2.0.0
+archive_url: https://codeload.github.com/nf-core/riboseq/tar.gz/refs/tags/2.0.0
+archive_sha256: 398a6e4851c2abd9d3bcbe0ef765db73919820736cee16f0df52c7792882fb94
+text_files: 481
+official_docs: https://nf-co.re/riboseq/2.0.0/
+repository_tag: https://github.com/nf-core/riboseq/tree/2.0.0
+schema_sha256: 44e0b629c93fd4ca03b50ff850d061b289714d9b9b3240a83bc7b94020ce063d
+retrieved_on: '2026-10-26'
+material_source: Official nf-core repository tag linked from the nf-core pipeline website

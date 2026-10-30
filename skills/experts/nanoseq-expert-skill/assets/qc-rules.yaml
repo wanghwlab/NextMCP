@@ -1,0 +1,96 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+    good_signal: Run succeeded and artifact summary includes expected route-specific sections.
+    bad_signal: Run failed, stalled, or reported a blocking diagnosis.
+    action: Read diagnosis and next_actions first, then use run_logs only if the summary is not
+      enough.
+  - id: samplesheet_shape
+    severity: high
+    source: pipeline_info/samplesheet.valid.csv
+    good_signal: Validated samplesheet preserves group, replicate, barcode, input_file, fasta, and
+      gtf values expected by the chosen route.
+    bad_signal: Missing protocol-specific reference fields, wrong input_file type, or unintended
+      barcode values.
+    action: Fix the server-local samplesheet and rerun with from_run_id only when the source run is
+      compatible.
+  - id: demultiplexing_balance
+    severity: medium
+    source: qcat/fastq/ and multiqc/multiqc_report.html
+    good_signal: Expected barcode FASTQ files are present and unassigned reads are not unexpectedly
+      dominant.
+    bad_signal: Most reads appear in none.fastq.gz or expected barcodes are missing.
+    action: Recheck barcode_kit, barcode_both_ends, trim_barcodes, qcat_detect_middle, and
+      qcat_min_score.
+  - id: nanolyse_filtering
+    severity: medium
+    source: nanolyse/<SAMPLE>.nanolyse.log
+    good_signal: Filtering ran and retained plausible read counts for the sample.
+    bad_signal: Excessive read loss or missing contaminant FASTA in offline runs.
+    action: Confirm nanolyse_fasta or rerun without run_nanolyse when contaminant removal was not
+      intended.
+  - id: read_qc
+    severity: medium
+    source: nanoplot/fastq/, fastqc/, and multiqc/multiqc_report.html
+    good_signal: Read length and quality distributions match the protocol and experiment.
+    bad_signal: Very short reads, low quality, adapter warnings, or missing QC sections when they
+      were expected.
+    action: Inspect read QC first before interpreting alignment, variant, or RNA outputs.
+  - id: alignment_mapping
+    severity: high
+    source: <ALIGNER>/samtools_stats/ and multiqc/multiqc_report.html
+    good_signal: BAM, BAI, and SAMtools stats are present with plausible mapped-read counts.
+    bad_signal: Low mapping rate, missing BAM index, or no alignment section.
+    action: Confirm protocol, aligner, samplesheet fasta values, and whether skip_alignment was set.
+  - id: coverage_tracks
+    severity: low
+    source: <ALIGNER>/bigwig/ and <ALIGNER>/bigbed/
+    good_signal: Expected bigWig and, for RNA protocols, bigBed files are present.
+    bad_signal: Tracks absent despite skip_bigwig=false or skip_bigbed=false.
+    action: Check alignment completion and the matching skip toggle before presenting tracks as
+      missing.
+  - id: dna_variant_outputs
+    severity: high
+    source: variant_calling/
+    good_signal: Selected caller output VCF and index files are present.
+    bad_signal: call_variants requested but no variant_calling section appears.
+    action: Confirm protocol=DNA, call_variants=true, skip_vc/skip_sv values, selected callers, and
+      Docker/Singularity or GPU prerequisites for DeepVariant/PEPPER routes.
+  - id: rna_quantification_outputs
+    severity: high
+    source: bambu/ or stringtie2/
+    good_signal: Gene and transcript count tables plus expected annotation outputs are present.
+    bad_signal: Quantification absent or counts missing.
+    action: Confirm protocol is cDNA/directRNA, skip_quantification=false, quantification_method,
+      and samplesheet fasta/gtf values.
+  - id: differential_analysis_outputs
+    severity: medium
+    source: <QUANTIFICATION_METHOD>/deseq2/ and <QUANTIFICATION_METHOD>/dexseq/
+    good_signal: DESeq2 and DEXSeq result tables exist when suitable conditions and replicates were
+      supplied.
+    bad_signal: Differential outputs are absent despite user expectation.
+    action: Confirm skip_differential_analysis=false and that the samplesheet represents multiple
+      conditions with replicates.
+  - id: rna_modification_outputs
+    severity: high
+    source: rna_modifications/xpore/ and rna_modifications/m6anet/
+    good_signal: xPore diffmod.table and/or m6Anet data.result.csv.gz exist according to skip_xpore
+      and skip_m6anet.
+    bad_signal: Modification outputs absent for a directRNA route.
+    action: Confirm protocol=directRNA, input_file directory layout with fast5/fastq, alignment
+      completion, skip_modification_analysis, skip_xpore, and skip_m6anet.
+  - id: rna_fusion_outputs
+    severity: medium
+    source: jaffal/
+    good_signal: jaffa_results.csv and jaffa_results.fasta exist.
+    bad_signal: JAFFAL outputs absent for a fusion request.
+    action: Confirm protocol is cDNA/directRNA, skip_fusion_analysis=false, and jaffal_ref_dir or
+      reference download availability.
+  - id: multiqc_traceability
+    severity: medium
+    source: multiqc/multiqc_report.html and pipeline_info/
+    good_signal: MultiQC and pipeline_info include software versions and execution reports.
+    bad_signal: Missing MultiQC when skip_multiqc=false or missing pipeline trace files.
+    action: Use pipeline_info and raw logs to separate a pipeline failure from an intentional
+      skip_multiqc route.

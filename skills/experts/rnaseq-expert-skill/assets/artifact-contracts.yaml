@@ -1,0 +1,119 @@
+artifacts:
+  - id: fastqc_raw
+    path: fastqc/
+    produced_when: Unless skip_fastqc is true.
+    meaning: Raw read FastQC reports and files summarized by MultiQC.
+
+  - id: trimming
+    path: trimgalore/ or fastp/
+    produced_when: Unless skip_trimming is true.
+    meaning: Adapter and quality trimming reports; saved FASTQ files require save_trimmed.
+
+  - id: bbsplit
+    path: bbsplit/
+    produced_when: skip_bbsplit is false and BBSplit references or index are provided.
+    meaning: Genome-filtering outputs and optional split reads.
+
+  - id: sortmerna
+    path: sortmerna/
+    produced_when: remove_ribo_rna is true.
+    meaning: rRNA filtering logs and optional non-rRNA reads when save_non_ribo_reads is true.
+
+  - id: star_salmon_quant
+    path: star_salmon/
+    produced_when: aligner is star_salmon.
+    meaning: STAR alignment reports, Salmon quantification, gene and transcript matrices, and BAM outputs.
+
+  - id: star_rsem_quant
+    path: star_rsem/
+    produced_when: aligner is star_rsem.
+    meaning: STAR-compatible RSEM gene and transcript quantification plus alignment reports.
+
+  - id: hisat2_alignment
+    path: hisat2/
+    produced_when: aligner is hisat2.
+    meaning: HISAT2 alignment and QC outputs. This route does not produce expression quantification.
+
+  - id: pseudoalignment
+    path: salmon/ or kallisto/
+    produced_when: pseudo_aligner is salmon or kallisto, especially with skip_alignment true.
+    meaning: Pseudoalignment-only quantification matrices and per-sample quantification outputs.
+
+  - id: umi_outputs
+    path: <ALIGNER>/umitools/ and <ALIGNER>/*umi_dedup.sorted.bam
+    produced_when: with_umi is true.
+    meaning: UMI extraction, deduplication stats, and UMI-deduplicated BAMs.
+
+  - id: bam_reprocessing_samplesheet
+    path: pipeline_info/samplesheet_with_bams.csv
+    produced_when: save_align_intermeds is true.
+    meaning: Samplesheet for later skip_alignment reruns using pipeline-generated BAMs.
+
+  - id: stringtie
+    path: <ALIGNER>/stringtie/
+    produced_when: skip_stringtie is false and alignment outputs are available.
+    meaning: Reference-guided transcript assemblies and expression estimates.
+
+  - id: bigwig
+    path: <ALIGNER>/bigwig/
+    produced_when: skip_bigwig is false and alignment outputs are available.
+    meaning: Strand-aware coverage tracks for genome browser review.
+
+  - id: rseqc
+    path: <ALIGNER>/rseqc/
+    produced_when: skip_rseqc is false and alignment outputs are available.
+    meaning: RNA-seq QC including strandedness, read distribution, junction, duplication, and BAM stats.
+
+  - id: qualimap
+    path: <ALIGNER>/qualimap/
+    produced_when: skip_qualimap is false and alignment outputs are available.
+    meaning: Alignment-level RNA-seq QC; cross-check genomic origin counts with RSeQC if unexpected.
+
+  - id: featurecounts_biotype
+    path: <ALIGNER>/featurecounts/
+    produced_when: skip_biotype_qc is false.
+    meaning: Biotype-level featureCounts QC and MultiQC custom content.
+
+  - id: deseq2_qc
+    path: <ALIGNER>/deseq2_qc/
+    produced_when: skip_deseq2_qc is false and count matrices are available.
+    meaning: PCA, sample distance, and clustering checks for sample similarity, not differential testing.
+
+  - id: kraken_bracken
+    path: kraken2/
+    produced_when: contaminant_screening is kraken2 or kraken2_bracken and kraken_db is set.
+    meaning: Contamination screening of unaligned reads; Bracken abundance files when requested.
+
+  - id: multiqc_report
+    path: multiqc/multiqc_report.html
+    produced_when: Unless skip_multiqc is true.
+    meaning: Aggregated QC report across raw reads, trimming, filtering, alignment, quantification, and pipeline metadata.
+
+  - id: saved_reference
+    path: genome/
+    produced_when: save_reference is true and the pipeline builds indices.
+    meaning: STAR, HISAT2, RSEM, Salmon, or Kallisto reference assets for later compatible runs.
+
+  - id: pipeline_info
+    path: pipeline_info/
+    produced_when: Always.
+    meaning: Params, software versions, execution reports, validated samplesheet, and trace files.
+
+review_order:
+  - multiqc_report
+  - pipeline_info
+  - star_salmon_quant
+  - star_rsem_quant
+  - pseudoalignment
+  - hisat2_alignment
+  - bam_reprocessing_samplesheet
+  - rseqc
+  - qualimap
+  - featurecounts_biotype
+  - deseq2_qc
+  - stringtie
+  - bigwig
+  - bbsplit
+  - sortmerna
+  - kraken_bracken
+  - saved_reference

@@ -1,0 +1,485 @@
+group:
+  id: bismark_options
+  label: Bismark options
+  selection_rule: Use this group for parameters defined under the `Bismark options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/bismark_options.md
+  - assets/schema-groups/bismark_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `bismark_options` for exact lookup.
+parameters:
+- group_id: bismark_options
+  name: comprehensive
+  source_name: comprehensive
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Merges methylation calls for every strand into a single, context dependent
+    file.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-dna
+    description: Merges methylation calls for every strand into a single, context
+      dependent file.
+    help_text: By default `bismark_methylation_extractor` will produce a strand-specific
+      output named as OT, OB, CTOT or CTOB. This flag will merge all strands into
+      a single, context dependent file.
+- group_id: bismark_options
+  name: cytosine_report
+  source_name: cytosine_report
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Output stranded cytosine report, following Bismark's bismark_methylation_extractor
+    step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    description: Output stranded cytosine report, following Bismark's bismark_methylation_extractor
+      step.
+    help_text: By default, Bismark does not produce stranded calls. With this option
+      the output considers all Cs on both forward and reverse strands and reports
+      their position, strand, trinucleotide context and methylation state.
+    fa_icon: fas fa-clipboard
+- group_id: bismark_options
+  name: known_splices
+  source_name: known_splices
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Supply a .gtf file containing known splice sites (bismark_hisat only).
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/known_splices.gtf
+  example_values:
+  - <server_reference_root>/known_splices.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Bismark options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: ^\S+\.gtf(\.gz)?$
+    description: Supply a .gtf file containing known splice sites (bismark_hisat only).
+    help_text: 'Specify to run Bismark with the `--known-splicesite-infile` flag to
+      run splice-aware alignment using HISAT2. A `.gtf` file has to be provided from
+      which a list of known splicesites is created by the pipeline
+
+
+      > NB: This only works when using the `bismark_hisat` aligner with `--align`'
+    fa_icon: fas fa-barcode
+- group_id: bismark_options
+  name: local_alignment
+  source_name: local_alignment
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Allow soft-clipping of reads (potentially useful for single-cell experiments).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    description: Allow soft-clipping of reads (potentially useful for single-cell
+      experiments).
+    help_text: Specify to run Bismark with the `--local` flag to allow soft-clipping
+      of reads. This should only be used with care in certain single-cell applications
+      or PBAT libraries, which may produce chimeric read pairs. (See [Wu et al.](https://doi.org/10.1093/bioinformatics/btz125)).
+    fa_icon: fas fa-search
+- group_id: bismark_options
+  name: meth_cutoff
+  source_name: meth_cutoff
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Specify a minimum read coverage to report a methylation call
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    description: Specify a minimum read coverage to report a methylation call
+    help_text: Use to discard any methylation calls with less than a given read coverage
+      depth (in fold coverage) during Bismark's `bismark_methylation_extractor` step.
+    fa_icon: fas fa-angle-double-down
+- group_id: bismark_options
+  name: no_overlap
+  source_name: no_overlap
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Ignore read 2 methylation when it overlaps read 1
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    default: true
+    description: Ignore read 2 methylation when it overlaps read 1
+    help_text: 'For paired-end reads it is theoretically possible that read_1 and
+      read_2 overlap. To avoid scoring overlapping methylation calls twice, this is
+      set to `true` by default. (Only methylation calls of read 1 are used since read
+      1 has historically higher quality basecalls than read 2). Whilst this option
+      removes a bias towards more methylation calls in the center of sequenced fragments
+      it may de facto remove a sizable proportion of the data. To count methylation
+      data from both reads in overlapping regions, set this to `false`. '
+    fa_icon: fas fa-allergies
+- group_id: bismark_options
+  name: nomeseq
+  source_name: nomeseq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Sample is NOMe-seq or NMT-seq. Runs coverage2cytosine.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-dna
+    description: Sample is NOMe-seq or NMT-seq. Runs coverage2cytosine.
+    help_text: 'Sets `--CX` during methylation extraction and `--nome` during the
+      `coverage2cytosine` step.
+
+
+      Will also force the coverage2cytosine step to run.'
+- group_id: bismark_options
+  name: non_directional
+  source_name: non_directional
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run alignment against all four possible strands.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    description: Run alignment against all four possible strands.
+    help_text: 'By default, Bismark assumes that libraries are directional and does
+      not align against complementary strands. If your library prep was not directional,
+      use `--non_directional` to align against all four possible strands.
+
+
+      Note that the `--single_cell` and `--zymo` parameters both set the `--non_directional`
+      workflow flag automatically.'
+    fa_icon: fas fa-exchange-alt
+- group_id: bismark_options
+  name: relax_mismatches
+  source_name: relax_mismatches
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on to relax stringency for alignment (set allowed penalty with
+    --num_mismatches).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: boolean
+    description: Turn on to relax stringency for alignment (set allowed penalty with
+      --num_mismatches).
+    help_text: "By default, Bismark is pretty strict about which alignments it accepts\
+      \ as valid. If you have good reason to believe that your reads will contain\
+      \ more mismatches than normal, this flags can be used to relax the stringency\
+      \ that Bismark uses when accepting alignments. This can greatly improve the\
+      \ number of aligned reads you get back, but may negatively impact the quality\
+      \ of your data.\n\nBismark uses the Bowtie alignment scoring mechanism to filter\
+      \ reads. Mismatches cost `-6`, gap opening `-5` and gap extension `-2`. So,\
+      \ a threshold of`-60` would allow 10 mismatches or ~ 8 x 1-2bp indels. The threshold\
+      \ is dependent on the length of reads, so a penalty value is used where `penalty\
+      \ * bp read length = threshold`.\n\nThe penalty value used by Bismark by default\
+      \ is `0.2`, so for 100bp reads this would be a threshold of `-20`. \n\nIf you\
+      \ specifying the `--relax_mismatches` pipeline flag, Bismark instead uses `0.6`,\
+      \ or a threshold of `-60`. This adds the Bismark flag `--score_min L,0,-0.6`\
+      \ to the alignment command.\n\nThe penalty value can be modified using the `--num_mismatches`\
+      \ pipeline option."
+    fa_icon: fas fa-bullseye
+- group_id: bismark_options
+  name: ignore_3prime_r1
+  source_name: ignore_3prime_r1
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Ignore methylation in last n bases of 3' end of R1
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    default: 0
+    description: Ignore methylation in last n bases of 3' end of R1
+    help_text: Ignore the first <int> bp from the 5' end of Read 2 of paired-end sequencing
+      results only. Since the first couple of bases in Read 2 of BS-Seq experiments
+      show a severe bias towards non-methylation as a result of end-repairing sonicated
+      fragments with unmethylated cytosines (see M-bias plot), it is recommended that
+      the first couple of bp of Read 2 are removed before starting downstream analysis.
+      Please see the section on M-bias plots in the Bismark User Guide for more details.
+    fa_icon: far fa-eye-slash
+- group_id: bismark_options
+  name: ignore_3prime_r2
+  source_name: ignore_3prime_r2
+  type: integer
+  required: false
+  default: 2
+  enum: null
+  description: Ignore methylation in last n bases of 3' end of R2
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 2
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    default: 2
+    description: Ignore methylation in last n bases of 3' end of R2
+    help_text: Ignore the last <int> bp from the 3' end of Read 1 (or single-end alignment
+      files) when processing the methylation call string. This can remove unwanted
+      biases from the end of reads.
+    fa_icon: far fa-eye-slash
+- group_id: bismark_options
+  name: ignore_r1
+  source_name: ignore_r1
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Ignore methylation in first n bases of 5' end of R1
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    default: 0
+    description: Ignore methylation in first n bases of 5' end of R1
+    help_text: Ignore the first <int> bp from the 5' end of Read 1 (or single-end
+      alignment files) when processing the methylation call string. This can remove
+      e.g. a restriction enzyme site at the start of each read or any other source
+      of bias (such as PBAT-Seq data).
+    fa_icon: far fa-eye-slash
+- group_id: bismark_options
+  name: ignore_r2
+  source_name: ignore_r2
+  type: integer
+  required: false
+  default: 2
+  enum: null
+  description: Ignore methylation in first n bases of 5' end of R2
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 2
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    default: 2
+    description: Ignore methylation in first n bases of 5' end of R2
+    help_text: Ignore the first <int> bp from the 5' end of Read 2 of paired-end sequencing
+      results only. Since the first couple of bases in Read 2 of BS-Seq experiments
+      show a severe bias towards non-methylation as a result of end-repairing sonicated
+      fragments with unmethylated cytosines (see M-bias plot), it is recommended that
+      the first couple of bp of Read 2 are removed before starting downstream analysis.
+      Please see the section on M-bias plots in the Bismark User Guide for more details.
+    fa_icon: far fa-eye-slash
+- group_id: bismark_options
+  name: maxins
+  source_name: maxins
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: The maximum insert size for valid paired-end alignments.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    fa_icon: fas fa-expand-alt
+    description: The maximum insert size for valid paired-end alignments.
+    help_text: 'For example, if `--maxins 100` is specified and a paired-end alignment
+      consists of two 20-bp alignments in the proper orientation with a 60-bp gap
+      between them, that alignment is considered valid (as long as `--minins` is also
+      satisfied). A 61-bp gap would not be valid in that case.
+
+
+      Default: not specified. Bismark default: `500`.'
+- group_id: bismark_options
+  name: minins
+  source_name: minins
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: The minimum insert size for valid paired-end alignments.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: integer
+    fa_icon: fas fa-compress-alt
+    description: The minimum insert size for valid paired-end alignments.
+    help_text: 'For example, if `--minins 60` is specified and a paired-end alignment
+      consists of two 20-bp alignments in the appropriate orientation with a 20-bp
+      gap between them, that alignment is considered valid (as long as `--maxins`
+      is also satisfied). A 19-bp gap would not be valid in that case.
+
+
+      Default: no flag (Bismark default: `0`).'
+- group_id: bismark_options
+  name: num_mismatches
+  source_name: num_mismatches
+  type: number
+  required: false
+  default: 0.6
+  enum: null
+  description: 0.6 will allow a penalty of bp * -0.6 - for 100bp reads (bismark default
+    is 0.2)
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.6
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Bismark options
+  raw_schema:
+    type: number
+    default: 0.6
+    description: 0.6 will allow a penalty of bp * -0.6 - for 100bp reads (bismark
+      default is 0.2)
+    help_text: 'Customise the penalty in the function used to filter reads based on
+      mismatches. The parameter `--relax_mismatches` must also be specified.
+
+
+      See the parameter documentation for `--relax_mismatches` for an explanation.'
+    fa_icon: fas fa-calculator

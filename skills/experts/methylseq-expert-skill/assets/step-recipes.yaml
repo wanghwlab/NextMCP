@@ -1,0 +1,132 @@
+steps:
+  - id: launch
+    purpose: Confirm inputs, prepare when needed, launch the pipeline, then inspect summary before raw files.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+      - aligner
+    tool_sequence:
+      - project_list() when the project id is unknown
+      - project_get(project) when the project root or prior runs matter
+      - fs_list(mode="manifest") when one server-local path still needs confirmation
+      - nextflow_run(prepare=true) when launch layout, inputs, or target outputs are still uncertain
+      - nextflow_run(pipeline="methylseq", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(...) after artifact_summary identifies relevant result sections
+      - run_logs() or fs_read() only after summary points to logs or explicit files
+    outputs:
+      - run_layout from prepare or run_get(detail="full") when concrete project-owned paths are needed
+      - results/<run_id>/
+      - status summary
+
+  - id: reference_preflight
+    purpose: Choose whether to use iGenomes, prebuilt indices, or build and save references from FASTA.
+    minimal_inputs:
+      - aligner
+      - genome or fasta
+    rules:
+      - For bismark or bismark_hisat, confirm bismark_index or let the pipeline build it from fasta.
+      - For bwameth, confirm fasta, fasta_index, and bwameth_index unless genome resolves them.
+      - For bwamem or TAPS, confirm fasta, fasta_index, and bwamem_index unless genome resolves them.
+      - Use save_reference=true when a generated reference should be published under <outdir>/<aligner>/reference_genome/.
+    outputs:
+      - <outdir>/<aligner>/reference_genome/
+
+  - id: bismark_route
+    purpose: Bismark alignment, deduplication, methylation extraction, Bismark reports, and MultiQC.
+    minimal_inputs:
+      - input
+      - outdir
+      - aligner=bismark or aligner=bismark_hisat
+      - fasta
+      - bismark_index
+    route_switches:
+      - cytosine_report
+      - nomeseq
+      - non_directional
+      - pbat
+      - rrbs
+      - slamseq
+      - local_alignment
+      - relax_mismatches
+    outputs:
+      - bismark/alignments/
+      - bismark/deduplicated/
+      - bismark/methylation_calls/
+      - bismark/reports/
+      - bismark/summary/
+
+  - id: bwameth_route
+    purpose: BWA-Meth alignment, duplicate marking, MethylDackel extraction, and MultiQC.
+    minimal_inputs:
+      - input
+      - outdir
+      - aligner=bwameth
+      - fasta
+      - fasta_index
+      - bwameth_index
+    route_switches:
+      - use_mem2
+      - all_contexts
+      - merge_context
+      - ignore_flags
+      - methyl_kit
+      - run_preseq
+      - run_qualimap
+    outputs:
+      - bwameth/alignments/
+      - bwameth/deduplicated/
+      - methyldackel/
+      - methyldackel/mbias/
+
+  - id: taps_bwamem_route
+    purpose: BWA-MEM alignment for TAPS data, Rastair conversion calling, and MultiQC.
+    minimal_inputs:
+      - input
+      - outdir
+      - aligner=bwamem
+      - fasta
+      - fasta_index
+      - bwamem_index
+    route_switches:
+      - taps
+      - methyl_kit
+      - run_preseq
+      - run_qualimap
+    failure_checks:
+      - run_targeted_sequencing is incompatible with taps or aligner=bwamem.
+    outputs:
+      - bwamem/alignments/
+      - bwamem/deduplicated/
+      - rastair/call/
+      - rastair/mbias/
+      - rastair/mbiasparser/
+      - rastair/methylkit/
+
+  - id: targeted_sequencing
+    purpose: Filter bedGraph methylation calls to a target BED and optionally run CollectHsMetrics.
+    minimal_inputs:
+      - run_targeted_sequencing=true
+      - target_regions_file
+      - aligner=bismark or aligner=bwameth
+    route_switches:
+      - collecthsmetrics
+    failure_checks:
+      - target_regions_file must be present.
+      - Do not use with taps or aligner=bwamem.
+    outputs:
+      - bismark/methylation_calls/bedGraph/*targeted.bedGraph
+      - methyldackel/*targeted.bedGraph
+      - enrichment_metrics/
+
+  - id: restart_from_prior_run
+    purpose: Public restart route through nextflow_run(from_run_id=...).
+    minimal_inputs:
+      - project
+      - from_run_id
+    tool_sequence:
+      - run_get(detail="full") on the source run when launch_spec or resume compatibility matters
+      - nextflow_run(from_run_id=...)
+    rules:
+      - Use only from_run_id for public restart planning.

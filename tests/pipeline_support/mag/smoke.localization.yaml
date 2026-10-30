@@ -1,0 +1,269 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: mag
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/mag/test
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/
+    localized_prefix: /data/nextmcp/testdata/mag/test/pipeline-data/
+  - remote_prefix: https://github.com/nf-core/test-datasets/raw/
+    localized_prefix: /data/nextmcp/testdata/mag/test/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/mag
+  config: conf/test.config
+  resolved_runtime_chain:
+    pipelines_testdata_base_path: https://raw.githubusercontent.com/nf-core/test-datasets/
+    test_profile: test
+    nf_test_case: tests/default.nf.test::-profile test
+  resolved_params:
+    input: /data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv
+    min_length_unbinned_contigs: 1
+    max_unbinned_contigs: 2
+    skip_ale: true
+    skip_concoct: true
+    skip_comebin: true
+    skip_metabinner: true
+    busco_db: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+    busco_db_lineage: bacteria_odb10
+    busco_clean: true
+    prokka_fast_mode: true
+    gtdb_db: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+    cat_db: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz
+    cat_no_suggestive_asterisks: true
+    gtdbtk_min_completeness: 0.01
+    gtdbtk_skip_aniscreen: true
+    gtdbtk_use_full_tree: true
+    megahit_fix_cpu_1: true
+    spades_fix_cpus: 1
+
+runtime_hints:
+  process_resource_limits:
+    from_conf_test_config:
+      cpus: 4
+      memory: 15.GB
+      time: 1.h
+  launch_rule: Build the smoke contract from nextflow.config plus conf/test.config, keep the upstream resourceLimits in one small override config, and do not merge tests/nextflow.config because its branch-pin base path does not reconstruct the same concrete URLs.
+  manifest_rule: Download and rewrite the upstream multirun samplesheet because the nested short-read FASTQ URLs only become visible after fetching the CSV, and two rows reuse the same test_minigut FASTQ pair.
+  artifact_rule: Keep assertions focused on the software versions file and a small set of stable MultiQC YAML outputs derived from tests/default.nf.test.snap plus tests/.nftignore.
+
+config_override_files:
+  - path: /data/nextmcp/testdata/mag/test/project-files/pipeline-support-mag/profile_test_overrides.config
+    source_fields:
+      - process.resourceLimits.cpus
+      - process.resourceLimits.memory
+      - process.resourceLimits.time
+    purpose: Keep the upstream test profile resource caps in config scope instead of nextflow_run params.
+    content: |
+      process {
+          resourceLimits = [
+              cpus: 4,
+              memory: '15.GB',
+              time: '1.h'
+          ]
+      }
+
+url_inventory:
+  - role: input_samplesheet
+    config_field: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/samplesheets/samplesheet.multirun.v4.csv
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/samplesheets/samplesheet.multirun.v4.csv
+  - role: busco_database
+    config_field: busco_db
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+  - role: gtdbtk_database
+    config_field: gtdb_db
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+  - role: cat_database
+    config_field: cat_db
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/databases/cat/minigut_cat.tar.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz
+  - role: test_minigut_read_1
+    config_field: input.samplesheet[].short_reads_1
+    original_value: https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R1.fastq.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R1.fastq.gz
+  - role: test_minigut_read_2
+    config_field: input.samplesheet[].short_reads_2
+    original_value: https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R2.fastq.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R2.fastq.gz
+  - role: test_minigut_sample2_read_1
+    config_field: input.samplesheet[].short_reads_1
+    original_value: https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_sample2_R1.fastq.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_sample2_R1.fastq.gz
+  - role: test_minigut_sample2_read_2
+    config_field: input.samplesheet[].short_reads_2
+    original_value: https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_sample2_R2.fastq.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_sample2_R2.fastq.gz
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/mag/test/pipeline-data/mag/samplesheets/samplesheet.multirun.v4.csv
+    localized_path: /data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv
+    rewritten_columns:
+      - short_reads_1
+      - short_reads_2
+    localized_rows:
+      - sample: test_minigut
+        run: "1"
+        group: "0"
+        short_reads_platform: ILLUMINA
+        short_reads_1: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R1.fastq.gz
+        short_reads_2: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R2.fastq.gz
+        long_reads: ""
+      - sample: test_minigut
+        run: "2"
+        group: "0"
+        short_reads_platform: ILLUMINA
+        short_reads_1: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R1.fastq.gz
+        short_reads_2: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R2.fastq.gz
+        long_reads: ""
+      - sample: test_minigut_sample2
+        run: "0"
+        group: "0"
+        short_reads_platform: ILLUMINA
+        short_reads_1: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_sample2_R1.fastq.gz
+        short_reads_2: /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_sample2_R2.fastq.gz
+        long_reads: ""
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/samplesheets/samplesheet.multirun.v4.csv
+    localized_value: /data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv
+  - config_field: min_length_unbinned_contigs
+    official_param: min_length_unbinned_contigs
+    original_value: 1
+    localized_value: 1
+  - config_field: max_unbinned_contigs
+    official_param: max_unbinned_contigs
+    original_value: 2
+    localized_value: 2
+  - config_field: skip_ale
+    official_param: skip_ale
+    original_value: true
+    localized_value: true
+  - config_field: skip_concoct
+    official_param: skip_concoct
+    original_value: true
+    localized_value: true
+  - config_field: skip_comebin
+    official_param: skip_comebin
+    original_value: true
+    localized_value: true
+  - config_field: skip_metabinner
+    official_param: skip_metabinner
+    original_value: true
+    localized_value: true
+  - config_field: busco_db
+    official_param: busco_db
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+  - config_field: busco_db_lineage
+    official_param: busco_db_lineage
+    original_value: bacteria_odb10
+    localized_value: bacteria_odb10
+  - config_field: busco_clean
+    official_param: busco_clean
+    original_value: true
+    localized_value: true
+  - config_field: prokka_fast_mode
+    official_param: prokka_fast_mode
+    original_value: true
+    localized_value: true
+  - config_field: gtdb_db
+    official_param: gtdb_db
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+  - config_field: cat_db
+    official_param: cat_db
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/mag/databases/cat/minigut_cat.tar.gz
+    localized_value: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz
+  - config_field: cat_no_suggestive_asterisks
+    official_param: cat_no_suggestive_asterisks
+    original_value: true
+    localized_value: true
+  - config_field: gtdbtk_min_completeness
+    official_param: gtdbtk_min_completeness
+    original_value: 0.01
+    localized_value: 0.01
+  - config_field: gtdbtk_skip_aniscreen
+    official_param: gtdbtk_skip_aniscreen
+    original_value: true
+    localized_value: true
+  - config_field: gtdbtk_use_full_tree
+    official_param: gtdbtk_use_full_tree
+    original_value: true
+    localized_value: true
+  - config_field: megahit_fix_cpu_1
+    official_param: megahit_fix_cpu_1
+    original_value: true
+    localized_value: true
+  - config_field: spades_fix_cpus
+    official_param: spades_fix_cpus
+    original_value: 1
+    localized_value: 1
+  - config_field: process.resourceLimits
+    official_param: null
+    original_value: "{cpus: 4, memory: 15.GB, time: 1.h}"
+    localized_value: Execution note only. Keep in config_files, not in nextflow_run params.
+
+ignored_upstream_params:
+  - config_field: "tests/nextflow.config:params.pipelines_testdata_base_path"
+    reason: The literal `refs/heads/mag` branch pin does not reconstruct the concrete URLs used by conf/test.config and would yield non-resolving paths when combined with the appended `mag/...` suffixes.
+  - config_field: "tests/nextflow.config:params.modules_testdata_base_path"
+    reason: nf-test module defaults are not needed for the pipeline-level smoke route.
+  - config_field: "tests/nextflow.config:aws.client.anonymous"
+    reason: The selected smoke route fetches GitHub-hosted inputs and does not depend on anonymous S3 access.
+  - config_field: "process.withName:'PROKKA'"
+    reason: The test-specific PROKKA override is redundant once `prokka_fast_mode=true` and `prokka_with_compliance=false`.
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+
+natural_language_execution_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `mag` multirun lightweight example in project
+  `pipeline-withskill-mag`. Use the rewritten samplesheet, the local BUSCO,
+  GTDB-Tk, and CAT database bundles, and the server-local paired-end FASTQ files
+  referenced by the samplesheet. Keep the project-owned default results
+  directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv`
+  - BUSCO database tarball: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz`
+  - GTDB-Tk mock database: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz`
+  - CAT database bundle: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz`
+  - FASTQ bundle root: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data`
+  
+  ## Workflow goal
+  
+  - Run the normal paired-end multirun assembly, binning, taxonomy, and annotation route represented
+    by the samplesheet.
+  - Use the listed local BUSCO, GTDB-Tk, and CAT databases instead of downloading databases at
+    runtime.
+  - Keep the lightweight-test behavior that limits unbinned-contig handling to minimum contig length
+    1 and at most 2 unbinned contigs.
+  - Omit the optional ALE, CONCOCT, COMEBin, and MetaBinner steps that the upstream lightweight test
+    excludes, while keeping the rest of the multirun MAG route active.
+  - Keep fast Prokka behavior, BUSCO checking against the `bacteria_odb10` lineage with cleanup, CAT
+    output formatting without suggestive asterisks, the MEGAHIT single-CPU fix, and one CPU for
+    SPAdes.
+  - For GTDB-Tk on the tiny mock bins, use full-tree classification, skip the ANI pre-screening step,
+    and use a 0.01% completeness threshold.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/mag/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-mag` as project name.
+  - Do not use the `mag` expert skill.

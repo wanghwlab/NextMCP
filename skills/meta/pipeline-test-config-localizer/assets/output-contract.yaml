@@ -1,0 +1,86 @@
+version: "2026-03-17"
+deliverables:
+  - name: localized_input_root
+    type: directory
+    required: true
+    description: >-
+      Writable server-local root for downloads, reused local copies, and
+      rewritten manifests. By default this should be a self-contained bundle
+      that the final contract can point to directly.
+  - name: url_inventory
+    type: report
+    required: true
+    description: "Mapping of original remote URL to localization mode, server-local path, and rewrite target."
+  - name: rewritten_manifests
+    type: file-list
+    required: true
+    description: "Sibling files such as samplesheet_local.csv or rrna-db_local.txt."
+  - name: natural_language_execution_brief
+    type: markdown
+    required: true
+    description: >-
+      Plain-language client-visible task prompt. Keep it at the task, available
+      inputs, and direct route-constraint level. Include source-backed
+      resource-cap summaries when they materially define the route. Keep
+      execution mechanics in agent_param_mapping or config_override_files
+      instead.
+  - name: agent_param_mapping
+    type: report
+    required: true
+    description: "Secondary mapping from prose requirements back to official nextflow_run params. Config-scoped resource caps belong in config_override_files instead."
+  - name: config_override_files
+    type: file-list
+    required: false
+    description: "Optional small server-local Nextflow config files for runtime settings that must stay in config scope, such as max_cpus, max_memory, and max_time."
+natural_language_brief_template:
+  sections:
+    - "Task"
+    - "Available inputs"
+    - "Route constraints"
+  style_rules:
+    - "Prefer user-visible descriptions over raw config keys"
+    - "Name each local file with its purpose"
+    - "Mention server-local output directory explicitly"
+    - "Do not mention internal source file names such as conf/test.config or tests/default.nf.test"
+    - "Do not mention nextflow_run(prepare=true), config_files, override config paths, or raw Groovy config blocks in the main brief"
+    - "When source-backed resource caps exist, include them once as plain-language route constraints"
+    - "Do not frame the task as a test, validation run, or production analysis unless the user asked for that wording"
+    - "Keep only route constraints that are directly supported by the source materials"
+agent_mapping_template:
+  fields:
+    - "config_field"
+    - "official_param"
+    - "original_value"
+    - "localized_value"
+url_inventory_template:
+  fields:
+    - "original_url"
+    - "localization_mode"
+    - "matched_remote_prefix"
+    - "local_root"
+    - "fetch_method"
+    - "localized_path"
+special_cases:
+  missing_mapped_mirror:
+    description: >-
+      A URL matches a preferred mirror prefix, but the mapped server-local file
+      does not exist.
+    rule: >-
+      Do not treat prefix matching alone as a completed localization result. If
+      no authoritative-mirror instruction exists, download the file into the
+      current localized_input_root and keep the final contract pointed there.
+  config_scoped_resource_caps:
+    description: "Resource-cap settings such as max_cpus, max_memory, and max_time that the current runtime expects through -c config files."
+    rule: "Write a small server-local override config, pass it through nextflow_run(config_files=...), and summarize the cap values once in the main brief without exposing config syntax."
+  config_level_runtime_hints:
+    description: "Examples: process.resourceLimits, timeline/report directives, profile-only behaviors."
+    rule: "Keep them as notes unless exact equivalence requires a local override config."
+  nested_remote_list_file:
+    description: "A TXT/CSV/TSV file whose content includes more remote URLs."
+    rule: "Download nested assets, then emit a rewritten sibling local file."
+  mixed_url_and_local_manifest:
+    description: "A manifest that already contains some local or relative values."
+    rule: "Rewrite only the remote URL cells."
+  s3_reference_asset:
+    description: "A direct `s3://` reference file such as a Sentieon model or iGenomes asset."
+    rule: "Prefer an explicit local mirror prefix; otherwise use `aws s3 cp` or `s5cmd cp` and record the fetch method."

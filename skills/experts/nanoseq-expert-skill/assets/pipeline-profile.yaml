@@ -1,0 +1,116 @@
+pipeline:
+  id: nanoseq
+  name: nf-core/nanoseq
+  version: 3.1.0
+  summary: Nanopore DNA/RNA pipeline for demultiplexing, raw-read QC, alignment, coverage
+    tracks, DNA variant calling, RNA quantification, differential analysis, RNA modification
+    analysis, and RNA fusion analysis.
+source_basis:
+  - "authoring bundle fields: schema, documents, and source_files"
+  - "pipeline directory: /root/key_projects/nextmcp/nf_pipeline/nanoseq"
+  - "main workflow: workflows/nanoseq.nf"
+runtime_path_boundary:
+  rule: All runtime paths and relative path-like values are resolved on the nextmcp server
+    filesystem.
+  placeholders:
+    input: <server_input_root>/samplesheet.csv
+    input_path: <server_input_root>/undemultiplexed.fastq.gz
+    outdir: <server_output_root>/nanoseq
+    jaffal_ref_dir: <server_reference_root>/JAFFAL
+required_inputs:
+  - name: input
+    required_for: Every run.
+    placeholder: <server_input_root>/samplesheet.csv
+    notes: CSV with group, replicate, barcode, input_file, fasta, and gtf columns.
+  - name: protocol
+    required_for: Every run.
+    placeholder: DNA
+    notes: Must be DNA, cDNA, or directRNA. Variant calling is DNA-only; quantification is
+      cDNA/directRNA only; modification analysis is directRNA-only.
+  - name: outdir
+    required_for: Published results.
+    placeholder: <server_output_root>/nanoseq
+    notes: Server-local publish directory passed in params.
+samplesheet_columns:
+  - group
+  - replicate
+  - barcode
+  - input_file
+  - fasta
+  - gtf
+supported_modes:
+  - id: dna_demultiplex_align_qc
+    entry_target: pipeline id nanoseq
+    use_when: DNA samples require optional qcat demultiplexing, raw-read QC, alignment, coverage
+      tracks, and optional variant calling.
+    route_shaping_params:
+      - protocol
+      - input
+      - input_path
+      - barcode_kit
+      - skip_demultiplexing
+      - aligner
+      - call_variants
+  - id: dna_variant_calling
+    entry_target: pipeline id nanoseq
+    use_when: DNA samples need short and structural variants after alignment.
+    route_shaping_params:
+      - protocol
+      - call_variants
+      - variant_caller
+      - structural_variant_caller
+      - skip_vc
+      - skip_sv
+      - deepvariant_gpu
+  - id: cdna_or_directrna_quantification
+    entry_target: pipeline id nanoseq
+    use_when: cDNA or directRNA samples need transcript reconstruction, quantification, and
+      optional DESeq2/DEXSeq differential analysis.
+    route_shaping_params:
+      - protocol
+      - skip_quantification
+      - quantification_method
+      - skip_differential_analysis
+  - id: directrna_modification
+    entry_target: pipeline id nanoseq
+    use_when: directRNA runs have FAST5 plus FASTQ input directories and need xPore or m6Anet RNA
+      modification analysis.
+    route_shaping_params:
+      - protocol
+      - skip_modification_analysis
+      - skip_xpore
+      - skip_m6anet
+  - id: rna_fusion
+    entry_target: pipeline id nanoseq
+    use_when: cDNA or directRNA runs need JAFFAL fusion detection.
+    route_shaping_params:
+      - protocol
+      - skip_fusion_analysis
+      - jaffal_ref_dir
+  - id: aligned_bam_input
+    entry_target: pipeline id nanoseq
+    use_when: Samplesheet points at existing BAM files and the user wants to skip alignment.
+    route_shaping_params:
+      - skip_demultiplexing
+      - skip_alignment
+resource_override:
+  channel: config_files
+  syntax: |
+    process {
+      resourceLimits = [
+        memory: 64.GB,
+        cpus  : 16,
+        time  : 24.h
+      ]
+    }
+limitations:
+  - qcat demultiplexing needs a server-local input_path and a supported barcode_kit.
+  - Variant calling only runs when protocol is DNA and call_variants is true.
+  - deepvariant and pepper_margin_deepvariant are documented as Docker/Singularity-only choices.
+  - deepvariant_gpu applies to pepper_margin_deepvariant GPU mode and needs matching server GPU
+    resources.
+  - Quantification and differential analysis only run for cDNA or directRNA.
+  - RNA modification analysis only runs for directRNA and requires input directories that include
+    fast5 and fastq subdirectories for each sample.
+  - JAFFAL can use a provided server-local jaffal_ref_dir; otherwise the workflow attempts to fetch
+    and unpack a reference.

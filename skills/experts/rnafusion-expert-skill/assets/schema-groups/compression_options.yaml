@@ -1,0 +1,36 @@
+group:
+  id: compression_options
+  label: Alignment compression options
+  selection_rule: Use this group for parameters defined under the `Alignment compression
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/compression_options.md
+  - assets/schema-groups/compression_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `compression_options` for exact lookup.
+parameters:
+- group_id: compression_options
+  name: cram
+  source_name: cram
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Output CRAM files instead of BAM files.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment compression options
+  raw_schema:
+    type: boolean
+    description: Output CRAM files instead of BAM files.
+    fa_icon: fas fa-cut

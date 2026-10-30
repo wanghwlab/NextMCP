@@ -1,0 +1,260 @@
+group:
+  id: reference_genome_options
+  label: Reference genome options
+  selection_rule: Use this group for parameters defined under the `Reference genome
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/reference_genome_options.md
+  - assets/schema-groups/reference_genome_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `reference_genome_options` for exact lookup.
+parameters:
+- group_id: reference_genome_options
+  name: fasta
+  source_name: fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to FASTA genome file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.fn?a(sta)?(\.gz)?$
+    description: Path to FASTA genome file.
+    help_text: This parameter is *mandatory* if `--genome` is not specified. If you
+      don't have a BWA index available, this will be generated for you automatically.
+      Combine with `--save_reference` to save BWA index for future runs.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: gtf
+  source_name: gtf
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Reference GTF annotation file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: Reference GTF annotation file
+    fa_icon: fas fa-code-branch
+    format: file-path
+    exists: true
+- group_id: reference_genome_options
+  name: save_align_intermeds
+  source_name: save_align_intermeds
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify this parameter to save the intermediate alignment files (STAR,
+    CellRanger) to the results.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/save_align_intermeds
+  example_values:
+  - <server_reference_root>/save_align_intermeds
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    description: Specify this parameter to save the intermediate alignment files (STAR,
+      CellRanger) to the results.
+    fa_icon: fas fa-bookmark
+- group_id: reference_genome_options
+  name: save_reference
+  source_name: save_reference
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify this parameter to save the indices created (STAR, Kallisto,
+    Simpleaf) to the results.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/save_reference
+  example_values:
+  - <server_reference_root>/save_reference
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    description: Specify this parameter to save the indices created (STAR, Kallisto,
+      Simpleaf) to the results.
+    fa_icon: fas fa-bookmark
+- group_id: reference_genome_options
+  name: transcript_fasta
+  source_name: transcript_fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: A cDNA FASTA file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: A cDNA FASTA file
+    fa_icon: fas fa-dna
+    format: file-path
+    exists: true
+    help_text: If simpleaf is used as the aligner, this must be provided together
+      with a transcript-to-gene ID mapping file (`txp2gene`).
+- group_id: reference_genome_options
+  name: txp2gene
+  source_name: txp2gene
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to transcript to gene mapping file. This allows the specification
+    of a transcript to gene mapping file for Kallisto/BUS and Alevin-fry with AlevinQC.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/txp2gene
+  example_values:
+  - <server_reference_root>/txp2gene
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: Path to transcript to gene mapping file. This allows the specification
+      of a transcript to gene mapping file for Kallisto/BUS and Alevin-fry with AlevinQC.
+    fa_icon: fas fa-map-marked-alt
+    format: file-path
+    exists: true
+- group_id: reference_genome_options
+  name: genome
+  source_name: genome
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Name of iGenomes reference.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/genome
+  example_values:
+  - <server_reference_root>/genome
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: Name of iGenomes reference.
+    fa_icon: fas fa-book
+    help_text: "If using a reference genome configured in the pipeline using iGenomes,\
+      \ use this parameter to give the ID for the reference. This is then used to\
+      \ build the full paths for all required reference genome files e.g. `--genome\
+      \ GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes)\
+      \ for more details."
+- group_id: reference_genome_options
+  name: igenomes_base
+  source_name: igenomes_base
+  type: string
+  required: false
+  default: s3://ngi-igenomes/igenomes/
+  enum: null
+  description: Directory / URL base for iGenomes references.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - s3://ngi-igenomes/igenomes/
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: Directory / URL base for iGenomes references.
+    default: s3://ngi-igenomes/igenomes/
+    fa_icon: fas fa-cloud-download-alt
+    hidden: true
+- group_id: reference_genome_options
+  name: igenomes_ignore
+  source_name: igenomes_ignore
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Do not load the iGenomes reference config.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    description: Do not load the iGenomes reference config.
+    fa_icon: fas fa-ban
+    hidden: true
+    help_text: Do not load `igenomes.config` when running the pipeline. You may choose
+      this option if you observe clashes between custom parameters and those supplied
+      in `igenomes.config`.

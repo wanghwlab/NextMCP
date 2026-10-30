@@ -1,0 +1,1049 @@
+group:
+  id: input_output_options
+  label: Input/output options
+  selection_rule: Use this group for parameters defined under the `Input/output options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/input_output_options.md
+  - assets/schema-groups/input_output_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `input_output_options` for exact lookup.
+parameters:
+- group_id: input_output_options
+  name: arriba_fusions
+  source_name: arriba_fusions
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to arriba output
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/arriba_fusions.tsv
+  example_values:
+  - <server_output_root>/arriba_fusions.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.tsv$
+    fa_icon: far fa-file-code
+    description: Path to arriba output
+- group_id: input_output_options
+  name: arriba_ref_blacklist
+  source_name: arriba_ref_blacklist
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to arriba reference blacklist
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/arriba_ref_blacklist.tsv
+  example_values:
+  - <server_output_root>/arriba_ref_blacklist.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.tsv(\.gz)?$
+    fa_icon: far fa-file-code
+    description: Path to arriba reference blacklist
+- group_id: input_output_options
+  name: arriba_ref_cytobands
+  source_name: arriba_ref_cytobands
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to arriba reference cytobands
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/arriba_ref_cytobands.tsv
+  example_values:
+  - <server_output_root>/arriba_ref_cytobands.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.tsv$
+    fa_icon: far fa-file-code
+    description: Path to arriba reference cytobands
+- group_id: input_output_options
+  name: arriba_ref_known_fusions
+  source_name: arriba_ref_known_fusions
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to arriba reference known fusions
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/arriba_ref_known_fusions.tsv
+  example_values:
+  - <server_output_root>/arriba_ref_known_fusions.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.tsv(\.gz)?$
+    fa_icon: far fa-file-code
+    description: Path to arriba reference known fusions
+- group_id: input_output_options
+  name: arriba_ref_protein_domains
+  source_name: arriba_ref_protein_domains
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to arriba reference protein domain
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/arriba_ref_protein_domains
+  example_values:
+  - <server_output_root>/arriba_ref_protein_domains
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.gff3$
+    fa_icon: far fa-file-code
+    description: Path to arriba reference protein domain
+- group_id: input_output_options
+  name: ctatsplicing_cancer_introns
+  source_name: ctatsplicing_cancer_introns
+  type: string
+  required: false
+  default: https://data.broadinstitute.org/Trinity/CTAT_RESOURCE_LIB/CANCER_SPLICING_LIB_SUPPLEMENT/cancer_introns.GRCh38.Jun232020.tsv.gz
+  enum: null
+  description: Path to the cancer introns CSV file to create the CTAT-SPLICING reference
+    with
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/ctatsplicing_cancer_introns.tsv
+  example_values:
+  - <server_output_root>/ctatsplicing_cancer_introns.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.tsv\.gz$
+    exists: true
+    description: Path to the cancer introns CSV file to create the CTAT-SPLICING reference
+      with
+    default: https://data.broadinstitute.org/Trinity/CTAT_RESOURCE_LIB/CANCER_SPLICING_LIB_SUPPLEMENT/cancer_introns.GRCh38.Jun232020.tsv.gz
+- group_id: input_output_options
+  name: dfam_h3f
+  source_name: dfam_h3f
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Dfam H3F database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/dfam_h3f
+  example_values:
+  - <server_output_root>/dfam_h3f
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.h3f$
+    description: Path to Dfam H3F database file
+    help_text: Provide a valid path pointing to the Dfam H3F database file. Leave
+      as null if using the automatical filling with `--dfam_version` and `--species`.
+    fa_icon: fas fa-link
+- group_id: input_output_options
+  name: dfam_h3i
+  source_name: dfam_h3i
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Dfam H3I database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/dfam_h3i
+  example_values:
+  - <server_output_root>/dfam_h3i
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.h3i$
+    description: Path to Dfam H3I database file
+    help_text: Provide a valid path pointing to the Dfam H3I database file. Leave
+      as null if using the automatical filling with `--dfam_version` and `--species`.
+    fa_icon: fas fa-link
+- group_id: input_output_options
+  name: dfam_h3m
+  source_name: dfam_h3m
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Dfam H3M database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/dfam_h3m
+  example_values:
+  - <server_output_root>/dfam_h3m
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.h3m$
+    description: Path to Dfam H3M database file
+    help_text: Provide a valid path pointing to the Dfam H3M database file. Leave
+      as null if using the automatical filling with `--dfam_version` and `--species`.
+    fa_icon: fas fa-link
+- group_id: input_output_options
+  name: dfam_h3p
+  source_name: dfam_h3p
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Dfam H3P database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/dfam_h3p
+  example_values:
+  - <server_output_root>/dfam_h3p
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.h3p$
+    description: Path to Dfam H3P database file
+    help_text: Provide a valid path pointing to the Dfam H3P database file. Leave
+      as null if using the automatical filling with `--dfam_version` and `--species`.
+    fa_icon: fas fa-link
+- group_id: input_output_options
+  name: dfam_hmm
+  source_name: dfam_hmm
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Dfam HMM database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/dfam_hmm
+  example_values:
+  - <server_output_root>/dfam_hmm
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.hmm$
+    description: Path to Dfam HMM database file
+    help_text: Provide a valid path pointing to the Dfam HMM database file. Leave
+      as null if using the automatical filling with `--dfam_version` and `--species`.
+    fa_icon: fas fa-link
+- group_id: input_output_options
+  name: fusioncatcher_fusions
+  source_name: fusioncatcher_fusions
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to fusioncatcher output
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/fusioncatcher_fusions.txt
+  example_values:
+  - <server_output_root>/fusioncatcher_fusions.txt
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.txt$
+    fa_icon: far fa-file-code
+    description: Path to fusioncatcher output
+- group_id: input_output_options
+  name: fusioncatcher_ref
+  source_name: fusioncatcher_ref
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to fusioncatcher references
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/fusioncatcher_ref
+  example_values:
+  - <server_output_root>/fusioncatcher_ref
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    fa_icon: far fa-file-code
+    description: Path to fusioncatcher references
+- group_id: input_output_options
+  name: fusioninspector_fusions
+  source_name: fusioninspector_fusions
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to a fusion list file built with format GENE1--GENE2
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/fusioninspector_fusions.tsv
+  example_values:
+  - <server_output_root>/fusioninspector_fusions.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.tsv$
+    fa_icon: far fa-file-code
+    description: Path to a fusion list file built with format GENE1--GENE2
+- group_id: input_output_options
+  name: genomes_base
+  source_name: genomes_base
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: Path to reference folder
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/genomes_base
+  example_values:
+  - <server_output_root>/genomes_base
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    fa_icon: far fa-file-code
+    description: Path to reference folder
+- group_id: input_output_options
+  name: genomes_ignore
+  source_name: genomes_ignore
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Don't automatically assign reference parameters to the correct references
+    in --genomes_base
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/genomes_ignore
+  example_values:
+  - <server_output_root>/genomes_ignore
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: boolean
+    fa_icon: far fa-file-code
+    description: Don't automatically assign reference parameters to the correct references
+      in --genomes_base
+- group_id: input_output_options
+  name: hgnc_date
+  source_name: hgnc_date
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to HGNC timestamp file for database retrieval
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/hgnc_date.txt
+  example_values:
+  - <server_output_root>/hgnc_date.txt
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.txt$
+    fa_icon: far fa-file-code
+    description: Path to HGNC timestamp file for database retrieval
+- group_id: input_output_options
+  name: hgnc_ref
+  source_name: hgnc_ref
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to HGNC database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/hgnc_ref.txt
+  example_values:
+  - <server_output_root>/hgnc_ref.txt
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.txt$
+    fa_icon: far fa-file-code
+    description: Path to HGNC database file
+- group_id: input_output_options
+  name: input
+  source_name: input
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to samplesheet file containing information about the samples in
+    the experiment.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/input
+  example_values:
+  - <server_output_root>/input
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    mimetype: text/csv
+    schema: assets/schema_input.json
+    exists: true
+    pattern: ^\S+\.(csv|yaml|yml|json)$
+    description: Path to samplesheet file containing information about the samples
+      in the experiment.
+    help_text: You will need to create a design file with information about the samples
+      in your experiment before running the pipeline. Use this parameter to specify
+      its location. It has to be a comma-separated file with 3 columns, and a header
+      row. See [usage docs](https://nf-co.re/rnafusion/usage#samplesheet-input).
+    fa_icon: fas fa-file-csv
+- group_id: input_output_options
+  name: outdir
+  source_name: outdir
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: The output directory where the results will be saved. You have to use
+    absolute paths to storage on Cloud infrastructure.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/rnafusion
+  example_values:
+  - <server_output_root>/rnafusion
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The output directory where the results will be saved. You have to
+      use absolute paths to storage on Cloud infrastructure.
+    fa_icon: fas fa-folder-open
+- group_id: input_output_options
+  name: pfam_file
+  source_name: pfam_file
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Pfam database file
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/pfam_file
+  example_values:
+  - <server_output_root>/pfam_file
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: \S+\.hmm(\.gz)?$
+    description: Path to Pfam database file
+    help_text: Provide a valid path pointing to the Pfam database file. Leave as null
+      if using the automatical filling with `--pfam_version`.
+    fa_icon: fas fa-link
+- group_id: input_output_options
+  name: qiagen
+  source_name: qiagen
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Use QIAGEN instead of SANGER to download COSMIC database
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/qiagen
+  example_values:
+  - <server_output_root>/qiagen
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: boolean
+    fa_icon: far fa-file-code
+    description: Use QIAGEN instead of SANGER to download COSMIC database
+- group_id: input_output_options
+  name: salmon_index
+  source_name: salmon_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to salmon index
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/salmon_index
+  example_values:
+  - <server_output_root>/salmon_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    fa_icon: far fa-file-code
+    description: Path to salmon index
+- group_id: input_output_options
+  name: starfusion_fusions
+  source_name: starfusion_fusions
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to starfusion output
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/starfusion_fusions.tsv
+  example_values:
+  - <server_output_root>/starfusion_fusions.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.tsv$
+    fa_icon: far fa-file-code
+    description: Path to starfusion output
+- group_id: input_output_options
+  name: starfusion_ref
+  source_name: starfusion_ref
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to starfusion references
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/starfusion_ref
+  example_values:
+  - <server_output_root>/starfusion_ref
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    fa_icon: far fa-file-code
+    description: Path to starfusion references
+- group_id: input_output_options
+  name: starindex_ref
+  source_name: starindex_ref
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to starindex references
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/starindex_ref
+  example_values:
+  - <server_output_root>/starindex_ref
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    fa_icon: far fa-file-code
+    description: Path to starindex references
+- group_id: input_output_options
+  name: tools
+  source_name: tools
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: Comma-delimited list of tools to run
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/tools
+  example_values:
+  - <server_output_root>/tools
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Comma-delimited list of tools to run
+    fa_icon: far fa-file-code
+    pattern: ^((arriba|ctatsplicing|fusioncatcher|starfusion|stringtie|fusionreport|fastp|salmon|fusioninspector|all)?,?)*(?<!,)$
+- group_id: input_output_options
+  name: tools_cutoff
+  source_name: tools_cutoff
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Discard fusions identified by less than INT tools
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/tools_cutoff
+  example_values:
+  - <server_output_root>/tools_cutoff
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    minimum: 1
+    default: 1
+    fa_icon: far fa-file-code
+    description: Discard fusions identified by less than INT tools
+- group_id: input_output_options
+  name: whitelist
+  source_name: whitelist
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to fusions to add to the input of fusioninspector
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/whitelist.tsv
+  example_values:
+  - <server_output_root>/whitelist.tsv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.tsv$
+    fa_icon: far fa-file-code
+    description: Path to fusions to add to the input of fusioninspector
+- group_id: input_output_options
+  name: annot_filter_url
+  source_name: annot_filter_url
+  type: string
+  required: false
+  default: https://data.broadinstitute.org/Trinity/CTAT_RESOURCE_LIB/AnnotFilterRule.pm
+  enum: null
+  description: URL to annotation filter rule file
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/annot_filter_url
+  example_values:
+  - <server_output_root>/annot_filter_url
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: uri
+    pattern: ^https?://.*
+    description: URL to annotation filter rule file
+    help_text: Provide a valid HTTP/HTTPS URL pointing to the annotation filter rule
+      file (typically a Perl module).
+    default: https://data.broadinstitute.org/Trinity/CTAT_RESOURCE_LIB/AnnotFilterRule.pm
+    fa_icon: fas fa-filter
+- group_id: input_output_options
+  name: cosmic_passwd
+  source_name: cosmic_passwd
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: COSMIC password
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/cosmic_passwd
+  example_values:
+  - <server_output_root>/cosmic_passwd
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    fa_icon: far fa-file-code
+    description: COSMIC password
+- group_id: input_output_options
+  name: cosmic_username
+  source_name: cosmic_username
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: COSMIC username
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/cosmic_username
+  example_values:
+  - <server_output_root>/cosmic_username
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    fa_icon: far fa-file-code
+    description: COSMIC username
+- group_id: input_output_options
+  name: email
+  source_name: email
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Email address for completion summary.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/email
+  example_values:
+  - <server_output_root>/email
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Email address for completion summary.
+    fa_icon: fas fa-envelope
+    help_text: Set this parameter to your e-mail address to get a summary e-mail with
+      details of the run sent to you when the workflow exits. If set in your user
+      config file (`~/.nextflow/config`) then you don't need to specify this on the
+      command line for every run.
+    pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+- group_id: input_output_options
+  name: fusioncatcher_limitSjdbInsertNsj
+  source_name: fusioncatcher_limitSjdbInsertNsj
+  type: integer
+  required: false
+  default: 2000000
+  enum: null
+  description: Use limitSjdbInsertNsj with int for fusioncatcher
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/fusioncatcher_limitSjdbInsertNsj
+  example_values:
+  - <server_output_root>/fusioncatcher_limitSjdbInsertNsj
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    fa_icon: far fa-file-code
+    description: Use limitSjdbInsertNsj with int for fusioncatcher
+    default: 2000000
+    minimum: 1
+- group_id: input_output_options
+  name: fusioninspector_limitSjdbInsertNsj
+  source_name: fusioninspector_limitSjdbInsertNsj
+  type: integer
+  required: false
+  default: 1000000
+  enum: null
+  description: Use limitSjdbInsertNsj with int for fusioninspector STAR process
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/fusioninspector_limitSjdbInsertNsj
+  example_values:
+  - <server_output_root>/fusioninspector_limitSjdbInsertNsj
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    fa_icon: far fa-file-code
+    description: Use limitSjdbInsertNsj with int for fusioninspector STAR process
+    default: 1000000
+    minimum: 1
+- group_id: input_output_options
+  name: fusionreport_ref
+  source_name: fusionreport_ref
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to fusionreport references
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/fusionreport_ref
+  example_values:
+  - <server_output_root>/fusionreport_ref
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    fa_icon: far fa-file-code
+    description: Path to fusionreport references
+- group_id: input_output_options
+  name: genome_gencode_version
+  source_name: genome_gencode_version
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: gencode version
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/genome_gencode_version
+  example_values:
+  - <server_output_root>/genome_gencode_version
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    fa_icon: far fa-file-code
+    description: gencode version
+- group_id: input_output_options
+  name: multiqc_title
+  source_name: multiqc_title
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: MultiQC report title. Printed as page header, used for filename if
+    not otherwise specified.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/multiqc_title
+  example_values:
+  - <server_output_root>/multiqc_title
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: MultiQC report title. Printed as page header, used for filename if
+      not otherwise specified.
+    fa_icon: fas fa-file-signature
+- group_id: input_output_options
+  name: read_length
+  source_name: read_length
+  type: integer
+  required: false
+  default: 100
+  enum: null
+  description: The length of the reads provided to the pipeline. This is used for
+    the '--sjdbOverhang' option of STAR as read_length - 1. Providing 1 to this option
+    will disable overhang handling.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/read_length
+  example_values:
+  - <server_output_root>/read_length
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    fa_icon: far fa-file-code
+    description: The length of the reads provided to the pipeline. This is used for
+      the '--sjdbOverhang' option of STAR as read_length - 1. Providing 1 to this
+      option will disable overhang handling.
+    default: 100
+    minimum: 1

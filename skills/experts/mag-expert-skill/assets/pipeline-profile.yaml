@@ -1,0 +1,132 @@
+pipeline:
+  id: mag
+  name: nf-core/mag
+  version: 5.4.2
+  summary: Assembly, binning, quality control, taxonomic classification, and annotation of metagenomes.
+source_basis:
+  - Repository-local inspect-equivalent bundle built from nf_pipeline/mag.
+  - Standard bundle fields: schema, documents, and source_files.
+  - Targeted source reads: docs/usage.md, docs/output.md, workflows/mag.nf, nextflow.config, conf/base.config.
+server_path_rule:
+  rule: All runtime path values, project identifiers, and relative path-like values are resolved on the nextmcp server filesystem.
+  placeholders:
+    input: <server_input_root>/samplesheet.csv
+    assembly_input: <server_input_root>/assemblies.csv
+    outdir: <server_output_root>/mag
+    database_root: <server_reference_root>/mag_databases
+required_inputs:
+  - name: input
+    required_for: All normal runs.
+    placeholder: <server_input_root>/samplesheet.csv
+    notes: CSV samplesheet. Required columns include sample and group, plus short-read or long-read columns and platform columns matching the reads supplied.
+  - name: outdir
+    required_for: Published results.
+    placeholder: <server_output_root>/mag
+    notes: Server-local output directory for published files.
+  - name: assembly_input
+    required_for: Pre-computed assembly route only.
+    placeholder: <server_input_root>/assemblies.csv
+    notes: CSV with id, group, assembler, and fasta. Reads must still be supplied through input.
+supported_modes:
+  - id: standard_mixed_read_mag
+    entry_target: pipeline id mag
+    use_when: User wants the main assembly, binning, QC, taxonomy, and annotation route from short reads, long reads, or both.
+    route_shaping_params:
+      - input
+      - outdir
+      - single_end
+      - coassemble_group
+      - binning_map_mode
+  - id: short_read_only
+    entry_target: pipeline id mag
+    use_when: Samplesheet has short_reads_1 and no long_reads values.
+    route_shaping_params:
+      - input
+      - single_end
+      - skip_spades
+      - skip_megahit
+      - skip_ale
+  - id: long_read_only
+    entry_target: pipeline id mag
+    use_when: Samplesheet has long_reads values and no short_reads_1 values.
+    route_shaping_params:
+      - input
+      - longread_adaptertrimming_tool
+      - longread_filtering_tool
+      - skip_flye
+      - skip_metamdbg
+  - id: hybrid_assembly
+    entry_target: pipeline id mag
+    use_when: Samplesheet has both short reads and long reads and user wants hybrid assembly.
+    route_shaping_params:
+      - input
+      - skip_spadeshybrid
+      - longread_filtering_tool
+  - id: precomputed_assembly_binning
+    entry_target: pipeline id mag
+    use_when: User already has assemblies and wants to begin at binning.
+    route_shaping_params:
+      - input
+      - assembly_input
+      - coassemble_group
+      - binning_map_mode
+  - id: ancient_dna_validation
+    entry_target: pipeline id mag
+    use_when: User asks for ancient DNA damage validation or pyDamage outputs.
+    route_shaping_params:
+      - ancient_dna
+      - binning_map_mode
+      - skip_ancient_damagecorrection
+  - id: virus_identification
+    entry_target: pipeline id mag
+    use_when: User asks to identify viruses or plasmids in assemblies.
+    route_shaping_params:
+      - run_virus_identification
+      - genomad_db
+  - id: bin_quality_and_taxonomy
+    entry_target: pipeline id mag
+    use_when: User wants BUSCO, CheckM, CheckM2, GUNC, CAT, GTDB-Tk, Prokka, or MetaEuk outputs.
+    route_shaping_params:
+      - run_busco
+      - run_checkm
+      - run_checkm2
+      - run_gunc
+      - cat_db
+      - gtdb_db
+      - metaeuk_db
+      - metaeuk_mmseqs_db
+      - skip_prokka
+      - skip_metaeuk
+  - id: bigmag_summary
+    entry_target: pipeline id mag
+    use_when: User wants a BIgMAG dashboard input table.
+    route_shaping_params:
+      - generate_bigmag_file
+      - run_busco
+      - run_checkm2
+      - run_gunc
+      - skip_gtdbtk
+resource_override:
+  scope: config_files
+  syntax: |
+    process {
+      resourceLimits = [
+        cpus: 16,
+        memory: '64.GB',
+        time: '24.h',
+      ]
+    }
+  notes:
+    - Pass resource caps through a small server-local Nextflow config file in config_files.
+    - Do not put max_cpus, max_memory, or max_time in params.
+runtime_defaults:
+  profile: Omit profile unless the user asks for a different runtime or the server default is known to be unsuitable.
+  restart: Use from_run_id as the public restart path. Inspect run_get(detail="full") on the source run when launch_spec, nextflow_session_uuid, or resume_compatible matters.
+checkm_defaults:
+  run_checkm: "run_checkm=false by default"
+  run_checkm2: "run_checkm2=false by default"
+  normal_route: Do not block a normal run on `checkm_db` or `checkm2_db`; the default route does not need them unless the user enables CheckM or CheckM2.
+limitations:
+  - This skill plans and reviews nf-core/mag outputs. It does not interpret MAGs beyond the pipeline-documented reports and tables.
+  - Large databases such as CAT nr, GTDB-Tk, BUSCO, CheckM, CheckM2, GUNC, geNomad, and MetaEuk must exist on the nextmcp server or be intentionally downloaded during the run.
+  - Raw-read taxonomic profiling was removed from nf-core/mag 5.0.0. Use a different pipeline for that request.

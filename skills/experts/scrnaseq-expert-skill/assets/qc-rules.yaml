@@ -1,0 +1,76 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    good_signal: Run succeeded and artifact summary includes pipeline_info plus the selected
+      aligner output family.
+    bad_signal: Run failed, stalled, or artifact summary is missing the selected aligner output.
+    action: Read diagnosis and next_actions first; use run_logs only when summary is not enough.
+  - id: protocol_auto_guard
+    severity: high
+    source: workflows/scrnaseq.nf
+    good_signal: protocol=auto is used only with cellranger, cellrangerarc, or cellrangermulti.
+    bad_signal: simpleaf, star, or kallisto launch uses protocol=auto and the workflow errors.
+    action: Choose a concrete protocol such as 10XV2, 10XV3, 10XV4, dropseq, smartseq when
+      supported, or a custom aligner-specific protocol string.
+  - id: samplesheet_shape
+    severity: high
+    source: docs/usage.md and assets/schema_input.json
+    good_signal: Samplesheet has required columns for the selected aligner route and server-local
+      FASTQ paths.
+    bad_signal: Missing fastq_2, sample_type, feature_type, fastq_barcode, or multiplexing barcode
+      metadata needed by the selected route.
+    action: Inspect pipeline_info/samplesheet.valid.csv when available, then correct the source
+      samplesheet and rerun with from_run_id only when compatible.
+  - id: reference_prerequisites
+    severity: high
+    source: nextflow_schema.json and docs/usage.md
+    good_signal: The route has genome or the aligner-specific index/reference files it needs.
+    bad_signal: Missing simpleaf_index, star_index, kallisto_index, cellranger_index,
+      cellranger_vdj_index, FASTA/GTF, txp2gene, or Cell Ranger ARC config pair.
+    action: Confirm server-local reference paths with fs_list(mode="manifest") or build references
+      with save_reference when appropriate.
+  - id: cellranger_license_runtime
+    severity: high
+    source: docs/usage.md and Cell Ranger routes
+    good_signal: Server runtime has Cell Ranger or Cell Ranger ARC/Multi available and references
+      are compatible with the route.
+    bad_signal: Tool is unavailable, reference directory is incompatible, or FASTQ names do not
+      match route expectations.
+    action: Confirm runtime availability and reference path before launch; for Cell Ranger ARC,
+      require compliant 10x FASTQ names.
+  - id: cellrangermulti_metadata
+    severity: high
+    source: docs/usage.md
+    good_signal: feature_type, barcode assignment, probe-set, feature reference, and VDJ reference
+      choices match the requested assay components.
+    bad_signal: Multiplexed FFPE/CMO/OCM data lacks cellranger_multi_barcodes, feature barcoding
+      lacks fb_reference, or VDJ reference handling is inconsistent.
+    action: Add the missing samplesheet or reference parameter; use skip_cellrangermulti_vdjref
+      only when no VDJ data is present.
+  - id: matrix_conversion_outputs
+    severity: medium
+    source: docs/output.md and workflows/scrnaseq.nf
+    good_signal: h5ad and RDS outputs have raw, filtered, or cellbender_filter suffixes that match
+      their provenance.
+    bad_signal: Downstream user cannot distinguish raw, aligner-filtered, and CellBender-filtered
+      matrices.
+    action: Use artifact-contracts matrix_conversions paths and preserve the suffix meaning in
+      handoff notes.
+  - id: cellbender_filtering
+    severity: medium
+    source: workflows/scrnaseq.nf
+    good_signal: CellBender output exists only for non-cellrangerarc routes when skip_cellbender is
+      false.
+    bad_signal: User expects CellBender output for cellrangerarc or disabled it with
+      skip_cellbender=true.
+    action: Explain the route limit and verify skip_cellbender in pipeline_info/params.json.
+  - id: multiqc_review
+    severity: medium
+    source: docs/output.md
+    good_signal: MultiQC report and data directory exist and summarize raw read QC plus selected
+      aligner reports.
+    bad_signal: multiqc output is missing because skip_multiqc was true or upstream tool reports
+      were not produced.
+    action: Read multiqc/multiqc_report.html when present; otherwise inspect aligner-specific
+      outputs and pipeline_info.

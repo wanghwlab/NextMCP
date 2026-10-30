@@ -1,0 +1,214 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Offline evals for scrnaseq-expert-skill. These prompts test nextmcp planning, parameter mapping, route selection, output review, historical reuse, and source-backed coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch"
+  },
+  "summary": {
+    "eval_count": 10,
+    "asset_eval_count": 6,
+    "authoring_bundle_eval_count": 4,
+    "audit_eval_count": 0
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, draft a nextmcp launch plan for nf-core/scrnaseq. The project is my-project. The user confirmed the server-local input at /data/samplesheet.csv and wants results under /results/scrnaseq. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and the nextflow_run argument shape.",
+      "expected_output": "A launch plan that keeps project as a top-level nextflow_run argument, puts ordinary pipeline options under params, puts resource caps in a server-local override config passed through config_files using process.resourceLimits, omits profile by default, and avoids authoring-time inspection.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument, not inside params.",
+        "Mentions input and outdir under params.",
+        "Mentions resource caps under config_files or an override config using process.resourceLimits, not params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Uses nextflow_run(prepare=true) only as an optional check when launch uncertainty remains."
+      ],
+      "files": []
+    },
+    {
+      "id": "simpleaf-protocol-guard",
+      "source": "authoring_bundle",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/qc-rules.yaml",
+        "workflows/scrnaseq.nf"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, plan a dry run for the default Simpleaf route. The user has a server-local samplesheet and says to leave protocol as auto. Do not launch anything.",
+      "expected_output": "A dry-run plan that rejects protocol=auto for Simpleaf, asks for a concrete protocol or custom Simpleaf chemistry, and keeps input/outdir/reference fields under params.",
+      "assertions": [
+        "Says protocol=auto is not valid for Simpleaf.",
+        "Asks for a concrete protocol or custom Simpleaf chemistry.",
+        "Keeps ordinary pipeline values under params.",
+        "Does not use nextflow_inspect_pipeline for runtime planning."
+      ],
+      "files": []
+    },
+    {
+      "id": "cellrangermulti-planning",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/cellranger_multi_options.yaml"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, plan a Cell Ranger Multi run for GEX plus antibody capture and CMO multiplexing. The user has a main samplesheet, a barcode assignment CSV, and a feature reference CSV on the server. Do not launch anything.",
+      "expected_output": "A route plan for aligner=cellrangermulti with protocol=auto, cellranger_multi_barcodes, fb_reference, and checks for Cell Ranger runtime and reference handling.",
+      "assertions": [
+        "Uses aligner=cellrangermulti.",
+        "Mentions cellranger_multi_barcodes for multiplexing.",
+        "Mentions fb_reference for antibody capture.",
+        "Mentions Cell Ranger runtime or reference prerequisites.",
+        "Does not use unsupported beam input."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, answer a user who says: 'The nf-core/scrnaseq run finished, and I need to review the main published outputs and QC reports. What nextmcp calls should I make first, and which artifact or report paths should I inspect?' Do not assume concrete paths that have not come from nextmcp.",
+      "expected_output": "A post-run review plan that starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then uses run_artifacts for relevant sections, then fs_read only for explicit report or table paths. It should use artifact contracts and QC rules instead of guessing output paths.",
+      "assertions": [
+        "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) or equivalent summary-first call.",
+        "Uses run_artifacts before reading individual output files.",
+        "Uses fs_read only after an explicit path is known.",
+        "Grounds output choices in artifact-contracts.yaml or QC rules.",
+        "Does not jump straight to raw logs as the default first step."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, plan how to recover a previous nf-core/scrnaseq run when the user only remembers one output filename fragment. The project is my-project. Do not launch anything; return the search and compatibility-check sequence.",
+      "expected_output": "A historical reuse plan that searches with run_list(project=..., pipeline=\"scrnaseq\", artifact_path_contains=...), inspects run_get(include=[\"artifact_summary\"]), uses run_artifacts, treats artifacts.json and pipeline_fingerprint as historical facts, and confirms route compatibility through pipeline_info/params.json before recommending reuse.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains when only an artifact fragment is known.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires route compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+        "Does not guess old output directories as the default safe path."
+      ],
+      "files": []
+    },
+    {
+      "id": "schema-lookup-cellranger-index",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/schema-index.yaml",
+        "assets/schema-groups/cellranger_options.yaml",
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, show how you would confirm the exact schema mapping for cellranger_index before preparing a Cell Ranger run. Do not inspect pipeline source at runtime.",
+      "expected_output": "A schema-backed answer that opens schema-index.yaml and cellranger_options, then maps cellranger_index under params as a server-local path.",
+      "assertions": [
+        "Uses schema-index or grouped schema assets for exact mapping.",
+        "Places cellranger_index under params.",
+        "Treats the value as a server-local path.",
+        "Does not use nextflow_inspect_pipeline for runtime planning."
+      ],
+      "files": []
+    },
+    {
+      "id": "starsolo-feature-selection",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/starsolo_options.yaml"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, plan a STARsolo run where the user asks for pre-mRNA counts and wants BAM files saved. Do not launch anything.",
+      "expected_output": "A STARsolo plan with aligner=star, concrete protocol, star_feature=GeneFull, reference checks, and save_align_intermeds when BAMs are needed.",
+      "assertions": [
+        "Uses aligner=star.",
+        "Sets or recommends star_feature=GeneFull for pre-mRNA counts.",
+        "Mentions save_align_intermeds for published BAMs.",
+        "Requires a concrete protocol rather than auto."
+      ],
+      "files": []
+    },
+    {
+      "id": "kallisto-workflow-selection",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/kallisto_bus_options.yaml"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, plan a Kallisto/BUS run for standard gene counts, and explain what changes if the user asks for a La Manno RNA-velocity route. Do not launch anything.",
+      "expected_output": "A Kallisto/BUS plan with aligner=kallisto, concrete protocol, kb_workflow=standard by default, and kb_workflow=lamanno only for the requested route.",
+      "assertions": [
+        "Uses aligner=kallisto.",
+        "Mentions kb_workflow=standard as default.",
+        "Mentions kb_workflow=lamanno only for the specific request.",
+        "Mentions reference or txp2gene prerequisites."
+      ],
+      "files": []
+    },
+    {
+      "id": "cellbender-route",
+      "source": "asset",
+      "category": "coverage",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, explain whether CellBender output should exist for a completed cellrangerarc run and for a completed simpleaf run with skip_cellbender=false.",
+      "expected_output": "An answer that says CellBender is not run for cellrangerarc, but can produce cellbender_removebackground and cellbender_filter matrix outputs for non-cellrangerarc routes when enabled.",
+      "assertions": [
+        "Says CellBender is not run for cellrangerarc.",
+        "Mentions skip_cellbender=false for enabled filtering.",
+        "Mentions cellbender_removebackground or cellbender_filter outputs.",
+        "Uses artifact contracts or QC rules."
+      ],
+      "files": []
+    },
+    {
+      "id": "restart-boundary",
+      "source": "asset",
+      "category": "restart",
+      "source_materials": [
+        "assets/step-recipes.yaml",
+        "references/06_troubleshooting.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the scrnaseq-expert-skill, plan a restart from a previous failed run. The user gives from_run_id=old123. Do not launch anything.",
+      "expected_output": "A restart plan that reads run_get(detail=\"full\") for the source run, uses nextflow_run(prepare=true, from_run_id=...), and does not expose raw Nextflow resume flags as public nextmcp inputs.",
+      "assertions": [
+        "Uses from_run_id.",
+        "Mentions run_get(detail=\"full\") before restart planning.",
+        "Mentions prepare=true before launch when compatibility is uncertain.",
+        "Does not expose raw Nextflow resume flags as public nextmcp inputs."
+      ],
+      "files": []
+    }
+  ]
+}

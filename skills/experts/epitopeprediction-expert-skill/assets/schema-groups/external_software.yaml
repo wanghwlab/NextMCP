@@ -1,0 +1,120 @@
+group:
+  id: external_software
+  label: External software
+  selection_rule: Use this group for parameters defined under the `External software`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/external_software.md
+  - assets/schema-groups/external_software.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `external_software` for exact lookup.
+parameters:
+- group_id: external_software
+  name: netmhc_system
+  source_name: netmhc_system
+  type: string
+  required: false
+  default: linux
+  enum: &id001
+  - linux
+  - darwin
+  description: Specifies the operating system in use (Linux or Darwin). This is only
+    necessary if conda is used.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - linux
+  - darwin
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: External software
+  raw_schema:
+    type: string
+    default: linux
+    enum: *id001
+    description: Specifies the operating system in use (Linux or Darwin). This is
+      only necessary if conda is used.
+- group_id: external_software
+  name: netmhciipan_path
+  source_name: netmhciipan_path
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: To use the 'netmhciipan' tool, specify the path to the original software
+    tarball for NetMHCIIpan 3.1 here.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/netmhciipan_path
+  example_values:
+  - <server_input_root>/netmhciipan_path
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: External software
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: ^\S+\.tar\.gz$
+    description: To use the 'netmhciipan' tool, specify the path to the original software
+      tarball for NetMHCIIpan 3.1 here.
+- group_id: external_software
+  name: netmhcpan_path
+  source_name: netmhcpan_path
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: To use the 'netmhcpan' tool, specify the path to the original software
+    tarball for NetMHCpan 4.0 here.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/netmhcpan_path
+  example_values:
+  - <server_input_root>/netmhcpan_path
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: External software
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: ^\S+\.tar\.gz$
+    description: To use the 'netmhcpan' tool, specify the path to the original software
+      tarball for NetMHCpan 4.0 here.
+- group_id: external_software
+  name: external_tools_meta
+  source_name: external_tools_meta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specifies the path to the JSON file with meta information on external
+    prediction tools.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: External software
+  raw_schema:
+    type: string
+    description: Specifies the path to the JSON file with meta information on external
+      prediction tools.
+    hidden: true

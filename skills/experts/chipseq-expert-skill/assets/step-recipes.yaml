@@ -1,0 +1,92 @@
+steps:
+- id: prepare_inputs
+  purpose: Confirm project, samplesheet, reference, and output paths before any launch.
+  minimal_inputs:
+  - project
+  - input
+  - outdir
+  - genome or fasta plus gtf/gff
+  tool_sequence:
+  - server_info() when default profile or server layout is unknown
+  - project_list() when the project id is unknown
+  - project_get(project) when the project root or prior runs matter
+  - fs_list(path=<server path>, mode="manifest") when one server path still needs
+    confirmation
+  - nextflow_run(prepare=true, pipeline="chipseq", project=..., params=...)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  outputs:
+  - run layout
+  - layout_warnings
+  - normalized launch spec
+- id: launch_main
+  purpose: Launch the selected chipseq route after prepare output and path checks
+    are acceptable.
+  minimal_inputs:
+  - project
+  - params.input
+  - params.outdir
+  - params.genome or params.fasta plus params.gtf/gff
+  tool_sequence:
+  - nextflow_run(pipeline="chipseq", project=..., params=..., config_files=[...] when
+    resource caps are needed)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_logs() only when summary diagnosis points to raw log inspection
+  outputs:
+  - runs/<run_id>/job
+  - runs/<run_id>/work
+  - results/<run_id> or params.outdir
+  - status summary
+- id: align_and_filter
+  purpose: Choose aligner, reuse or build matching index, then review BAM and alignment
+    QC outputs.
+  minimal_inputs:
+  - aligner
+  - matching index path or fasta for index build
+  outputs:
+  - <ALIGNER>/library/samtools_stats/
+  - <ALIGNER>/merged_library/
+  - <ALIGNER>/merged_library/picard_metrics/
+  - <ALIGNER>/merged_library/preseq/
+  failure_checks:
+  - Missing or incompatible prebuilt index for selected aligner.
+  - Samplesheet control labels do not match sample labels.
+  - Resource caps too low for alignment or index generation.
+- id: call_peaks
+  purpose: Run MACS3 broadPeak by default or narrowPeak when requested, then inspect
+    per-sample peaks and QC files.
+  minimal_inputs:
+  - filtered BAMs
+  - control mapping from samplesheet
+  - macs_gsize or fasta plus read_length-derived size
+  outputs:
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/qc/
+  failure_checks:
+  - macs_fdr and macs_pvalue are mutually exclusive.
+  - Missing controls or inconsistent antibody/control fields in the samplesheet.
+- id: consensus_and_deseq2_qc
+  purpose: Merge per-sample peaks per antibody, quantify consensus peaks, and produce
+    DESeq2 PCA and clustering QC.
+  minimal_inputs:
+  - MACS3 peaks
+  - antibody values in samplesheet
+  outputs:
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/
+  - <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/deseq2/
+  failure_checks:
+  - skip_consensus_peaks removes consensus, featureCounts, and downstream DESeq2
+    QC outputs.
+  - skip_peak_annotation removes HOMER annotation fields from peak outputs.
+- id: postrun_review
+  purpose: Inspect finished outputs and QC in a summary-first order.
+  minimal_inputs:
+  - run_id
+  tool_sequence:
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_artifacts(project=..., run_id=..., artifact_path_contains="multiqc")
+  - run_artifacts(project=..., run_id=..., artifact_path_contains="pipeline_info/params.json")
+  - fs_read(path=<explicit report or table path>) only after a concrete path is known
+  outputs:
+  - multiqc/<PEAK_TYPE>/multiqc_report.html
+  - pipeline_info/params.json
+  - igv/<PEAK_TYPE>/igv_session.xml

@@ -1,0 +1,103 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: atacseq
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/atacseq/test
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/
+    localized_prefix: /data/nextmcp/testdata/atacseq/test/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/atacseq
+  config: conf/test.config
+  resolved_runtime_chain:
+    aligner: bwa
+    validationSchemaIgnoreParams: genomes
+    with_control: false
+    skip_multiqc: false
+    skip_fastqc: false
+    skip_ataqv: false
+  resolved_params:
+    input: /data/nextmcp/testdata/atacseq/test/rewrites/pipeline-data/samplesheet/v2.0/samplesheet_test_local.csv
+    aligner: bwa
+    read_length: 50
+    mito_name: MT
+    fasta: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genome.fa
+    gtf: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genes.gtf
+    fingerprint_bins: 100
+    validationSchemaIgnoreParams: genomes
+
+runtime_hints:
+  launch_rule: Build the smoke contract directly from nextflow.config plus conf/test.config because the test route is profile-only, but keep max_cpus, max_memory, and max_time in a small override config passed through config_files.
+  manifest_rule: Download and rewrite the upstream samplesheet at execution time because the allowed source files do not enumerate the nested FASTQ URLs inside the CSV.
+  artifact_rule: Keep artifact assertions minimal because the allowed source set does not include .nf.test or .snap evidence for atacseq.
+
+config_override_files:
+  - path: /data/nextmcp/testdata/atacseq/test/project-files/pipeline-support-atacseq/max_resources.config
+    source_fields:
+      - max_cpus
+      - max_memory
+      - max_time
+    purpose: Keep smoke resource caps in config scope instead of nextflow_run params.
+    content: |
+      params.max_cpus = 2
+      params.max_memory = '6.GB'
+      params.max_time = '6.h'
+
+url_inventory:
+  - role: input_samplesheet
+    config_field: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/samplesheet/v2.0/samplesheet_test.csv
+    localized_value: /data/nextmcp/testdata/atacseq/test/pipeline-data/samplesheet/v2.0/samplesheet_test.csv
+  - role: genome_fasta
+    config_field: fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/reference/genome.fa
+    localized_value: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genome.fa
+  - role: annotation_gtf
+    config_field: gtf
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/reference/genes.gtf
+    localized_value: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genes.gtf
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/atacseq/test/pipeline-data/samplesheet/v2.0/samplesheet_test.csv
+    localized_path: /data/nextmcp/testdata/atacseq/test/rewrites/pipeline-data/samplesheet/v2.0/samplesheet_test_local.csv
+    rewritten_columns:
+      - auto_detect_all_remote_url_fields
+    rewrite_rule: Rewrite every remote URL cell in the CSV to a server-local path, including nested FASTQ URLs that are only visible after downloading the upstream samplesheet.
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/samplesheet/v2.0/samplesheet_test.csv
+    localized_value: /data/nextmcp/testdata/atacseq/test/rewrites/pipeline-data/samplesheet/v2.0/samplesheet_test_local.csv
+  - config_field: nextflow.config:aligner
+    official_param: aligner
+    original_value: bwa
+    localized_value: bwa
+  - config_field: read_length
+    official_param: read_length
+    original_value: 50
+    localized_value: 50
+  - config_field: mito_name
+    official_param: mito_name
+    original_value: MT
+    localized_value: MT
+  - config_field: fasta
+    official_param: fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/reference/genome.fa
+    localized_value: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genome.fa
+  - config_field: gtf
+    official_param: gtf
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/atacseq/reference/genes.gtf
+    localized_value: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genes.gtf
+  - config_field: fingerprint_bins
+    official_param: fingerprint_bins
+    original_value: 100
+    localized_value: 100
+  - config_field: nextflow.config:validationSchemaIgnoreParams
+    official_param: validationSchemaIgnoreParams
+    original_value: genomes
+    localized_value: genomes

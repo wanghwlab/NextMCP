@@ -1,0 +1,252 @@
+group:
+  id: alignment_options
+  label: Alignment options
+  selection_rule: Use this group for parameters defined under the `Alignment options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/alignment_options.md
+  - assets/schema-groups/alignment_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `alignment_options` for exact lookup.
+parameters:
+- group_id: alignment_options
+  name: aligner
+  source_name: aligner
+  type: string
+  required: false
+  default: bwa
+  enum: &id001
+  - bwa
+  - bowtie2
+  - chromap
+  - star
+  description: Specifies the alignment algorithm to use - available options are 'bwa',
+    'bowtie2', 'chromap' and 'star'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - bwa
+  - bowtie2
+  - chromap
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    default: bwa
+    description: Specifies the alignment algorithm to use - available options are
+      'bwa', 'bowtie2', 'chromap' and 'star'.
+    fa_icon: fas fa-map-signs
+    enum: *id001
+- group_id: alignment_options
+  name: keep_dups
+  source_name: keep_dups
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Duplicate reads are not filtered from alignments.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Duplicate reads are not filtered from alignments.
+    fa_icon: fas fa-cart-arrow-down
+- group_id: alignment_options
+  name: keep_multi_map
+  source_name: keep_multi_map
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Reads mapping to multiple locations are not filtered from alignments.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Reads mapping to multiple locations are not filtered from alignments.
+    fa_icon: fas fa-cart-arrow-down
+- group_id: alignment_options
+  name: save_align_intermeds
+  source_name: save_align_intermeds
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the intermediate BAM files from the alignment step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Save the intermediate BAM files from the alignment step.
+    help_text: By default, intermediate BAM files will not be saved. The final BAM
+      files created after the appropriate filtering step are always saved to limit
+      storage usage. Set this parameter to also save other intermediate BAM files.
+    fa_icon: fas fa-save
+- group_id: alignment_options
+  name: save_unaligned
+  source_name: save_unaligned
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Where possible, save unaligned reads from either STAR, HISAT2 or Salmon
+    to the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: Where possible, save unaligned reads from either STAR, HISAT2 or
+      Salmon to the results directory.
+    help_text: This may either be in the form of FastQ or BAM files depending on the
+      options available for that particular tool.
+- group_id: alignment_options
+  name: skip_merge_replicates
+  source_name: skip_merge_replicates
+  type: boolean
+  required: false
+  default: false
+  enum: null
+  description: Do not perform alignment merging and downstream analysis by merging
+    replicates i.e. only do this by merging resequenced libraries.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    default: false
+    description: Do not perform alignment merging and downstream analysis by merging
+      replicates i.e. only do this by merging resequenced libraries.
+    help_text: An additional series of steps are performed by the pipeline for merging
+      the replicates from the same experimental group. This is primarily to increase
+      the sequencing depth in order to perform downstream analyses such as footprinting.
+      Specifying this parameter means that these steps will not be performed.
+    fa_icon: fas fa-fast-forward
+- group_id: alignment_options
+  name: bamtools_filter_pe_config
+  source_name: bamtools_filter_pe_config
+  type: string
+  required: false
+  default: $projectDir/assets/bamtools_filter_pe.json
+  enum: null
+  description: BAMTools JSON file with custom filters for paired-end data.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - $projectDir/assets/bamtools_filter_pe.json
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    default: $projectDir/assets/bamtools_filter_pe.json
+    hidden: true
+    description: BAMTools JSON file with custom filters for paired-end data.
+    fa_icon: fas fa-cog
+- group_id: alignment_options
+  name: bamtools_filter_se_config
+  source_name: bamtools_filter_se_config
+  type: string
+  required: false
+  default: $projectDir/assets/bamtools_filter_se.json
+  enum: null
+  description: BAMTools JSON file with custom filters for single-end data.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - $projectDir/assets/bamtools_filter_se.json
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    default: $projectDir/assets/bamtools_filter_se.json
+    hidden: true
+    description: BAMTools JSON file with custom filters for single-end data.
+    fa_icon: fas fa-cog
+- group_id: alignment_options
+  name: bwa_min_score
+  source_name: bwa_min_score
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: "Don\u2019t output BWA MEM alignments with score lower than this parameter."
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: integer
+    description: "Don\u2019t output BWA MEM alignments with score lower than this\
+      \ parameter."
+    fa_icon: fas fa-hand-paper

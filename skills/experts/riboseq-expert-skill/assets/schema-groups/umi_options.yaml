@@ -1,0 +1,277 @@
+group:
+  id: umi_options
+  label: UMI options
+  selection_rule: Use this group for parameters defined under the `UMI options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/umi_options.md
+  - assets/schema-groups/umi_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section `umi_options` for
+    exact lookup.
+parameters:
+- group_id: umi_options
+  name: umi_dedup_tool
+  source_name: umi_dedup_tool
+  type: string
+  required: false
+  default: umitools
+  enum: &id001
+  - umitools
+  - umicollapse
+  description: Specifies the tool to use for UMI deduplication - available options are 'umitools'
+    and 'umicollapse'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - umitools
+  - umicollapse
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: string
+    default: umitools
+    description: Specifies the tool to use for UMI deduplication - available options are 'umitools'
+      and 'umicollapse'.
+    fa_icon: fas fa-barcode
+    enum: *id001
+- group_id: umi_options
+  name: umi_discard_read
+  source_name: umi_discard_read
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: After UMI barcode extraction discard either R1 or R2 by setting this parameter to 1
+    or 2, respectively.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: integer
+    fa_icon: fas fa-barcode
+    description: After UMI barcode extraction discard either R1 or R2 by setting this parameter to
+      1 or 2, respectively.
+- group_id: umi_options
+  name: umitools_bc_pattern
+  source_name: umitools_bc_pattern
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: The UMI barcode pattern to use e.g. 'NNNNNN' indicates that the first 6 nucleotides
+    of the read are from the UMI.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: string
+    fa_icon: fas fa-barcode
+    help_text: More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).
+    description: The UMI barcode pattern to use e.g. 'NNNNNN' indicates that the first 6 nucleotides
+      of the read are from the UMI.
+- group_id: umi_options
+  name: umitools_bc_pattern2
+  source_name: umitools_bc_pattern2
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: The UMI barcode pattern to use if the UMI is located in read 2.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: string
+    fa_icon: fas fa-barcode
+    description: The UMI barcode pattern to use if the UMI is located in read 2.
+- group_id: umi_options
+  name: umitools_dedup_primary_only
+  source_name: umitools_dedup_primary_only
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Filter to primary alignments before UMI-tools dedup.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: boolean
+    default: true
+    fa_icon: fas fa-filter
+    description: Filter to primary alignments before UMI-tools dedup.
+    help_text: When enabled, secondary and supplementary alignments (SAM flag 0x900) are removed before
+      running UMI-tools dedup. This ensures dedup statistics reflect only primary alignments and are
+      consistent with the rest of the QC flow (raw reads > trimmed > non-rRNA > aligned > deduplicated).
+- group_id: umi_options
+  name: umitools_dedup_stats
+  source_name: umitools_dedup_stats
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Generate output stats when running "umi_tools dedup".
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-barcode
+    help_text: It can be quite time consuming generating these output stats - see [#827](https://github.com/nf-core/rnaseq/issues/827).
+    description: Generate output stats when running "umi_tools dedup".
+- group_id: umi_options
+  name: umitools_extract_method
+  source_name: umitools_extract_method
+  type: string
+  required: false
+  default: string
+  enum: null
+  description: UMI pattern to use. Can be either 'string' (default) or 'regex'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - string
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: string
+    default: string
+    fa_icon: fas fa-barcode
+    description: UMI pattern to use. Can be either 'string' (default) or 'regex'.
+    help_text: 'More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).
+
+      '
+- group_id: umi_options
+  name: umitools_grouping_method
+  source_name: umitools_grouping_method
+  type: string
+  required: false
+  default: directional
+  enum: &id002
+  - unique
+  - percentile
+  - cluster
+  - adjacency
+  - directional
+  description: Method to use to determine read groups by subsuming those with similar UMIs. All methods
+    start by identifying the reads with the same mapping position, but treat similar yet nonidentical
+    UMIs differently.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - unique
+  - percentile
+  - cluster
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: string
+    default: directional
+    fa_icon: far fa-object-ungroup
+    description: Method to use to determine read groups by subsuming those with similar UMIs. All
+      methods start by identifying the reads with the same mapping position, but treat similar yet
+      nonidentical UMIs differently.
+    enum: *id002
+- group_id: umi_options
+  name: umitools_umi_separator
+  source_name: umitools_umi_separator
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: The character that separates the UMI in the read name. Most likely a colon if you skipped
+    the extraction with UMI-tools and used other software.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: string
+    fa_icon: fas fa-star-half-alt
+    description: The character that separates the UMI in the read name. Most likely a colon if you
+      skipped the extraction with UMI-tools and used other software.
+- group_id: umi_options
+  name: with_umi
+  source_name: with_umi
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable UMI extraction and UMI-based read deduplication for all samples unless overridden
+    by the optional `with_umi` samplesheet column.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: UMI options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-barcode
+    description: Enable UMI extraction and UMI-based read deduplication for all samples unless overridden
+      by the optional `with_umi` samplesheet column.

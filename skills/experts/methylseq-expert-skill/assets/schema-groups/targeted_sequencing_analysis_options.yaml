@@ -1,0 +1,68 @@
+group:
+  id: targeted_sequencing_analysis_options
+  label: Targeted Sequencing Analysis Options
+  selection_rule: Use this group for parameters defined under the `Targeted Sequencing
+    Analysis Options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/targeted_sequencing_analysis_options.md
+  - assets/schema-groups/targeted_sequencing_analysis_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `targeted_sequencing_analysis_options` for exact lookup.
+parameters:
+- group_id: targeted_sequencing_analysis_options
+  name: collecthsmetrics
+  source_name: collecthsmetrics
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run Picard CollectHsMetrics in the targeted analysis
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Targeted Sequencing Analysis Options
+  raw_schema:
+    type: boolean
+    description: Run Picard CollectHsMetrics in the targeted analysis
+    help_text: Instructs the pipeline to run `picard CollectHsMetrics` with the target
+      regions BED on the BAM files to estimate several enrichment metrics
+    fa_icon: fas fa-fast-forward
+- group_id: targeted_sequencing_analysis_options
+  name: target_regions_file
+  source_name: target_regions_file
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: A BED file containing the target regions
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/target_regions_file.bed
+  example_values:
+  - <server_input_root>/target_regions_file.bed
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Targeted Sequencing Analysis Options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+|\.bed(\.gz)?$
+    description: A BED file containing the target regions
+    help_text: This file will be used for filtering the bedGraph file with the methylation
+      results
+    fa_icon: fas fa-file

@@ -1,0 +1,263 @@
+group:
+  id: optional_outputs
+  label: Optional outputs
+  selection_rule: Use this group for parameters defined under the `Optional outputs`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/optional_outputs.md
+  - assets/schema-groups/optional_outputs.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `optional_outputs` for exact lookup.
+parameters:
+- group_id: optional_outputs
+  name: save_align_intermeds
+  source_name: save_align_intermeds
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the intermediate BAM files from the alignment step.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_align_intermeds
+  example_values:
+  - <server_output_root>/save_align_intermeds
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    description: Save the intermediate BAM files from the alignment step.
+    help_text: By default, only final filtered BAM files are saved to conserve storage.
+      Enable this option to also save intermediate BAM files from the alignment process.
+    fa_icon: fas fa-save
+- group_id: optional_outputs
+  name: save_bbsplit_reads
+  source_name: save_bbsplit_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If this option is specified, FastQ files split by reference will be
+    saved in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_bbsplit_reads
+  example_values:
+  - <server_output_root>/save_bbsplit_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: If this option is specified, FastQ files split by reference will
+      be saved in the results directory.
+- group_id: optional_outputs
+  name: save_kraken_assignments
+  source_name: save_kraken_assignments
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save read-by-read assignments from Kraken2.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_kraken_assignments
+  example_values:
+  - <server_output_root>/save_kraken_assignments
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: Save read-by-read assignments from Kraken2.
+    help_text: The `--kraken_db` parameter must be provided to use this option.
+- group_id: optional_outputs
+  name: save_kraken_unassigned
+  source_name: save_kraken_unassigned
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save reads that were not given assignment from Kraken2.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_kraken_unassigned
+  example_values:
+  - <server_output_root>/save_kraken_unassigned
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: Save reads that were not given assignment from Kraken2.
+    help_text: The `--kraken_db` parameter must be provided to use this option.
+- group_id: optional_outputs
+  name: save_merged_fastq
+  source_name: save_merged_fastq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save FastQ files after merging re-sequenced libraries in the results
+    directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_merged_fastq
+  example_values:
+  - <server_output_root>/save_merged_fastq
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: Save FastQ files after merging re-sequenced libraries in the results
+      directory.
+- group_id: optional_outputs
+  name: save_non_ribo_reads
+  source_name: save_non_ribo_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If this option is specified, intermediate FastQ files containing non-rRNA
+    reads will be saved in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_non_ribo_reads
+  example_values:
+  - <server_output_root>/save_non_ribo_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: If this option is specified, intermediate FastQ files containing
+      non-rRNA reads will be saved in the results directory.
+- group_id: optional_outputs
+  name: save_reference
+  source_name: save_reference
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If generated by the pipeline save the STAR index in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_reference
+  example_values:
+  - <server_output_root>/save_reference
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    description: If generated by the pipeline save the STAR index in the results directory.
+    help_text: If the pipeline generates an alignment index, use this parameter to
+      save it to your results folder for future pipeline runs, reducing processing
+      time.
+    fa_icon: fas fa-save
+- group_id: optional_outputs
+  name: save_trimmed
+  source_name: save_trimmed
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the trimmed FastQ files in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_trimmed
+  example_values:
+  - <server_output_root>/save_trimmed
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    description: Save the trimmed FastQ files in the results directory.
+    help_text: By default, trimmed FastQ files are not saved. Enable this option to
+      copy these files to the results directory.
+    fa_icon: fas fa-save
+- group_id: optional_outputs
+  name: save_umi_intermeds
+  source_name: save_umi_intermeds
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If this option is specified, intermediate FastQ and BAM files produced
+    by UMI-tools are also saved in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_umi_intermeds
+  example_values:
+  - <server_output_root>/save_umi_intermeds
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: If this option is specified, intermediate FastQ and BAM files produced
+      by UMI-tools are also saved in the results directory.
+- group_id: optional_outputs
+  name: save_unaligned
+  source_name: save_unaligned
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Where possible, save unaligned reads from either STAR, HISAT2 or Salmon
+    to the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/save_unaligned
+  example_values:
+  - <server_output_root>/save_unaligned
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Optional outputs
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: Where possible, save unaligned reads from either STAR, HISAT2 or
+      Salmon to the results directory.
+    help_text: Output may be in FastQ or BAM format depending on the options available
+      for the specific alignment tool used.

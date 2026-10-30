@@ -1,0 +1,154 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: nanoseq
+case_id: smoke
+description: >-
+  Minimal end-to-end MCP smoke test for nanoseq using the upstream DNA
+  demultiplexing plus minimap2 alignment route.
+mode: profile-only
+
+source_profile:
+  profile: test
+  config: conf/test.config
+  source_files:
+    - nextflow.config
+    - conf/test.config
+  rationale: >-
+    `nextflow.config` exposes the canonical `test` profile through
+    `conf/test.config`, and that route keeps the normal DNA demultiplexing,
+    QC, and minimap2 alignment path on a small upstream dataset without
+    needing any nf-test harness files.
+
+classification:
+  primary_mode: profile-only
+  modifiers:
+    - localize-remote-inputs
+  evidence:
+    - >-
+      `nextflow.config` includes `conf/test.config` under the `test` profile,
+      so the lightweight route is fully visible in the normal runtime config
+      chain.
+    - >-
+      `conf/test.config` sets concrete remote values for `input` and
+      `input_path`, keeps `protocol=DNA`, enables demultiplexing with
+      `barcode_kit=NBD103/NBD104`, and disables quantification, bigwig,
+      bigbed, fusion, and modification branches to keep the route small.
+    - >-
+      The upstream `3.0` samplesheet referenced by `conf/test.config` embeds a
+      remote FASTA URL in the `fasta` column, so localization must rewrite the
+      manifest before the run.
+    - >-
+      The selected samplesheet uses a direct FASTA URL rather than an igenomes
+      key, so this route does not depend on server-side igenomes resolution.
+    - >-
+      The vendored nanoseq checkout does not expose top-level `tests/*.nf.test`
+      or `.snap` files, so artifact assertions should stay minimal and
+      source-backed.
+  next_action: localize inputs first
+
+local_data_contract:
+  profile_name: test
+  localized_root: /data/nextmcp/testdata/nanoseq/test
+  path_layout_rule: prefix_map_pipeline_testdata_and_rewrite_samplesheet
+  rewritten_manifests:
+    - role: input_samplesheet
+      original_name: samplesheet_nobc_dx.csv
+      localized_name: samplesheet_nobc_dx_local.csv
+      expected_path: /data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv
+
+launch:
+  pipeline: nanoseq
+  project: pipeline-support-nanoseq
+  run_name: smoke
+  params:
+    input: /data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv
+    input_path: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+    protocol: DNA
+    aligner: minimap2
+    barcode_kit: NBD103/NBD104
+    skip_quantification: true
+    skip_bigwig: true
+    skip_bigbed: true
+    skip_fusion_analysis: true
+    skip_modification_analysis: true
+  config_files:
+    - /data/nextmcp/testdata/nanoseq/test/project-files/pipeline-support-nanoseq/max_resources.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/nanoseq/test/project-files/pipeline-support-nanoseq/max_resources.config
+      purpose: Keep max_cpus, max_memory, and max_time in Nextflow config scope for the smoke run.
+      content: |
+        params.max_cpus = 2
+        params.max_memory = '6.GB'
+        params.max_time = '12.h'
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - Start with `nextflow_run(prepare=true)` before the real launch.
+    - Omit `profile` and rely on explicit params plus one small override config.
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    required_paths:
+      - /data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv
+      - /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+      - /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/reference/hg19_KCMF1.fa
+  run:
+    ok: true
+    final_status: succeeded
+  observability:
+    process_get_status: succeeded
+    required_log_streams:
+      - nextflow
+  artifacts:
+    required_paths:
+      - qcat/fastq/barcode06.fastq.gz
+      - qcat/fastq/barcode12.fastq.gz
+      - fastqc
+      - nanoplot
+      - minimap2/sample_R1.sorted.bam
+      - minimap2/sample_R2.sorted.bam
+      - minimap2/samtools_stats
+      - multiqc/minimap2/multiqc_report.html
+      - pipeline_info/software_versions.yml
+
+prompt_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `nanoseq` lightweight example in project
+  `pipeline-withskill-nanoseq`. Use the rewritten samplesheet, the local
+  nondemultiplexed FASTQ, and the server-local reference FASTA copied from the
+  upstream example. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv`
+  - Nondemultiplexed FASTQ: `/data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz`
+  - Reference FASTA: `/data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/reference/hg19_KCMF1.fa`
+  
+  ## Workflow goal
+  
+  - Run the DNA Nanopore route represented by the rewritten samplesheet.
+  - Start from the nondemultiplexed FASTQ and keep the demultiplexing step active with barcode kit
+    `NBD103/NBD104`.
+  - Keep the two sample replicates represented by samplesheet barcodes 6 and 12.
+  - Align with the default minimap2 path after demultiplexing.
+  - Skip quantification, genome-browser track generation, fusion analysis, and modification analysis
+    branches that are outside this small DNA demultiplexing and alignment test.
+  - Keep the upstream test resource caps at 2 CPUs, 6.GB memory, and 12.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/nanoseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-nanoseq` as project name.
+  - Do not use the `nanoseq` expert skill.
+prompt_brief_path: tests/pipeline_support/nanoseq/smoke.task.md
+blockers: []

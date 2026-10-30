@@ -1,0 +1,443 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: rnafusion
+case_id: smoke
+profile_name: test_build
+localized_root: /data/nextmcp/testdata/rnafusion/test_build
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/
+    localized_prefix: /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/
+  - remote_prefix: https://github.com/nf-core/test-datasets/raw/
+    localized_prefix: /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/rnafusion
+  config: conf/test_build.config
+  resolved_runtime_chain:
+    selected_profile: test_build
+    selected_test_case: tests/test_build.nf.test::Test build references
+    selected_route: reference_build_only
+    reason_for_not_using_test_profile: >-
+      The top-level `test` route is only exercised upstream through
+      `tests/test_stub.nf.test` with `-stub` and a placeholder
+      `fusioncatcher_ref`, so `test_build` is the smallest top-level non-stub
+      route.
+  resolved_params:
+    input: >-
+      /data/nextmcp/testdata/rnafusion/test_build/rewrites/repo-assets/tests/csv/fastq_local.csv
+    genomes_base: ${params.outdir}/references
+    tools: arriba,starfusion,fusionreport,salmon,fusioninspector
+    references_only: true
+    no_cosmic: true
+    genome: GRCh38
+    genome_gencode_version: 46
+    species: homo_sapiens
+    fasta: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.fa
+    gtf: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.gtf
+    fusion_annot_lib: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/CTAT_HumanFusionLib.mini.dat.gz
+    dfam_hmm: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm
+    dfam_h3f: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3f
+    dfam_h3i: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3i
+    dfam_h3m: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3m
+    dfam_h3p: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3p
+    pfam_file: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/Pfam-A.hmm.gz
+    arriba_ref_protein_domains: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/protein_domains_hg38_GRCh38_v2.5.0.gff3
+    arriba_ref_known_fusions: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/known_fusions_hg38_GRCh38_v2.5.0.tsv.gz
+    arriba_ref_blacklist: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/blacklist_hg38_GRCh38_v2.5.0.tsv.gz
+    arriba_ref_cytobands: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/cytobands_hg38_GRCh38_v2.5.0.tsv
+    fusionreport_ref: /data/nextmcp/testdata/rnafusion/test_build/inputs/fusion_report_db
+
+runtime_hints:
+  launch_rule: >-
+    Build the smoke contract from `nextflow.config` plus
+    `conf/test_build.config`, copy the repo samplesheet, rewrite its nested
+    FASTQ URLs to the current localized bundle, localize the explicit small
+    reference URLs, keep the dynamic `genomes_base` setting, the upstream
+    resource caps, and the upstream nf-test `STARFUSION_BUILD ext.args=''`
+    override in one small override config, keep `HGNC_DOWNLOAD` active by
+    omitting `hgnc_ref` plus `hgnc_date`, and reuse the local FusionReport
+    database through `fusionreport_ref`.
+  manifest_rule: >-
+    Copy the repo `fastq.csv` into the current localized root, then rewrite the
+    nested FASTQ URLs to server-local paths under the same bundle. The current
+    workspace already has those FASTQ files under the mapped `pipeline-data`
+    tree, so localization should reuse them instead of downloading fresh copies.
+  artifact_rule: >-
+    Keep assertions focused on one salmon index file, one STAR genome file, one
+    STAR-Fusion anchor file, one HGNC file, and the software versions output
+    derived from `tests/test_build.nf.test.snap` plus `tests/.nftignore`.
+  environment_rule: >-
+    The runtime still needs pipeline-side network access for `HGNC_DOWNLOAD`.
+    FusionReport is satisfied from the localized database bundle.
+
+local_file_inventory:
+  - role: input_samplesheet_template
+    config_field: input
+    source_path: /root/key_projects/nextmcp/nf_pipeline/rnafusion/tests/csv/fastq.csv
+    localized_path: /data/nextmcp/testdata/rnafusion/test_build/repo-assets/tests/csv/fastq.csv
+
+generated_file_inventory:
+  - role: fusionreport_ref
+    source_requirement: >-
+      Reuse an existing local `fusion_report_db` directory, copy one supplied
+      with `--fusionreport-db`, or build it with `fusion_report download --no-cosmic`.
+    localized_path: /data/nextmcp/testdata/rnafusion/test_build/inputs/fusion_report_db
+
+config_override_files:
+  - path: >-
+      /data/nextmcp/testdata/rnafusion/test_build/project-files/pipeline-support-rnafusion/profile_test_build_overrides.config
+    source_fields:
+      - params.genomes_base
+      - process.resourceLimits.cpus
+      - process.resourceLimits.memory
+      - process.resourceLimits.time
+      - process.withName:STARFUSION_BUILD.ext.args
+    purpose: >-
+      Keep the dynamic `genomes_base` value, the upstream test resource caps,
+      and the upstream nf-test `STARFUSION_BUILD ext.args=''` override in
+      Nextflow config scope instead of nextflow_run params.
+    content: |
+      params {
+          genomes_base = "${params.outdir}/references"
+      }
+
+      process {
+          resourceLimits = [
+              cpus: 4,
+              memory: '15.GB',
+              time: '1.h'
+          ]
+
+          withName: 'STARFUSION_BUILD' {
+              ext.args = ''
+          }
+      }
+
+url_inventory:
+  - role: fastq_read_1
+    config_field: input.samplesheet[].fastq_1
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human/reads_1.fq.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human/reads_1.fq.gz
+  - role: fastq_read_2
+    config_field: input.samplesheet[].fastq_2
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human/reads_2.fq.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human/reads_2.fq.gz
+  - role: minigenome_fasta
+    config_field: fasta
+    original_value: https://github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.fa
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.fa
+  - role: minigenome_gtf
+    config_field: gtf
+    original_value: https://github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.gtf
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.gtf
+  - role: fusion_annot_lib
+    config_field: fusion_annot_lib
+    original_value: >-
+      https://github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/CTAT_HumanFusionLib.mini.dat.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/CTAT_HumanFusionLib.mini.dat.gz
+  - role: dfam_hmm
+    config_field: dfam_hmm
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm
+  - role: dfam_h3f
+    config_field: dfam_h3f
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3f
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3f
+  - role: dfam_h3i
+    config_field: dfam_h3i
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3i
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3i
+  - role: dfam_h3m
+    config_field: dfam_h3m
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3m
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3m
+  - role: dfam_h3p
+    config_field: dfam_h3p
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3p
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3p
+  - role: pfam_file
+    config_field: pfam_file
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/Pfam-A.hmm.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/Pfam-A.hmm.gz
+  - role: arriba_ref_blacklist
+    config_field: arriba_ref_blacklist
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/blacklist_hg38_GRCh38_v2.5.0.tsv.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/blacklist_hg38_GRCh38_v2.5.0.tsv.gz
+  - role: arriba_ref_cytobands
+    config_field: arriba_ref_cytobands
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/cytobands_hg38_GRCh38_v2.5.0.tsv
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/cytobands_hg38_GRCh38_v2.5.0.tsv
+  - role: arriba_ref_known_fusions
+    config_field: arriba_ref_known_fusions
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/known_fusions_hg38_GRCh38_v2.5.0.tsv.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/known_fusions_hg38_GRCh38_v2.5.0.tsv.gz
+  - role: arriba_ref_protein_domains
+    config_field: arriba_ref_protein_domains
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/protein_domains_hg38_GRCh38_v2.5.0.gff3
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/protein_domains_hg38_GRCh38_v2.5.0.gff3
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/rnafusion/test_build/repo-assets/tests/csv/fastq.csv
+    localized_path: >-
+      /data/nextmcp/testdata/rnafusion/test_build/rewrites/repo-assets/tests/csv/fastq_local.csv
+    rewritten_columns:
+      - fastq_1
+      - fastq_2
+    localized_rows:
+      - sample: test
+        fastq_1: >-
+          /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human/reads_1.fq.gz
+        fastq_2: >-
+          /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human/reads_2.fq.gz
+        strandedness: forward
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: ${projectDir}/tests/csv/fastq.csv
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/rewrites/repo-assets/tests/csv/fastq_local.csv
+  - config_field: references_only
+    official_param: references_only
+    original_value: true
+    localized_value: true
+  - config_field: tools
+    official_param: tools
+    original_value: arriba,starfusion,fusionreport,salmon,fusioninspector
+    localized_value: arriba,starfusion,fusionreport,salmon,fusioninspector
+  - config_field: no_cosmic
+    official_param: no_cosmic
+    original_value: true
+    localized_value: true
+  - config_field: genome
+    official_param: genome
+    original_value: GRCh38
+    localized_value: GRCh38
+  - config_field: genome_gencode_version
+    official_param: genome_gencode_version
+    original_value: 46
+    localized_value: 46
+  - config_field: species
+    official_param: species
+    original_value: homo_sapiens
+    localized_value: homo_sapiens
+  - config_field: fasta
+    official_param: fasta
+    original_value: https://github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.fa
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.fa
+  - config_field: gtf
+    official_param: gtf
+    original_value: https://github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.gtf
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.gtf
+  - config_field: fusion_annot_lib
+    official_param: fusion_annot_lib
+    original_value: >-
+      https://github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/CTAT_HumanFusionLib.mini.dat.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/CTAT_HumanFusionLib.mini.dat.gz
+  - config_field: dfam_hmm
+    official_param: dfam_hmm
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm
+  - config_field: dfam_h3f
+    official_param: dfam_h3f
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3f
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3f
+  - config_field: dfam_h3i
+    official_param: dfam_h3i
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3i
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3i
+  - config_field: dfam_h3m
+    official_param: dfam_h3m
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3m
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3m
+  - config_field: dfam_h3p
+    official_param: dfam_h3p
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3p
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3p
+  - config_field: pfam_file
+    official_param: pfam_file
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/human/Pfam-A.hmm.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/Pfam-A.hmm.gz
+  - config_field: arriba_ref_protein_domains
+    official_param: arriba_ref_protein_domains
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/protein_domains_hg38_GRCh38_v2.5.0.gff3
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/protein_domains_hg38_GRCh38_v2.5.0.gff3
+  - config_field: arriba_ref_known_fusions
+    official_param: arriba_ref_known_fusions
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/known_fusions_hg38_GRCh38_v2.5.0.tsv.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/known_fusions_hg38_GRCh38_v2.5.0.tsv.gz
+  - config_field: arriba_ref_blacklist
+    official_param: arriba_ref_blacklist
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/blacklist_hg38_GRCh38_v2.5.0.tsv.gz
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/blacklist_hg38_GRCh38_v2.5.0.tsv.gz
+  - config_field: arriba_ref_cytobands
+    official_param: arriba_ref_cytobands
+    original_value: >-
+      https://github.com/nf-core/test-datasets/raw/refs/heads/rnafusion/testdata/reference/arriba/cytobands_hg38_GRCh38_v2.5.0.tsv
+    localized_value: >-
+      /data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/cytobands_hg38_GRCh38_v2.5.0.tsv
+  - config_field: fusionreport_ref
+    official_param: fusionreport_ref
+    original_value: generated by FUSIONREPORT_DOWNLOAD
+    localized_value: /data/nextmcp/testdata/rnafusion/test_build/inputs/fusion_report_db
+  - config_field: process.resourceLimits
+    official_param: null
+    original_value: "{cpus: 4, memory: 15.GB, time: 1.h}"
+    localized_value: Execution note only. Keep in config_files, not in nextflow_run params.
+  - config_field: params.genomes_base
+    official_param: null
+    original_value: ${params.outdir}/references
+    localized_value: Execution note only. Keep in config_files as `${params.outdir}/references`.
+
+ignored_upstream_params:
+  - config_field: nextflow.config:params.input
+    reason: The default repo samplesheet path is replaced by a copied and rewritten local manifest under the current localized root.
+  - config_field: nextflow.config:params.genomes_base
+    reason: The default S3 reference root is replaced by a local override that tracks `${params.outdir}/references`.
+  - config_field: nextflow.config:params.fusioncatcher_ref
+    reason: The selected route does not include `fusioncatcher`.
+  - config_field: tests/nextflow.config:params.modules_testdata_base_path
+    reason: nf-test module base paths are not needed for the selected pipeline-level route.
+  - config_field: tests/nextflow.config:params.pipelines_testdata_base_path
+    reason: The branch-pinned nf-test base path is not needed once the contract localizes the selected explicit reference URLs and FASTQ paths under the current localized root.
+  - config_field: tests/nextflow.config:params.dfam_hmm
+    reason: The selected route already carries direct values in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.dfam_h3f
+    reason: The selected route already carries direct values in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.dfam_h3i
+    reason: The selected route already carries direct values in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.dfam_h3m
+    reason: The selected route already carries direct values in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.dfam_h3p
+    reason: The selected route already carries direct values in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.pfam_file
+    reason: The selected route already carries a direct value in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.arriba_ref_blacklist
+    reason: The selected route already carries direct GitHub-hosted Arriba support files in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.arriba_ref_cytobands
+    reason: The selected route already carries direct GitHub-hosted Arriba support files in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.arriba_ref_known_fusions
+    reason: The selected route already carries direct GitHub-hosted Arriba support files in `conf/test_build.config`.
+  - config_field: tests/nextflow.config:params.arriba_ref_protein_domains
+    reason: The selected route already carries direct GitHub-hosted Arriba support files in `conf/test_build.config`.
+  - config_field: aws.client.anonymous
+    reason: No S3 access is required after localizing the selected explicit reference URLs and FASTQ paths.
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+
+natural_language_execution_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `rnafusion` reference-build lightweight example in project
+  `pipeline-withskill-rnafusion`. Use the rewritten FASTQ samplesheet and the
+  reference/support files listed below. Every path listed below already exists
+  on the nextmcp server. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/rnafusion/test_build/rewrites/repo-assets/tests/csv/fastq_local.csv`
+  - FASTQ bundle root: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/81cb45949e75cbb85cbf6c5ec9009ab45b160823/testdata/human`
+  - Minigenome FASTA: `/data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.fa`
+  - Minigenome GTF: `/data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/minigenome.gtf`
+  - Arriba protein domains: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/protein_domains_hg38_GRCh38_v2.5.0.gff3`
+  - Arriba known fusions: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/known_fusions_hg38_GRCh38_v2.5.0.tsv.gz`
+  - Arriba blacklist: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/blacklist_hg38_GRCh38_v2.5.0.tsv.gz`
+  - Arriba cytobands: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/reference/arriba/cytobands_hg38_GRCh38_v2.5.0.tsv`
+  - FusionAnnotator library: `/data/nextmcp/testdata/rnafusion/test_build/downloads/github.com/STAR-Fusion/STAR-Fusion-Tutorial/raw/master/CTAT_HumanFusionLib.mini.dat.gz`
+  - PFAM HMM: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/Pfam-A.hmm.gz`
+  - DFAM HMM: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm`
+  - DFAM H3F: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3f`
+  - DFAM H3I: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3i`
+  - DFAM H3M: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3m`
+  - DFAM H3P: `/data/nextmcp/testdata/rnafusion/test_build/pipeline-data/refs/heads/rnafusion/testdata/human/test_starfusion_dfam.hmm.h3p`
+  - FusionReport database root: `/data/nextmcp/testdata/rnafusion/test_build/inputs/fusion_report_db`
+  
+  ## Workflow goal
+  
+  - Run the reference-building route, not a sample-level fusion-calling analysis.
+  - Build the local support assets for Arriba, STAR-Fusion, FusionReport, Salmon, and FusionInspector.
+  - Use the rewritten samplesheet so pipeline initialization reads the server-local FASTQ paths already
+    recorded in that file.
+  - Use the listed minigenome FASTA/GTF and support files instead of downloading reference inputs at
+    runtime.
+  - Let the workflow create HGNC reference data during the run rather than binding pre-existing HGNC
+    files.
+  - Use the human GRCh38/gencode v46 minigenome setup with species label `homo_sapiens`, and do not
+    require COSMIC inputs.
+  - Clear any extra arguments for `STARFUSION_BUILD` so that step runs without
+    appended build flags.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/rnafusion/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-rnafusion` as project name.
+  - Do not use the `rnafusion` expert skill.

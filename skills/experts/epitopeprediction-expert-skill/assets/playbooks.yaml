@@ -1,0 +1,74 @@
+playbooks:
+  - id: standard_prediction
+    use_when: Standard epitope prediction from annotated variants, protein FASTA, or peptide TSV.
+    prerequisites:
+      - Confirm the server-local samplesheet path and every file path named inside it.
+      - Confirm samplesheet columns are sample, alleles, mhc_class, and filename.
+      - For VCF input, confirm annotation by SnpEff or VEP before launch.
+      - Choose tools from mhcflurry, mhcnuggets, mhcnuggetsii, netmhcpan, and netmhciipan. Default is mhcnuggets.
+    recommended_preset: standard_prediction
+    outputs_to_review:
+      - predictions/[sample].tsv
+      - predictor directories matching selected tools
+      - multiqc/multiqc_report.html
+      - pipeline_info/params.json
+    tool_sequence:
+      - project_list() when the project id is unknown
+      - fs_list(mode="manifest") when one server-local input or software path needs confirmation
+      - nextflow_run(prepare=true) when input paths, output paths, or restart compatibility remain uncertain
+      - nextflow_run(pipeline="epitopeprediction", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - id: netmhc_prediction
+    use_when: User requests NetMHCpan or NetMHCIIpan predictors.
+    prerequisites:
+      - Confirm tools includes netmhcpan, netmhciipan, or both.
+      - Confirm netmhcpan_path and/or netmhciipan_path points to server-local .tar.gz files.
+      - Use netmhc_system only when the server uses conda and the default linux value is wrong; ordinary container runs usually leave it at linux.
+    recommended_preset: netmhc_prediction
+    outputs_to_review:
+      - netmhcpan/[sample]_chunk_[0-9]_predicted_netmhcpan.xls
+      - netmhciipan/[sample]_chunk_[0-9]_predicted_netmhciipan.xls
+      - predictions/[sample].tsv
+      - multiqc/multiqc_report.html
+  - id: fasta_only_variant_output
+    use_when: User wants FASTA files for variant protein sequences as input to another workflow such as MHCquant.
+    prerequisites:
+      - Use VCF input annotated by Ensembl VEP as recommended by the schema help.
+      - Set fasta_output true. This route skips MHC binding prediction.
+      - Alleles and mhc_class still need syntactically valid values in the samplesheet, but they are not biologically used for prediction in this route.
+    recommended_preset: fasta_only_variant_output
+    outputs_to_review:
+      - epytope/[sample].fasta
+      - pipeline_info/params.json
+  - id: reporting_shape
+    use_when: User asks for binder-only filtering, wide-format results, or custom MultiQC text.
+    prerequisites:
+      - Use binder_only true only when downstream work should drop non-binders from final prediction tables.
+      - Use wide_format_output true when the user needs predictor and allele metrics spread across columns.
+      - Use multiqc_methods_description only with a server-local YAML file.
+    recommended_preset: reporting_shape
+    outputs_to_review:
+      - predictions/[sample].tsv
+      - multiqc/multiqc_report.html
+      - multiqc/multiqc_data/
+  - id: variant_split_optimisation
+    use_when: Large VCF input needs split_by_variants instead of the default SnpSift chromosome split.
+    prerequisites:
+      - Use only with VCF or VCF.GZ rows in the samplesheet.
+      - Set split_by_variants true and tune split_by_variants_size or split_by_variants_distance only when the user gives a concrete scaling reason.
+    recommended_preset: variant_split_optimisation
+    outputs_to_review:
+      - split_input/[sample]/
+      - epytope/[sample]_chr*.tsv
+      - predictions/[sample].tsv
+  - id: historical_reuse
+    use_when: User wants to find, inspect, or rerun a previous epitopeprediction result.
+    prerequisites:
+      - Search with a remembered artifact fragment such as predictions/, multiqc_report.html, pipeline_info/params.json, or epytope/.
+      - Treat artifacts.json and pipeline_fingerprint as historical facts, then confirm compatibility with pipeline_info/params.json.
+    recommended_preset: null
+    outputs_to_review:
+      - artifacts.json
+      - pipeline_fingerprint
+      - pipeline_info/params.json
+      - run_get(detail="full") for launch_spec and resume metadata

@@ -1,0 +1,67 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","diagnosis","artifact_summary"])
+    good_signal: Run succeeded and artifact summary lists the expected output families.
+    bad_signal: Run failed, stalled, or diagnosis reports missing inputs, missing databases, or process errors.
+    action: Use run_get(include=["progress","artifact_summary","diagnosis","next_actions"]) first, then run_logs only when summary details are insufficient.
+  - id: samplesheet_and_paths
+    severity: high
+    source: nextflow_run(prepare=true) and pipeline validation.
+    good_signal: Samplesheet columns match supplied read types and referenced files are server-local and visible.
+    bad_signal: Missing platform columns, mixed paired-end and single-end short reads, uncompressed FastQ files, or client-local paths.
+    action: Fix the server-local samplesheet or confirm paths with fs_list(mode="manifest") for one concrete path.
+  - id: database_prerequisites
+    severity: high
+    source: playbooks and parameter presets.
+    good_signal: Required BUSCO, CAT, GTDB-Tk, CheckM, CheckM2, GUNC, geNomad, MetaEuk, host, or Bowtie2 index paths are present on the server, or downloads were intentionally accepted.
+    bad_signal: Database path does not exist, large default database download starts unexpectedly, BUSCO offline lineage is missing, or MetaEuk database options conflict.
+    action: Supply server-local database paths or explicitly choose the download/generate route. Use config_files for GTDB-Tk SquashFS containerOptions.
+  - id: read_qc
+    severity: medium
+    source: multiqc/multiqc_report.html and QC_shortreads or QC_longreads.
+    good_signal: FastQC/NanoPlot and trimming reports show expected read counts and no severe adapter, host, PhiX, or Lambda carryover.
+    bad_signal: Large read loss after trimming or contamination removal, unexpected host mapping, or long-read filtering removes most reads.
+    action: Review clip_tool, skip_clipping, host_fasta, keep_phix, keep_lambda, longread_filtering_tool, and related save toggles.
+  - id: assembly_qc
+    severity: medium
+    source: Assembly/*/QC and MultiQC.
+    good_signal: Assemblies have plausible contig counts, contig lengths, mapping rates, and QUAST summaries for the input type.
+    bad_signal: Assemblies are missing, QUAST failed, ALE reports poor likelihood for short-read assemblies, or mapping rates are low.
+    action: Check assembler skip flags, coassemble_group, spades_downstreaminput, bbnorm, and resource caps.
+  - id: binning_depths
+    severity: high
+    source: GenomeBinning/depths and GenomeBinning/bin_summary.tsv.
+    good_signal: Depth tables are present and depths are non-zero for expected samples or groups.
+    bad_signal: Depths are zero or near zero, especially for older ONT data or mismatched mapping identity.
+    action: Review binning_map_mode, shortread_percentidentity, longread_percentidentity, and whether reads match assemblies.
+  - id: bin_quality
+    severity: high
+    source: GenomeBinning/QC summaries and GenomeBinning/bin_summary.tsv.
+    good_signal: BUSCO, CheckM, CheckM2, GUNC, and QUAST outputs agree that target bins have acceptable completeness and contamination for the user's use case.
+    bad_signal: High contamination, low completeness, GUNC chimerism warnings, missing QC summaries, or incompatible database outputs.
+    action: Inspect busco_summary.tsv, checkm_summary.tsv, checkm2_summary.tsv, gunc_summary.tsv, quast_summary.tsv, and bin_summary.tsv before downstream use.
+  - id: taxonomy_and_annotation
+    severity: medium
+    source: Taxonomy and Annotation outputs.
+    good_signal: GTDB-Tk, CAT, Prokka, and MetaEuk outputs exist for the expected bins and domains.
+    bad_signal: GTDB-Tk filtered or failed genomes, CAT database mismatch, Prokka missing genes, or MetaEuk database conflict.
+    action: Check Taxonomy/GTDB-Tk/gtdbtk_summary.tsv, Taxonomy/CAT/bat_summary.tsv, Annotation/Prokka, Annotation/MetaEuk, and database parameters.
+  - id: ancient_dna_reproducibility
+    severity: high
+    source: Ancient_DNA outputs and GenomeBinning/QC/pydamage_bins_summary.tsv.
+    good_signal: pyDamage outputs and optional consensus recall files are present; binning_map_mode own was used when reproducibility matters.
+    bad_signal: pyDamage outputs differ across resume or rerun with binning_map_mode group or all.
+    action: Prefer binning_map_mode own for ancient_dna unless co-binning is required.
+  - id: dastool_refinement
+    severity: medium
+    source: GenomeBinning/DASTool.
+    good_signal: DASTool summary and refined bins are present when refine_bins_dastool is true.
+    bad_signal: DASTool note says error ignored and no directory appears for a sample.
+    action: Explain that DASTool may fail to refine if bins do not pass criteria; consider lowering refine_bins_dastool_threshold if appropriate.
+  - id: bigmag_ready
+    severity: medium
+    source: GenomeBinning/BIgMAG/bigmag_summary.tsv.
+    good_signal: bigmag_summary.tsv exists after BUSCO, GUNC, CheckM2, and GTDB-Tk run.
+    bad_signal: File is missing because one required tool was skipped or lacked a database.
+    action: Confirm generate_bigmag_file, run_busco, run_gunc, run_checkm2, and skip_gtdbtk false.

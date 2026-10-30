@@ -1,0 +1,68 @@
+group:
+  id: reference_options
+  label: Reference options
+  selection_rule: Use this group for parameters defined under the `Reference options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/reference_options.md
+  - assets/schema-groups/reference_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `reference_options` for exact lookup.
+parameters:
+- group_id: reference_options
+  name: proteome_reference
+  source_name: proteome_reference
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specifies the reference proteome fasta file that is used for self-filtering
+    peptides derived from provided genomic variants.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/proteome_reference
+  example_values:
+  - <server_reference_root>/proteome_reference
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    description: Specifies the reference proteome fasta file that is used for self-filtering
+      peptides derived from provided genomic variants.
+- group_id: reference_options
+  name: genome_reference
+  source_name: genome_reference
+  type: string
+  required: false
+  default: grch37
+  enum: null
+  description: Specifies the Ensembl genome reference version that will be used.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/genome_reference
+  example_values:
+  - <server_reference_root>/genome_reference
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference options
+  raw_schema:
+    type: string
+    default: grch37
+    help_text: This defines against which human Ensembl genome reference the pipeline
+      performs the analysis including the incorporation of genetic variants. If `grch37`
+      or `grch38` are specified, the most recent Ensembl Biomart version for genome
+      versions will be used. Alternatively, an Ensembl Biomart (archive) version can
+      be specified, e.g. http://jan2020.archive.ensembl.org/.
+    description: Specifies the Ensembl genome reference version that will be used.

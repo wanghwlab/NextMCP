@@ -1,0 +1,167 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: epitopeprediction
+case_id: smoke
+description: >-
+  Minimal end-to-end MCP smoke test for epitopeprediction using the upstream
+  peptide-list route with the default MHCnuggets predictor.
+mode: profile-plus-tests-config
+
+source_profile:
+  profile: test_peptides
+  config: conf/test_peptides.config
+  shared_test_config: tests/nextflow.config
+  source_files:
+    - nextflow.config
+    - conf/test_peptides.config
+    - tests/nextflow.config
+    - tests/peptides.nf.test
+    - tests/peptides.nf.test.snap
+    - tests/.nftignore
+  rationale: >-
+    `nextflow.config` exposes `conf/test_peptides.config` under the
+    `test_peptides` profile, but the concrete upstream samplesheet URL only
+    resolves through the branch-pinned `pipelines_testdata_base_path` in
+    `tests/nextflow.config`. The selected `tests/peptides.nf.test` case keeps
+    the normal peptide input route and only adds the temporary nf-test
+    `outdir`.
+
+classification:
+  primary_mode: profile-plus-tests-config
+  modifiers:
+    - localize-remote-inputs
+    - snapshot-rich
+  evidence:
+    - >-
+      `nextflow.config` includes `conf/test_peptides.config` under the
+      `test_peptides` profile, so the canonical lightweight route still comes
+      from the normal runtime config chain.
+    - >-
+      `conf/test_peptides.config` fixes the route to the small peptide-list
+      samplesheet plus `tools=mhcnuggets`,
+      `min_peptide_length_classI=9`, and
+      `max_peptide_length_classI=10`.
+    - >-
+      `tests/nextflow.config` provides the branch-pinned
+      `pipelines_testdata_base_path=https://raw.githubusercontent.com/nf-core/test-datasets/epitopeprediction/`
+      value that makes the upstream samplesheet URL concrete for this
+      repository snapshot.
+    - >-
+      The upstream samplesheet contains nested remote URLs in both the
+      `alleles` and `filename` columns, so localization must rewrite that
+      manifest before launch.
+    - >-
+      `tests/peptides.nf.test.snap` and `tests/.nftignore` provide stable
+      output evidence for one compact assertion set.
+  next_action: localize inputs first
+
+local_data_contract:
+  profile_name: test_peptides
+  localized_root: /data/nextmcp/testdata/epitopeprediction/test_peptides
+  path_layout_rule: >-
+    prefix_map_branch_pinned_testdatasets_and_rewrite_csv_samplesheet
+  rewritten_manifests:
+    - role: input_samplesheet
+      original_name: sample_sheet_peptides.csv
+      localized_name: sample_sheet_peptides_local.csv
+      expected_path: /data/nextmcp/testdata/epitopeprediction/test_peptides/rewrites/pipeline-data/testdata/sample_sheets/sample_sheet_peptides_local.csv
+
+launch:
+  pipeline: epitopeprediction
+  project: pipeline-support-epitopeprediction
+  run_name: smoke
+  inputs:
+    input: /data/nextmcp/testdata/epitopeprediction/test_peptides/rewrites/pipeline-data/testdata/sample_sheets/sample_sheet_peptides_local.csv
+  params:
+    tools: mhcnuggets
+    min_peptide_length_classI: 9
+    max_peptide_length_classI: 10
+  config_files:
+    - /data/nextmcp/testdata/epitopeprediction/test_peptides/project-files/pipeline-support-epitopeprediction/profile_test_overrides.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/epitopeprediction/test_peptides/project-files/pipeline-support-epitopeprediction/profile_test_overrides.config
+      content: |
+        process {
+            resourceLimits = [
+                cpus: 2,
+                memory: '6.GB',
+                time: '48.h'
+            ]
+        }
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - Start with `nextflow_run(prepare=true)` before the real launch.
+    - Omit `profile` and rely on the localized inputs, explicit scalar params, and one small override config.
+    - Keep the upstream `process.resourceLimits` in config scope instead of nextflow_run params.
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    required_paths:
+      - /data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/sample_sheets/sample_sheet_peptides.csv
+      - /data/nextmcp/testdata/epitopeprediction/test_peptides/rewrites/pipeline-data/testdata/sample_sheets/sample_sheet_peptides_local.csv
+      - /data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/alleles/alleles.txt
+      - /data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/alleles/alleles.H2.txt
+      - /data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/peptides/peptides.tsv
+      - /data/nextmcp/testdata/epitopeprediction/test_peptides/project-files/pipeline-support-epitopeprediction/profile_test_overrides.config
+  run:
+    ok: true
+    final_status: succeeded
+  observability:
+    process_get_status: succeeded
+    required_log_streams:
+      - nextflow
+  artifacts:
+    required_paths:
+      - mhcnuggets/sample1_peptides_chunk_0_predicted_mhcnuggets.csv
+      - mhcnuggets/sample2_peptides_chunk_0_predicted_mhcnuggets.csv
+      - multiqc/multiqc_report.html
+      - multiqc/multiqc_data/multiqc_peptide_binding_prediction_stats.txt
+      - pipeline_info/nf_core_epitopeprediction_software_mqc_versions.yml
+      - predictions/sample1.tsv
+      - predictions/sample2.tsv
+    content_checks:
+      - path: multiqc/multiqc_data/multiqc_peptide_binding_prediction_stats.txt
+        kind: md5
+        expected: 42808c04f5fba461be38c84cc6427b2a
+
+prompt_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `epitopeprediction` lightweight example in project
+  `pipeline-withskill-epitopeprediction`. Use the rewritten samplesheet that points
+  to two allele files and one shared peptide TSV. Every path listed below already
+  exists on the nextmcp server. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/epitopeprediction/test_peptides/rewrites/pipeline-data/testdata/sample_sheets/sample_sheet_peptides_local.csv`
+  - Human alleles file: `/data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/alleles/alleles.txt`
+  - Mouse alleles file: `/data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/alleles/alleles.H2.txt`
+  - Shared peptide file: `/data/nextmcp/testdata/epitopeprediction/test_peptides/pipeline-data/testdata/peptides/peptides.tsv`
+  
+  ## Workflow goal
+  
+  - Run the peptide-to-binding-prediction route represented by the rewritten samplesheet.
+  - Keep the two-sample layout in which the human sample uses the human allele file and the mouse
+    sample uses the mouse allele file.
+  - Use the shared peptide TSV for both samples.
+  - Use the MHCnuggets class I prediction path for short class I peptides of 9 to 10 amino acids.
+  - Keep the upstream test resource caps at 2 CPUs, 6.GB memory, and 48.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/epitopeprediction/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-epitopeprediction` as project name.
+  - Do not use the `epitopeprediction` expert skill.
+prompt_brief_path: tests/pipeline_support/epitopeprediction/smoke.task.md
+blockers: []

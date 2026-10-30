@@ -1,0 +1,197 @@
+presets:
+  standard_riboseq:
+    use_when: Standard FASTQ-to-results Ribo-seq or TI-seq run with explicit FASTA/GTF references.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/riboseq
+      fasta: <server_reference_root>/genome.fa.gz
+      gtf: <server_reference_root>/genes.gtf.gz
+      aligner: star
+    placeholders:
+      input: Server-local samplesheet with sample, fastq_1, fastq_2, strandedness, type.
+      outdir: Server-local publish directory.
+      fasta: Server-local genome FASTA unless genome is used.
+      gtf: Server-local GTF unless genome is used.
+    route_shaping:
+    - input
+    - outdir
+    - genome
+    - fasta
+    - gtf
+    - gencode
+    - aligner
+    - trimmer
+    - salmon_quant_libtype
+    - bam_csi_index
+    lookup_groups:
+    - input_output_options
+    - reference_genome_options
+    - alignment_options
+    - read_trimming_options
+  translational_efficiency:
+    use_when: Matched Ribo-seq and RNA-seq samples need anota2seq analysis.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      contrasts: <server_input_root>/contrasts.csv
+      outdir: <server_output_root>/riboseq_te
+      fasta: <server_reference_root>/genome.fa.gz
+      gtf: <server_reference_root>/genes.gtf.gz
+      aligner: star
+    placeholders:
+      contrasts: CSV with id, variable, reference, target, optional batch, and optional pair.
+      samplesheet: Include both riboseq and rnaseq rows; include grouping columns referenced by contrasts.
+    lookup_groups:
+    - input_output_options
+    - riboseq_specific_options
+  umi_aware:
+    use_when: UMIs are present and PCR duplicate-aware analysis is needed.
+    params:
+      with_umi: true
+      umi_dedup_tool: umitools
+    variants:
+      umi_in_read_name:
+        params:
+          with_umi: true
+          skip_umi_extract: true
+          umitools_umi_separator: ':'
+      umi_in_sequence_regex:
+        params:
+          with_umi: true
+          umitools_extract_method: regex
+          umitools_bc_pattern: <source-backed-regex>
+    lookup_groups:
+    - umi_options
+    - optional_outputs
+  rrna_filtering:
+    use_when: Remove rRNA reads with SortMeRNA before alignment.
+    params:
+      remove_ribo_rna: true
+      ribo_removal_tool: sortmerna
+      ribo_database_manifest: <server_reference_root>/rrna-db-manifest.txt
+    placeholders:
+      ribo_database_manifest: Text file with server-local FASTA paths, one per line.
+      sortmerna_index: Optional pre-built SortMeRNA index directory or tar.gz on the server.
+    prerequisites:
+    - Commercial or non-academic use of the default SILVA databases may require a license check.
+    lookup_groups:
+    - read_filtering_options
+    - optional_outputs
+  contamination_screening:
+    use_when: Split reads against contaminant references with BBSplit.
+    params:
+      skip_bbsplit: false
+      bbsplit_fasta_list: <server_reference_root>/bbsplit-fasta-list.csv
+    placeholders:
+      bbsplit_fasta_list: CSV-like list with short name and full server-local FASTA path.
+      bbsplit_index: Optional pre-built BBSplit index directory or tar.gz on the server.
+    optional_params:
+      save_bbsplit_reads: Save split FASTQ files when user needs contaminant-specific read sets.
+      save_reference: Save a newly generated BBSplit index for reuse.
+    lookup_groups:
+    - read_filtering_options
+    - optional_outputs
+  reference_build_or_reuse:
+    use_when: Build, save, or reuse STAR, Salmon, BBSplit, or SortMeRNA reference assets.
+    params:
+      fasta: <server_reference_root>/genome.fa.gz
+      gtf: <server_reference_root>/genes.gtf.gz
+      save_reference: true
+    optional_params:
+      star_index: Server-local STAR index directory or tar.gz.
+      salmon_index: Server-local Salmon index directory or tar.gz.
+      bbsplit_index: Server-local BBSplit index directory or tar.gz.
+      sortmerna_index: Server-local SortMeRNA index directory or tar.gz.
+      star_ignore_sjdbgtf: Use when a pre-built STAR index should not be adjusted with GTF splice
+        junctions.
+      bam_csi_index: Use for genomes with contigs too large for BAI indexes.
+    lookup_groups:
+    - reference_genome_options
+    - alignment_options
+    - optional_outputs
+  skip_or_save_outputs:
+    use_when: User explicitly asks to skip pipeline stages or save intermediates.
+    params: {}
+    important_toggles:
+      save_merged_fastq: Save merged resequenced-library FASTQ files.
+      save_trimmed: Save trimmed FASTQ files.
+      save_non_ribo_reads: Save reads retained after the selected SortMeRNA or Bowtie2 depletion step.
+      save_bbsplit_reads: Save BBSplit split reads.
+      save_align_intermeds: Save original STAR genome and transcriptome BAM files.
+      save_umi_intermeds: Save UMI extraction or deduplicated intermediate files.
+      save_unaligned: Save unmapped reads from STAR.
+      skip_ribotish: Disable Ribo-TISH QC and ORF prediction.
+      skip_qc: Disable QC stages except MultiQC.
+      skip_multiqc: Disable final MultiQC report, usually not recommended.
+      run_ribotricer: Opt in to the additional Ribotricer caller; default disabled.
+    lookup_groups:
+    - optional_outputs
+    - process_skipping_options
+  bowtie2_rrna_removal:
+    use_when: Requested Bowtie2 depletion of rRNA and tRNA, or rRNA alone with matching references.
+    params:
+      remove_ribo_rna: true
+      ribo_removal_tool: bowtie2
+      ribo_database_manifest: <server_reference_root>/rrna-trna-manifest.txt
+      save_non_ribo_reads: true
+    prerequisites:
+    - For combined depletion, confirm that the manifest contains FASTAs covering both rRNA and tRNA
+      for the intended organism, with one server-local FASTA path per line.
+    - Do not assume the default rRNA manifest includes tRNA or pass sortmerna_index to Bowtie2.
+    notes:
+    - Compose with confirmed input, output and reference settings; this is a route fragment, not a
+      complete launch request.
+  default_psite_te:
+    use_when: default psite te; review release prerequisites in references/07_version_update.md.
+    params:
+      te_quantification_method: plastid_psite
+      translational_efficiency_method: anota2seq
+      contrasts: <server_input_root>/contrasts.csv
+    notes:
+    - Compose with confirmed input, output and reference settings; this is a route fragment, not a
+      complete launch request.
+  deltate:
+    use_when: deltate; review release prerequisites in references/07_version_update.md.
+    params:
+      te_quantification_method: plastid_psite
+      translational_efficiency_method: deltate
+      contrasts: <server_input_root>/contrasts.csv
+    notes:
+    - Compose with confirmed input, output and reference settings; this is a route fragment, not a
+      complete launch request.
+  pseudo_kallisto_te:
+    use_when: pseudo kallisto te; review release prerequisites in references/07_version_update.md.
+    params:
+      te_quantification_method: pseudo
+      pseudo_aligner: kallisto
+      kallisto_quant_fraglen: <measured_fragment_mean>
+      kallisto_quant_fraglen_sd: <measured_fragment_sd>
+    notes:
+    - Compose with confirmed input, output and reference settings; this is a route fragment, not a
+      complete launch request.
+  extended_orfs:
+    use_when: extended orfs; review release prerequisites in references/07_version_update.md.
+    params:
+      extended_orf_analysis: true
+      canonical_gtf: <server_reference_root>/canonical.gtf
+      novel_gtf: <server_reference_root>/novel.gtf
+    notes:
+    - Compose with confirmed input, output and reference settings; this is a route fragment, not a
+      complete launch request.
+  optional_orf_callers:
+    use_when: optional orf callers; review release prerequisites in references/07_version_update.md.
+    params:
+      run_ribotricer: true
+      run_price: false
+      run_rpbp: false
+    notes:
+    - Compose with confirmed input, output and reference settings; this is a route fragment, not a
+      complete launch request.
+nextmcp_boundaries:
+  project: Required nextmcp project container, resolved on the nextmcp server.
+  params: Use for pipeline parameters such as input, outdir, references, UMI settings, and skip/save
+    toggles.
+  config_files: Use for Nextflow config files and resource caps such as process.resourceLimits.
+  from_run_id: Public restart path for reusing a previous nextmcp run.
+  extra_args: Use only when no normalized nextflow_run field covers the needed CLI flag.
+channel_boundaries:
+  extra_args: Pin the official release with ["-r", "2.0.0"]. Workflow options remain in params.

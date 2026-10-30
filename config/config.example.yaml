@@ -1,0 +1,41 @@
+server:
+  host: 127.0.0.1
+  port: 8321
+  base_dir: /data/nextmcp
+  logging_level: INFO
+  reload_config_on_change: false
+  reload_config_interval_seconds: 1.0
+
+auth:
+  enabled: true
+  bearer_token: "replace-with-a-long-random-secret"
+
+paths:
+  allowed_read_roots:
+    - /data
+    - /refs
+  allowed_write_roots:
+    - /data/nextmcp
+    - /data/analysis
+
+state:
+  db_path: /data/nextmcp/state/processes.db
+
+projects:
+  root: /data/nextmcp/projects
+
+audit:
+  file_path: /data/nextmcp/logs/audit.log
+  max_bytes: 5242880
+  backup_count: 3
+
+nextflow:
+  executable: /absolute/path/to/conda/envs/nextmcp/bin/nextflow
+  pipeline_roots: []
+  default_profile: docker
+  igenomes_ignore: false
+  expose_pipeline_materials: false
+  env:
+    NXF_HOME: /data/nextmcp/.nextflow
+    NXF_OFFLINE: "false"
+    NXF_VER: "25.10.2"

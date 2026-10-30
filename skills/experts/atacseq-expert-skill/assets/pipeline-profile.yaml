@@ -1,0 +1,27 @@
+pipeline:
+  id: atacseq
+  name: nf-core/atacseq pipeline parameters
+  version: 2.1.2
+  summary: ATACSeq peak-calling and differential analysis pipeline.
+source_basis:
+- 'authoring bundle fields: schema, documents, and source_files'
+- 'pipeline directory: /root/key_projects/nextmcp/nf_pipeline/atacseq'
+required_inputs:
+- name: input
+  required_for: Most runs
+  placeholder: <server_output_root>/input.csv
+  notes: Path to comma-separated file containing information about the samples in
+    the experiment.
+- name: outdir
+  required_for: Published results
+  placeholder: <server_output_root>/atacseq
+  notes: The output directory where the results will be saved. You have to use absolute
+    paths to storage on Cloud infrastructure.
+supported_modes:
+- id: main_entry
+  entry_target: pipeline id atacseq
+  use_when: Standard main pipeline route.
+limitations:
+- Starter scaffold only. Review current docs and outputs before runtime use.
+- Confirm special runtime prerequisites such as licenses, indices, or server-local
+  databases.

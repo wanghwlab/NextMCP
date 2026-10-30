@@ -1,0 +1,22 @@
+grouping_strategy: schema top-level sections with pipeline-specific overrides
+
+force_groups:
+  pseudo_aligner_kmer_size: alignment_options
+
+group_overrides:
+  alignment_options:
+    coverage_notes: Contains the original alignment section plus one numeric threshold that controls the selected execution branch.
+
+parameter_overrides:
+  outdir:
+    classification: route_shaping
+    placeholder: <server_output_root>/rnaseq
+    mapping_notes: Pass under `nextflow_run(params=...)` as the published results root on the nextmcp server filesystem.
+    example_values:
+      - <server_output_root>/rnaseq
+  max_cpus:
+    group_id: max_job_request_options
+    channel: config_files
+    lookup_priority: medium
+    confidence: high
+    mapping_notes: Render this value into a small server-local override config and pass that file through `nextflow_run(config_files=...)`, not `nextflow_run(params=...)`.

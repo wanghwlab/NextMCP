@@ -1,0 +1,141 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: riboseq
+case_id: smoke
+mode: profile-only
+source_profile:
+  profile: test
+  config: conf/test.config
+  source_files:
+    - nextflow.config
+    - conf/test.config
+    - tests/main.nf.test
+    - tests/main.nf.test.snap
+    - tests/.nftignore
+  rationale: >-
+    `nextflow.config` exposes `-profile test`, `conf/test.config` provides the
+    complete minimal runtime route, and `tests/main.nf.test` only repeats the
+    same runtime params plus the temporary output directory used by nf-test.
+classification:
+  primary_mode: profile-only
+  modifiers:
+    - localize-remote-inputs
+    - snapshot-rich
+  evidence:
+    - "`nextflow.config` includes `conf/test.config` under the `test` profile."
+    - >-
+      `conf/test.config` sets concrete values for `input`, `contrasts`,
+      `ribo_database_manifest`, `fasta`, `gtf`, `min_trimmed_reads`, and
+      `skip_ribotricer`.
+    - >-
+      `tests/main.nf.test` repeats the same params and adds only the temporary
+      `outdir` used by nf-test.
+    - >-
+      `tests/nextflow.config` only carries nf-test-specific resource and module
+      snapshot settings, so it is not required to reconstruct the pipeline
+      route.
+    - >-
+      `tests/main.nf.test.snap` and `tests/.nftignore` provide stable artifact
+      paths and md5 anchors for a small assertion set.
+  next_action: localize inputs first
+local_data_contract:
+  localized_root: /data/nextmcp/testdata/riboseq/test
+  path_layout_rule: download_upstream_manifests_then_rewrite_nested_urls
+  rewritten_manifests:
+    - role: input_samplesheet
+      expected_path: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv
+    - role: ribo_database_manifest
+      expected_path: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt
+launch:
+  pipeline: riboseq
+  project: pipeline-support-riboseq
+  run_name: smoke
+  params:
+    input: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv
+    contrasts: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv
+    ribo_database_manifest: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt
+    fasta: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+    gtf: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+    min_trimmed_reads: 1000
+    skip_ribotricer: true
+  config_files:
+    - /data/nextmcp/testdata/riboseq/test/project-files/pipeline-support-riboseq/profile_test_overrides.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/riboseq/test/project-files/pipeline-support-riboseq/profile_test_overrides.config
+      content: |
+        process {
+            resourceLimits = [
+                cpus: 4,
+                memory: '15.GB',
+                time: '1.h'
+            ]
+        }
+  notes:
+    - Start with `nextflow_run(prepare=true)` before the real launch.
+    - Omit `profile` and rely on the server default profile.
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+assertions:
+  prepare:
+    ok: true
+    required_paths:
+      - /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv
+      - /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt
+      - /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv
+      - /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+      - /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+  run:
+    ok: true
+    final_status: succeeded
+  artifacts:
+    required_paths:
+      - alignment/star/sorted/SRX11780879.genome.sorted.bam
+      - multiqc/star/multiqc_report.html
+      - quantification/salmon/salmon.merged.gene_counts.tsv
+      - riboseq_qc/ribotish/SRX11780885_qual.txt
+      - translational_efficiency/anota2seq/treated_vs_control.translation.anota2seq.results.tsv
+    content_checks:
+      - path: alignment/star/log/SRX11780879.SJ.out.tab
+        kind: md5
+        expected: b5239565ecf18cd55147a4e67d7db3a2
+      - path: alignment/star/sorted/samtools_stats/SRX11780879.genome.sorted.bam.idxstats
+        kind: md5
+        expected: b0e56d0944762d792ed9de03b467f960
+prompt_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the prepared mixed RNA-seq and Ribo-seq lightweight example in project
+  `pipeline-withskill-riboseq`. Use the localized chr20 references, the localized
+  contrasts table, and the localized SortMeRNA database manifest. Keep the
+  project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Samplesheet: `/data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv`
+  - Contrasts table: `/data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv`
+  - Genome FASTA: `/data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz`
+  - Annotation GTF: `/data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf`
+  - rRNA database manifest: `/data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt`
+  
+  ## Workflow goal
+  
+  - Run the mixed RNA-seq and Ribo-seq test design represented by the samplesheet.
+  - Use the contrasts table so translational-efficiency outputs remain part of the run.
+  - Use the localized chr20 genome, annotation, and SortMeRNA database manifest.
+  - Keep STAR alignment, Salmon quantification, Ribo-TISH quality-control outputs, and
+    translational-efficiency outputs active.
+  - Keep the trimmed-read minimum at 1000 for this lightweight test.
+  - Do not run the Ribotricer branch for this lightweight test.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/riboseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-riboseq` as project name.
+  - Do not use the `riboseq` expert skill.
+prompt_brief_path: tests/pipeline_support/riboseq/smoke.task.md
+blockers: []

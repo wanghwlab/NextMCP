@@ -1,0 +1,171 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Offline evals for methylseq-expert-skill. These test nextmcp planning, parameter mapping, route selection, output review, historical reuse, and capability coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary"
+  },
+  "summary": {
+    "eval_count": 8,
+    "asset_eval_count": 6,
+    "authoring_bundle_eval_count": 2,
+    "audit_eval_count": 0
+  },
+  "evals": [
+    {
+      "id": "bismark-default-launch",
+      "source": "asset",
+      "category": "launch_planning",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the methylseq-expert-skill, draft a nextmcp launch plan for project my-project. The user confirmed server-local samplesheet /srv/in/samplesheet.csv, outdir /srv/out/methylseq, and wants default Bismark analysis with a prebuilt Bismark index under /srv/ref/BismarkIndex plus FASTA /srv/ref/genome.fa. Do not launch; return tool order and nextflow_run argument shape.",
+      "expected_output": "Plan uses project top-level, pipeline methylseq, params for input/outdir/aligner/fasta/bismark_index, optional prepare, no nextflow_inspect_pipeline, and profile omitted by default.",
+      "assertions": [
+        "project is top-level nextflow_run argument",
+        "input/outdir/aligner/fasta/bismark_index are under params",
+        "does not call nextflow_inspect_pipeline",
+        "omits profile by default",
+        "uses nextflow_run(prepare=true) only as optional preflight"
+      ],
+      "files": []
+    },
+    {
+      "id": "resource-channel-boundary",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "SKILL.md",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the methylseq-expert-skill, explain how to cap a methylseq run at 8 CPUs and 32 GB while keeping ordinary Bismark params. Do not launch.",
+      "expected_output": "Answer puts resource caps in a server-local override config passed through config_files, not params, and keeps methylseq options in params.",
+      "assertions": [
+        "mentions config_files or server-local override config",
+        "does not put max_cpus/max_memory in params",
+        "keeps project top-level",
+        "keeps ordinary pipeline options under params"
+      ],
+      "files": []
+    },
+    {
+      "id": "bwameth-mem2-route",
+      "source": "authoring_bundle",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/alignment_options.yaml"
+      ],
+      "prompt": "Using the methylseq-expert-skill, plan a BWA-Meth run where the user wants BWA-MEM2. State required reference placeholders and outputs to review.",
+      "expected_output": "Plan sets aligner=bwameth and use_mem2=true, requires fasta/fasta_index/bwameth_index, and reviews bwameth plus methyldackel outputs.",
+      "assertions": [
+        "sets aligner to bwameth",
+        "sets use_mem2 true",
+        "mentions fasta_index and bwameth_index",
+        "mentions methyldackel outputs"
+      ],
+      "files": []
+    },
+    {
+      "id": "taps-route-incompatibility",
+      "source": "authoring_bundle",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/step-recipes.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the methylseq-expert-skill, answer a user who wants TAPS analysis and targeted sequencing in the same methylseq run.",
+      "expected_output": "Answer explains TAPS should use aligner=bwamem/Rastair and targeted sequencing is incompatible with TAPS or aligner=bwamem.",
+      "assertions": [
+        "mentions aligner=bwamem or Rastair for TAPS",
+        "states run_targeted_sequencing is incompatible",
+        "does not recommend launching the incompatible combination"
+      ],
+      "files": []
+    },
+    {
+      "id": "special-library-presets",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the methylseq-expert-skill, map a PBAT RRBS request to methylseq route-shaping params and note output or QC implications.",
+      "expected_output": "Answer uses pbat and rrbs, explains trimming preset behavior and RRBS deduplication behavior, and points to schema lookup for exact fields.",
+      "assertions": [
+        "mentions pbat",
+        "mentions rrbs",
+        "mentions trimming presets",
+        "mentions deduplication is skipped for RRBS or changed by RRBS"
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the methylseq-expert-skill, the run finished. What nextmcp calls come first and which outputs should be inspected for a BWA-Meth run?",
+      "expected_output": "Starts with run_get include summary, then run_artifacts, then explicit reads; reviews MultiQC, bwameth, methyldackel, and pipeline_info/params.json.",
+      "assertions": [
+        "starts with run_get(include=[progress,artifact_summary,diagnosis,next_actions]) or equivalent",
+        "uses run_artifacts before fs_read",
+        "mentions bwameth outputs",
+        "mentions methyldackel outputs",
+        "mentions pipeline_info/params.json"
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the methylseq-expert-skill, recover a previous methylseq run when the user remembers only targeted.bedGraph. Project is my-project. Do not launch.",
+      "expected_output": "Uses run_list with artifact_path_contains, run_get artifact_summary, run_artifacts, artifacts.json/pipeline_fingerprint facts, and params.json compatibility confirmation.",
+      "assertions": [
+        "uses run_list with artifact_path_contains",
+        "uses run_get(include=[artifact_summary])",
+        "mentions artifacts.json or pipeline_fingerprint",
+        "confirms compatibility through pipeline_info/params.json",
+        "does not guess old outdir"
+      ],
+      "files": []
+    },
+    {
+      "id": "schema-lookup-exact-param",
+      "source": "asset",
+      "category": "schema_lookup",
+      "source_materials": [
+        "assets/schema-index.yaml",
+        "assets/schema-groups/*.yaml",
+        "references/04_schema_lookup.md"
+      ],
+      "prompt": "Using the methylseq-expert-skill, explain how to confirm exact enum/default details for aligner, publish_dir_mode, and all_contexts without loading the whole raw schema.",
+      "expected_output": "Uses schema-index.yaml to find grouped files and opens only alignment_options, generic_options, and methyldackel_options as needed.",
+      "assertions": [
+        "mentions schema-index.yaml",
+        "mentions grouped schema assets",
+        "does not inspect raw nextflow_schema.json at runtime",
+        "does not invent enum values"
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+group:
+  id: amplicon_sequence_variants_asv_calculation
+  label: Amplicon Sequence Variants (ASV) calculation
+  selection_rule: Use this group for parameters defined under the `Amplicon Sequence
+    Variants (ASV) calculation` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/amplicon_sequence_variants_asv_calculation.md
+  - assets/schema-groups/amplicon_sequence_variants_asv_calculation.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `amplicon_sequence_variants_asv_calculation` for exact lookup.
+parameters:
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_consensus_percentile_cutoff
+  source_name: mergepairs_consensus_percentile_cutoff
+  type: number
+  required: false
+  default: 0.001
+  enum: null
+  description: The percentile used to determine a stringent cutoff which will correspond
+    to the minimum observed overlap in the dataset. This ensures that only read pairs
+    with high overlap are merged into consensus sequences. Those with insufficient
+    overlap are concatenated.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.001
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: number
+    default: 0.001
+    description: The percentile used to determine a stringent cutoff which will correspond
+      to the minimum observed overlap in the dataset. This ensures that only read
+      pairs with high overlap are merged into consensus sequences. Those with insufficient
+      overlap are concatenated.
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_strategy
+  source_name: mergepairs_strategy
+  type: string
+  required: false
+  default: merge
+  enum: &id001
+  - merge
+  - concatenate
+  - consensus
+  description: Strategy to merge paired end reads. When paired end reads are not sufficiently
+    overlapping for merging, you can use "concatenate" (not recommended). When you
+    have a mix of overlapping and non overlapping reads use "consensus"
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - merge
+  - concatenate
+  - consensus
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: string
+    default: merge
+    description: Strategy to merge paired end reads. When paired end reads are not
+      sufficiently overlapping for merging, you can use "concatenate" (not recommended).
+      When you have a mix of overlapping and non overlapping reads use "consensus"
+    help_text: This parameters specifies how paired-end reads are merged after denoising.
+      By default, read pairs will be merged by overlap. Concatenating read pairs (separated
+      by 10 N's) is an alternative to only analyzing the forward or reverse read in
+      case of non-overlapping paired-end sequencing data, this is not recommended,
+      only if all other options fail. The consensus strategy is merging read pairs
+      by overlap if possible and concatenates non-overlapping read pairs, based on
+      `--mergepairs_consensus_*` parameters.
+    enum: *id001
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: sample_inference
+  source_name: sample_inference
+  type: string
+  required: false
+  default: independent
+  enum: &id002
+  - independent
+  - pooled
+  - pseudo
+  description: 'Mode of sample inference: "independent", "pooled" or "pseudo"'
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/samplesheet.csv
+  example_values:
+  - independent
+  - pooled
+  - pseudo
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: string
+    default: independent
+    help_text: If samples are treated independent (lowest sensitivity and lowest resources),
+      pooled (highest sensitivity and resources) or pseudo-pooled (balance between
+      required resources and sensitivity).
+    description: 'Mode of sample inference: "independent", "pooled" or "pseudo"'
+    enum: *id002
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_consensus_gap
+  source_name: mergepairs_consensus_gap
+  type: integer
+  required: false
+  default: -4
+  enum: null
+  description: The penalty score assigned for each gap introduced during sequence
+    alignment.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - -4
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: integer
+    default: -4
+    description: The penalty score assigned for each gap introduced during sequence
+      alignment.
+    help_text: This parameter sets the numerical penalty subtracted from the alignment
+      score for each gap (insertion or deletion) introduced to align the forward and
+      reverse reads. A higher penalty discourages alignments that require gaps.
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_consensus_match
+  source_name: mergepairs_consensus_match
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: The score assigned for each matching base pair during sequence alignment.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: integer
+    default: 1
+    description: The score assigned for each matching base pair during sequence alignment.
+    help_text: This parameter specifies the numerical value added to the alignment
+      score for every pair of bases that match between the forward and reverse reads.
+      A higher value increases the preference for alignments with more matching bases.
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_consensus_maxmismatch
+  source_name: mergepairs_consensus_maxmismatch
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: The maximum number of mismatches allowed within the overlapping region
+    for merging reads.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: integer
+    default: 0
+    description: The maximum number of mismatches allowed within the overlapping region
+      for merging reads.
+    help_text: This parameter defines the highest number of mismatched base pairs
+      permitted in the overlap region between forward and reverse reads for a successful
+      merge. Setting this value helps control the stringency of read merging, balancing
+      between sensitivity and accuracy.
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_consensus_minoverlap
+  source_name: mergepairs_consensus_minoverlap
+  type: integer
+  required: false
+  default: 12
+  enum: null
+  description: The minimum number of overlapping base pairs required to merge forward
+    and reverse reads.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 12
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: integer
+    default: 12
+    description: The minimum number of overlapping base pairs required to merge forward
+      and reverse reads.
+    help_text: This parameter specifies the smallest number of consecutive base pairs
+      that must overlap between the forward and reverse reads for them to be merged.
+      Ensuring sufficient overlap is crucial for accurate merging.
+- group_id: amplicon_sequence_variants_asv_calculation
+  name: mergepairs_consensus_mismatch
+  source_name: mergepairs_consensus_mismatch
+  type: integer
+  required: false
+  default: -2
+  enum: null
+  description: The penalty score assigned for each mismatched base pair during sequence
+    alignment.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - -2
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Amplicon Sequence Variants (ASV) calculation
+  raw_schema:
+    type: integer
+    default: -2
+    description: The penalty score assigned for each mismatched base pair during sequence
+      alignment.
+    help_text: This parameter defines the numerical penalty subtracted from the alignment
+      score for each base pair mismatch between the forward and reverse reads. A higher
+      penalty reduces the likelihood of accepting alignments with mismatches.

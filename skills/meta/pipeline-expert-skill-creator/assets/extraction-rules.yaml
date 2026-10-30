@@ -1,0 +1,385 @@
+collection_path:
+  - step: choose_authoring_source
+    options:
+      - nextmcp_pipeline_id
+      - repository_pipeline_path
+    notes:
+      - Prefer the live nextmcp inspect payload when the pipeline is available through the server.
+      - Use a repository-local path such as `nf_pipeline/rnaseq` or `nf_pipeline/riboseq` when the
+        user is authoring directly from the vendored pipeline tree.
+
+  - step: discover_pipeline_id
+    preferred_tool: nextflow_list_pipelines
+    use_when:
+      - authoring_source is `nextmcp_pipeline_id`
+    notes:
+      - Use this only when the server-visible pipeline ID is not already known.
+
+  - step: collect_standard_materials_from_nextmcp
+    preferred_tool: nextflow_inspect_pipeline
+    use_when:
+      - authoring_source is `nextmcp_pipeline_id`
+    payload_sections:
+      - schema
+      - documents
+      - source_files
+    notes:
+      - Call this as `nextflow_inspect_pipeline(detail="materials")` during authoring so the
+        standard payload still includes inlined schema, documents, and source files.
+
+  - step: collect_standard_materials_from_repository
+    preferred_source: repository files
+    use_when:
+      - authoring_source is `repository_pipeline_path`
+    source_root_examples:
+      - nf_pipeline/rnaseq
+      - nf_pipeline/riboseq
+    payload_sections:
+      - schema
+      - documents
+      - source_files
+    document_rules:
+      - 'Map `README.md` to `{"role": "readme", ...}`.'
+      - 'Map top-level `docs/*.md` files to `{"role": "doc", ...}`.'
+    source_file_rules:
+      - 'Map `main.nf` to `{"role": "main_script", ...}`.'
+      - 'Map `nextflow.config` to `{"role": "nextflow_config", ...}` when present.'
+      - 'Map top-level `*.nf` files other than `main.nf` to `{"role": "entry_script", ...}`.'
+      - 'Map top-level `workflows/*.nf` files to `{"role": "workflow_script", ...}`.'
+    notes:
+      - Mirror the inclusion rules in `src/nextmcp/nextflow_catalog.py` instead of widening the
+        standard payload.
+      - 'Keep the same descriptor keys the inspect payload uses: `role`, `path`, and `content`.'
+      - 'Use targeted extra reads for nested workflow files or deeper docs that sit outside this
+        standard bundle.'
+
+  - step: collect_targeted_extras
+    preferred_tool: fs_read
+    use_when:
+      - required files live outside the standard inspect payload
+      - top-level docs point to deeper markdown pages
+      - nested workflow files materially change execution behavior
+      - tests or alternate entry scripts are needed to confirm a significant optional capability
+
+source_priority:
+  - rank: 1
+    source: local_pipeline_code
+    examples:
+      - main.nf
+      - nextflow.config
+      - conf/*.config
+      - modules/
+      - interactive.nf
+      - tests/*.nf.test
+    use_for:
+      - pipeline identity and execution modes
+      - step boundaries and produced artifacts
+      - local output locations that docs may summarize loosely
+      - high-impact optional modes and non-param runtime prerequisites
+
+  - rank: 2
+    source: nextflow_schema.json
+    examples:
+      - nextflow_schema.json
+    use_for:
+      - parameter names, types, defaults, and enums
+      - required inputs and placeholder values
+      - schema-backed descriptions that should seed presets
+      - booleans and enums that imply major route variants or output families
+
+  - rank: 3
+    source: official_pipeline_docs
+    examples:
+      - README.md
+      - docs/usage.md
+      - docs/output.md
+    use_for:
+      - scenario playbooks
+      - QC interpretation guidance
+      - troubleshooting routes and output review order
+      - optional modes that change how outputs should be interpreted
+
+  - rank: 4
+    source: mcp_tool_metadata
+    examples:
+      - MCP tool docstrings
+      - MCP input schemas
+    use_for:
+      - server-side call-shape conventions
+      - runtime tool ordering
+      - parameter-channel boundaries
+      - process follow-up order and log-reading paths
+      - server-side path semantics for `path`, `project`, and returned run-layout or artifact paths
+
+  - rank: 5
+    source: legacy_skills_or_prompts
+    use_for:
+      - migration clues only
+      - terminology and historical examples that still match current pipeline behavior
+
+standard_payload_map:
+  schema:
+    examples:
+      - nextflow_schema.json
+    use_for:
+      - parameter names, types, defaults, and enums
+      - required inputs and placeholder values
+      - schema-backed preset seeds
+
+  documents:
+    roles:
+      - readme
+      - doc
+    examples:
+      - README.md
+      - docs/usage.md
+      - docs/output.md
+    use_for:
+      - user-facing scenarios
+      - output review order
+      - QC interpretation guidance
+      - troubleshooting routes
+
+  source_files:
+    roles:
+      - main_script
+      - nextflow_config
+      - workflow_script
+      - entry_script
+    examples:
+      - main.nf
+      - nextflow.config
+      - interactive.nf
+      - test_fastq_align_star.nf
+    use_for:
+      - workflow boundaries and step order
+      - supported execution modes
+      - hidden assumptions in channel wiring or published artifacts
+      - alternate entry scripts such as index-build or assembly-only workflows
+
+default_schema_groups_notes:
+  - Prefer the original top-level `nextflow_schema.json` section structure from `allOf` plus the
+    referenced `definitions` or `$defs` entries when that structure is present and stable.
+  - Use the heuristic groups below only as a fallback for schemas that do not expose stable
+    top-level sections.
+
+default_schema_groups:
+  - id: input_paths_and_manifests
+    use_when:
+      - parameters point to input files, input directories, samplesheets, manifests, or path-like
+        primary inputs
+    examples:
+      - input
+      - input_path
+      - samplesheet
+      - reads_dir
+    selection_rule: Path-like primary inputs the user must usually provide or confirm on the server.
+
+  - id: references_and_indices
+    use_when:
+      - parameters point to reference FASTA, GTF, BED, databases, indices, or reusable assets
+    examples:
+      - fasta
+      - gtf
+      - transcript_fasta
+      - kraken_db
+    selection_rule: Reference or database inputs that shape compatibility, outputs, or prerequisites.
+
+  - id: route_selectors_and_booleans
+    use_when:
+      - parameters are booleans or route selectors that materially change workflow behavior
+    examples:
+      - with_umi
+      - skip_alignment
+      - skip_pseudo_alignment
+      - use_sentieon_star
+    selection_rule: High-impact switches that change route choice, prerequisites, outputs, or QC.
+
+  - id: enums_and_choice_params
+    use_when:
+      - parameters use enums or a constrained set of string choices that shape execution
+    examples:
+      - aligner
+      - pseudo_aligner
+      - contaminant_screening
+    selection_rule: Choice parameters whose allowed values meaningfully alter execution or outputs.
+
+  - id: outputs_and_reporting
+    use_when:
+      - parameters mainly affect publication, reports, outdir structure, or optional output families
+    examples:
+      - outdir
+      - save_align_intermeds
+      - email
+    selection_rule: Output destination or reporting controls that matter for review or artifact reuse.
+
+  - id: tuning_metadata_and_notifications
+    use_when:
+      - parameters are lower-impact tuning, metadata, labels, or notification controls
+    examples:
+      - publish_dir_mode
+      - monochrome_logs
+      - hook_url
+    selection_rule: Fields preserved for exact lookup even when they rarely belong in route planning.
+
+schema_group_record_contract:
+  required_parameter_fields:
+    - name
+    - source_name
+    - type
+    - required
+    - default
+    - enum
+    - description
+    - classification
+    - channel
+    - placeholder
+    - example_values
+    - mapping_notes
+    - lookup_priority
+  classification_values:
+    - route_shaping
+    - lookup_only
+    - non_runtime
+  channel_values:
+    - params
+    - config_files
+    - runtime_metadata
+    - authoring_only
+
+capability_completeness:
+  extract_or_explicitly_scope_out:
+    - UMI or barcode-aware modes such as `with_umi`
+    - licensed or accelerated routes such as `use_sentieon_star`
+    - preprocessing-only and filter-heavy routes such as `skip_alignment` plus `skip_pseudo_alignment`
+    - contamination or taxonomic screening routes such as `kraken2_bracken`
+    - alternate entry workflows such as `STEP_BUILD_STAR_INDEX` and `STEP_ASSEMBLE_STRINGTIE`
+    - major output families beyond one raw count matrix, such as TPM, `tx2gene.tsv`,
+      `SummarizedExperiment`, reusable BAMs, contamination reports, and StringTie outputs
+  detect_from:
+    - schema booleans, enums, and help text
+    - docs headings, notes, and output sections
+    - source_files branches, include blocks, and publish paths
+    - selected tests when docs and schema hint at the mode but do not fully define it
+  render_into_assets:
+    - playbooks when a capability changes user intent or route selection
+    - param-presets when a capability has a stable parameter bundle
+    - step-recipes when a capability changes execution order or entry selection
+    - artifact-contracts when a capability adds outputs worth review or reuse
+    - qc-rules when a capability changes interpretation or common failure modes
+
+asset_generation_order:
+  - pipeline-profile.yaml
+  - playbooks.yaml
+  - step-recipes.yaml
+  - param-presets.yaml
+  - schema-index.yaml
+  - schema-groups/*.yaml
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+
+render_order:
+  - assets
+  - references
+  - SKILL.md
+
+runtime_tool_contract:
+  creation_time_tools:
+    - Use `nextflow_list_pipelines` only when the pipeline ID or server-local pipeline root is unknown.
+    - Use `nextflow_inspect_pipeline(detail="materials")` only to collect source materials for
+      skill generation or package refresh.
+    - 'When authoring from a repository-local path such as `nf_pipeline/<pipeline>`, normalize the
+      same `schema`, `documents`, and `source_files` payload shape before extraction.'
+    - Use `fs_read` only for missing source files outside the standard inspect payload.
+  runtime_tools:
+    - Use `server_info()` only when the runtime still needs a compact
+      environment and readiness summary.
+    - Use `project_list()` only when the project id is still unknown.
+    - Use `project_get(project)` when the runtime needs to confirm the project root or recent runs
+      before launch or reuse.
+    - Use `fs_list(mode="manifest")` only when one concrete input, output, or result path needs
+      confirmation without a broad directory listing.
+    - Use `nextflow_run(prepare=true)` before launch when the runtime still needs path checks,
+      path warnings, expected artifact hints, historical restart guidance, or `run_layout` /
+      `layout_warnings` for the project-owned run root, `runs/<run_id>/job`,
+      `runs/<run_id>/work`, and `results/<run_id>`.
+    - Use `nextflow_run` to launch the main pipeline id or an explicit server-local entry script path.
+    - Use `run_list` when the runtime needs to recover one historical run before launch,
+      especially for artifact reuse or BAM reprocessing routes.
+    - Use `run_get(include=["progress","artifact_summary","diagnosis","next_actions"])` after launch
+      as the first post-launch summary call.
+    - Use `run_get(detail="full")` only when the runtime needs concrete project-owned layout
+      paths, `nextflow_log`, the persisted `run_layout` / `layout_warnings`, or source-run
+      restart metadata such as `launch_spec`, `nextflow_session_uuid`, and
+      `resume_compatible`.
+    - Use `run_artifacts(...)` only after the summary shows the needed artifact section.
+    - Use `run_logs` only when raw stdout, stderr, or Nextflow log lines are still needed after
+      `run_get`.
+    - Use `fs_read` for `nextflow_log`, generated reports, manifests, and explicit output files.
+  parameter_boundaries:
+    - Pass the required project id in `project`.
+    - Use `run_id` only when the caller needs a stable run identifier.
+    - Use `run_name` only for a human-readable label.
+    - Put ordinary user-facing pipeline inputs in `params`.
+    - Omit `profile` by default and rely on `server_info().nextflow.default_profile` when runtime
+      environment choice still matters.
+    - Pass `profile` explicitly only when the user asks for a different runtime or the server
+      default is known to be unsuitable.
+    - Use `config_files` for Nextflow config files and small server-local override configs, not as
+      a substitute for ordinary pipeline params.
+    - Use `from_run_id` as the only public restart input. Do not teach `resume` or
+      `resume_session_id` as public `nextflow_run` inputs.
+    - Keep `max_cpus`, `max_memory`, and `max_time` in config scope. Render them as a small
+      override config passed through `config_files`, not as `params`.
+    - Preserve the pipeline's source-backed resource-override syntax. If the current runtime
+      materials use `process.resourceLimits` or another config-level key, render that same
+      structure in examples instead of inventing `params.max_cpus` or `process.maxCpus`.
+    - Treat `run_layout` and detail-only layout paths as returned metadata, not as public inputs.
+    - Use `extra_args` only as a last-resort escape hatch when no normalized field exists.
+  generated_skill_rules:
+    - Pipeline-specific expert skills should assume their pipeline ID is already known for ordinary
+      runs.
+    - Preserve full current-schema parameter coverage through progressive disclosure.
+    - Keep `references/03_parameters.md` compact and route-focused.
+    - Add `assets/schema-index.yaml` as the discovery layer for grouped parameter lookup.
+    - Add `assets/schema-groups/*.yaml` so every current schema parameter remains available for exact
+      mapping without forcing one giant parameter dump into context.
+    - Group schema fields first by the schema author's own top-level `allOf` sections and their
+      referenced `definitions` or `$defs` entries when those sections are stable.
+    - Fall back to stable runtime-behavior groups such as input paths, references, route
+      selectors, enums, output controls, or lower-impact tuning fields only when the schema does
+      not expose a clear top-level section layout.
+    - Keep group ids stable and machine-friendly so references can point to them directly.
+    - Every current schema parameter must appear in exactly one schema group or one explicit
+      non-runtime bucket with a reason.
+    - >-
+      Preserve enough per-parameter detail for exact mapping: current field name, type,
+      required status, default, enum choices, channel, placeholder guidance, and
+      mapping notes.
+    - Every generated expert skill must state that runtime `path` values, the `project`
+      identifier, and relative path-like values in `params` or `config_files` refer to the
+      nextmcp server filesystem, not the client machine.
+    - Do not use bare `local path` wording in runtime instructions. Prefer `server-local path` or
+      `path on the nextmcp server`.
+    - Use server-scoped placeholders such as `<server_input_root>/...` unless a concrete path is
+      already confirmed on the server.
+    - Do not tell the runtime agent to start ordinary planning or execution with
+      `nextflow_inspect_pipeline`.
+    - Do not make `server_info()`, `fs_list(mode="manifest")`, or
+      `nextflow_run(prepare=true)` mandatory on every run. Render them as opt-in checks used when
+      uncertainty still exists.
+    - If a pipeline publishes reusable historical outputs, render one compact reuse rule that uses
+      `run_list(..., artifact_path_contains=...)` before
+      `run_get(include=["artifact_summary"])` plus `run_artifacts(...)`.
+    - Prefer `artifact_path_contains` values derived from real artifact contracts such as
+      `pipeline_info/params.json`, reusable samplesheets, reports, or other named handoff files.
+    - If the generated skill proposes historical artifact reuse, it must teach compatibility checks
+      based on `artifacts.json`, `pipeline_fingerprint`, and route-shaping files such as
+      `pipeline_info/params.json` instead of guessing from the old outdir alone.
+    - If an alternate server-local entry script path is needed at runtime, recover `pipeline_dir`
+      with `nextflow_list_pipelines` and then pass the explicit script path to `nextflow_run`.
+
+conflict_policy:
+  prefer_lowest_rank_number: true
+  legacy_skills_never_override_schema: true
+  unresolved_conflicts_must_be_noted: true

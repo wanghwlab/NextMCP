@@ -1,0 +1,78 @@
+steps:
+- id: prepare_launch
+  purpose: Confirm the nextmcp project, server-local inputs, reference directory, and output target before launch.
+  minimal_inputs:
+  - project
+  - params.tools
+  - params.genomes_base
+  - params.outdir
+  tool_sequence:
+  - project_list() when the project id is unknown
+  - project_get(project) when the project root or recent runs matter
+  - fs_list(mode="manifest") when one server-local path needs confirmation
+  - nextflow_run(prepare=true) when launch layout or restart planning is uncertain
+  outputs:
+  - run_layout with project-owned runs/<run_id>/job, runs/<run_id>/work, and results/<run_id>
+  - layout_warnings
+- id: launch_standard_run
+  purpose: Launch normal analysis after inputs and references are confirmed.
+  minimal_inputs:
+  - project
+  - params.input
+  - params.tools
+  - params.genomes_base
+  - params.outdir
+  tool_sequence:
+  - nextflow_run(pipeline="rnafusion", project=..., params={...})
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_artifacts(...) after the summary identifies relevant sections
+  - run_logs() only when the summary is not enough
+  outputs:
+  - fusion caller result directories
+  - fusionreport and fusioninspector outputs when selected
+  - multiqc report unless skip_qc is true
+- id: build_references
+  purpose: Build references with references_only=true.
+  minimal_inputs:
+  - project
+  - params.references_only
+  - params.tools
+  - params.genomes_base
+  - params.outdir
+  tool_sequence:
+  - fs_list(mode="manifest") on the target reference parent when needed
+  - nextflow_run(prepare=true) for long reference builds
+  - nextflow_run(pipeline="rnafusion", project=..., params={references_only:true,...})
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  outputs:
+  - genomes_base/<genome>/arriba/
+  - genomes_base/<genome>/fusion_report_db/
+  - genomes_base/<genome>/gencode_v<version>/
+  - genomes_base/<genome>/gencode_v<version>/starfusion/ctat_genome_lib_build_dir/
+- id: recover_historical_outputs
+  purpose: Find and verify outputs from a previous rnafusion run.
+  minimal_inputs:
+  - project
+  - artifact_path_contains
+  tool_sequence:
+  - run_list(project=..., pipeline="rnafusion", artifact_path_contains=...)
+  - run_get(include=["artifact_summary"]) on candidate runs
+  - run_artifacts(...) for matching artifact sections
+  - fs_read(...) for explicit params or report paths only
+  outputs:
+  - artifacts.json facts
+  - pipeline_fingerprint facts
+  - pipeline_info/params_<timestamp>.json compatibility evidence
+- id: troubleshoot_failed_run
+  purpose: Use summary-first failure inspection before raw logs.
+  minimal_inputs:
+  - project
+  - run_id
+  tool_sequence:
+  - run_get(include=["progress","diagnosis","next_actions","artifact_summary"])
+  - run_get(detail="full") when layout paths, launch_spec, or restart compatibility matter
+  - run_logs() for Nextflow log lines or stdout/stderr after diagnosis
+  - fs_read() for explicit report, trace, or log files
+  outputs:
+  - diagnosis and next_actions
+  - launch_spec and nextflow_session_uuid when restart planning matters

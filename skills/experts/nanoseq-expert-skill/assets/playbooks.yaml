@@ -1,0 +1,129 @@
+playbooks:
+  - id: standard_demultiplex_or_aligned_route
+    use_when: The user wants a normal Nanopore DNA, cDNA, or directRNA run and has not asked for
+      a specialized downstream route.
+    prerequisites:
+      - Confirm project if the user did not name one.
+      - Confirm server-local input samplesheet with columns group, replicate, barcode, input_file,
+        fasta, and gtf.
+      - Confirm protocol is DNA, cDNA, or directRNA.
+      - If skip_demultiplexing is false, confirm server-local input_path and barcode_kit.
+      - If skip_alignment is true, confirm input_file values are BAM files.
+    recommended_preset: standard_run
+    decision_rules:
+      - Use skip_demultiplexing=true when samplesheet input_file values already point at per-sample
+        FASTQ or BAM files.
+      - Use skip_demultiplexing=false with input_path and barcode_kit when one pooled FASTQ needs
+        qcat demultiplexing.
+      - Use minimap2 by default; use graphmap2 only when the user requests it or local policy
+        expects it.
+      - Use run_nanolyse=true only when the user wants lambda or custom contaminant removal.
+      - Keep skip_multiqc=false unless the user explicitly does not want MultiQC.
+    tool_sequence:
+      - project_list() when the project id is unknown.
+      - project_get(project) when the project root or previous runs matter.
+      - fs_list(mode="manifest") when one server-local input path still needs confirmation.
+      - nextflow_run(prepare=true) when inputs, target outdir, or restart layout are uncertain.
+      - nextflow_run(pipeline="nanoseq", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    outputs_to_review:
+      - multiqc/multiqc_report.html
+      - nanoplot/fastq/
+      - fastqc/
+      - <ALIGNER>/*.sorted.bam
+      - <ALIGNER>/samtools_stats/
+      - pipeline_info/
+  - id: dna_variant_calling
+    use_when: The user has Nanopore DNA data and asks for short variants, structural variants, or
+      both.
+    prerequisites:
+      - protocol must be DNA.
+      - call_variants must be true.
+      - Alignment must run; do not set skip_alignment for this route.
+      - If variant_caller is deepvariant or pepper_margin_deepvariant, confirm the server runtime
+        can use Docker or Singularity.
+      - If deepvariant_gpu is true, confirm GPU resources and any scheduler options.
+    recommended_preset: dna_variant_calling
+    decision_rules:
+      - Use variant_caller=medaka for the default short-variant route.
+      - Use phase_vcf or split_mnps only with medaka.
+      - Use skip_vc=true only when the user wants structural variants without short variants.
+      - Use skip_sv=true only when the user wants short variants without structural variants.
+      - Use structural_variant_caller=sniffles by default unless the user requests cutesv.
+    outputs_to_review:
+      - variant_calling/medaka_variant/
+      - variant_calling/deepvariant/
+      - variant_calling/margin_pepper_deepvariant/
+      - variant_calling/sniffles/
+      - variant_calling/cutesv/
+      - <ALIGNER>/*.sorted.bam
+      - pipeline_info/params.json
+  - id: rna_quantification_and_differential
+    use_when: The user has cDNA or directRNA data and asks for transcript reconstruction,
+      quantification, or differential expression.
+    prerequisites:
+      - protocol must be cDNA or directRNA.
+      - Samplesheet rows need fasta and gtf values when quantification is required.
+      - For differential analysis, conditions and replicates must be represented in the group and
+        replicate columns.
+    recommended_preset: rna_quantification
+    decision_rules:
+      - Use quantification_method=bambu by default.
+      - Use quantification_method=stringtie2 when the user wants StringTie2 reconstruction and
+        featureCounts quantification.
+      - Set skip_quantification=true when the user only needs QC/alignment/fusion or modification
+        outputs.
+      - Set skip_differential_analysis=true when the user wants expression counts without
+        DESeq2/DEXSeq.
+    outputs_to_review:
+      - bambu/
+      - stringtie2/
+      - <QUANTIFICATION_METHOD>/deseq2/deseq2.results.txt
+      - <QUANTIFICATION_METHOD>/dexseq/dexseq.results.txt
+      - multiqc/multiqc_report.html
+  - id: directrna_modification
+    use_when: The user has directRNA data and asks for RNA modification detection with xPore,
+      m6Anet, or both.
+    prerequisites:
+      - protocol must be directRNA.
+      - skip_demultiplexing is usually true for prepared per-sample directories.
+      - Each samplesheet input_file directory should include fast5 and fastq subdirectories.
+      - Alignment must run so Nanopolish can use sorted BAM inputs.
+    recommended_preset: directrna_modification
+    decision_rules:
+      - Keep skip_modification_analysis=false for this route.
+      - Use skip_xpore=true when the user wants only m6Anet.
+      - Use skip_m6anet=true when the user wants only xPore.
+      - Use skip_quantification according to whether the user also wants transcript counts.
+    outputs_to_review:
+      - rna_modifications/xpore/diffmod/diffmod_outputs/diffmod.table
+      - rna_modifications/m6anet/inference/<sample_name>/data.result.csv.gz
+      - multiqc/multiqc_report.html
+  - id: rna_fusion
+    use_when: The user has cDNA or directRNA data and asks for JAFFAL fusion detection.
+    prerequisites:
+      - protocol must be cDNA or directRNA.
+      - Confirm jaffal_ref_dir when the server should use a prebuilt JAFFAL reference directory.
+      - If jaffal_ref_dir is not provided, confirm the server can fetch and unpack the JAFFAL
+        reference.
+    recommended_preset: rna_fusion
+    decision_rules:
+      - Keep skip_fusion_analysis=false for this route.
+      - Keep skip_demultiplexing and skip_alignment choices aligned with the user's input files.
+    outputs_to_review:
+      - jaffal/jaffa_results.csv
+      - jaffal/jaffa_results.fasta
+  - id: historical_reuse
+    use_when: The user asks to find, inspect, or reuse outputs from a prior nanoseq run.
+    prerequisites:
+      - The nextmcp project id is known.
+      - Use an artifact filename or path fragment when the user remembers one.
+    tool_sequence:
+      - run_list(project=..., pipeline="nanoseq", artifact_path_contains=...)
+      - run_get(include=["artifact_summary"])
+      - run_artifacts(...)
+      - fs_read(...) only for explicit files such as pipeline_info/params.json.
+    decision_rules:
+      - Treat artifacts.json and pipeline_fingerprint as historical facts.
+      - Confirm route compatibility through pipeline_info/params.json before presenting reuse as
+        safe.

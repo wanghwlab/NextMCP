@@ -1,0 +1,204 @@
+playbooks:
+  - id: simpleaf_default
+    use_when: User wants the default scRNA-seq route and did not request a specific aligner.
+    prerequisites:
+      - Confirm project id, server-local samplesheet, and output directory.
+      - Confirm protocol as a concrete value such as 10XV2, 10XV3, 10XV4, dropseq, or a custom
+        Simpleaf chemistry string. Do not leave protocol as auto for Simpleaf.
+      - Confirm either genome, prebuilt simpleaf_index, transcript_fasta plus txp2gene, or
+        FASTA/GTF materials suitable for building an index.
+    recommended_preset: simpleaf_default
+    params_to_confirm:
+      - input
+      - outdir
+      - aligner=simpleaf
+      - protocol
+      - genome or fasta/gtf or simpleaf_index
+      - transcript_fasta and txp2gene when using explicit transcript references
+      - simpleaf_umi_resolution when UMI resolution strategy matters
+      - save_reference when generated index should be reused
+    outputs_to_review:
+      - simpleaf/<sample>/simpleaf_quant/
+      - simpleaf/<sample>/simpleaf_qc_report_<sample>.html
+      - simpleaf/mtx_conversions/
+      - multiqc/multiqc_report.html
+      - pipeline_info/params.json
+  - id: starsolo
+    use_when: User requests STARsolo, BAM-level alignment, GeneFull pre-mRNA counts, or RNA
+      velocity output.
+    prerequisites:
+      - Confirm protocol is not auto.
+      - Confirm star_index or FASTA/GTF to build one.
+      - Confirm star_feature as Gene, GeneFull, or Gene Velocyto.
+      - Use save_align_intermeds when the user needs BAM files in published results.
+    recommended_preset: starsolo
+    params_to_confirm:
+      - aligner=star
+      - protocol
+      - star_index or fasta/gtf
+      - star_feature
+      - seq_center when BAM read groups matter
+      - save_reference
+      - save_align_intermeds
+    outputs_to_review:
+      - star/<sample>/
+      - star/genome_generate/
+      - star/mtx_conversions/
+      - multiqc/multiqc_report.html
+  - id: kallisto_bus
+    use_when: User requests Kallisto/BUS, BUS files, or RNA velocity-like Kallisto workflows.
+    prerequisites:
+      - Confirm protocol is not auto.
+      - Confirm kallisto_index or FASTA/GTF plus txp2gene.
+      - Confirm kb_workflow. Use standard by default; use lamanno or nac only when the user asks
+        for the corresponding RNA velocity or nascent/mature RNA route.
+    recommended_preset: kallisto_bus
+    params_to_confirm:
+      - aligner=kallisto
+      - protocol
+      - kallisto_index or fasta/gtf
+      - txp2gene
+      - kb_t1c and kb_t2c for capture-aware workflows
+      - kb_workflow
+      - save_reference
+    outputs_to_review:
+      - kallisto/raw_bus/
+      - kallisto/sort_bus/
+      - kallisto/bustools_counts/
+      - kallisto/bustools_metrics/
+      - kallisto/mtx_conversions/
+      - multiqc/multiqc_report.html
+  - id: cellranger
+    use_when: User requests Cell Ranger count behavior for 10x Genomics single-cell gene
+      expression data.
+    prerequisites:
+      - Confirm Cell Ranger is available in the server runtime.
+      - Protocol can remain auto for Cell Ranger, or be set to a supported 10x chemistry.
+      - Confirm cellranger_index or FASTA/GTF for building a reference.
+      - Confirm whether FASTQs need automatic 10x-style renaming; set skip_cellranger_renaming
+        only when names already comply.
+    recommended_preset: cellranger
+    params_to_confirm:
+      - aligner=cellranger
+      - protocol
+      - cellranger_index or fasta/gtf
+      - skip_cellranger_renaming
+      - save_align_intermeds
+    outputs_to_review:
+      - cellranger/count/
+      - cellranger/mkref/
+      - cellranger/mtx_conversions/
+      - multiqc/multiqc_report.html
+  - id: cellrangerarc
+    use_when: User requests 10x Single Cell Multiome ATAC + GEX through Cell Ranger ARC.
+    prerequisites:
+      - Samplesheet must include sample_type with atac or gex and fastq_barcode for scATAC rows.
+      - FASTQ files must already follow 10x naming; this route does not automatically rename
+        Cell Ranger ARC inputs.
+      - Confirm cellranger_index, or FASTA/GTF plus optional motifs or cellrangerarc_config and
+        matching cellrangerarc_reference.
+    recommended_preset: cellrangerarc
+    params_to_confirm:
+      - aligner=cellrangerarc
+      - protocol=auto or supported 10x chemistry
+      - cellranger_index or fasta/gtf
+      - motifs
+      - cellrangerarc_config
+      - cellrangerarc_reference
+    outputs_to_review:
+      - cellrangerarc/count/
+      - cellrangerarc/mkref/
+      - multiqc/multiqc_report.html
+  - id: cellrangermulti
+    use_when: User requests Cell Ranger Multi for GEX with VDJ, antibody capture, CRISPR,
+      CMO/OCM multiplexing, or FFPE probe-set data.
+    prerequisites:
+      - Main samplesheet must include feature_type values such as gex, vdj, ab, crispr, cmo, or
+        ocm-compatible GEX rows. beam is documented as not supported.
+      - CMO, OCM, or FFPE multiplexing requires cellranger_multi_barcodes.
+      - Feature barcode antibody capture requires fb_reference.
+      - FFPE fixed RNA profiling requires gex_frna_probe_set.
+      - VDJ analysis requires cellranger_vdj_index or FASTA/GTF to build one; if no VDJ data,
+        use skip_cellrangermulti_vdjref.
+    recommended_preset: cellrangermulti
+    params_to_confirm:
+      - aligner=cellrangermulti
+      - protocol=auto
+      - cellranger_multi_barcodes when multiplexed samples are present
+      - cellranger_index or fasta/gtf
+      - cellranger_vdj_index or skip_cellrangermulti_vdjref
+      - gex_frna_probe_set
+      - gex_cmo_set
+      - fb_reference
+      - vdj_inner_enrichment_primers
+    outputs_to_review:
+      - cellrangermulti/count/
+      - cellrangermulti/count/<sample>/outs/per_sample_outs/
+      - cellrangermulti/count/<sample>/outs/multi/
+      - cellrangermulti/mkref/
+      - cellrangermulti/mkvdjref/
+      - multiqc/multiqc_report.html
+  - id: cellbender_filtering
+    use_when: User wants empty-droplet/background filtering with CellBender after matrix
+      generation.
+    prerequisites:
+      - skip_cellbender must be false or omitted.
+      - This route is not run for cellrangerarc.
+      - Confirm server runtime can run the CellBender container and has sufficient GPU/CPU
+        resources when required by the deployment.
+    recommended_preset: cellbender_filtering
+    params_to_confirm:
+      - skip_cellbender=false
+      - aligner other than cellrangerarc
+    outputs_to_review:
+      - <aligner>/<sample>/cellbender_removebackground/
+      - <aligner>/mtx_conversions/<sample>/*_cellbender_filter_matrix.h5ad
+  - id: reference_build_or_reuse
+    use_when: User needs to build, save, or reuse aligner-specific references or indices.
+    prerequisites:
+      - Confirm whether the server already has the needed simpleaf_index, star_index,
+        kallisto_index, cellranger_index, or Cell Ranger VDJ index.
+      - Use save_reference when generated Simpleaf, STAR, or Kallisto references should be
+        published for later reuse.
+      - For Cell Ranger ARC config-driven reference builds, pass both cellrangerarc_config and
+        cellrangerarc_reference.
+    recommended_preset: reference_build_or_reuse
+    outputs_to_review:
+      - simpleaf/simpleaf_index
+      - star/genome_generate/
+      - kallisto/kallisto_index/
+      - cellranger/mkref/
+      - cellrangerarc/mkref/
+      - cellrangermulti/mkref/
+      - cellrangermulti/mkvdjref/
+      - pipeline_info/params.json
+  - id: historical_reuse
+    use_when: User asks to recover or reuse a previous matrix, web summary, reference index, or
+      report.
+    prerequisites:
+      - Search prior runs with run_list using artifact_path_contains for a known filename or
+        output fragment.
+      - Treat artifacts.json and pipeline_fingerprint as historical facts, not compatibility
+        proof.
+      - Confirm route compatibility through pipeline_info/params.json before recommending reuse.
+    artifact_path_contains_examples:
+      - pipeline_info/params.json
+      - multiqc/multiqc_report.html
+      - simpleaf/<sample>/simpleaf_qc_report
+      - star/<sample>
+      - kallisto/bustools_counts
+      - cellranger/count
+      - cellrangermulti/count
+      - mtx_conversions/combined_
+runtime_tool_order:
+  - Optional server_info when server defaults or layout are unknown.
+  - Optional project_list or project_get when project id or project root is unknown.
+  - Optional fs_list(mode="manifest") for one concrete server-local input, reference, config, or
+    samplesheet path.
+  - nextflow_run(prepare=true) before launch when inputs, outputs, config files, or restart route
+    are uncertain.
+  - nextflow_run to launch.
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"]) before raw logs.
+  - run_artifacts after the summary identifies relevant artifact sections.
+  - run_logs only when the summary is not enough.
+  - fs_read only for explicit logs or output files after their server-local paths are known.

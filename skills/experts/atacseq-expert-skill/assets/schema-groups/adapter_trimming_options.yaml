@@ -1,0 +1,217 @@
+group:
+  id: adapter_trimming_options
+  label: Adapter trimming options
+  selection_rule: Use this group for parameters defined under the `Adapter trimming
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/adapter_trimming_options.md
+  - assets/schema-groups/adapter_trimming_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `adapter_trimming_options` for exact lookup.
+parameters:
+- group_id: adapter_trimming_options
+  name: min_trimmed_reads
+  source_name: min_trimmed_reads
+  type: integer
+  required: false
+  default: 10000
+  enum: null
+  description: Minimum number of trimmed reads below which samples are removed from
+    further processing. Some downstream steps in the pipeline will fail if this threshold
+    is too low.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/min_trimmed_reads
+  example_values:
+  - <server_input_root>/min_trimmed_reads
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: integer
+    default: 10000
+    fa_icon: fas fa-hand-paper
+    description: Minimum number of trimmed reads below which samples are removed from
+      further processing. Some downstream steps in the pipeline will fail if this
+      threshold is too low.
+- group_id: adapter_trimming_options
+  name: save_trimmed
+  source_name: save_trimmed
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the trimmed FastQ files in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: boolean
+    description: Save the trimmed FastQ files in the results directory.
+    help_text: By default, trimmed FastQ files will not be saved to the results directory.
+      Specify this flag (or set to true in your config file) to copy these files to
+      the results directory when complete.
+    fa_icon: fas fa-save
+- group_id: adapter_trimming_options
+  name: skip_trimming
+  source_name: skip_trimming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the adapter trimming step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: boolean
+    description: Skip the adapter trimming step.
+    help_text: Use this if your input FastQ files have already been trimmed outside
+      of the workflow or if you're very confident that there is no adapter contamination
+      in your data.
+    fa_icon: fas fa-fast-forward
+- group_id: adapter_trimming_options
+  name: three_prime_clip_r1
+  source_name: three_prime_clip_r1
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Instructs Trim Galore to remove bp from the 3' end of read 1 AFTER
+    adapter/quality trimming has been performed.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: integer
+    description: Instructs Trim Galore to remove bp from the 3' end of read 1 AFTER
+      adapter/quality trimming has been performed.
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming_options
+  name: three_prime_clip_r2
+  source_name: three_prime_clip_r2
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Instructs Trim Galore to remove bp from the 3' end of read 2 AFTER
+    adapter/quality trimming has been performed.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: integer
+    description: Instructs Trim Galore to remove bp from the 3' end of read 2 AFTER
+      adapter/quality trimming has been performed.
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming_options
+  name: trim_nextseq
+  source_name: trim_nextseq
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Instructs Trim Galore to apply the --nextseq=X option, to trim based
+    on quality after removing poly-G tails.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: integer
+    description: Instructs Trim Galore to apply the --nextseq=X option, to trim based
+      on quality after removing poly-G tails.
+    help_text: This enables the option Cutadapt `--nextseq-trim=3'CUTOFF` option via
+      Trim Galore, which will set a quality cutoff (that is normally given with -q
+      instead), but qualities of G bases are ignored. This trimming is in common for
+      the NextSeq- and NovaSeq-platforms, where basecalls without any signal are called
+      as high-quality G bases.
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming_options
+  name: clip_r1
+  source_name: clip_r1
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Instructs Trim Galore to remove bp from the 5' end of read 1 (or single-end
+    reads).
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: integer
+    description: Instructs Trim Galore to remove bp from the 5' end of read 1 (or
+      single-end reads).
+    fa_icon: fas fa-cut
+- group_id: adapter_trimming_options
+  name: clip_r2
+  source_name: clip_r2
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Instructs Trim Galore to remove bp from the 5' end of read 2 (paired-end
+    reads only).
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Adapter trimming options
+  raw_schema:
+    type: integer
+    description: Instructs Trim Galore to remove bp from the 5' end of read 2 (paired-end
+      reads only).
+    fa_icon: fas fa-cut

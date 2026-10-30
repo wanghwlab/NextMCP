@@ -1,0 +1,196 @@
+playbooks:
+- id: standard_riboseq
+  use_when: User wants a normal Ribo-seq or TI-seq analysis from FASTQ.
+  prerequisites:
+  - Confirm the project id and server-local samplesheet.
+  - Confirm FASTA/GTF or a supported genome reference route.
+  - Check whether the samplesheet type column contains riboseq or tiseq.
+  recommended_preset: standard_riboseq
+  params_to_confirm:
+  - input
+  - outdir
+  - fasta or genome
+  - gtf unless genome supplies it
+  - gencode when using GENCODE references
+  prepare_first: Use nextflow_run(prepare=true) when paths, output location, or resource config are
+    uncertain; inspect run_layout and layout_warnings before launch.
+  outputs_to_review:
+  - multiqc/
+  - riboseq_qc/ribotish/
+  - riboseq_qc/ribocode/
+  - psites/plastid/
+  - psites/ribowaltz/
+  - orf_predictions/ribotish/
+  - orf_predictions/ribocode/
+  - quantification/inframe_psite/
+  - pipeline_info/
+- id: translational_efficiency
+  use_when: User has matched RNA-seq and Ribo-seq samples and asks for translation, buffering, or
+    anota2seq outputs.
+  prerequisites:
+  - Samplesheet must include both rnaseq and riboseq rows.
+  - Samplesheet must include the grouping columns named by the contrasts file.
+  - Contrasts file must have id, variable, reference, target, optional batch, and optional pair.
+  recommended_preset: translational_efficiency
+  params_to_confirm:
+  - contrasts
+  - input
+  - outdir
+  outputs_to_review:
+  - translational_efficiency/anota2seq/
+  - quantification/salmon/salmon.merged.gene_counts.tsv
+  - multiqc/multiqc_report.html
+- id: umi_aware
+  use_when: User says the library has UMIs or asks for PCR duplicate-aware quantification.
+  prerequisites:
+  - Confirm where the UMI is encoded: read sequence or read name.
+  - Confirm extraction pattern, separator, and deduplication tool before launch.
+  recommended_preset: umi_aware
+  decision_rules:
+  - If UMI is already in the read name, use with_umi, skip_umi_extract, and umitools_umi_separator.
+  - If UMI is in the read sequence, use with_umi plus an exact umitools_bc_pattern or umitools_bc_pattern2
+    from the library design.
+  - For large sample sets, consider less expensive umitools_grouping_method values only when the user
+    accepts the tradeoff.
+  outputs_to_review:
+  - alignment/star/deduplicated/
+  - alignment/star/deduplicated/log/
+  - umitools/
+- id: rrna_filtering
+  use_when: User selects SortMeRNA for rRNA filtering or supplies SortMeRNA reference materials.
+  prerequisites:
+  - Confirm the selected ribo_removal_tool. Bowtie2 uses ribo_database_manifest, not sortmerna_index.
+  - For requested Bowtie2 filtering choose bowtie2_rrna_removal. Confirm FASTA composition before
+    claiming rRNA and tRNA depletion.
+  recommended_preset: rrna_filtering
+  outputs_to_review:
+  - preprocessing/sortmerna/
+  - multiqc/multiqc_report.html
+- id: bowtie2_rrna_trna_depletion
+  use_when: User requests combined rRNA and tRNA depletion with Bowtie2.
+  prerequisites:
+  - Set remove_ribo_rna=true and ribo_removal_tool=bowtie2 explicitly.
+  - Confirm a ribo_database_manifest with one server-local FASTA path per line and coverage of both RNA classes.
+  - Use save_non_ribo_reads=true if retained FASTQs are needed; do not use sortmerna_index for Bowtie2.
+  recommended_preset: bowtie2_rrna_removal
+  outputs_to_review:
+  - preprocessing/bowtie2_rrna/
+  - multiqc/multiqc_report.html
+- id: contamination_screening
+  use_when: User asks to separate host/contaminant reads or mentions BBSplit.
+  prerequisites:
+  - Set skip_bbsplit false; it is skipped by default.
+  - Confirm bbsplit_fasta_list or a pre-built bbsplit_index.
+  - Use save_bbsplit_reads if the user needs the split FASTQ files.
+  recommended_preset: contamination_screening
+  outputs_to_review:
+  - preprocessing/bbsplit/
+  - multiqc/multiqc_report.html
+- id: reference_build_or_reuse
+  use_when: User needs to build, save, or reuse STAR, Salmon, BBSplit, or SortMeRNA indices.
+  prerequisites:
+  - Confirm FASTA/GTF for new STAR or Salmon indices.
+  - Confirm index directory or tar.gz paths when reusing existing indices.
+  - Use save_reference when generated indices must be reused later.
+  recommended_preset: reference_build_or_reuse
+  outputs_to_review:
+  - genome/
+  - genome/index/star/
+  - pipeline_info/params.json
+- id: historical_reuse
+  use_when: User asks to reuse a previous index, BAM, ORF table, quantification matrix, or report.
+  prerequisites:
+  - Search prior runs with run_list using artifact_path_contains for a known file fragment.
+  - Treat artifacts.json and pipeline_fingerprint as historical facts.
+  - Confirm route compatibility through pipeline_info/params.json before presenting reuse as the safer
+    path.
+  artifact_path_contains_examples:
+  - pipeline_info/params.json
+  - multiqc/multiqc_report.html
+  - quantification/salmon/salmon.merged.gene_counts.tsv
+  - orf_predictions/ribotricer
+  - genome/index/star
+- id: bowtie2_rrna_removal
+  use_when: bowtie2 rrna removal
+  recommended_preset: bowtie2_rrna_removal
+  params_to_confirm:
+  - remove_ribo_rna
+  - ribo_removal_tool
+  - ribo_database_manifest
+  - save_non_ribo_reads
+  prerequisites:
+  - Read the version-specific conditions in references/07_version_update.md and confirm server paths.
+  outputs_to_review:
+  - Use the matching section of official_output_catalog in artifact-contracts.yaml; discover actual
+    files with run_artifacts.
+- id: default_psite_te
+  use_when: default psite te
+  recommended_preset: default_psite_te
+  params_to_confirm:
+  - te_quantification_method
+  - translational_efficiency_method
+  - contrasts
+  prerequisites:
+  - Read the version-specific conditions in references/07_version_update.md and confirm server paths.
+  outputs_to_review:
+  - Use the matching section of official_output_catalog in artifact-contracts.yaml; discover actual
+    files with run_artifacts.
+- id: deltate
+  use_when: deltate
+  recommended_preset: deltate
+  params_to_confirm:
+  - te_quantification_method
+  - translational_efficiency_method
+  - contrasts
+  prerequisites:
+  - Read the version-specific conditions in references/07_version_update.md and confirm server paths.
+  outputs_to_review:
+  - Use the matching section of official_output_catalog in artifact-contracts.yaml; discover actual
+    files with run_artifacts.
+- id: pseudo_kallisto_te
+  use_when: pseudo kallisto te
+  recommended_preset: pseudo_kallisto_te
+  params_to_confirm:
+  - te_quantification_method
+  - pseudo_aligner
+  - kallisto_quant_fraglen
+  - kallisto_quant_fraglen_sd
+  prerequisites:
+  - Read the version-specific conditions in references/07_version_update.md and confirm server paths.
+  outputs_to_review:
+  - Use the matching section of official_output_catalog in artifact-contracts.yaml; discover actual
+    files with run_artifacts.
+- id: extended_orfs
+  use_when: extended orfs
+  recommended_preset: extended_orfs
+  params_to_confirm:
+  - extended_orf_analysis
+  - canonical_gtf
+  - novel_gtf
+  prerequisites:
+  - Read the version-specific conditions in references/07_version_update.md and confirm server paths.
+  outputs_to_review:
+  - Use the matching section of official_output_catalog in artifact-contracts.yaml; discover actual
+    files with run_artifacts.
+- id: optional_orf_callers
+  use_when: optional orf callers
+  recommended_preset: optional_orf_callers
+  params_to_confirm:
+  - run_ribotricer
+  - run_price
+  - run_rpbp
+  prerequisites:
+  - Read the version-specific conditions in references/07_version_update.md and confirm server paths.
+  outputs_to_review:
+  - Use the matching section of official_output_catalog in artifact-contracts.yaml; discover actual
+    files with run_artifacts.
+runtime_tool_order:
+- Optional server_info when server defaults or layout are unknown.
+- Optional project_list or project_get when project id or project root is unknown.
+- Optional fs_list(mode="manifest") for one concrete server-local path.
+- nextflow_run(prepare=true) before launch when inputs, outputs, or restart route are uncertain.
+- nextflow_run to launch.
+- run_get(include=["progress","artifact_summary","diagnosis","next_actions"]) before raw logs.
+- run_artifacts after the summary identifies relevant artifact sections.
+- run_logs only when the summary is not enough.
+- fs_read only for explicit logs or output files after their server-local paths are known.

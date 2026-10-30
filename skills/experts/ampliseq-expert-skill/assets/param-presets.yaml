@@ -1,0 +1,150 @@
+presets:
+  samplesheet_illumina_16s:
+    use_when: Default paired-end Illumina 16S route from a samplesheet.
+    params:
+      input: <server_input_root>/samplesheet.tsv
+      FW_primer: <forward_primer_sequence>
+      RV_primer: <reverse_primer_sequence>
+      metadata: <server_input_root>/metadata.tsv
+      outdir: <server_output_root>/ampliseq
+    placeholders:
+      input: Server-local TSV/CSV/YAML samplesheet.
+      FW_primer: Primer sequence only, without sequencing adapter.
+      RV_primer: Primer sequence only, without sequencing adapter.
+      metadata: Optional QIIME2-style metadata TSV.
+      outdir: Server-local output directory.
+    lookup_groups:
+    - input_output_options
+    - sequencing_input
+    - primer_removal
+    - taxonomic_assignment
+  folder_fastq:
+    use_when: FASTQ files are in one server-local folder.
+    params:
+      input_folder: <server_input_root>/fastq_folder
+      extension: /*_R{1,2}_001.fastq.gz
+      FW_primer: <forward_primer_sequence>
+      RV_primer: <reverse_primer_sequence>
+      outdir: <server_output_root>/ampliseq
+    optional_params:
+      single_end: Set true for single-end Illumina data.
+      multiple_sequencing_runs: Set true only when input_folder has one subfolder
+        per sequencing run.
+      pacbio: Set true for single-ended PacBio reads.
+      iontorrent: Set true for single-ended IonTorrent reads.
+    lookup_groups:
+    - input_output_options
+    - sequencing_input
+  fasta_taxonomy_only:
+    use_when: Taxonomically classify existing ASV or OTU FASTA sequences.
+    params:
+      input_fasta: <server_input_root>/asv_or_otu.fasta
+      outdir: <server_output_root>/ampliseq_fasta
+    optional_params:
+      dada_ref_taxonomy: Default DADA2 database selector.
+      sintax_ref_taxonomy: Enable SINTAX taxonomy.
+      kraken2_ref_taxonomy: Enable Kraken2 taxonomy.
+      qiime_ref_taxonomy: Enable QIIME2 taxonomy.
+    lookup_groups:
+    - input_output_options
+    - taxonomic_assignment
+  its_variable_length:
+    use_when: ITS or other variable-length amplicons.
+    params:
+      input: <server_input_root>/samplesheet.tsv
+      illumina_pe_its: true
+      dada_ref_taxonomy: unite-fungi
+      outdir: <server_output_root>/ampliseq_its
+    optional_params:
+      cut_its: Use its1 or its2 when ITSx extraction is requested.
+      its_partial: Keep partial ITS sequences longer than cutoff.
+      sintax_ref_taxonomy: Use unite-fungi or unite-alleuk for SINTAX.
+    lookup_groups:
+    - sequencing_input
+    - asv_post_processing
+    - taxonomic_assignment
+  multiregion_sidle:
+    use_when: Multiple regions are scaffolded along a reference with Sidle.
+    params:
+      input: <server_input_root>/samplesheet_multiregion.tsv
+      multiregion: <server_input_root>/regions_multiregion.tsv
+      sidle_ref_taxonomy: silva=128
+      outdir: <server_output_root>/ampliseq_sidle
+    placeholders:
+      multiregion: Server-local TSV/CSV/YAML with region, region_length, FW_primer,
+        RV_primer.
+    optional_params:
+      sidle_ref_tax_custom: Custom taxonomy file.
+      sidle_ref_seq_custom: Custom reference sequences.
+      sidle_ref_aln_custom: Optional custom alignment.
+      sidle_ref_tree_custom: Optional custom tree.
+    lookup_groups:
+    - input_output_options
+    - multiregion_taxonomic_database
+  taxonomy_alternatives:
+    use_when: Change or supplement the default DADA2 SILVA taxonomy route.
+    params:
+      input: <server_input_root>/samplesheet.tsv
+      outdir: <server_output_root>/ampliseq_taxonomy
+    optional_params:
+      dada_ref_taxonomy: Supported DADA2 database and optional version.
+      dada_ref_tax_custom: Server-local custom DADA2 taxonomy FASTA.
+      dada_ref_tax_custom_sp: Server-local DADA2 species FASTA.
+      qiime_ref_taxonomy: Supported QIIME2 database selector.
+      qiime_ref_tax_custom: Server-local QIIME2 custom database files or tarball.
+      classifier: Server-local trained QIIME2 classifier.
+      kraken2_ref_taxonomy: Supported Kraken2 database selector.
+      kraken2_ref_tax_custom: Server-local Kraken2 database folder or tarball.
+      sintax_ref_taxonomy: Supported SINTAX database selector.
+      pplace_tree: Server-local Newick tree for pplacer.
+      pplace_aln: Server-local reference alignment for pplacer.
+      pplace_model: Phylogenetic model for pplacer.
+    lookup_groups:
+    - taxonomic_assignment
+  metadata_downstream:
+    use_when: QIIME2 visualisations, diversity, ADONIS, ANCOM, ANCOM-BC, PICRUSt2,
+      or SBDI export.
+    params:
+      input: <server_input_root>/samplesheet.tsv
+      metadata: <server_input_root>/metadata.tsv
+      outdir: <server_output_root>/ampliseq_metadata
+    optional_params:
+      metadata_category: Limit metadata columns for downstream analysis.
+      metadata_category_barplot: Columns for average barplots.
+      qiime_adonis_formula: Formula for ADONIS tests.
+      ancom: Enable ANCOM.
+      ancombc: Enable ANCOM-BC.
+      ancombc_formula: Formula for ANCOM-BC.
+      picrust: Enable PICRUSt2.
+      sbdiexport: Enable SBDI export.
+    lookup_groups:
+    - downstream_analysis
+    - differential_abundance_analysis
+  skip_or_save_steps:
+    use_when: User explicitly asks to skip stages or save intermediates.
+    params: {}
+    important_toggles:
+      skip_fastqc: Skip raw read FastQC.
+      skip_cutadapt: Skip primer trimming only when reads do not contain primers.
+      skip_qiime: Skip QIIME2 import and downstream analysis.
+      skip_qiime_downstream: Keep QIIME2 import but skip downstream analysis.
+      skip_taxonomy: Skip taxonomy; incompatible with sbdiexport.
+      skip_dada_taxonomy: Skip DADA2 taxonomy.
+      skip_dada_addspecies: Reduce memory by skipping DADA2 species-level addSpecies;
+        incompatible with sbdiexport.
+      skip_multiqc: Skip MultiQC, usually not recommended.
+      skip_report: Skip summary report.
+      save_intermediates: Save additional intermediate files for inspection.
+    lookup_groups:
+    - skipping_specific_steps
+    - asv_post_processing
+nextmcp_boundaries:
+  project: Required nextmcp project container, resolved on the nextmcp server.
+  params: Use for ampliseq parameters such as input, input_folder, input_fasta, primers,
+    metadata, taxonomy choices, route selectors, and skip/save toggles.
+  config_files: Use for Nextflow config files and resource caps such as process.resourceLimits.
+  from_run_id: Public restart path for reusing a previous nextmcp run.
+  extra_args: Use only when no normalized nextflow_run field covers the needed CLI
+    flag.
+resource_override_example: 'process { resourceLimits = [cpus: 8, memory: ''32.GB'',
+  time: ''24.h''] }'

@@ -1,0 +1,314 @@
+group:
+  id: sequencing_input
+  label: Sequencing input
+  selection_rule: Use this group for parameters defined under the `Sequencing input`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/sequencing_input.md
+  - assets/schema-groups/sequencing_input.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `sequencing_input` for exact lookup.
+parameters:
+- group_id: sequencing_input
+  name: ignore_empty_input_files
+  source_name: ignore_empty_input_files
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Ignore input files with too few reads.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/ignore_empty_input_files
+  example_values:
+  - <server_input_root>/ignore_empty_input_files
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: Ignore input files with too few reads.
+    help_text: Ignore input files with less reads than specified by `--min_read_counts`
+      and continue the pipeline without those samples.
+    fa_icon: fas fa-arrow-right
+- group_id: sequencing_input
+  name: illumina_novaseq
+  source_name: illumina_novaseq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If data has binned quality scores such as Illumina NovaSeq
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/illumina_novaseq
+  example_values:
+  - <server_input_root>/illumina_novaseq
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: If data has binned quality scores such as Illumina NovaSeq
+    fa_icon: fas fa-align-justify
+- group_id: sequencing_input
+  name: illumina_pe_its
+  source_name: illumina_pe_its
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If analysing ITS amplicons or any other region with large length variability
+    with Illumina paired end reads
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/illumina_pe_its
+  example_values:
+  - <server_input_root>/illumina_pe_its
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: If analysing ITS amplicons or any other region with large length
+      variability with Illumina paired end reads
+    help_text: 'This will cause the pipeline to
+
+      - not truncate input reads if not `--trunclenf` and `--trunclenr` are overwriting
+      defaults
+
+      - remove reverse complement primers from the end of reads in case the read length
+      exceeds the amplicon length'
+    fa_icon: fas fa-align-justify
+- group_id: sequencing_input
+  name: iontorrent
+  source_name: iontorrent
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If data is single-ended IonTorrent reads instead of Illumina
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/iontorrent
+  example_values:
+  - <server_input_root>/iontorrent
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: If data is single-ended IonTorrent reads instead of Illumina
+    fa_icon: fas fa-align-justify
+- group_id: sequencing_input
+  name: min_read_counts
+  source_name: min_read_counts
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Set read count threshold for failed samples.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/min_read_counts
+  example_values:
+  - <server_input_root>/min_read_counts
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: integer
+    default: 1
+    description: Set read count threshold for failed samples.
+    help_text: Samples with less reads than this threshold at input or after trimming
+      stop the pipeline. Using `--ignore_empty_input_files` or `--ignore_failed_trimming
+      ignores` samples with read numbers below the threshold and lets the pipeline
+      continue with less samples.
+    fa_icon: fas fa-greater-than-equal
+- group_id: sequencing_input
+  name: multiple_sequencing_runs
+  source_name: multiple_sequencing_runs
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: 'If using `--input_folder`: samples were sequenced in multiple sequencing
+    runs'
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/multiple_sequencing_runs
+  example_values:
+  - <server_input_root>/multiple_sequencing_runs
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: 'If using `--input_folder`: samples were sequenced in multiple sequencing
+      runs'
+    help_text: "Expects one sub-folder per sequencing run in the folder specified\
+      \ by `--input_folder` containing sequencing data of the specific run.\nSample\
+      \ identifiers are taken from sequencing files, specifically the string before\
+      \ the first underscore will be the sample ID. Sample IDs across all sequencing\
+      \ runs (all sequencing files) have to be unique. If this is not the case, please\
+      \ use a sample sheet as input instead.\n\nExample for input data organization:\n\
+      \n```bash\ndata\n  |-run1\n  |  |-sample1_1_L001_R1_001.fastq.gz\n  |  |-sample1_1_L001_R2_001.fastq.gz\n\
+      \  |  |-sample2_1_L001_R1_001.fastq.gz\n  |  |-sample2_1_L001_R2_001.fastq.gz\n\
+      \  |\n  |-run2\n     |-sample3_1_L001_R1_001.fastq.gz\n     |-sample3_1_L001_R2_001.fastq.gz\n\
+      \     |-sample4_1_L001_R1_001.fastq.gz\n     |-sample4_1_L001_R2_001.fastq.gz\n\
+      ```\n\nExample command to analyze this data in one pipeline run:\n\n```bash\n\
+      nextflow run nf-core/ampliseq \\\n    -profile singularity \\\n    --input_folder\
+      \ \"data\" \\\n    --FW_primer \"GTGYCAGCMGCCGCGGTAA\" \\\n    --RV_primer \"\
+      GGACTACNVGGGTWTCTAAT\" \\\n    --metadata \"data/Metadata.tsv\" \\\n    --multiple_sequencing_runs\n\
+      ```"
+    fa_icon: fas fa-running
+- group_id: sequencing_input
+  name: pacbio
+  source_name: pacbio
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If data is single-ended PacBio reads instead of Illumina
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/pacbio
+  example_values:
+  - <server_input_root>/pacbio
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: If data is single-ended PacBio reads instead of Illumina
+    fa_icon: fas fa-align-justify
+- group_id: sequencing_input
+  name: quality_type
+  source_name: quality_type
+  type: string
+  required: false
+  default: Auto
+  enum: &id001
+  - Auto
+  - FastqQuality
+  - SFastqQuality
+  description: Type of quality scores in raw read data
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/quality_type
+  example_values:
+  - Auto
+  - FastqQuality
+  - SFastqQuality
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: string
+    default: Auto
+    description: Type of quality scores in raw read data
+    help_text: 'From R package ''ShortRead'' function ''readFastq'': Representation
+      to be used for quality scores, must be one of `Auto` (infer automatically),
+      `FastqQuality` (Phred-like base 33 encoding), `SFastqQuality` (Illumina base
+      64 encoding).'
+    enum: *id001
+    fa_icon: fab fa-amilia
+- group_id: sequencing_input
+  name: single_end
+  source_name: single_end
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If data is single-ended Illumina reads instead of paired-end
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/single_end
+  example_values:
+  - <server_input_root>/single_end
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: boolean
+    description: If data is single-ended Illumina reads instead of paired-end
+    help_text: When using a sample sheet with `--input` containing forward and reverse
+      reads, specifying `--single_end` will only extract forward reads and treat the
+      data as single ended instead of extracting forward and reverse reads.
+    fa_icon: fas fa-align-left
+- group_id: sequencing_input
+  name: extension
+  source_name: extension
+  type: string
+  required: false
+  default: /*_R{1,2}_001.fastq.gz
+  enum: null
+  description: 'If using `--input_folder`: naming of sequencing files'
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/extension
+  example_values:
+  - <server_input_root>/extension
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Sequencing input
+  raw_schema:
+    type: string
+    default: /*_R{1,2}_001.fastq.gz
+    description: 'If using `--input_folder`: naming of sequencing files'
+    help_text: 'Indicates the naming of sequencing files (default: `"/*_R{1,2}_001.fastq.gz"`).
+
+
+      Please note:
+
+
+      1. The prepended slash (`/`) is required
+
+      2. The star (`*`) is the required wildcard for sample names
+
+      3. The curly brackets (`{}`) enclose the orientation for paired end reads, separated
+      by a comma (`,`).
+
+      4. The pattern must be enclosed in quotes
+
+
+      For example for one sample (name: `1`) with forward (file: `1_a.fastq.gz`) and
+      reverse (file: `1_b.fastq.gz`) reads in folder `data`:
+
+
+      ```bash
+
+      --input_folder "data" --extension "/*_{a,b}.fastq.gz"
+
+      ```'
+    fa_icon: fab fa-amilia

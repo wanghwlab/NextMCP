@@ -1,0 +1,17 @@
+status: resolved
+gaps:
+- id: capability_audit_items
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in playbooks, presets, step recipes, artifact contracts, QC rules,
+    and schema-backed lookup files. Low-impact help, validation, email formatting,
+    and presentation parameters remain lookup-only in grouped schema assets.
+- id: replace_generic_artifact_contract
+  source: artifact-contracts.yaml
+  status: resolved
+  action: Source-backed chipseq output families were added to artifact-contracts.yaml.
+- id: replace_generic_qc_rule
+  source: qc-rules.yaml
+  status: resolved
+  action: Replace the generic completion check with source-backed QC and troubleshooting
+    rules.

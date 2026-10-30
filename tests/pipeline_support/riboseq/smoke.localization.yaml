@@ -1,0 +1,176 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: riboseq
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/riboseq/test
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/
+    localized_prefix: /data/nextmcp/testdata/riboseq/test/pipeline-data/
+  - remote_prefix: https://raw.githubusercontent.com/biocore/sortmerna/v4.3.4/data/rRNA_databases/
+    localized_prefix: /data/nextmcp/testdata/riboseq/test/sortmerna-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/riboseq
+  config: conf/test.config
+  resolved_runtime_chain:
+    aligner: star
+    remove_ribo_rna: true
+    min_trimmed_reads: 1000
+    skip_ribotricer: true
+  resolved_params:
+    input: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv
+    contrasts: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv
+    ribo_database_manifest: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt
+    fasta: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+    gtf: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+    min_trimmed_reads: 1000
+    skip_ribotricer: true
+
+runtime_hints:
+  launch_rule: Build the smoke contract from nextflow.config plus conf/test.config because the route is profile-only, but keep the upstream resourceLimits in a small override config passed through config_files.
+  manifest_rule: Download and rewrite the upstream samplesheet and rRNA database manifest because the nested FASTQ URLs and SortMeRNA FASTA URLs are only visible after fetching those files.
+  artifact_rule: Keep assertions minimal and stable by using tests/main.nf.test.snap plus tests/.nftignore as evidence only.
+
+config_override_files:
+  - path: /data/nextmcp/testdata/riboseq/test/project-files/pipeline-support-riboseq/profile_test_overrides.config
+    source_fields:
+      - process.resourceLimits.cpus
+      - process.resourceLimits.memory
+      - process.resourceLimits.time
+    purpose: Keep the upstream test profile resource caps in config scope instead of nextflow_run params.
+    content: |
+      process {
+          resourceLimits = [
+              cpus: 4,
+              memory: '15.GB',
+              time: '1.h'
+          ]
+      }
+
+url_inventory:
+  - role: input_samplesheet
+    config_field: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/riboseq/samplesheet/samplesheet.csv
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/samplesheet/samplesheet.csv
+  - role: contrasts_table
+    config_field: contrasts
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/riboseq/contrasts.csv
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv
+  - role: ribo_database_manifest
+    config_field: ribo_database_manifest
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/riboseq/testdata/rrna-db.txt
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/testdata/rrna-db.txt
+  - role: genome_fasta
+    config_field: fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+  - role: annotation_gtf
+    config_field: gtf
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/samplesheet/samplesheet.csv
+    localized_path: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv
+    rewritten_columns:
+      - auto_detect_all_remote_url_fields
+    rewrite_rule: Rewrite every remote URL cell in the CSV to a server-local path, including all nested FASTQ URLs for both RNA-seq and Ribo-seq libraries.
+  - role: ribo_database_manifest
+    original_path: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/testdata/rrna-db.txt
+    localized_path: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt
+    rewritten_columns:
+      - line_or_cell_values_that_are_remote_urls
+    rewrite_rule: Rewrite each remote SortMeRNA FASTA URL line to a server-local path under sortmerna-data.
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/riboseq/samplesheet/samplesheet.csv
+    localized_value: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv
+  - config_field: contrasts
+    official_param: contrasts
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/riboseq/contrasts.csv
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv
+  - config_field: ribo_database_manifest
+    official_param: ribo_database_manifest
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/riboseq/testdata/rrna-db.txt
+    localized_value: /data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt
+  - config_field: fasta
+    official_param: fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz
+  - config_field: gtf
+    official_param: gtf
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+    localized_value: /data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf
+  - config_field: min_trimmed_reads
+    official_param: min_trimmed_reads
+    original_value: 1000
+    localized_value: 1000
+  - config_field: skip_ribotricer
+    official_param: skip_ribotricer
+    original_value: true
+    localized_value: true
+  - config_field: nextflow.config:aligner
+    official_param: aligner
+    original_value: star
+    localized_value: star
+
+ignored_upstream_params:
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+  - config_field: params.test_data_base
+    reason: tests/nextflow.config carries nf-test module testdata defaults, not the pipeline runtime route.
+  - config_field: params.modules_testdata_base_path
+    reason: tests/nextflow.config carries nf-test module testdata defaults, not the pipeline runtime route.
+  - config_field: params.extra_fqlint_args
+    reason: tests/nextflow.config resets a value that already matches the pipeline default in nextflow.config.
+  - config_field: process.withName:'.*'
+    reason: nf-test-wide resource caps are excluded; the contract keeps the upstream test profile resourceLimits instead.
+  - config_field: process.withName:'FQ_SUBSAMPLE'
+    reason: module snapshot override for nf-test only.
+  - config_field: process.withName:'GFFREAD'
+    reason: module snapshot override for nf-test only.
+  - config_field: includeConfig:https://raw.githubusercontent.com/nf-core/modules/0094ae45ba8f5a2e30644d4e252970775a03ee91/tests/config/test_data.config
+    reason: remote nf-test harness include is not needed for the pipeline-level smoke route.
+
+natural_language_execution_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the prepared mixed RNA-seq and Ribo-seq lightweight example in project
+  `pipeline-withskill-riboseq`. Use the localized chr20 references, the localized
+  contrasts table, and the localized SortMeRNA database manifest. Keep the
+  project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Samplesheet: `/data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/samplesheet/samplesheet_local.csv`
+  - Contrasts table: `/data/nextmcp/testdata/riboseq/test/pipeline-data/riboseq/contrasts.csv`
+  - Genome FASTA: `/data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz`
+  - Annotation GTF: `/data/nextmcp/testdata/riboseq/test/pipeline-data/modules/data/genomics/homo_sapiens/riboseq_expression/Homo_sapiens.GRCh38.111_chr20.gtf`
+  - rRNA database manifest: `/data/nextmcp/testdata/riboseq/test/rewrites/pipeline-data/riboseq/testdata/rrna-db_local.txt`
+  
+  ## Workflow goal
+  
+  - Run the mixed RNA-seq and Ribo-seq test design represented by the samplesheet.
+  - Use the contrasts table so translational-efficiency outputs remain part of the run.
+  - Use the localized chr20 genome, annotation, and SortMeRNA database manifest.
+  - Keep STAR alignment, Salmon quantification, Ribo-TISH quality-control outputs, and
+    translational-efficiency outputs active.
+  - Keep the trimmed-read minimum at 1000 for this lightweight test.
+  - Do not run the Ribotricer branch for this lightweight test.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/riboseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-riboseq` as project name.
+  - Do not use the `riboseq` expert skill.

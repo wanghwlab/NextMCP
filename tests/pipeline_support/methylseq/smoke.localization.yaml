@@ -1,0 +1,179 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: methylseq
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/methylseq/test
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/
+    localized_prefix: /data/nextmcp/testdata/methylseq/test/pipeline-data/
+  - remote_prefix: https://github.com/nf-core/test-datasets/raw/
+    localized_prefix: /data/nextmcp/testdata/methylseq/test/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/methylseq
+  config: conf/test.config
+  resolved_runtime_chain:
+    test_profile: test
+    aligner: bismark
+    pipelines_testdata_base_path: https://raw.githubusercontent.com/nf-core/test-datasets/methylseq/
+    nf_test_case: tests/default.nf.test::-profile test
+  resolved_params:
+    input: /data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv
+    fasta: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz
+    fasta_index: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai
+    aligner: bismark
+
+runtime_hints:
+  launch_rule: Build the smoke contract from nextflow.config plus conf/test.config and the copied repo samplesheet, keep the upstream process.resourceLimits in one small override config, and do not merge tests/nextflow.config because its duplicate branch-pinned testdata values and nf-test settings are not required for this route.
+  manifest_rule: Copy the repo samplesheet into the current localized_root, then rewrite every nested remote FASTQ URL to a server-local path under the same localized bundle.
+  artifact_rule: Keep assertions focused on one deduplicated BAM branch, one methylation coverage file, MultiQC outputs, and the software versions files derived from tests/default.nf.test.snap plus tests/.nftignore.
+
+local_file_inventory:
+  - role: input_samplesheet_template
+    config_field: input
+    source_path: /root/key_projects/nextmcp/nf_pipeline/methylseq/assets/samplesheet.csv
+    localized_path: /data/nextmcp/testdata/methylseq/test/repo-assets/assets/samplesheet.csv
+
+config_override_files:
+  - path: /data/nextmcp/testdata/methylseq/test/project-files/pipeline-support-methylseq/profile_test_overrides.config
+    source_fields:
+      - process.resourceLimits.cpus
+      - process.resourceLimits.memory
+      - process.resourceLimits.time
+    purpose: Keep the upstream test profile resource caps in config scope instead of nextflow_run params.
+    content: |
+      process {
+          resourceLimits = [
+              cpus: 4,
+              memory: '15.GB',
+              time: '1.h'
+          ]
+      }
+
+url_inventory:
+  - role: genome_fasta
+    config_field: fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/methylseq/reference/genome.fa.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz
+  - role: genome_fasta_index
+    config_field: fasta_index
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/methylseq/reference/genome.fa.fai
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai
+  - role: srr389222_sub1_fastq
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://github.com/nf-core/test-datasets/raw/methylseq/testdata/SRR389222_sub1.fastq.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub1.fastq.gz
+  - role: srr389222_sub2_fastq
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://github.com/nf-core/test-datasets/raw/methylseq/testdata/SRR389222_sub2.fastq.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub2.fastq.gz
+  - role: srr389222_sub3_fastq
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://github.com/nf-core/test-datasets/raw/methylseq/testdata/SRR389222_sub3.fastq.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub3.fastq.gz
+  - role: ecoli_methylated_read_1
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://github.com/nf-core/test-datasets/raw/methylseq/testdata/Ecoli_10K_methylated_R1.fastq.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/Ecoli_10K_methylated_R1.fastq.gz
+  - role: ecoli_methylated_read_2
+    config_field: input.samplesheet[].fastq_2
+    original_value: https://github.com/nf-core/test-datasets/raw/methylseq/testdata/Ecoli_10K_methylated_R2.fastq.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/Ecoli_10K_methylated_R2.fastq.gz
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/methylseq/test/repo-assets/assets/samplesheet.csv
+    localized_path: /data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv
+    rewritten_columns:
+      - fastq_1
+      - fastq_2
+    localized_rows:
+      - sample: SRR389222_sub1
+        fastq_1: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub1.fastq.gz
+        fastq_2: ""
+        genome: ""
+      - sample: SRR389222_sub2
+        fastq_1: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub2.fastq.gz
+        fastq_2: ""
+        genome: ""
+      - sample: SRR389222_sub3
+        fastq_1: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/SRR389222_sub3.fastq.gz
+        fastq_2: ""
+        genome: ""
+      - sample: Ecoli_10K_methylated
+        fastq_1: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/Ecoli_10K_methylated_R1.fastq.gz
+        fastq_2: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata/Ecoli_10K_methylated_R2.fastq.gz
+        genome: ""
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: ${projectDir}/assets/samplesheet.csv
+    localized_value: /data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv
+  - config_field: fasta
+    official_param: fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/methylseq/reference/genome.fa.gz
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz
+  - config_field: fasta_index
+    official_param: fasta_index
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/methylseq/reference/genome.fa.fai
+    localized_value: /data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai
+  - config_field: nextflow.config:aligner
+    official_param: aligner
+    original_value: bismark
+    localized_value: bismark
+  - config_field: process.resourceLimits
+    official_param: null
+    original_value: "{cpus: 4, memory: 15.GB, time: 1.h}"
+    localized_value: Execution note only. Keep in config_files, not in nextflow_run params.
+
+ignored_upstream_params:
+  - config_field: tests/nextflow.config:params.modules_testdata_base_path
+    reason: nf-test module defaults are not needed for the pipeline-level default route.
+  - config_field: tests/nextflow.config:params.pipelines_testdata_base_path
+    reason: The branch-pinned nf-test base path is not needed once the contract localizes the concrete reference URLs and copied samplesheet inputs under the current localized_root.
+  - config_field: tests/nextflow.config:params.input
+    reason: conf/test.config already defines the canonical repo samplesheet for the selected route.
+  - config_field: tests/nextflow.config:params.target_regions_file
+    reason: The targeted sequencing branch is not part of the canonical default route.
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+  - config_field: aws.client.anonymous
+    reason: No S3 access is required after localizing the GitHub-hosted inputs.
+
+natural_language_execution_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `methylseq` lightweight example in project
+  `pipeline-withskill-methylseq`. Use the rewritten samplesheet, the local genome
+  FASTA and FASTA index, and the server-local FASTQ files referenced by the
+  samplesheet. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/methylseq/test/rewrites/repo-assets/assets/samplesheet_local.csv`
+  - Genome FASTA: `/data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.gz`
+  - Genome FASTA index: `/data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/reference/genome.fa.fai`
+  - FASTQ bundle root: `/data/nextmcp/testdata/methylseq/test/pipeline-data/methylseq/testdata`
+  
+  ## Workflow goal
+  
+  - Run the upstream lightweight methylation-analysis route represented by the rewritten samplesheet.
+  - Keep the provided mix of single-end reads and paired-end methylated control reads.
+  - Use the listed local genome FASTA and FASTA index instead of genome lookup or igenomes lookup.
+  - Keep the default Bismark alignment, deduplication, methylation extraction, FastQC, and MultiQC
+    behavior.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/methylseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-methylseq` as project name.
+  - Do not use the `methylseq` expert skill.

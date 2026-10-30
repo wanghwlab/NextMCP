@@ -1,0 +1,795 @@
+group:
+  id: process_skipping_options
+  label: Process skipping options
+  selection_rule: Use this group for parameters defined under the `Process skipping options` top-level
+    schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/process_skipping_options.md
+  - assets/schema-groups/process_skipping_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section `process_skipping_options`
+    for exact lookup.
+parameters:
+- group_id: process_skipping_options
+  name: extended_orf_analysis
+  source_name: extended_orf_analysis
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Discover novel ORFs in novel intergenic transcripts (from StringTie or user-supplied
+    --novel_gtf) by feeding the hybrid GTF to genome-BAM ORF callers (Ribo-TISH predict, Ribotricer).
+    Also enables the cross-caller ORF catalogue and ORF-level quantification, which do not need a
+    novel-transcript source. Default false for backward compatibility.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Discover novel ORFs in novel intergenic transcripts (from StringTie or user-supplied
+      --novel_gtf) by feeding the hybrid GTF to genome-BAM ORF callers (Ribo-TISH predict, Ribotricer).
+      Also enables the cross-caller ORF catalogue and ORF-level quantification, which do not need
+      a novel-transcript source. Default false for backward compatibility.
+    help_text: When true and a novel-transcript source is enabled (--skip_stringtie false or --novel_gtf),
+      the hybrid GTF (<outdir>/transcript_assembly/stringtie/hybrid_reference.gtf) is passed to Ribo-TISH
+      predict (-g) and Ribotricer prepare-orfs so that novel intergenic ORFs are within scope. RiboCode,
+      riboWaltz and Salmon continue to read the reference transcriptome, and plastid P-site quantification
+      the canonical backbone, regardless of this flag (RiboCode's transcriptome-coordinate BAM is
+      keyed to the reference transcriptome FASTA used at alignment time). This flag also gates the
+      cross-caller ORF catalogue, per-ORF P-site quantification and ORF-level differential translation,
+      none of which need novel transcripts. When true but no novel-transcript source is configured,
+      hybrid routing into the callers is a no-op and a warning is emitted, but the catalogue is still
+      built against the full reference annotation.
+    fa_icon: fas fa-expand-arrows-alt
+- group_id: process_skipping_options
+  name: novel_gtf
+  source_name: novel_gtf
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Optional user-supplied novel-transcript GTF. When provided, StringTie assembly is skipped
+    and this GTF is used directly as the source of novel transcripts.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Process skipping options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.gtf(\.gz)?$
+    description: Optional user-supplied novel-transcript GTF. When provided, StringTie assembly is
+      skipped and this GTF is used directly as the source of novel transcripts.
+    help_text: Useful when you already have a curated cell-type-specific annotation (e.g. from long-read
+      RNA-seq or a published ORF catalogue). The supplied GTF is still passed through the gffcompare
+      class-code filter (`--gffcompare_class_codes`, default `u` = intergenic only) so users can submit
+      annotations containing any class of transcript and have the pipeline retain only the intergenic
+      ones.
+    fa_icon: fas fa-file-import
+- group_id: process_skipping_options
+  name: rrna_blacklist
+  source_name: rrna_blacklist
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Optional BED file of rRNA/repeat regions to exclude from the novel-transcript GTF (strand-aware
+    intersect).
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/rrna_blacklist.bed
+  example_values:
+  - <server_reference_root>/rrna_blacklist.bed
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference, database, or prebuilt
+    index value. Prefer reuse of confirmed server-side assets over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Process skipping options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.bed(\.gz)?$
+    description: Optional BED file of rRNA/repeat regions to exclude from the novel-transcript GTF
+      (strand-aware intersect).
+    help_text: When supplied, novel transcripts overlapping the blacklist on the same strand are removed
+      via `bedtools intersect -v -s`. UCSC publishes ready-made blacklists for hg38 and mm10; for
+      other organisms you must construct one yourself or omit this parameter (the step is skipped
+      silently).
+    fa_icon: fas fa-ban
+- group_id: process_skipping_options
+  name: run_price
+  source_name: run_price
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Opt in to running PRICE as an additional ORF caller (Bayesian, slow).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Opt in to running PRICE as an additional ORF caller (Bayesian, slow).
+    help_text: PRICE (Probabilistic inference of codon activities, Erhard et al. 2018) is a Bayesian
+      ORF caller distributed as part of the Gedi Java framework (`gedi -e Price`). It is opt-in because
+      the EM fit dominates runtime at full scale. PRICE is invoked once across the riboseq cohort
+      (it estimates a shared codon-position model) so the whole BAM cohort is staged into a single
+      task; expect higher disk I/O than per-sample callers on local executors. PRICE joins the cross-caller
+      ORF catalogue alongside Ribo-TISH, RiboCode and Ribotricer.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: run_ribotricer
+  source_name: run_ribotricer
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Opt in to running Ribotricer as an additional ORF caller.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Opt in to running Ribotricer as an additional ORF caller.
+    help_text: Ribotricer is disabled by default because benchmark data (FK/NGB, May 2026) showed
+      its ORF-score column is rank-unstable across biological replicates (mean Spearman 0.288 vs Jaccard
+      0.770). Its binary call set is reproducible, but the score should not be used as a primary ranking
+      source. Enable with `--run_ribotricer true` if you need its calls; the pipeline will warn at
+      runtime and exclude its score column from any cross-caller rank aggregation.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: run_rpbp
+  source_name: run_rpbp
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Opt in to running Rp-Bp as an additional ORF caller (Bayesian, slow).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Opt in to running Rp-Bp as an additional ORF caller (Bayesian, slow).
+    help_text: Rp-Bp (Malone et al. 2017) is a Bayesian-strict ORF caller that complements RiboCode's
+      permissive canonical-CDS calls. Runtime is on the order of 20-24h per replicate at genome-wide
+      scale because the MCMC fit dominates, hence it is opt-in. Plan accordingly. Rp-Bp's score column
+      (Bayes factor) participates in the cross-caller rank aggregation alongside RiboCode and Ribo-TISH.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_bbsplit
+  source_name: skip_bbsplit
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Skip BBSplit for removal of non-reference genome reads.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    default: true
+    fa_icon: fas fa-fast-forward
+    description: Skip BBSplit for removal of non-reference genome reads.
+- group_id: process_skipping_options
+  name: skip_coverage_tracks
+  source_name: skip_coverage_tracks
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip bigWig coverage track generation.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip bigWig coverage track generation.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_fastqc
+  source_name: skip_fastqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip FastQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip FastQC.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_gtf_filter
+  source_name: skip_gtf_filter
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip filtering of GTF for valid scaffolds and/ or transcript IDs.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-forward
+    description: Skip filtering of GTF for valid scaffolds and/ or transcript IDs.
+    help_text: If you're confident on the validity of the GTF with respect to the genome fasta file,
+      or wish to disregard failures thriggered by the filtering module, activate this option.
+- group_id: process_skipping_options
+  name: skip_gtf_transcript_filter
+  source_name: skip_gtf_transcript_filter
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the 'transcript_id' checking component of the GTF filtering script used in the
+    pipeline.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-forward
+    description: Skip the 'transcript_id' checking component of the GTF filtering script used in the
+      pipeline.
+- group_id: process_skipping_options
+  name: skip_linting
+  source_name: skip_linting
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip linting checks during FASTQ preprocessing and filtering.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip linting checks during FASTQ preprocessing and filtering.
+- group_id: process_skipping_options
+  name: skip_markduplicates
+  source_name: skip_markduplicates
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip picard MarkDuplicates step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip picard MarkDuplicates step.
+- group_id: process_skipping_options
+  name: skip_multiqc
+  source_name: skip_multiqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate, or reporting
+    behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip MultiQC.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_orf_collapse
+  source_name: skip_orf_collapse
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the peptide-level small-ORF deduplication of the cross-sample ORF catalogue.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip the peptide-level small-ORF deduplication of the cross-sample ORF catalogue.
+    help_text: By default the catalogue clusters its amino-acid sequences with MMseqs2 (`--min-seq-id
+      0.9 -c 0.8`) and folds each multi-member small-ORF cluster (`aa_length` <= `--smorf_max_aa`)
+      down to one representative, following the GENCODE Ribo-seq ORF catalogue convention (Mudge et
+      al. 2022). Set true to publish the coordinate-merged catalogue without this sequence-level collapse,
+      e.g. when you want to inspect every redundant copy. Has no effect unless `--extended_orf_analysis
+      true`.
+    fa_icon: fas fa-layer-group
+- group_id: process_skipping_options
+  name: skip_plastid
+  source_name: skip_plastid
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip plastid.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip plastid.
+    help_text: Also disables per-ORF P-site quantification, and, when `--te_quantification_method
+      plastid_psite` (the default), makes gene-level TE fall back to the alignment-based (Salmon)
+      count matrix instead.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_qc
+  source_name: skip_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all QC steps except for MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate, or reporting
+    behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip all QC steps except for MultiQC.
+- group_id: process_skipping_options
+  name: skip_ribocode
+  source_name: skip_ribocode
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip RiboCode.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip RiboCode.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_ribotish
+  source_name: skip_ribotish
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Ribo-TISH.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip Ribo-TISH.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_ribowaltz
+  source_name: skip_ribowaltz
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip riboWaltz.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip riboWaltz.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_stringtie
+  source_name: skip_stringtie
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Skip StringTie reference-guided transcript assembly and merge.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    default: true
+    description: Skip StringTie reference-guided transcript assembly and merge.
+    help_text: When `false`, the pipeline runs StringTie per sample (reference-guided) then merges
+      per-sample GTFs into a unified annotation. RNA-seq BAMs are used for assembly. Merged transcripts
+      are classified with gffcompare and filtered to class codes set by `--gffcompare_class_codes`.
+      The filtered novel GTF is concatenated with `--canonical_gtf` to produce `<outdir>/transcript_assembly/stringtie/hybrid_reference.gtf`.
+      Ignored when `--novel_gtf` is supplied.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_trimming
+  source_name: skip_trimming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the adapter trimming step.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip the adapter trimming step.
+    help_text: Use this if your input FastQ files have already been trimmed outside of the workflow
+      or if you're very confident that there is no adapter contamination in your data.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_umi_extract
+  source_name: skip_umi_extract
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the UMI extraction from the read in case the UMIs have been moved to the headers
+    in advance of the pipeline run.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-compress-alt
+    description: Skip the UMI extraction from the read in case the UMIs have been moved to the headers
+      in advance of the pipeline run.
+- group_id: process_skipping_options
+  name: extra_rpbp_predictorfs_args
+  source_name: extra_rpbp_predictorfs_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra CLI arguments passed to `select-final-prediction-set`.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: string
+    description: Extra CLI arguments passed to `select-final-prediction-set`.
+    fa_icon: fas fa-terminal
+- group_id: process_skipping_options
+  name: extra_rpbp_preparegenome_args
+  source_name: extra_rpbp_preparegenome_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra CLI arguments passed to `prepare-rpbp-genome`.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: string
+    description: Extra CLI arguments passed to `prepare-rpbp-genome`.
+    fa_icon: fas fa-terminal
+- group_id: process_skipping_options
+  name: gffcompare_class_codes
+  source_name: gffcompare_class_codes
+  type: string
+  required: false
+  default: u
+  enum: null
+  description: Comma-separated gffcompare class codes to retain when filtering novel transcripts.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - u
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: string
+    default: u
+    description: Comma-separated gffcompare class codes to retain when filtering novel transcripts.
+    help_text: Default `u` keeps only unambiguously intergenic transcripts. Stranded users may add
+      `x` (antisense overlap with a known locus) via `--gffcompare_class_codes 'u,x'` to recover translated
+      antisense transcripts; this is unsafe for non-stranded or partially-stranded protocols. See
+      https://ccb.jhu.edu/software/stringtie/gffcompare.shtml for the full class-code list.
+    fa_icon: fas fa-filter
+- group_id: process_skipping_options
+  name: orf_min_callers
+  source_name: orf_min_callers
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Minimum number of ORF callers that must agree for an ORF to enter the consensus catalogue
+    view.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: integer
+    default: 1
+    minimum: 1
+    description: Minimum number of ORF callers that must agree for an ORF to enter the consensus catalogue
+      view.
+    help_text: The full catalogue is an unfiltered cross-caller/cross-sample union and is always published.
+      In addition, a consensus view (`orf_predictions/catalogue/consensus/`) is published containing
+      only ORFs supported by at least this many distinct callers (and at least `--orf_min_samples`
+      samples). Default 1 applies no caller filter, so the consensus view equals the full merged catalogue.
+      Set 2 or higher for a higher-confidence catalogue that tames downstream ORF-level multiple testing.
+    fa_icon: fas fa-users
+- group_id: process_skipping_options
+  name: orf_min_samples
+  source_name: orf_min_samples
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Minimum number of samples an ORF must recur in to enter the consensus catalogue view.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: integer
+    default: 1
+    minimum: 1
+    description: Minimum number of samples an ORF must recur in to enter the consensus catalogue view.
+    help_text: Companion to `--orf_min_callers`. The consensus view (`orf_predictions/catalogue/consensus/`)
+      retains only ORFs seen in at least this many distinct samples. Default 1 applies no recurrence
+      filter.
+    fa_icon: fas fa-vials
+- group_id: process_skipping_options
+  name: smorf_max_aa
+  source_name: smorf_max_aa
+  type: integer
+  required: false
+  default: 100
+  enum: null
+  description: Maximum amino-acid length flagged as a small ORF in the catalogue's `is_smorf` column.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 100
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: integer
+    default: 100
+    minimum: 1
+    description: Maximum amino-acid length flagged as a small ORF in the catalogue's `is_smorf` column.
+    help_text: Controls the `is_smorf` flag and which ORFs are eligible for the peptide-level collapse.
+      It never affects `orf_class`, which is purely positional. The default 100 aa follows the GENCODE
+      Ribo-seq ORF catalogue convention (Mudge et al. 2022). Raise it (e.g. 150) to widen the microprotein
+      window, which flags more ORFs as small and brings more of them into the MMseqs2 collapse.
+    fa_icon: fas fa-ruler-horizontal

@@ -1,0 +1,129 @@
+artifacts:
+- id: fusionreport
+  path: fusionreport/<sample>/
+  produced_when: tools includes fusionreport, skip_vis is false, and at least one caller produced fusion files.
+  meaning: Main cross-caller fusion summary and visualization entry point.
+  key_files:
+  - <sample>.fusionreport_filtered.tsv
+  - <sample>_fusionreport_index.html
+  - <sample>.fusionreport.tsv
+  - <sample>.fusions.csv
+  - <sample>.fusions.json
+  review_priority: 1
+  reuse_fragments:
+  - fusionreport_filtered.tsv
+  - fusionreport_index.html
+- id: fusioninspector
+  path: fusioninspector/<sample>/
+  produced_when: tools includes fusioninspector and valid fusion input is available.
+  meaning: Supervised re-scoring and visualization of candidate fusions.
+  key_files:
+  - <sample>.FusionInspector.fusions.tsv
+  - <sample>.FusionInspector.fusions.abridged.tsv
+  - <sample>.fusion_inspector_web.html
+  review_priority: 2
+  reuse_fragments:
+  - FusionInspector.fusions.tsv
+  - fusion_inspector_web.html
+- id: arriba
+  path: arriba/
+  produced_when: tools includes arriba or arriba_fusions is provided for downstream use.
+  meaning: Arriba fusion calls and discarded calls.
+  key_files:
+  - <sample>.arriba.fusions.tsv
+  - <sample>.arriba.fusions.discarded.tsv
+  review_priority: 3
+- id: arriba_visualisation
+  path: arriba_visualisation/
+  produced_when: visualization is enabled and FusionInspector output is available for Arriba plots.
+  meaning: PDF visualization of FusionInspector-supported fusions.
+  key_files:
+  - <sample>_combined_fusions_arriba_visualisation.pdf
+  review_priority: 4
+- id: starfusion
+  path: starfusion/
+  produced_when: tools includes starfusion or starfusion_fusions is provided for downstream use.
+  meaning: STAR-Fusion predictions.
+  key_files:
+  - <sample>.starfusion.fusion_predictions.tsv
+  - <sample>.starfusion.abridged.tsv
+  review_priority: 3
+- id: fusioncatcher
+  path: fusioncatcher/
+  produced_when: tools includes fusioncatcher or fusioncatcher_fusions is provided for downstream use.
+  meaning: FusionCatcher predictions and summary logs.
+  key_files:
+  - <sample>.fusion-genes.txt
+  - <sample>.summary.txt
+  - <sample>.log
+  review_priority: 3
+- id: ctatsplicing
+  path: ctatsplicing/
+  produced_when: tools includes ctatsplicing.
+  meaning: Cancer splicing aberration calls and IGV supporting files.
+  key_files:
+  - <sample>.cancer.introns
+  - <sample>.ctat-splicing.igv.html
+  - <sample>.introns.for_IGV.bed
+  review_priority: 5
+- id: vcf
+  path: vcf/
+  produced_when: skip_vcf is false and FusionInspector/fusion-report output can feed vcf_collect.
+  meaning: Fusion calls represented as VCF with collected statistics.
+  key_files:
+  - <sample>_fusion_data.vcf
+  review_priority: 5
+- id: star_alignment
+  path: star/
+  produced_when: selected tools need STAR alignment or input lacks required aligned files.
+  meaning: STAR BAM/CRAM, chimeric junctions, splice junctions, logs, and gene counts.
+  key_files:
+  - <sample>.Aligned.sortedByCoord.out.bam
+  - <sample>.Aligned.sortedByCoord.out.bam.bai
+  - <sample>.Aligned.sortedByCoord.out.cram
+  - <sample>.Aligned.sortedByCoord.out.cram.crai
+  - <sample>.Chimeric.out.junction
+  - <sample>.SJ.out.tab
+  - <sample>.ReadsPerGene.out.tab
+  review_priority: 6
+- id: expression_and_assembly
+  path: salmon/ and stringtie/
+  produced_when: tools includes salmon or stringtie.
+  meaning: Gene expression quantification and StringTie assembly files.
+  key_files:
+  - salmon/<sample>/
+  - stringtie/<sample>/stringtie.merged.gtf
+  review_priority: 6
+- id: qc_reports
+  path: multiqc/, fastqc/, fastp/, picard/
+  produced_when: skip_qc is false, with fastp-specific reports when fastp is selected.
+  meaning: Summary QC, raw/trimmed read QC, trimming reports, and alignment metrics.
+  key_files:
+  - multiqc/multiqc_report.html
+  - fastqc/*_fastqc.html
+  - fastp/<sample>.fastp.html
+  - picard/<sample>.MarkDuplicates.metrics.txt
+  - picard/<sample>_rna_metrics.txt
+  review_priority: 7
+- id: pipeline_info
+  path: pipeline_info/
+  produced_when: every run
+  meaning: Execution reports, trace files, software versions, and captured parameters.
+  key_files:
+  - execution_report_<timestamp>.html
+  - execution_trace_<timestamp>.txt
+  - pipeline_dag_<timestamp>.html
+  - nf_core_rnafusion_software_mqc_versions.yml
+  - params_<timestamp>.json
+  review_priority: 0
+historical_reuse:
+  search_first_with:
+  - fusionreport_filtered.tsv
+  - FusionInspector.fusions.tsv
+  - multiqc_report.html
+  - params_
+  compatibility_checks:
+  - Compare pipeline_info/params_<timestamp>.json against the intended tools, references_only,
+    no_cosmic, skip_vis, skip_vcf, and skip_qc route.
+  - Treat artifacts.json and pipeline_fingerprint as historical facts, then confirm route
+    compatibility from params or launch metadata before recommending reuse.

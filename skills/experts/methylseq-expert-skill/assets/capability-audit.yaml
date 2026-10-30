@@ -1,0 +1,1007 @@
+pipeline_id: methylseq
+status: covered
+summary:
+  total: 63
+  high_impact: 49
+  covered: 63
+  scoped_out: 0
+  needs_review: 0
+capabilities:
+- id: documented_prerequisite_index
+  label: Documented `index` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets: &id001
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage: *id001
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/README.md
+    excerpt: index
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/output.md
+    excerpt: index
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/usage.md
+    excerpt: index
+- id: prerequisite_bismark_index
+  label: Parameter `bismark_index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets: &id002
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage: *id002
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bismark_index
+    excerpt: Path to a directory containing a Bismark reference index.
+- id: prerequisite_bwamem_index
+  label: Parameter `bwamem_index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets: &id003
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage: *id003
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bwamem_index
+    excerpt: Path to the BWA-MEM index filename base
+- id: prerequisite_bwameth_index
+  label: Parameter `bwameth_index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets: &id004
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage: *id004
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bwameth_index
+    excerpt: bwameth index filename base
+- id: prerequisite_fasta_index
+  label: Parameter `fasta_index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets: &id005
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage: *id005
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: fasta_index
+    excerpt: Path to Fasta index file.
+- id: prerequisite_use_mem2
+  label: Parameter `use_mem2` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets: &id006
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage: *id006
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: use_mem2
+    excerpt: Use BWA-MEM2 algorithm for BWA-Meth indexing and alignment.
+- id: schema_param_accel
+  label: Schema parameter `accel` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id007
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id007
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: accel
+    excerpt: Trimming preset for the Accel kit.
+- id: schema_param_aligner
+  label: Schema parameter `aligner` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id008
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id008
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: aligner
+    excerpt: Alignment tool to use.
+- id: schema_param_all_contexts
+  label: Schema parameter `all_contexts` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id009
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id009
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: all_contexts
+    excerpt: Call methylation in all three CpG, CHG and CHH contexts.
+- id: schema_param_collecthsmetrics
+  label: Schema parameter `collecthsmetrics` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id010
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id010
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: collecthsmetrics
+    excerpt: Run Picard CollectHsMetrics in the targeted analysis
+- id: schema_param_comprehensive
+  label: Schema parameter `comprehensive` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id011
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id011
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: comprehensive
+    excerpt: Merges methylation calls for every strand into a single, context dependent
+      file.
+- id: schema_param_cytosine_report
+  label: Schema parameter `cytosine_report` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id012
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id012
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cytosine_report
+    excerpt: Output stranded cytosine report, following Bismark's bismark_methylation_extractor
+      step.
+- id: schema_param_em_seq
+  label: Schema parameter `em_seq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id013
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id013
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: em_seq
+    excerpt: Preset for EM-seq libraries.
+- id: schema_param_help
+  label: Schema parameter `help` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id014
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id014
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help
+    excerpt: Display the help message.
+  maintenance_note: Runtime launch planning does not use help-only display mode; exact
+    schema lookup still preserves the parameter.
+- id: schema_param_help_full
+  label: Schema parameter `help_full` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id015
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id015
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help_full
+    excerpt: Display the full detailed help message.
+  maintenance_note: Runtime launch planning does not use help-only display mode; exact
+    schema lookup still preserves the parameter.
+- id: schema_param_igenomes_ignore
+  label: Schema parameter `igenomes_ignore` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id016
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id016
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: igenomes_ignore
+    excerpt: Do not load the iGenomes reference config.
+- id: schema_param_ignore_flags
+  label: Schema parameter `ignore_flags` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id017
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id017
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ignore_flags
+    excerpt: MethylDackel - ignore SAM flags
+- id: schema_param_local_alignment
+  label: Schema parameter `local_alignment` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id018
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id018
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: local_alignment
+    excerpt: Allow soft-clipping of reads (potentially useful for single-cell experiments).
+- id: schema_param_merge_context
+  label: Schema parameter `merge_context` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id019
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id019
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: merge_context
+    excerpt: Merges methylation metrics of the Cytosines in a given context.
+- id: schema_param_methyl_kit
+  label: Schema parameter `methyl_kit` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id020
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id020
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: methyl_kit
+    excerpt: Save files for use with methylKit
+- id: schema_param_monochrome_logs
+  label: Schema parameter `monochrome_logs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id021
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id021
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: monochrome_logs
+    excerpt: Do not use coloured log outputs.
+  maintenance_note: Only changes log color formatting; exact schema lookup still preserves
+    the parameter.
+- id: schema_param_no_overlap
+  label: Schema parameter `no_overlap` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id022
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id022
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: no_overlap
+    excerpt: Ignore read 2 methylation when it overlaps read 1
+- id: schema_param_nomeseq
+  label: Schema parameter `nomeseq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id023
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id023
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: nomeseq
+    excerpt: Sample is NOMe-seq or NMT-seq. Runs coverage2cytosine.
+- id: schema_param_non_directional
+  label: Schema parameter `non_directional` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id024
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id024
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: non_directional
+    excerpt: Run alignment against all four possible strands.
+- id: schema_param_pbat
+  label: Schema parameter `pbat` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id025
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id025
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pbat
+    excerpt: Preset for working with PBAT libraries.
+- id: schema_param_plaintext_email
+  label: Schema parameter `plaintext_email` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id026
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id026
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: plaintext_email
+    excerpt: Send plain-text email instead of HTML.
+  maintenance_note: Only changes email rendering; exact schema lookup still preserves
+    the parameter.
+- id: schema_param_publish_dir_mode
+  label: Schema parameter `publish_dir_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id027
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id027
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: publish_dir_mode
+    excerpt: Method used to save pipeline results to output directory.
+  maintenance_note: Low-level publish behavior; keep the default unless user explicitly
+    asks for it, with exact enum preserved in schema lookup.
+- id: schema_param_relax_mismatches
+  label: Schema parameter `relax_mismatches` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id028
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id028
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: relax_mismatches
+    excerpt: Turn on to relax stringency for alignment (set allowed penalty with --num_mismatches).
+- id: schema_param_rrbs
+  label: Schema parameter `rrbs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id029
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id029
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: rrbs
+    excerpt: Turn on if dealing with MspI digested material.
+- id: schema_param_run_preseq
+  label: Schema parameter `run_preseq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id030
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id030
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_preseq
+    excerpt: Run preseq/lcextrap tool
+- id: schema_param_run_qualimap
+  label: Schema parameter `run_qualimap` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id031
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id031
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_qualimap
+    excerpt: Run qualimap/bamqc tool
+- id: schema_param_run_targeted_sequencing
+  label: Schema parameter `run_targeted_sequencing` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id032
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id032
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_targeted_sequencing
+    excerpt: Run advanced analysis for targeted methylation kits with enrichment of
+      specific regions
+- id: schema_param_save_align_intermeds
+  label: Schema parameter `save_align_intermeds` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id033
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id033
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_align_intermeds
+    excerpt: Save aligned intermediates to results directory
+- id: schema_param_save_reference
+  label: Schema parameter `save_reference` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id034
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id034
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_reference
+    excerpt: Save reference(s) to results directory
+- id: schema_param_save_trimmed
+  label: Schema parameter `save_trimmed` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id035
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id035
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_trimmed
+    excerpt: Save trimmed reads to results directory.
+- id: schema_param_show_hidden
+  label: Schema parameter `show_hidden` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id036
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id036
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: show_hidden
+    excerpt: Display hidden parameters in the help message (only works when --help
+      or --help_full are provided).
+  maintenance_note: Only affects help display; exact schema lookup still preserves
+    the parameter.
+- id: schema_param_single_cell
+  label: Schema parameter `single_cell` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id037
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id037
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: single_cell
+    excerpt: Trimming preset for single-cell bisulfite libraries.
+- id: schema_param_skip_deduplication
+  label: Schema parameter `skip_deduplication` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id038
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id038
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_deduplication
+    excerpt: Skip deduplication step after alignment.
+- id: schema_param_skip_fastqc
+  label: Schema parameter `skip_fastqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id039
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id039
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_fastqc
+    excerpt: Skip FastQC
+- id: schema_param_skip_multiqc
+  label: Schema parameter `skip_multiqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id040
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id040
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_multiqc
+    excerpt: Skip MultiQC
+- id: schema_param_skip_trimming
+  label: Schema parameter `skip_trimming` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id041
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id041
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_trimming
+    excerpt: Skip read trimming.
+- id: schema_param_skip_trimming_presets
+  label: Schema parameter `skip_trimming_presets` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id042
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id042
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_trimming_presets
+    excerpt: Skip presetting trimming parameters entirely
+- id: schema_param_slamseq
+  label: Schema parameter `slamseq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id043
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id043
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: slamseq
+    excerpt: Run bismark in SLAM-seq mode.
+- id: schema_param_taps
+  label: Schema parameter `taps` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id044
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id044
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: taps
+    excerpt: Preset for working with TET-assisted pyridine borane sequencing (TAPS)
+      libraries.
+- id: schema_param_unmapped
+  label: Schema parameter `unmapped` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id045
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id045
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: unmapped
+    excerpt: Bismark only - Save unmapped reads to FastQ files
+- id: schema_param_use_mem2
+  label: Schema parameter `use_mem2` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id046
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id046
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: use_mem2
+    excerpt: Use BWA-MEM2 algorithm for BWA-Meth indexing and alignment.
+- id: schema_param_validate_params
+  label: Schema parameter `validate_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id047
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id047
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validate_params
+    excerpt: Boolean whether to validate parameters against the schema at runtime
+  maintenance_note: Keep the pipeline default true unless a maintainer explicitly
+    asks to disable validation; exact schema lookup preserves the field.
+- id: schema_param_version
+  label: Schema parameter `version` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id048
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id048
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: version
+    excerpt: Display version and exit.
+  maintenance_note: Only prints pipeline version and exits; exact schema lookup still
+    preserves the parameter.
+- id: schema_param_zymo
+  label: Schema parameter `zymo` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets: &id049
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id049
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: zymo
+    excerpt: Trimming preset for the Zymo kit.
+- id: documented_output_bam
+  label: Documented `bam` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets: &id050
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage: *id050
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/README.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/output.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/usage.md
+    excerpt: bam
+- id: documented_output_contamination
+  label: Documented `contamination` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets: &id051
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage: *id051
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/output.md
+    excerpt: contamination
+- id: documented_output_counts
+  label: Documented `counts` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets: &id052
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage: *id052
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/output.md
+    excerpt: counts
+- id: documented_output_multiqc
+  label: Documented `multiqc` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets: &id053
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage: *id053
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/README.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/output.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/usage.md
+    excerpt: multiqc
+- id: documented_output_report
+  label: Documented `report` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets: &id054
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage: *id054
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/README.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/output.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/methylseq/docs/usage.md
+    excerpt: report
+- id: schema_param_clip_r1
+  label: Schema parameter `clip_r1` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id055
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id055
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: clip_r1
+    excerpt: Trim bases from the 5' end of read 1 (or single-end reads).
+- id: schema_param_clip_r2
+  label: Schema parameter `clip_r2` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id056
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id056
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: clip_r2
+    excerpt: Trim bases from the 5' end of read 2 (paired-end only).
+- id: schema_param_length_trim
+  label: Schema parameter `length_trim` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id057
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id057
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: length_trim
+    excerpt: Discard reads that become shorter than INT because of either quality
+      or adapter trimming.
+- id: schema_param_multiqc_methods_description
+  label: Schema parameter `multiqc_methods_description` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id058
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id058
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: multiqc_methods_description
+    excerpt: Custom MultiQC yaml file containing HTML including a methods description.
+- id: schema_param_nextseq_trim
+  label: Schema parameter `nextseq_trim` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id059
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id059
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: nextseq_trim
+    excerpt: Trim bases below this quality value from the 3' end of the read, ignoring
+      high-quality G bases
+- id: schema_param_three_prime_clip_r1
+  label: Schema parameter `three_prime_clip_r1` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id060
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id060
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: three_prime_clip_r1
+    excerpt: Trim bases from the 3' end of read 1 AFTER adapter/quality trimming.
+- id: schema_param_three_prime_clip_r2
+  label: Schema parameter `three_prime_clip_r2` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id061
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id061
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: three_prime_clip_r2
+    excerpt: Trim bases from the 3' end of read 2 AFTER adapter/quality trimming
+- id: schema_param_trim_ob
+  label: Schema parameter `trim_OB` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id062
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id062
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: trim_OB
+    excerpt: 'Nucleotides to exclude from methylation calling on Original Bottom (strand)
+      reads, following this pattern: R1 start, R1 end, R2 start, R2 end'
+- id: schema_param_trim_ot
+  label: Schema parameter `trim_OT` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets: &id063
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage: *id063
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: trim_OT
+    excerpt: 'Nucleotides to exclude from methylation calling on Original Top (strand)
+      reads, following this pattern: R1 start, R1 end, R2 start, R2 end'

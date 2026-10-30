@@ -1,0 +1,126 @@
+pipeline:
+  id: sarek
+  name: nf-core/sarek
+  version: 3.8.1
+  summary: Detect germline and somatic variants from whole-genome, whole-exome, or
+    targeted sequencing data, including tumor-normal pairs and annotation routes.
+source_basis:
+  - authoring bundle fields: schema, documents, and source_files
+  - pipeline directory: /root/key_projects/nextmcp/nf_pipeline/sarek
+  - main.nf and workflows/sarek/main.nf source routing
+  - docs/usage.md and docs/output.md
+server_path_boundary:
+  rule: All runtime paths, project identifiers, params path values, and config_files resolve
+    on the nextmcp server filesystem.
+  placeholders:
+    input: <server_input_root>/sarek_samplesheet.csv
+    outdir: <server_output_root>/sarek
+    reference: <server_reference_root>/...
+required_inputs:
+  - name: input
+    required_for: Standard runs with samples.
+    placeholder: <server_input_root>/sarek_samplesheet.csv
+    notes: Samplesheet path. For build-only index or cache-only preparation, schema allows input
+      false.
+  - name: outdir
+    required_for: Published results.
+    placeholder: <server_output_root>/sarek
+    notes: Output directory on the nextmcp server.
+  - name: step
+    required_for: Route selection.
+    placeholder: mapping
+    notes: Current enum is mapping, markduplicates, prepare_recalibration, recalibrate,
+      variant_calling, or annotate. Default is mapping.
+core_params:
+  - input
+  - outdir
+  - step
+  - genome
+  - igenomes_ignore
+  - fasta
+  - fasta_fai
+  - dict
+  - tools
+  - skip_tools
+  - aligner
+  - wes
+  - intervals
+  - no_intervals
+  - save_reference
+  - build_only_index
+  - download_cache
+supported_modes:
+  - id: mapping_to_variants
+    entry_target: pipeline id sarek
+    use_when: Start from FastQ, Spring-compressed FastQ, or unmapped BAM and run through mapping,
+      duplicate marking, recalibration, optional variant calling, and optional annotation.
+    route_params:
+      step: mapping
+  - id: restart_from_alignment
+    entry_target: pipeline id sarek
+    use_when: Start from mapped BAM or CRAM at markduplicates, prepare_recalibration,
+      recalibrate, or variant_calling.
+    route_params:
+      step: markduplicates|prepare_recalibration|recalibrate|variant_calling
+  - id: annotation_only
+    entry_target: pipeline id sarek
+    use_when: Start from a VCF samplesheet and run snpEff, VEP, merge, bcftools annotate, or SnpSift.
+    route_params:
+      step: annotate
+      tools: snpeff|vep|merge|bcfann|snpsift
+  - id: reference_or_cache_build
+    entry_target: pipeline id sarek
+    use_when: Build and save reference indices or download annotation caches before analysis.
+    route_params:
+      input: false
+      build_only_index: true
+      save_reference: true
+  - id: sentieon
+    entry_target: pipeline id sarek
+    use_when: Use Sentieon BWA mem, Dedup, DNAscope, Haplotyper, or TNscope when a server-side
+      Sentieon license secret is already configured.
+    route_params:
+      aligner: sentieon-bwamem
+      tools: sentieon_dedup|sentieon_dnascope|sentieon_haplotyper|sentieon_tnscope
+  - id: umi
+    entry_target: pipeline id sarek
+    use_when: Process data with UMIs already present in read headers or BAM/CRAM tags, or create
+      fgbio consensus reads from supported UMI structures.
+    route_params:
+      umi_in_read_header: true
+  - id: tumor_normal
+    entry_target: pipeline id sarek
+    use_when: Call somatic variants, CNVs, SVs, MSI, or tumor-only variants based on samplesheet
+      patient, status, and sample columns.
+    route_params:
+      tools: mutect2|strelka|manta|tiddit|ascat|cnvkit|controlfreec|msisensor2|msisensorpro
+limitations:
+  - Sentieon routes require a Sentieon license configured on the server. The skill can plan
+    parameters but cannot create or validate secrets.
+  - Parabricks requires a GPU-capable runtime profile chosen outside ordinary parameter mapping.
+  - Targeted and WES runs should provide intervals and set wes=true unless the user has a
+    source-backed reason not to.
+  - Annotation plugins such as dbNSFP, SpliceAI, Phenotypes, Mastermind, SnpSift, and bcftools
+    annotate require matching server-local database files and indexes.
+resource_overrides:
+  channel: config_files
+  guidance: Create a small server-local Nextflow config and pass it with
+    nextflow_run(config_files=[...]).
+  example_config: |
+    process {
+      resourceLimits = [
+        cpus: 32,
+        memory: '256.GB',
+        time: '72.h'
+      ]
+    }
+runtime_tool_order:
+  - server_info() when runtime defaults or profile are unknown
+  - project_list() when the project id is unknown
+  - project_get(project) when project root or prior runs matter
+  - fs_list(mode="manifest") for one concrete server path check
+  - nextflow_run(prepare=true) before launch when inputs or output layout are uncertain
+  - nextflow_run(...) to launch
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"]) after launch
+  - run_artifacts(...) for summarized output sections
+  - run_logs(...) or fs_read(...) only after a concrete log or output path is known

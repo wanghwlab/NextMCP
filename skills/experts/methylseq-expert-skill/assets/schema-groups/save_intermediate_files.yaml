@@ -1,0 +1,113 @@
+group:
+  id: save_intermediate_files
+  label: Save intermediate files
+  selection_rule: Use this group for parameters defined under the `Save intermediate
+    files` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/save_intermediate_files.md
+  - assets/schema-groups/save_intermediate_files.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `save_intermediate_files` for exact lookup.
+parameters:
+- group_id: save_intermediate_files
+  name: save_align_intermeds
+  source_name: save_align_intermeds
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save aligned intermediates to results directory
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Save intermediate files
+  raw_schema:
+    type: boolean
+    description: Save aligned intermediates to results directory
+    fa_icon: fas fa-save
+- group_id: save_intermediate_files
+  name: save_reference
+  source_name: save_reference
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save reference(s) to results directory
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Save intermediate files
+  raw_schema:
+    type: boolean
+    description: Save reference(s) to results directory
+    fa_icon: far fa-save
+- group_id: save_intermediate_files
+  name: save_trimmed
+  source_name: save_trimmed
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save trimmed reads to results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Save intermediate files
+  raw_schema:
+    type: boolean
+    description: Save trimmed reads to results directory.
+    fa_icon: fas fa-cut
+    help_text: By default, trimmed FastQ files will not be saved to the results directory.
+      Specify this flag (or set to true in your config file) to copy these files to
+      the results directory when complete.
+- group_id: save_intermediate_files
+  name: unmapped
+  source_name: unmapped
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Bismark only - Save unmapped reads to FastQ files
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Save intermediate files
+  raw_schema:
+    type: boolean
+    description: Bismark only - Save unmapped reads to FastQ files
+    help_text: Use the `--unmapped` flag to set the `--unmapped` flag with Bismark
+      align and save the unmapped reads to FastQ files.
+    fa_icon: fas fa-recycle

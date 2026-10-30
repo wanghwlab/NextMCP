@@ -1,0 +1,25 @@
+steps:
+- id: main_entry
+  entry: official nf-core/riboseq pinned to 2.0.0
+  use_when: Standard end-to-end run.
+  minimal_inputs:
+  - project
+  - params.input
+  - params.outdir
+  - params.fasta and params.gtf, unless params.genome supplies references
+  checkpoints:
+  - nextflow_run(prepare=true) when path or layout confirmation is needed.
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"]) after launch.
+- id: alternate_entry_test_fastq_align_star_nf
+  entry: test_fastq_align_star.nf
+  status: scoped_out
+  reason: Developer test script using remote nf-core module test data; not a normal user-facing nextmcp
+    analysis route.
+- id: restart_from_previous_run
+  entry: official nf-core/riboseq pinned to 2.0.0
+  use_when: User asks to resume or restart from an earlier nextmcp run.
+  runtime_rules:
+  - Use nextflow_run(from_run_id=<run_id>) as the public restart path.
+  - Read run_get(detail="full") on the source run when launch_spec, nextflow_session_uuid, or structured
+    resume compatibility matters.
+  - Do not teach resume as public nextflow_run inputs.

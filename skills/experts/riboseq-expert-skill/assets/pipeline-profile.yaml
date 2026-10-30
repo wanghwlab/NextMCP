@@ -1,0 +1,135 @@
+pipeline:
+  id: riboseq
+  name: nf-core/riboseq
+  version: 2.0.0
+  summary: Analysis of ribosome profiling, or Ribo-seq, including preprocessing, STAR alignment, Ribo-TISH
+    and Ribotricer ORF calls, Salmon quantification, and optional translational efficiency analysis.
+source_basis:
+- https://nf-co.re/riboseq/2.0.0/
+- https://github.com/nf-core/riboseq/tree/2.0.0
+- See source-provenance.yaml for archive and schema checksums.
+path_boundary:
+  rule: All runtime path values, the project identifier, and relative path-like values in params or
+    config_files resolve on the nextmcp server filesystem.
+  placeholders:
+    input: <server_input_root>/samplesheet.csv
+    outdir: <server_output_root>/riboseq
+    references: <server_reference_root>/...
+required_inputs:
+- name: input
+  required_for: main pipeline runs
+  placeholder: <server_input_root>/samplesheet.csv
+  notes: CSV samplesheet with sample, fastq_1, fastq_2, strandedness, and type as the first five columns.
+    The type value can be riboseq, tiseq, or rnaseq.
+- name: outdir
+  required_for: published results
+  placeholder: <server_output_root>/riboseq
+  notes: Published result directory on the nextmcp server.
+- name: fasta
+  required_for: explicit reference runs when genome is not used
+  placeholder: <server_reference_root>/genome.fa.gz
+  notes: Genome FASTA. The pipeline can build STAR and Salmon indices from FASTA plus GTF.
+- name: gtf
+  required_for: explicit reference runs when genome is not used
+  placeholder: <server_reference_root>/genes.gtf.gz
+  notes: Gene annotation. Use gencode true for GENCODE-formatted references.
+supported_modes:
+- id: standard_riboseq
+  entry_target: official nf-core/riboseq pinned to 2.0.0
+  use_when: Standard Ribo-seq or TI-seq analysis from FASTQ samples.
+  required_assets:
+  - playbooks.yaml#standard_riboseq
+  - param-presets.yaml#standard_riboseq
+- id: translational_efficiency
+  entry_target: official nf-core/riboseq pinned to 2.0.0
+  use_when: Matched Ribo-seq and RNA-seq samples need anota2seq translational efficiency analysis
+    from a contrasts file.
+  required_assets:
+  - playbooks.yaml#translational_efficiency
+  - artifact-contracts.yaml#translational_efficiency
+- id: umi_aware
+  entry_target: official nf-core/riboseq pinned to 2.0.0
+  use_when: Libraries contain UMIs and deduplication must be included in the analysis.
+  required_assets:
+  - playbooks.yaml#umi_aware
+  - param-presets.yaml#umi_aware
+- id: rrna_filtering
+  entry_target: official nf-core/riboseq pinned to 2.0.0
+  use_when: User asks to remove ribosomal RNA with SortMeRNA or provide a custom rRNA database manifest/index.
+  required_assets:
+  - playbooks.yaml#rrna_filtering
+  - param-presets.yaml#rrna_filtering
+- id: contamination_screening
+  entry_target: official nf-core/riboseq pinned to 2.0.0
+  use_when: User asks to split reads against contaminant references with BBSplit.
+  required_assets:
+  - playbooks.yaml#contamination_screening
+  - param-presets.yaml#contamination_screening
+- id: reference_build_or_reuse
+  entry_target: official nf-core/riboseq pinned to 2.0.0
+  use_when: User needs to build, save, or reuse STAR, Salmon, BBSplit, or SortMeRNA indices.
+  required_assets:
+  - playbooks.yaml#reference_build_or_reuse
+  - artifact-contracts.yaml#reference_files
+limitations:
+- The expert skill plans nextmcp launches and interprets pipeline outputs; it does not perform biological
+  interpretation beyond the pipeline's documented result files.
+- Do not pass client-local paths. Confirm server-local inputs with nextmcp tools or use paths the
+  user already confirmed exist on the server.
+- The `test_fastq_align_star.nf` entry is a developer subworkflow test that depends on remote nf-core
+  test data; it is scoped out of normal user run planning.
+resource_override:
+  channel: config_files
+  syntax: "process {\n  resourceLimits = [\n    memory: 64.GB,\n    cpus  : 16,\n    time  : 24.h\n\
+    \  ]\n}\n"
+  notes: max_cpus, max_memory, and max_time are not ordinary pipeline params. Put resource caps in
+    a small server-local config file and pass it through nextflow_run(config_files=[...]).
+launch_target:
+  pipeline: nf-core/riboseq
+  extra_args:
+  - -r
+  - 2.0.0
+  rule: Use the official remote identifier and exact release. Do not silently substitute a configured
+    local pipeline ID.
+release_notes:
+- The genome aligner is star (the only aligner enum). Do not use the rnaseq value star_salmon. The
+  main workflow still uses STAR and Salmon where specified by the chosen quantification route.
+- For the requested Bowtie2 depletion route, set remove_ribo_rna=true, ribo_removal_tool=bowtie2 and
+  ribo_database_manifest to a server-confirmed text file containing one reference FASTA path per line.
+  Bowtie2 keeps unaligned reads for downstream analysis. save_non_ribo_reads=true publishes the retained
+  FASTQs.
+- 'The official default ribo_removal_tool is sortmerna, not bowtie2. Bowtie2 here is an explicit user-selected
+  preset. The official feature is rRNA removal: tRNA removal additionally requires appropriate tRNA
+  sequences in the supplied reference set; the default rRNA manifest does not establish tRNA coverage.
+  For this requested route, rtRNA means rRNA + tRNA; verify reference coverage of both classes.'
+- The riboseq 2.0.0 schema does not expose rnaseq's bowtie2_rrna_index parameter. Do not pass sortmerna_index
+  as a Bowtie2 index. rrna_blacklist is a BED filter for novel transcripts and is not the FASTQ rRNA-removal
+  reference.
+- Review preprocessing/bowtie2_rrna/*.bowtie2.log, retained read counts and MultiQC. High depletion
+  can indicate contamination or an unsuitable reference; interpret it with downstream mapping and
+  periodicity rather than assuming a successful run implies good Ribo-seq signal.
+- Default ORF callers include Ribo-TISH and RiboCode. Ribotricer is opt-in through run_ribotricer;
+  skip_ribotricer was removed. PRICE and Rp-Bp are also opt-in through run_price and run_rpbp and
+  add substantial computation. Treat Ribotricer score rankings cautiously as described by the release.
+- te_quantification_method defaults to plastid_psite. alignment selects STAR-to-Salmon counts; pseudo
+  selects the experimental direct transcriptome route. pseudo_aligner=salmon or kallisto applies only
+  to pseudo, not to the primary STAR alignment. Single-end Kallisto requires kallisto_quant_fraglen
+  and kallisto_quant_fraglen_sd.
+- skip_plastid disables per-ORF P-site quantification and makes the default plastid_psite gene-level
+  TE route fall back to alignment-based counts. Do not compare these counts across runs as if their
+  definitions were unchanged.
+- translational_efficiency_method is a comma-separated selection of anota2seq, deltate and dotseq;
+  default anota2seq. dotseq is ORF-level only and requires extended_orf_analysis=true. Confirm matched
+  rnaseq/riboseq samples, contrasts and biological replication before interpreting differential translation.
+- 'Extended ORF analysis uses canonical_gtf and a novel transcript source: novel_gtf or RNA-seq-driven
+  StringTie with skip_stringtie=false. The hybrid reference supports a second STAR pass and a cross-caller
+  ORF catalogue. Review orf_min_callers, orf_min_samples and smorf_max_aa before interpreting consensus
+  and peptide collapse.'
+- Review psites/plastid/ and psites/ribowaltz/ for offsets and periodicity, quantification/inframe_psite/
+  for default TE counts, orf_predictions/catalogue/ for the union and consensus, and quantification/orf_level/
+  for ORF counts. ORFs sharing a host-gene RNA denominator are not statistically independent biological
+  replicates.
+- equalise_read_lengths optionally trims RNA-seq reads for alignment-based TE comparisons. It is a
+  deliberate analysis choice, not an automatic prerequisite. The official tag has no project-specific
+  interactive.nf or STEP_* interface.
+official_source_only: true

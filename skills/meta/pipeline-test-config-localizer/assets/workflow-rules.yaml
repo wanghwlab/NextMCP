@@ -1,0 +1,141 @@
+version: "2026-03-17"
+skill: pipeline-test-config-localizer
+selection:
+  config_patterns:
+    - "conf/test.config"
+    - "conf/test_full.config"
+    - "conf/*test*.config"
+  trigger_phrases:
+    - "localize pipeline test config"
+    - "download nf-core test data"
+    - "rewrite samplesheet to local paths"
+    - "convert test.config to natural language"
+path_rules:
+  root_pattern: "<server_input_root>/testdata/<pipeline>/<profile_name>/"
+  downloads_subdir: "downloads"
+  rewrites_subdir: "rewrites"
+  preserve_remote_layout: true
+  localization_priority:
+    - "Apply known remote-prefix to local-root mappings first"
+    - "Use longest matching remote prefix when several mappings match"
+    - "Preserve the unmatched URL suffix path exactly"
+    - "Use downloads/host/path mirroring only for unmatched URLs"
+  prefix_map_examples:
+    - remote_prefix: "https://raw.githubusercontent.com/nf-core/test-datasets/"
+      local_root: "/data/test-datasets/"
+      source_url: "https://raw.githubusercontent.com/nf-core/test-datasets/epitopeprediction/testdata/sample_sheets/sample_sheet_variants_local.csv"
+      localized_path: "/data/test-datasets/epitopeprediction/testdata/sample_sheets/sample_sheet_variants_local.csv"
+    - remote_prefix: "s3://ngi-igenomes/igenomes/"
+      local_root: "/data/igenomes/"
+      source_url: "s3://ngi-igenomes/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/Sentieon/SentieonDNAscopeModel1.1.model"
+      localized_path: "/data/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/Sentieon/SentieonDNAscopeModel1.1.model"
+  mirror_rule: "Fallback only: append URL host plus URL path under downloads/"
+  rewritten_suffix: "_local"
+download_rules:
+  direct_url_sources:
+    - "String assignments inside params { ... }"
+    - "Additional URL-bearing string assignments outside params when they affect runtime inputs"
+  fallback_only_when_unmapped: true
+  helper_script_logging:
+    enabled: true
+    stream: "stderr"
+    final_machine_readable_result: "Print the final rewritten manifest path on stdout"
+    must_report:
+      - "Downloading <url> -> <path>"
+      - "Reusing existing file <path>"
+      - "Rewriting local manifest <path>"
+      - "Localization complete"
+  fetch_methods:
+    http_https:
+      preferred:
+        - "curl -L --fail -o <target> <url>"
+        - "wget -O <target> <url>"
+      recursive_only_when_needed:
+        - "wget --recursive --no-host-directories --no-parent --directory-prefix <target_dir> <url_prefix>"
+    s3:
+      preferred:
+        - "aws s3 cp <url> <target>"
+        - "s5cmd cp <url> <target>"
+      recursive_only_when_needed:
+        - "aws s3 cp --recursive <url_prefix> <target_dir>"
+        - "s5cmd cp --recursive <url_prefix> <target_dir>"
+  fail_if_scheme_has_no_fetch_tool: true
+resolution_order:
+  requested_source_of_truth:
+    - "Start from the concrete config the user named, such as conf/test.config"
+    - "Resolve referenced params through the pipeline runtime config chain, such as nextflow.config"
+  exclude_test_harness_overrides_by_default:
+    - "Do not automatically apply tests/nextflow.config"
+    - "Do not automatically apply nf-test.config"
+    - "Do not automatically apply *.nf.test config values"
+    - "Use nf-test-only overrides only when the user explicitly asks to reproduce nf-test behavior"
+  recurse_into_extensions:
+    - ".csv"
+    - ".tsv"
+    - ".txt"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+  ignore_url_locations:
+    - "Comments"
+    - "Free prose that is not part of a parsed value"
+  list_separators:
+    - ";"
+rewrite_rules:
+  keep_original_download: true
+  rewrite_target_pattern: "<original stem>_local<original suffix>"
+  rewrite_only_exact_url_fields: true
+  preserve_non_url_cells: true
+  preserve_relative_paths_until_base_known: true
+  if_source_is_read_only_mirror:
+    - "Keep the mirrored source file unchanged"
+    - "Write the rewritten local manifest under rewrites/ while preserving useful relative structure"
+  examples:
+    - source: "samplesheet.csv"
+      output: "samplesheet_local.csv"
+    - source: "rrna-db.txt"
+      output: "rrna-db_local.txt"
+prompt_rules:
+  main_style: "Plain-language task prompt"
+  hide_raw_param_names_in_main_text: true
+  include_agent_mapping_note: true
+  mention_prepare_step: true
+  execution_order:
+    - "Goal and scope of the test run"
+    - "Localized input files and what each file is for"
+    - "Key analysis requirements expressed in user language"
+    - "Execution note for resource expectations or special validation"
+    - "Instruction to run prepare first, then launch"
+nextmcp_rules:
+  required_runtime_tools:
+    - "server_info"
+    - "fs_list"
+    - "fs_mkdir"
+    - "fs_write"
+    - "fs_read"
+    - "project_get"
+    - "nextflow_run"
+  path_boundary:
+    server: "All final runtime paths live on the nextmcp server filesystem"
+    client: "Client-local paths must not be sent to nextflow_run"
+  project_boundary:
+    required_field: "project"
+    guidance: "Pick one stable project id and let nextflow_run(prepare=true) resolve the run layout"
+  launch_guidance:
+    default_profile: "Prefer server default_profile unless the user explicitly asks otherwise"
+    prepare_first: true
+    params_channel: "Use params for ordinary pipeline-facing options and localized file paths"
+    config_files_channel: "Use for Nextflow config files and for small local override configs such as max_cpus, max_memory, and max_time when those values must stay in config scope"
+example_inventory:
+  riboseq_test_config:
+    input_manifest: "samplesheet.csv"
+    nested_assets:
+      - "FASTQ files linked inside samplesheet.csv"
+    direct_reference_files:
+      - "contrasts.csv"
+      - "rrna-db.txt"
+      - "Homo_sapiens.GRCh38.dna.chromosome.20.fa.gz"
+      - "Homo_sapiens.GRCh38.111_chr20.gtf"
+  sarek_test_config:
+    direct_reference_files:
+      - "s3://ngi-igenomes/igenomes/Homo_sapiens/GATK/GRCh38/Annotation/Sentieon/SentieonDNAscopeModel1.1.model"

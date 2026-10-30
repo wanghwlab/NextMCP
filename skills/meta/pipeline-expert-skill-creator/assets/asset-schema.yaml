@@ -1,0 +1,186 @@
+expert_skill_package:
+  required_files:
+    - SKILL.md
+    - assets/pipeline-profile.yaml
+    - assets/playbooks.yaml
+    - assets/step-recipes.yaml
+    - assets/param-presets.yaml
+    - assets/schema-index.yaml
+    - assets/capability-audit.yaml
+    - assets/authoring-gaps.yaml
+    - assets/artifact-contracts.yaml
+    - assets/qc-rules.yaml
+    - references/01_scope_and_assumptions.md
+    - references/02_playbooks.md
+    - references/03_parameters.md
+    - references/04_schema_lookup.md
+    - references/05_outputs_and_qc.md
+    - references/06_troubleshooting.md
+
+  required_directories:
+    - assets/schema-groups
+    - references/schema-groups
+
+  optional_generation_support:
+    - scripts/build_authoring_bundle.py
+    - scripts/generate_schema_groups.py
+    - scripts/audit_capabilities.py
+    - scripts/validate_expert_skill.py
+    - scripts/run_offline_evals.py
+    - evals/templates/expert-skill-evals.json
+    - assets/schema-grouping-rules.yaml
+    - assets/templates/schema-group-overrides.example.yaml
+
+asset_requirements:
+  pipeline-profile.yaml:
+    required_fields:
+      - pipeline.id
+      - pipeline.version
+      - pipeline.summary
+      - required_inputs
+      - supported_modes
+      - limitations
+
+  playbooks.yaml:
+    required_fields:
+      - playbooks[].id
+      - playbooks[].use_when
+      - playbooks[].prerequisites
+      - playbooks[].recommended_preset
+      - playbooks[].outputs_to_review
+
+  step-recipes.yaml:
+    required_fields:
+      - steps[].id
+      - steps[].purpose
+      - steps[].minimal_inputs
+      - steps[].tool_sequence
+      - steps[].outputs
+
+  param-presets.yaml:
+    required_fields:
+      - presets.<name>.use_when
+      - presets.<name>.params
+      - presets.<name>.placeholders
+
+  schema-index.yaml:
+    required_fields:
+      - grouping_strategy
+      - groups[].id
+      - groups[].label
+      - groups[].use_when
+      - groups[].summary
+      - groups[].asset_path
+      - groups[].reference_path
+      - groups[].parameter_count
+
+  capability-audit.yaml:
+    required_fields:
+      - pipeline_id
+      - status
+      - summary.total
+      - summary.high_impact
+      - summary.needs_review
+      - capabilities[].id
+      - capabilities[].label
+      - capabilities[].kind
+      - capabilities[].impact
+      - capabilities[].status
+      - capabilities[].required_assets
+      - capabilities[].coverage
+      - capabilities[].scope_out_reason
+      - capabilities[].evidence
+
+  authoring-gaps.yaml:
+    required_fields:
+      - status
+      - gaps[].id
+      - gaps[].source
+      - gaps[].status
+      - gaps[].action
+
+  schema-grouping-rules.yaml:
+    required_fields:
+      - generator.version
+      - generator.output_files
+      - generator.override_contract.top_level_fields
+      - heuristics.path_formats
+      - heuristics.config_scope_names
+      - groups[].id
+      - groups[].label
+      - groups[].use_when
+      - groups[].selection_rule
+      - groups[].coverage_notes
+
+  templates/schema-group-overrides.example.yaml:
+    required_fields:
+      - grouping_strategy
+      - force_groups
+      - group_overrides
+      - parameter_overrides
+
+  evals/templates/expert-skill-evals.json:
+    required_fields:
+      - template_name
+      - template_version
+      - purpose
+      - usage.replace_placeholders
+      - usage.run_mode
+      - usage.nextflow_launch_required
+      - evals[].id
+      - evals[].source
+      - evals[].category
+      - evals[].source_materials
+      - evals[].prompt
+      - evals[].expected_output
+      - evals[].assertions
+      - evals[].files
+
+  schema-groups/*.yaml:
+    required_fields:
+      - group.id
+      - group.label
+      - group.selection_rule
+      - group.lookup_order
+      - group.coverage_notes
+      - parameters[].name
+      - parameters[].source_name
+      - parameters[].type
+      - parameters[].required
+      - parameters[].default
+      - parameters[].enum
+      - parameters[].description
+      - parameters[].classification
+      - parameters[].channel
+      - parameters[].placeholder
+      - parameters[].example_values
+      - parameters[].mapping_notes
+      - parameters[].lookup_priority
+      - parameters[].confidence
+      - parameters[].mapping_flags
+
+  artifact-contracts.yaml:
+    required_fields:
+      - artifacts[].id
+      - artifacts[].path
+      - artifacts[].produced_when
+      - artifacts[].meaning
+
+  qc-rules.yaml:
+    required_fields:
+      - checks[].id
+      - checks[].severity
+      - checks[].source
+      - checks[].good_signal
+      - checks[].bad_signal
+      - checks[].action
+
+skill_md_contract:
+  required_sections:
+    - Scope
+    - When to use this skill
+    - What this skill does not handle
+    - Authoritative assets
+    - References to read next
+    - Operating rules
+    - Fast-start playbooks

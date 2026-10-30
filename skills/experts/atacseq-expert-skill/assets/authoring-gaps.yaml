@@ -1,0 +1,367 @@
+status: resolved
+gaps:
+- id: documented_prerequisite_database
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_prerequisite_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: prerequisite_bowtie2_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: prerequisite_bwa_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: prerequisite_chromap_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: prerequisite_save_reference
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: prerequisite_star_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_aligner
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_deseq2_vst
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_help
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_igenomes_ignore
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_keep_dups
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_keep_mito
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_keep_multi_map
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_monochrome_logs
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_narrow_peak
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_plaintext_email
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_publish_dir_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_read_length
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_save_align_intermeds
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_save_macs_pileup
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_save_reference
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_save_trimmed
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_save_unaligned
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_ataqv
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_consensus_peaks
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_deseq2_qc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_fastqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_igv
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_merge_replicates
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_peak_annotation
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_peak_qc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_picard_metrics
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_plot_fingerprint
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_plot_profile
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_preseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_qc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_skip_trimming
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_validate_params
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_validationfailunrecognisedparams
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_validationlenientmode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_validationshowhiddenparams
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_version
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_with_control
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_bam
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_contamination
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_counts
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_matrix
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_quantification
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: documented_output_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_clip_r1
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_clip_r2
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_min_trimmed_reads
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_multiqc_methods_description
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_three_prime_clip_r1
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_three_prime_clip_r2
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: schema_param_trim_nextseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Updated in corresponding asset files.
+- id: replace_generic_artifact_contract
+  source: artifact-contracts.yaml
+  status: resolved
+  action: Replace the generic results-root contract with source-backed published outputs.
+  resolution: Updated in corresponding asset files.
+- id: replace_generic_qc_rule
+  source: qc-rules.yaml
+  status: resolved
+  action: Replace the generic completion check with source-backed QC and troubleshooting
+    rules.
+  resolution: Updated in corresponding asset files.

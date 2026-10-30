@@ -1,0 +1,149 @@
+group:
+  id: input_output_options
+  label: Input/output options
+  selection_rule: Use this group for parameters defined under the `Input/output options` top-level
+    schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/input_output_options.md
+  - assets/schema-groups/input_output_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+parameters:
+- group_id: input_output_options
+  name: contrasts
+  source_name: contrasts
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: A CSV file describing sample contrasts
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/contrasts
+  example_values:
+  - <server_output_root>/contrasts
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like value.
+    Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: A CSV file describing sample contrasts
+    help_text: This file is used to define groups of samples from 'input' to compare.  It must contain
+      at least the columns 'variable', 'reference' and 'target', and optionally a 'batch' column.
+      'variable' and 'batch' must be columns in the input sample sheet, 'reference' and 'target' are
+      values in the column indicated by 'variable'.
+    pattern: ^\S+\.(csv|tsv|txt)$
+    format: file-path
+    fa_icon: fas fa-adjust
+- group_id: input_output_options
+  name: input
+  source_name: input
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: Path to comma-separated file containing information about the samples in the experiment.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/input
+  example_values:
+  - <server_output_root>/input
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like value.
+    Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    schema: assets/schema_input.json
+    pattern: ^\S+\.(csv|tsv|json|yaml|yml)$
+    description: Path to comma-separated file containing information about the samples in the experiment.
+    help_text: You will need to create a design file with information about the samples in your experiment
+      before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated
+      file with 3 columns, and a header row. See [usage docs](https://nf-co.re/riboseq/usage#samplesheet-input).
+    fa_icon: fas fa-file-csv
+- group_id: input_output_options
+  name: outdir
+  source_name: outdir
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: The output directory where the results will be saved. You have to use absolute paths
+    to storage on Cloud infrastructure.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/riboseq
+  example_values:
+  - <server_output_root>/riboseq
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like value.
+    Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The output directory where the results will be saved. You have to use absolute paths
+      to storage on Cloud infrastructure.
+    fa_icon: fas fa-folder-open
+- group_id: input_output_options
+  name: email
+  source_name: email
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Email address for completion summary.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Set only when the user wants a different output root, saved intermediate, or reporting
+    behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Email address for completion summary.
+    fa_icon: fas fa-envelope
+    help_text: Set this parameter to your e-mail address to get a summary e-mail with details of the
+      run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`)
+      then you don't need to specify this on the command line for every run.
+    pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+- group_id: input_output_options
+  name: multiqc_title
+  source_name: multiqc_title
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: MultiQC report title. Printed as page header, used for filename if not otherwise specified.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Set only when the user wants a different output root, saved intermediate, or reporting
+    behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: MultiQC report title. Printed as page header, used for filename if not otherwise
+      specified.
+    fa_icon: fas fa-file-signature

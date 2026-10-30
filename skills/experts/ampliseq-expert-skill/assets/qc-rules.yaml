@@ -1,0 +1,87 @@
+checks:
+- id: summary_first
+  severity: high
+  source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+  good_signal: Run succeeded and artifact summary includes expected report and table
+    families.
+  bad_signal: Run failed, stalled, or diagnosis points to input, database, resource,
+    or process errors.
+  action: Inspect run_artifacts for the relevant section before raw logs.
+- id: input_integrity
+  severity: high
+  source: input/ and pipeline_info/params.json
+  good_signal: Exactly one of input, input_folder, or input_fasta was used, with server-local
+    paths and expected file extensions.
+  bad_signal: Mixed input routes, missing compressed FASTQ files, invalid sample IDs,
+    or missing run column for multi-run data.
+  action: Fix the server-local samplesheet or folder layout and rerun with from_run_id
+    only when compatible.
+- id: primer_trimming
+  severity: high
+  source: cutadapt/cutadapt_summary.tsv
+  good_signal: Retained read counts are plausible and trimming matches expected primer
+    presence.
+  bad_signal: Large unexpected losses, untrimmed primer carryover, or skipped trimming
+    on reads that contain primers.
+  action: Check FW_primer, RV_primer, double_primer, retain_untrimmed, and skip_cutadapt
+    settings.
+- id: dada2_read_retention
+  severity: high
+  source: dada2/DADA2_stats.tsv and overall_summary.tsv
+  good_signal: Reads progress through filtering, denoising, merging, and chimera removal
+    without unexpected collapse.
+  bad_signal: Many samples fail min_read_counts, trimming, denoising, or merging.
+  action: Review quality profiles, trunclen settings, max_ee, min_len/max_len, illumina_novaseq,
+    single_end, pacbio, or iontorrent settings.
+- id: dada2_error_model
+  severity: medium
+  source: dada2/QC/*.err.convergence.txt and *.err.pdf
+  good_signal: Convergence values approach zero and estimated error rates fit observed
+    rates.
+  bad_signal: Poor convergence or mismatch between estimated and observed error rates.
+  action: Consider sequencing platform flags, quality_type, truncation, and run-specific
+    error models.
+- id: taxonomy_database
+  severity: high
+  source: dada2/ref_taxonomy.*.txt, qiime2/taxonomy/ref_taxonomy.txt, sintax/ref_taxonomy.*.txt,
+    kraken2 reports
+  good_signal: Database choice matches the marker and expected organism group.
+  bad_signal: Unsupported database key, missing custom database path, license concern,
+    or taxonomy route inconsistent with downstream goal.
+  action: Confirm exact schema fields in taxonomic_assignment and server-local database
+    paths.
+- id: qiime2_downstream
+  severity: medium
+  source: qiime2/abundance_tables/ and qiime2/diversity/
+  good_signal: Feature tables, relative abundance tables, diversity outputs, and metadata-driven
+    plots are present when requested.
+  bad_signal: Missing outputs because metadata is absent, skip_qiime or skip_qiime_downstream
+    is set, or rarefaction depth excludes samples.
+  action: Check metadata format, metadata_category, diversity_rarefaction_depth, and
+    skip toggles.
+- id: differential_abundance
+  severity: medium
+  source: qiime2/ancom/ and qiime2/ancombc/
+  good_signal: Requested ANCOM or ANCOM-BC output directories contain expected category
+    or formula outputs.
+  bad_signal: No suitable metadata columns, formula terms not present, empty values
+    removed unexpectedly, or reference level mismatch.
+  action: Confirm metadata columns, ancombc_formula, ancombc_formula_reflvl, effect
+    size, and significance settings.
+- id: multiregion_sidle
+  severity: high
+  source: sidle/reconstructed/ and sidle/DB/
+  good_signal: Per-region and reconstructed Sidle tables are present.
+  bad_signal: Missing region file fields, database setup issues, or absent reconstructed
+    outputs.
+  action: Check multiregion file, sidle_ref_taxonomy/custom files, and database license
+    or availability.
+- id: resource_caps
+  severity: medium
+  source: run_get(detail="full") and nextflow log paths
+  good_signal: Resource caps are supplied through config_files and follow process.resourceLimits
+    syntax.
+  bad_signal: max_cpus, max_memory, or max_time were placed in params or resource-related
+    failures persist.
+  action: Create a server-local override config with process.resourceLimits and pass
+    it via config_files.

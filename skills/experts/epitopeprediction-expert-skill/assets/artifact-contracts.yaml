@@ -1,0 +1,53 @@
+review_order:
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_artifacts(...) for the relevant section
+  - fs_read(...) only for explicit files returned by artifact metadata
+artifacts:
+  - id: predictions
+    path: predictions/[sample].tsv
+    produced_when: Binding prediction completes and fasta_output is false.
+    meaning: Final harmonized prediction table. Always includes peptide_col_name, allele, BA, rank, binder, predictor, plus source metadata.
+    review_notes:
+      - Prefer rank for binder selection for most predictors.
+      - MHCnuggets rank handling is experimental in the docs; review BA for MHCnuggets-specific decisions.
+      - binder_only true removes non-binders from this table.
+      - wide_format_output true changes the final table into predictor/allele-specific columns.
+    reuse_fragments:
+      - predictions/
+      - _predictions.csv
+      - pipeline_info/params.json
+  - id: epytope_variant_tables
+    path: epytope/[sample]_chr[1-22|X|Y].tsv
+    produced_when: Variant input is processed for mutated peptide generation.
+    meaning: Epytope-generated mutated peptide tables per chromosome or split.
+    review_notes:
+      - Empty variant output can indicate no usable peptide-generating variants after annotation parsing.
+      - genome_reference controls Ensembl BioMart selection for variant interpretation.
+  - id: epytope_fasta
+    path: epytope/[sample].fasta
+    produced_when: fasta_output is true for variant input.
+    meaning: FASTA with wildtype full-length sequences and variant sequences around mutation sites.
+    review_notes:
+      - This route skips MHC binding prediction.
+      - fasta_peptide_flanking_region_size controls flanking sequence size around the mutation site.
+  - id: predictor_raw_outputs
+    path: mhcflurry/; mhcnuggets/; netmhcpan/; netmhciipan/
+    produced_when: The matching predictor is selected in tools and supported alleles/peptide lengths remain after filtering.
+    meaning: Predictor-specific raw binding outputs before final harmonization.
+    review_notes:
+      - Missing predictor output can mean unsupported allele, unsupported peptide length, or missing NetMHC tarball.
+      - Supported allele gaps are summarized in MultiQC.
+  - id: multiqc
+    path: multiqc/multiqc_report.html
+    produced_when: The run reaches final reporting.
+    meaning: Summary of binding prediction counts, score distributions, unsupported alleles or peptide lengths, versions, and workflow metadata.
+    review_notes:
+      - Review multiqc/multiqc_data/ when exact plotted values or counts are needed.
+      - Custom methods text can come from multiqc_methods_description.
+  - id: pipeline_info
+    path: pipeline_info/
+    produced_when: Standard nf-core reporting is enabled.
+    meaning: Nextflow execution report, trace, timeline, DAG, software versions, validated samplesheet, and params.json.
+    review_notes:
+      - pipeline_info/params.json is the main compatibility check for historical reuse.
+      - Treat artifacts.json and pipeline_fingerprint as historical facts, then confirm route compatibility with params.json.

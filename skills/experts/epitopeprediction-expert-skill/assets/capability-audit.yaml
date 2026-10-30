@@ -1,0 +1,258 @@
+pipeline_id: epitopeprediction
+status: resolved
+summary:
+  total: 20
+  high_impact: 16
+  needs_review: 0
+  covered: 20
+  scoped_out: 0
+capabilities:
+  - id: documented_prerequisite_database
+    label: Documented `database` prerequisite should be explicit in planning.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage:
+      - "param-presets.yaml: NetMHC and server-local software/database-style prerequisites are mapped through explicit path placeholders."
+      - "playbooks.yaml: NetMHC route requires server-local licensed software paths before launch."
+      - "qc-rules.yaml: netmhc_prerequisites covers missing path, software metadata, and unpack failures."
+    scope_out_reason: null
+    evidence:
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/output.md, excerpt: database}
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/usage.md, excerpt: database}
+  - id: documented_prerequisite_index
+    label: Documented `index` prerequisite should be explicit in planning.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage:
+      - "param-presets.yaml: reference and NetMHC path placeholders are server-local params."
+      - "playbooks.yaml: standard and NetMHC routes require path confirmation before launch."
+      - "qc-rules.yaml: annotated_variant_input and netmhc_prerequisites cover reference and software path failures."
+    scope_out_reason: null
+    evidence:
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/output.md, excerpt: index}
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/usage.md, excerpt: index}
+  - id: schema_param_binder_only
+    label: Schema parameter `binder_only` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: reporting_shape preset sets binder_only and explains that it removes non-binders."
+      - "playbooks.yaml: reporting_shape route covers binder-only final table planning."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: binder_only, excerpt: Filter out non-binders from the final results.}
+  - id: schema_param_fasta_output
+    label: Schema parameter `fasta_output` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: fasta_only_variant_output preset sets fasta_output true and notes prediction output is skipped."
+      - "playbooks.yaml: fasta_only_variant_output route covers the FASTA-only run shape."
+      - "artifact-contracts.yaml: epytope_fasta explains expected FASTA outputs."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: fasta_output, excerpt: Specifies that sequences of proteins affected by variants will be written to FASTA.}
+  - id: schema_param_help
+    label: Schema parameter `help` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact keeps help out of ordinary run presets."
+      - "playbooks.yaml: analysis routes do not use help flags because they exit after displaying help."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: help, excerpt: Display the help message.}
+  - id: schema_param_help_full
+    label: Schema parameter `help_full` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact keeps help_full out of ordinary run presets."
+      - "playbooks.yaml: analysis routes do not use help flags because they exit after displaying help."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: help_full, excerpt: Display the full detailed help message.}
+  - id: schema_param_monochrome_logs
+    label: Schema parameter `monochrome_logs` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact keeps monochrome_logs in exact lookup instead of core route planning."
+      - "playbooks.yaml: runtime routes do not require colored-log changes for launch."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: monochrome_logs, excerpt: Do not use coloured log outputs.}
+  - id: schema_param_netmhc_system
+    label: Schema parameter `netmhc_system` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: netmhc_prediction notes netmhc_system defaults to linux and is only relevant for conda-style execution."
+      - "playbooks.yaml: netmhc_prediction route explains when to set netmhc_system."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: netmhc_system, excerpt: Specifies the operating system in use, linux or darwin.}
+  - id: schema_param_plaintext_email
+    label: Schema parameter `plaintext_email` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact preserves plaintext_email outside core run routes."
+      - "playbooks.yaml: analysis routes do not depend on email formatting."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: plaintext_email, excerpt: Send plain-text email instead of HTML.}
+  - id: schema_param_publish_dir_mode
+    label: Schema parameter `publish_dir_mode` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact preserves publish_dir_mode for exact lookup."
+      - "playbooks.yaml: output review is based on artifact paths, not a required publishDir mode change."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: publish_dir_mode, excerpt: Method used to save pipeline results to output directory.}
+  - id: schema_param_show_hidden
+    label: Schema parameter `show_hidden` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact keeps show_hidden out of ordinary run presets."
+      - "playbooks.yaml: analysis routes do not depend on hidden help display."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: show_hidden, excerpt: Display hidden parameters in the help message.}
+  - id: schema_param_split_by_variants
+    label: Schema parameter `split_by_variants` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: variant_split_optimisation preset sets split_by_variants and split distance."
+      - "playbooks.yaml: variant_split_optimisation route covers large VCF splitting."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: split_by_variants, excerpt: Split VCF file into multiple files by number of variants.}
+  - id: schema_param_validate_params
+    label: Schema parameter `validate_params` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact preserves validate_params for exact lookup."
+      - "playbooks.yaml: normal routes keep schema validation enabled unless a user gives a concrete reason."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: validate_params, excerpt: Boolean whether to validate parameters against the schema at runtime.}
+  - id: schema_param_version
+    label: Schema parameter `version` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: non_runtime_or_low_impact keeps version out of ordinary run presets."
+      - "playbooks.yaml: analysis routes do not use version because it exits after displaying version."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: version, excerpt: Display version and exit.}
+  - id: schema_param_wide_format_output
+    label: Schema parameter `wide_format_output` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: reporting_shape preset sets wide_format_output true."
+      - "playbooks.yaml: reporting_shape route covers wide final table planning."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: wide_format_output, excerpt: Specifies that the output file will be in wide format.}
+  - id: schema_param_wild_type
+    label: Schema parameter `wild_type` may change run planning.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "param-presets.yaml: standard_prediction keeps default prediction behavior and grouped schema lookup preserves wild_type."
+      - "playbooks.yaml: standard route covers variant-derived wild-type prediction planning."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: wild_type, excerpt: Specifies whether wild-type sequences should be predicted.}
+  - id: documented_output_counts
+    label: Documented `counts` outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage:
+      - "artifact-contracts.yaml: multiqc and predictions contracts describe prediction counts and final table review."
+      - "qc-rules.yaml: unsupported_alleles_or_lengths covers MultiQC counts and skipped predictions."
+    scope_out_reason: null
+    evidence:
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/output.md, excerpt: counts}
+  - id: documented_output_multiqc
+    label: Documented `multiqc` outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage:
+      - "artifact-contracts.yaml: multiqc contract covers report, plots, and multiqc_data."
+      - "qc-rules.yaml: run_completion and unsupported_alleles_or_lengths route review through MultiQC."
+    scope_out_reason: null
+    evidence:
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/output.md, excerpt: multiqc}
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/usage.md, excerpt: multiqc}
+  - id: documented_output_report
+    label: Documented `report` outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage:
+      - "artifact-contracts.yaml: pipeline_info and multiqc contracts cover report files."
+      - "qc-rules.yaml: run_completion requires summary-first review before reading report files."
+    scope_out_reason: null
+    evidence:
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/README.md, excerpt: report}
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/output.md, excerpt: report}
+      - {source: documents, path: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction/docs/usage.md, excerpt: report}
+  - id: schema_param_multiqc_methods_description
+    label: Schema parameter `multiqc_methods_description` may change run planning.
+    kind: schema_parameter
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+    coverage:
+      - "artifact-contracts.yaml: multiqc contract covers custom methods text review."
+      - "param-presets.yaml: reporting_shape includes multiqc_methods_description placeholder."
+      - "playbooks.yaml: reporting_shape route covers custom MultiQC reporting."
+    scope_out_reason: null
+    evidence:
+      - {source: schema, path: nextflow_schema.json, field: multiqc_methods_description, excerpt: Custom MultiQC yaml file containing HTML including a methods description.}

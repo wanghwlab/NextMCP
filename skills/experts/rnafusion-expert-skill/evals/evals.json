@@ -1,0 +1,113 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Offline evals for rnafusion-expert-skill. These prompts test planning, parameter mapping, output review, historical reuse, and coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch"
+  },
+  "evals": [
+    {
+      "id": "full-run-parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the rnafusion-expert-skill, draft a nextmcp dry-run plan for project my-project. The user confirmed /srv/in/samplesheet.csv, /srv/ref/rnafusion, and /srv/out/rnafusion on the server. They want all tools and a cap of 8 CPUs and 32 GB memory. Do not launch; return the tool order and nextflow_run argument shape.",
+      "expected_output": "Uses project as a top-level argument, puts input/outdir/tools/genomes_base in params, puts resource caps in a server-local config file passed through config_files using process.resourceLimits, omits profile by default, and avoids nextflow_inspect_pipeline.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument.",
+        "Puts input, outdir, tools, and genomes_base under params.",
+        "Places resource caps in config_files or an override config using process.resourceLimits, not params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.",
+        "Does not start with nextflow_inspect_pipeline."
+      ],
+      "files": []
+    },
+    {
+      "id": "reference-build-no-cosmic",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "references/02_playbooks.md"
+      ],
+      "prompt": "Using the rnafusion-expert-skill, plan a reference build when the user has no COSMIC license. The project is ref_project and the server reference target is /srv/ref/rnafusion. Do not launch.",
+      "expected_output": "Chooses the no_cosmic_reference_build route with references_only=true, tools=all, no_cosmic=true, genomes_base and outdir as server-local paths, and no invented credentials.",
+      "assertions": [
+        "Uses references_only=true.",
+        "Uses no_cosmic=true.",
+        "Does not invent COSMIC credentials.",
+        "Uses server-local paths."
+      ],
+      "files": []
+    },
+    {
+      "id": "fusioninspector-only",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the rnafusion-expert-skill, plan a FusionInspector-only run with a server-local fusion list /srv/in/fusions.tsv and samplesheet /srv/in/samplesheet.csv. Do not launch.",
+      "expected_output": "Uses tools=fusioninspector, fusioninspector_fusions, input, outdir, and the skip flags from the preset. It confirms reference needs and avoids pipeline source inspection.",
+      "assertions": [
+        "Sets tools to fusioninspector.",
+        "Includes fusioninspector_fusions.",
+        "Mentions skip_qc, skip_vis, and skip_vcf route behavior.",
+        "Does not use nextflow_inspect_pipeline for runtime planning."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the rnafusion-expert-skill, answer a user who says the run finished and they need the main fusion reports and QC outputs. What nextmcp calls come first, and which artifact paths matter?",
+      "expected_output": "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then run_artifacts, then fs_read only for concrete report paths such as fusionreport, FusionInspector, VCF, MultiQC, and pipeline_info params.",
+      "assertions": [
+        "Starts with summary-first run_get.",
+        "Uses run_artifacts before fs_read.",
+        "Mentions fusionreport and FusionInspector outputs.",
+        "Mentions MultiQC or pipeline_info review."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the rnafusion-expert-skill, plan how to recover a previous run when the user only remembers a FusionInspector filename fragment. Project is my-project. Do not launch.",
+      "expected_output": "Uses run_list with artifact_path_contains, then run_get(include=[\"artifact_summary\"]), then run_artifacts, and checks params or equivalent metadata before recommending reuse.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains.",
+        "Uses run_get(include=[\"artifact_summary\"]).",
+        "Mentions artifacts.json or pipeline_fingerprint.",
+        "Requires route compatibility confirmation through params metadata."
+      ],
+      "files": []
+    }
+  ],
+  "summary": {
+    "eval_count": 5,
+    "asset_eval_count": 5,
+    "authoring_bundle_eval_count": 0,
+    "audit_eval_count": 0
+  }
+}

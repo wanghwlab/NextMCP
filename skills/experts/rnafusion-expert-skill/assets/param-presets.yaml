@@ -1,0 +1,137 @@
+presets:
+  full_detection_all_tools:
+    use_when: Standard full rnafusion analysis after server-local inputs and references are confirmed.
+    params:
+      tools: all
+      input: <server_input_root>/samplesheet.csv
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_output_root>/rnafusion
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_output_root>/rnafusion
+    notes:
+    - tools is schema-required and must not be left null.
+    - Do not pass profile unless the user asks for a specific runtime or the server default is unsuitable.
+  selected_tools:
+    use_when: The user requests only selected callers or support tools.
+    params:
+      tools: arriba,starfusion,fusioncatcher,fusionreport,fastp,fusioninspector
+      input: <server_input_root>/samplesheet.csv
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_output_root>/rnafusion
+    placeholders:
+      tools: arriba,starfusion,fusioncatcher,fusionreport,fastp,fusioninspector
+      input: <server_input_root>/samplesheet.csv
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_output_root>/rnafusion
+    notes:
+    - Allowed tools are arriba, ctatsplicing, fusioncatcher, starfusion, stringtie,
+      fusionreport, fastp, salmon, fusioninspector, and all.
+  build_references_all:
+    use_when: Build the full reference set on the server.
+    params:
+      references_only: true
+      tools: all
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_reference_root>/rnafusion
+    placeholders:
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_reference_root>/rnafusion
+    notes:
+    - Use only server-local output/reference paths.
+    - Add cosmic_username and cosmic_passwd only when the user provides licensed credentials.
+  no_cosmic_reference_build:
+    use_when: Build references without COSMIC.
+    params:
+      references_only: true
+      tools: all
+      no_cosmic: true
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_reference_root>/rnafusion
+    placeholders:
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_reference_root>/rnafusion
+    notes:
+    - Fusion-report database interpretation should note that COSMIC is absent.
+  qiagen_cosmic_reference_build:
+    use_when: Build references using QIAGEN COSMIC credentials.
+    params:
+      references_only: true
+      tools: all
+      qiagen: true
+      cosmic_username: <server_secret_or_confirmed_value>
+      cosmic_passwd: <server_secret_or_confirmed_value>
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_reference_root>/rnafusion
+    placeholders:
+      cosmic_username: <server_secret_or_confirmed_value>
+      cosmic_passwd: <server_secret_or_confirmed_value>
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_reference_root>/rnafusion
+    notes:
+    - Do not invent, echo, or store COSMIC credentials.
+  fusioninspector_only:
+    use_when: Run FusionInspector on a supplied fusion list.
+    params:
+      tools: fusioninspector
+      fusioninspector_fusions: <server_input_root>/fusions.tsv
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/rnafusion_fusioninspector
+      skip_qc: true
+      skip_vis: true
+      skip_vcf: true
+    placeholders:
+      fusioninspector_fusions: <server_input_root>/fusions.tsv
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/rnafusion_fusioninspector
+    notes:
+    - Add genomes_base or exact reference params when server defaults do not resolve references.
+  fusioncatcher_trimmed:
+    use_when: FusionCatcher is selected and reads need trimming to about 100 bp.
+    params:
+      tools: fastp,fusioncatcher,fusionreport,fusioninspector
+      input: <server_input_root>/samplesheet.csv
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_output_root>/rnafusion_fusioncatcher
+      trim_tail_fusioncatcher: <bases_to_trim>
+    placeholders:
+      trim_tail_fusioncatcher: <bases_to_trim>
+      input: <server_input_root>/samplesheet.csv
+      genomes_base: <server_reference_root>/rnafusion
+      outdir: <server_output_root>/rnafusion_fusioncatcher
+    notes:
+    - The docs recommend 100 bp reads for FusionCatcher.
+parameter_boundaries:
+  params:
+  - input
+  - outdir
+  - tools
+  - genomes_base
+  - references_only
+  - cosmic_username
+  - cosmic_passwd
+  - qiagen
+  - no_cosmic
+  - skip_qc
+  - skip_vis
+  - skip_vcf
+  - tools_cutoff
+  - whitelist
+  - fusioninspector_fusions
+  - trim_tail_fusioncatcher
+  - adapter_fasta
+  - cram
+  config_files:
+  - resource caps using process.resourceLimits
+  - process-specific overrides such as FUSIONREPORT_DOWNLOAD memory and cpus
+  notes:
+  - Put Nextflow config files and resource caps in nextflow_run(config_files=[...]).
+  - Use process.resourceLimits for resource caps; do not invent params.max_cpus,
+    params.max_memory, params.max_time, or process.maxCpus.
+  top_level_nextflow_run:
+  - project
+  - run_id
+  - run_name
+  - from_run_id
+  - prepare

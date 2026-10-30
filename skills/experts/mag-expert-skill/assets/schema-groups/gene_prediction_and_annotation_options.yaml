@@ -1,0 +1,286 @@
+group:
+  id: gene_prediction_and_annotation_options
+  label: Gene prediction and annotation options
+  selection_rule: Use this group for parameters defined under the `Gene prediction
+    and annotation options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/gene_prediction_and_annotation_options.md
+  - assets/schema-groups/gene_prediction_and_annotation_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `gene_prediction_and_annotation_options` for exact lookup.
+parameters:
+- group_id: gene_prediction_and_annotation_options
+  name: metaeuk_mmseqs_db
+  source_name: metaeuk_mmseqs_db
+  type: string
+  required: false
+  default: null
+  enum: &id001
+  - UniRef100
+  - UniRef90
+  - UniRef50
+  - UniProtKB
+  - UniProtKB/TrEMBL
+  - UniProtKB/Swiss-Prot
+  - NR
+  - NT
+  - GTDB
+  - PDB
+  - PDB70
+  - Pfam-A.full
+  - Pfam-A.seed
+  - Pfam-B
+  - CDD
+  - eggNOG
+  - VOGDB
+  - dbCAN2
+  - SILVA
+  - Resfinder
+  - Kalamari
+  description: A string containing the name of one of the databases listed in the
+    [mmseqs2 documentation](https://github.com/soedinglab/MMseqs2/wiki#downloading-databases).
+    This database will be downloaded and formatted for eukaryotic genome annotation.
+    Incompatible with --metaeuk_db.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/metaeuk_mmseqs_db
+  example_values:
+  - UniRef100
+  - UniRef90
+  - UniRef50
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: string
+    enum: *id001
+    description: A string containing the name of one of the databases listed in the
+      [mmseqs2 documentation](https://github.com/soedinglab/MMseqs2/wiki#downloading-databases).
+      This database will be downloaded and formatted for eukaryotic genome annotation.
+      Incompatible with --metaeuk_db.
+    help_text: mmseqs2 lists a large number of databases, not all of which are appropriate
+      for use with MetaEuk. MetaEuk requires protein inputs, so you should select
+      one of the Aminoacid or Profile options.
+- group_id: gene_prediction_and_annotation_options
+  name: prokka_fast_mode
+  source_name: prokka_fast_mode
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to skip CDS/product searching in Prokka runs
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: boolean
+    description: Specify to skip CDS/product searching in Prokka runs
+- group_id: gene_prediction_and_annotation_options
+  name: prokka_with_compliance
+  source_name: prokka_with_compliance
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Turn on Prokka complicance mode for truncating contig names for NCBI/ENA
+    compatibility.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: boolean
+    help_text: 'Sometimes Prokka will complain that your contig names are too long
+      and fail.
+
+
+      This particularly happens with metaSPAdes assemblies.
+
+
+      You can turn on this flag which will tell Prokka to truncate the contig names
+      for you.
+
+      However this also requires you to specify a sequencing centre name (specified
+      with `--prokka_compliance_centre`).
+
+
+      :::warning
+
+      Truncating contig names may make it harder to associated contig annotations
+      with their original contigs!
+
+      :::
+
+      '
+    description: Turn on Prokka complicance mode for truncating contig names for NCBI/ENA
+      compatibility.
+- group_id: gene_prediction_and_annotation_options
+  name: save_mmseqs_db
+  source_name: save_mmseqs_db
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the downloaded mmseqs2 database specified in `--metaeuk_mmseqs_db`.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/save_mmseqs_db
+  example_values:
+  - <server_reference_root>/save_mmseqs_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: boolean
+    description: Save the downloaded mmseqs2 database specified in `--metaeuk_mmseqs_db`.
+- group_id: gene_prediction_and_annotation_options
+  name: skip_metaeuk
+  source_name: skip_metaeuk
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MetaEuk gene prediction and annotation
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_metaeuk
+  example_values:
+  - <server_reference_root>/skip_metaeuk
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: boolean
+    description: Skip MetaEuk gene prediction and annotation
+- group_id: gene_prediction_and_annotation_options
+  name: skip_prodigal
+  source_name: skip_prodigal
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Prodigal gene prediction
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: boolean
+    description: Skip Prodigal gene prediction
+- group_id: gene_prediction_and_annotation_options
+  name: skip_prokka
+  source_name: skip_prokka
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Prokka genome annotation.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_prokka
+  example_values:
+  - <server_reference_root>/skip_prokka
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: boolean
+    description: Skip Prokka genome annotation.
+- group_id: gene_prediction_and_annotation_options
+  name: metaeuk_db
+  source_name: metaeuk_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to either a local fasta file of protein sequences, or to a directory
+    containing an MMseqs2-formatted database, for annotation of eukaryotic genomes.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/metaeuk_db
+  example_values:
+  - <server_reference_root>/metaeuk_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: string
+    description: Path to either a local fasta file of protein sequences, or to a directory
+      containing an MMseqs2-formatted database, for annotation of eukaryotic genomes.
+    help_text: 'One option would be the databases from the MetaEuk publication (https://wwwuser.gwdg.de/~compbiol/metaeuk/),
+      however it should be noted that these are focused on marine eukaryotes.
+
+
+      If supplying an mmseqs database, you must supply a directory that _within_ it
+      has the `database`, `database.dbtype`, `database_h` etc. files. For example,
+      for a pre-downloaded Kalamari database, you would supply `--mmseqs_db /<path>/<to>/mmseqs_db/Kalamari/.
+      Where if you were to look inside the database you would see `mmseqs_db/Kalamari/database_h`'
+    format: path
+    exists: true
+- group_id: gene_prediction_and_annotation_options
+  name: prokka_compliance_centre
+  source_name: prokka_compliance_centre
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify sequencing centre name required for Prokka's compliance mode.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Gene prediction and annotation options
+  raw_schema:
+    type: string
+    help_text: Specify the sequencing centre name for making NCBI Genbank/ENA compatible
+      annotation files (required when specifying `--prokka_with_compliance`).
+    description: Specify sequencing centre name required for Prokka's compliance mode.

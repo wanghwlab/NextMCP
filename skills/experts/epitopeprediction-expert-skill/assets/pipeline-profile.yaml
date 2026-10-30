@@ -1,0 +1,84 @@
+pipeline:
+  id: epitopeprediction
+  name: nf-core/epitopeprediction
+  version: 3.1.0
+  summary: Predict and annotate MHC-binding epitopes from annotated variants, protein FASTA, or peptide TSV input.
+source_basis:
+  authoring_source: repository-local inspect-equivalent bundle
+  pipeline_directory: /root/key_projects/nextmcp/nf_pipeline/epitopeprediction
+  schema: nextflow_schema.json
+  documents:
+    - README.md
+    - docs/README.md
+    - docs/usage.md
+    - docs/output.md
+  source_files:
+    - main.nf
+    - nextflow.config
+    - workflows/epitopeprediction.nf
+path_boundary:
+  rule: All runtime path values, the project identifier, and relative path-like values in params or config_files resolve on the nextmcp server filesystem.
+  placeholders:
+    input: <server_input_root>/samplesheet.csv
+    outdir: <server_output_root>/epitopeprediction
+    netmhcpan_path: <server_software_root>/netMHCpan-4.1b.Linux.tar.gz
+    netmhciipan_path: <server_software_root>/netMHCIIpan-4.3e.Linux.tar.gz
+required_inputs:
+  - name: input
+    required_for: all main pipeline runs
+    placeholder: <server_input_root>/samplesheet.csv
+    notes: CSV samplesheet with sample, alleles, mhc_class, and filename columns. Filename values point to server-local VCF/VCF.GZ, FASTA/FA, or TSV input files.
+  - name: outdir
+    required_for: published results
+    placeholder: <server_output_root>/epitopeprediction
+    notes: Published result directory on the nextmcp server.
+supported_modes:
+  - id: standard_prediction
+    entry_target: pipeline id epitopeprediction
+    use_when: Standard epitope prediction from annotated variants, protein FASTA, or peptide TSV with packaged predictors.
+    required_assets:
+      - playbooks.yaml#standard_prediction
+      - param-presets.yaml#standard_prediction
+  - id: netmhc_prediction
+    entry_target: pipeline id epitopeprediction
+    use_when: User requests NetMHCpan and/or NetMHCIIpan. Requires server-local licensed software tarballs and matching tool choice.
+    required_assets:
+      - playbooks.yaml#netmhc_prediction
+      - param-presets.yaml#netmhc_prediction
+      - qc-rules.yaml#netmhc_prerequisites
+  - id: fasta_only_variant_output
+    entry_target: pipeline id epitopeprediction
+    use_when: User wants FASTA output for variant protein sequences instead of MHC binding prediction.
+    required_assets:
+      - playbooks.yaml#fasta_only_variant_output
+      - param-presets.yaml#fasta_only_variant_output
+      - artifact-contracts.yaml#epytope_fasta
+  - id: reporting_shape
+    entry_target: pipeline id epitopeprediction
+    use_when: User wants binder-only summaries, wide-format prediction tables, or custom MultiQC reporting.
+    required_assets:
+      - playbooks.yaml#reporting_shape
+      - param-presets.yaml#reporting_shape
+      - artifact-contracts.yaml#predictions
+  - id: variant_split_optimisation
+    entry_target: pipeline id epitopeprediction
+    use_when: Large VCF input needs split-by-variant routing instead of chromosome-based splitting.
+    required_assets:
+      - playbooks.yaml#variant_split_optimisation
+      - param-presets.yaml#variant_split_optimisation
+limitations:
+  - The skill plans nextmcp launches and interprets pipeline outputs; it does not rank candidate epitopes beyond the pipeline's documented BA, rank, and binder columns.
+  - Variant input must already be annotated with SnpEff or VEP. The skill can route genome_reference and proteome_reference but does not annotate VCFs.
+  - NetMHCpan and NetMHCIIpan require server-local software tarballs. The skill does not download or license those tools.
+  - The current README states that conda and mamba profiles are not supported for this pipeline version; prefer the server default container profile unless the user asks otherwise.
+resource_override:
+  channel: config_files
+  syntax: |
+    process {
+      resourceLimits = [
+        memory: 64.GB,
+        cpus  : 16,
+        time  : 24.h
+      ]
+    }
+  notes: max_cpus, max_memory, and max_time are not ordinary pipeline params. Put resource caps in a small server-local config file and pass it through nextflow_run(config_files=[...]).

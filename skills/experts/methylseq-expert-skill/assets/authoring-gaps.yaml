@@ -1,0 +1,254 @@
+status: resolved
+gaps:
+- id: documented_prerequisite_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: prerequisite_bismark_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: prerequisite_bwamem_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: prerequisite_bwameth_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: prerequisite_fasta_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: prerequisite_use_mem2
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_accel
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_aligner
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_all_contexts
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_collecthsmetrics
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_comprehensive
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_cytosine_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_em_seq
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_help
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_help_full
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_igenomes_ignore
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_ignore_flags
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_local_alignment
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_merge_context
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_methyl_kit
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_monochrome_logs
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_no_overlap
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_nomeseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_non_directional
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_pbat
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_plaintext_email
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_publish_dir_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_relax_mismatches
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_rrbs
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_run_preseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_run_qualimap
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_run_targeted_sequencing
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_save_align_intermeds
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_save_reference
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_save_trimmed
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_show_hidden
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_single_cell
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_skip_deduplication
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_skip_fastqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_skip_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_skip_trimming
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_skip_trimming_presets
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_slamseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_taps
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_unmapped
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_use_mem2
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_validate_params
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_version
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_zymo
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: documented_output_bam
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: documented_output_contamination
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: documented_output_counts
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: documented_output_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: documented_output_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_clip_r1
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_clip_r2
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_length_trim
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_multiqc_methods_description
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_nextseq_trim
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_three_prime_clip_r1
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_three_prime_clip_r2
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_trim_ob
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.
+- id: schema_param_trim_ot
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered in packaged assets or preserved in grouped schema lookup.

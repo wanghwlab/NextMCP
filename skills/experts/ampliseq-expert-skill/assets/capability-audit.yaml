@@ -1,0 +1,1597 @@
+pipeline_id: ampliseq
+status: resolved
+summary:
+  total: 88
+  high_impact: 72
+  needs_review: 0
+  covered: 88
+  scoped_out: 0
+capabilities:
+- id: documented_prerequisite_database
+  label: Documented `database` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for documented_prerequisite_database'
+  - 'playbooks.yaml: source-backed coverage for documented_prerequisite_database'
+  - 'qc-rules.yaml: source-backed coverage for documented_prerequisite_database'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/README.md
+    excerpt: database
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: database
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/usage.md
+    excerpt: database
+- id: documented_prerequisite_index
+  label: Documented `index` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for documented_prerequisite_index'
+  - 'playbooks.yaml: source-backed coverage for documented_prerequisite_index'
+  - 'qc-rules.yaml: source-backed coverage for documented_prerequisite_index'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/README.md
+    excerpt: index
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: index
+- id: documented_prerequisite_license
+  label: Documented `license` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for documented_prerequisite_license'
+  - 'playbooks.yaml: source-backed coverage for documented_prerequisite_license'
+  - 'qc-rules.yaml: source-backed coverage for documented_prerequisite_license'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/usage.md
+    excerpt: license
+- id: prerequisite_cut_dada_ref_taxonomy
+  label: Parameter `cut_dada_ref_taxonomy` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_cut_dada_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_cut_dada_ref_taxonomy'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_cut_dada_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cut_dada_ref_taxonomy
+    excerpt: If the expected amplified sequences are extracted from the DADA2 reference
+      taxonomy database
+- id: prerequisite_dada_ref_tax_custom
+  label: Parameter `dada_ref_tax_custom` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_dada_ref_tax_custom'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_dada_ref_tax_custom'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_dada_ref_tax_custom'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_ref_tax_custom
+    excerpt: Path to a custom DADA2 reference taxonomy database
+- id: prerequisite_dada_ref_tax_custom_sp
+  label: Parameter `dada_ref_tax_custom_sp` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_dada_ref_tax_custom_sp'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_dada_ref_tax_custom_sp'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_dada_ref_tax_custom_sp'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_ref_tax_custom_sp
+    excerpt: Path to a custom DADA2 reference taxonomy database for species assignment
+- id: prerequisite_dada_ref_taxonomy
+  label: Parameter `dada_ref_taxonomy` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_dada_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_dada_ref_taxonomy'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_dada_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: prerequisite_kraken2_ref_tax_custom
+  label: Parameter `kraken2_ref_tax_custom` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_kraken2_ref_tax_custom'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_kraken2_ref_tax_custom'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_kraken2_ref_tax_custom'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: kraken2_ref_tax_custom
+    excerpt: Path to a custom Kraken2 reference taxonomy database (*.tar.gz|*.tgz
+      archive or folder)
+- id: prerequisite_kraken2_ref_taxonomy
+  label: Parameter `kraken2_ref_taxonomy` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_kraken2_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_kraken2_ref_taxonomy'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_kraken2_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: kraken2_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: prerequisite_qiime_ref_tax_custom
+  label: Parameter `qiime_ref_tax_custom` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_qiime_ref_tax_custom'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_qiime_ref_tax_custom'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_qiime_ref_tax_custom'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: qiime_ref_tax_custom
+    excerpt: Path to files of a custom QIIME2 reference taxonomy database (tarball,
+      or two comma-separated files)
+- id: prerequisite_qiime_ref_taxonomy
+  label: Parameter `qiime_ref_taxonomy` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_qiime_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_qiime_ref_taxonomy'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_qiime_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: qiime_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: prerequisite_sidle_ref_taxonomy
+  label: Parameter `sidle_ref_taxonomy` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_sidle_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_sidle_ref_taxonomy'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_sidle_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sidle_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: prerequisite_sintax_ref_taxonomy
+  label: Parameter `sintax_ref_taxonomy` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for prerequisite_sintax_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for prerequisite_sintax_ref_taxonomy'
+  - 'qc-rules.yaml: source-backed coverage for prerequisite_sintax_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sintax_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: schema_param_addsh
+  label: Schema parameter `addsh` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_addsh'
+  - 'playbooks.yaml: source-backed coverage for schema_param_addsh'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: addsh
+    excerpt: If ASVs should be assigned to UNITE species hypotheses (SHs). Only relevant
+      for ITS data.
+- id: schema_param_ancom
+  label: Schema parameter `ancom` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_ancom'
+  - 'playbooks.yaml: source-backed coverage for schema_param_ancom'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ancom
+    excerpt: Perform differential abundance analysis with ANCOM
+- id: schema_param_ancombc
+  label: Schema parameter `ancombc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_ancombc'
+  - 'playbooks.yaml: source-backed coverage for schema_param_ancombc'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ancombc
+    excerpt: Perform differential abundance analysis with ANCOMBC
+- id: schema_param_cut_dada_ref_taxonomy
+  label: Schema parameter `cut_dada_ref_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_cut_dada_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_cut_dada_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cut_dada_ref_taxonomy
+    excerpt: If the expected amplified sequences are extracted from the DADA2 reference
+      taxonomy database
+- id: schema_param_cut_its
+  label: Schema parameter `cut_its` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_cut_its'
+  - 'playbooks.yaml: source-backed coverage for schema_param_cut_its'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cut_its
+    excerpt: 'Part of ITS region to use for taxonomy assignment: "full", "its1", or
+      "its2"'
+- id: schema_param_dada_addspecies_allowmultiple
+  label: Schema parameter `dada_addspecies_allowmultiple` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_dada_addspecies_allowmultiple'
+  - 'playbooks.yaml: source-backed coverage for schema_param_dada_addspecies_allowmultiple'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_addspecies_allowmultiple
+    excerpt: If multiple exact matches against different species are returned
+- id: schema_param_dada_ref_taxonomy
+  label: Schema parameter `dada_ref_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_dada_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_dada_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: schema_param_dada_taxonomy_rc
+  label: Schema parameter `dada_taxonomy_rc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_dada_taxonomy_rc'
+  - 'playbooks.yaml: source-backed coverage for schema_param_dada_taxonomy_rc'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_taxonomy_rc
+    excerpt: If reverse-complement of each sequences will be also tested for classification
+- id: schema_param_double_primer
+  label: Schema parameter `double_primer` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_double_primer'
+  - 'playbooks.yaml: source-backed coverage for schema_param_double_primer'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: double_primer
+    excerpt: Cutadapt will be run twice to ensure removal of potential double primers
+- id: schema_param_filter_codons
+  label: Schema parameter `filter_codons` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_filter_codons'
+  - 'playbooks.yaml: source-backed coverage for schema_param_filter_codons'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: filter_codons
+    excerpt: Filter ASVs based on codon usage
+- id: schema_param_filter_ssu
+  label: Schema parameter `filter_ssu` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_filter_ssu'
+  - 'playbooks.yaml: source-backed coverage for schema_param_filter_ssu'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: filter_ssu
+    excerpt: Enable SSU filtering. Comma separated list of kingdoms (domains) in Barrnap,
+      a combination (or one) of "bac", "arc", "mito", and "euk". ASVs that have their
+      lowest evalue in that kingdoms are kept.
+- id: schema_param_help
+  label: Schema parameter `help` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: schema lookup coverage only: help display option, not a runtime
+    route.'
+  - 'playbooks.yaml: schema lookup coverage only: help display option, not a runtime
+    route.'
+  - 'assets/schema-groups/*.yaml: exact field preserved for schema_param_help'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help
+    excerpt: Display the help message.
+- id: schema_param_help_full
+  label: Schema parameter `help_full` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: schema lookup coverage only: full help display option, not
+    a runtime route.'
+  - 'playbooks.yaml: schema lookup coverage only: full help display option, not a
+    runtime route.'
+  - 'assets/schema-groups/*.yaml: exact field preserved for schema_param_help_full'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help_full
+    excerpt: Display the full detailed help message.
+- id: schema_param_ignore_empty_input_files
+  label: Schema parameter `ignore_empty_input_files` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_ignore_empty_input_files'
+  - 'playbooks.yaml: source-backed coverage for schema_param_ignore_empty_input_files'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ignore_empty_input_files
+    excerpt: Ignore input files with too few reads.
+- id: schema_param_ignore_failed_filtering
+  label: Schema parameter `ignore_failed_filtering` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_ignore_failed_filtering'
+  - 'playbooks.yaml: source-backed coverage for schema_param_ignore_failed_filtering'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ignore_failed_filtering
+    excerpt: Ignore files with too few reads after quality filtering.
+- id: schema_param_ignore_failed_trimming
+  label: Schema parameter `ignore_failed_trimming` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_ignore_failed_trimming'
+  - 'playbooks.yaml: source-backed coverage for schema_param_ignore_failed_trimming'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ignore_failed_trimming
+    excerpt: Ignore files with too few reads after trimming.
+- id: schema_param_illumina_novaseq
+  label: Schema parameter `illumina_novaseq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_illumina_novaseq'
+  - 'playbooks.yaml: source-backed coverage for schema_param_illumina_novaseq'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: illumina_novaseq
+    excerpt: If data has binned quality scores such as Illumina NovaSeq
+- id: schema_param_illumina_pe_its
+  label: Schema parameter `illumina_pe_its` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_illumina_pe_its'
+  - 'playbooks.yaml: source-backed coverage for schema_param_illumina_pe_its'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: illumina_pe_its
+    excerpt: If analysing ITS amplicons or any other region with large length variability
+      with Illumina paired end reads
+- id: schema_param_iontorrent
+  label: Schema parameter `iontorrent` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_iontorrent'
+  - 'playbooks.yaml: source-backed coverage for schema_param_iontorrent'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: iontorrent
+    excerpt: If data is single-ended IonTorrent reads instead of Illumina
+- id: schema_param_kraken2_ref_taxonomy
+  label: Schema parameter `kraken2_ref_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_kraken2_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_kraken2_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: kraken2_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: schema_param_mergepairs_strategy
+  label: Schema parameter `mergepairs_strategy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_mergepairs_strategy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_mergepairs_strategy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: mergepairs_strategy
+    excerpt: Strategy to merge paired end reads. When paired end reads are not sufficiently
+      overlapping for merging, you can use "concatenate" (not recommended). When you
+      have a mix of overlapping and non overlapping reads use "consensus"
+- id: schema_param_monochrome_logs
+  label: Schema parameter `monochrome_logs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: schema lookup coverage only: log color formatting, not a
+    runtime route.'
+  - 'playbooks.yaml: schema lookup coverage only: log color formatting, not a runtime
+    route.'
+  - 'assets/schema-groups/*.yaml: exact field preserved for schema_param_monochrome_logs'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: monochrome_logs
+    excerpt: Do not use coloured log outputs.
+- id: schema_param_multiple_sequencing_runs
+  label: Schema parameter `multiple_sequencing_runs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_multiple_sequencing_runs'
+  - 'playbooks.yaml: source-backed coverage for schema_param_multiple_sequencing_runs'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: multiple_sequencing_runs
+    excerpt: 'If using `--input_folder`: samples were sequenced in multiple sequencing
+      runs'
+- id: schema_param_pacbio
+  label: Schema parameter `pacbio` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_pacbio'
+  - 'playbooks.yaml: source-backed coverage for schema_param_pacbio'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pacbio
+    excerpt: If data is single-ended PacBio reads instead of Illumina
+- id: schema_param_picrust
+  label: Schema parameter `picrust` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_picrust'
+  - 'playbooks.yaml: source-backed coverage for schema_param_picrust'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: picrust
+    excerpt: If the functional potential of the bacterial community is predicted.
+- id: schema_param_plaintext_email
+  label: Schema parameter `plaintext_email` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: schema lookup coverage only: email formatting, not a runtime
+    route.'
+  - 'playbooks.yaml: schema lookup coverage only: email formatting, not a runtime
+    route.'
+  - 'assets/schema-groups/*.yaml: exact field preserved for schema_param_plaintext_email'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: plaintext_email
+    excerpt: Send plain-text email instead of HTML.
+- id: schema_param_pplace_alnmethod
+  label: Schema parameter `pplace_alnmethod` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_pplace_alnmethod'
+  - 'playbooks.yaml: source-backed coverage for schema_param_pplace_alnmethod'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pplace_alnmethod
+    excerpt: Method used for alignment, "hmmer" or "mafft"
+- id: schema_param_publish_dir_mode
+  label: Schema parameter `publish_dir_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: schema lookup coverage only: Nextflow publish behavior tuning,
+    not normal route selection.'
+  - 'playbooks.yaml: schema lookup coverage only: Nextflow publish behavior tuning,
+    not normal route selection.'
+  - 'assets/schema-groups/*.yaml: exact field preserved for schema_param_publish_dir_mode'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: publish_dir_mode
+    excerpt: Method used to save pipeline results to output directory.
+- id: schema_param_qiime_ref_taxonomy
+  label: Schema parameter `qiime_ref_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_qiime_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_qiime_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: qiime_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: schema_param_quality_type
+  label: Schema parameter `quality_type` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_quality_type'
+  - 'playbooks.yaml: source-backed coverage for schema_param_quality_type'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: quality_type
+    excerpt: Type of quality scores in raw read data
+- id: schema_param_raise_filter_stacksize
+  label: Schema parameter `raise_filter_stacksize` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_raise_filter_stacksize'
+  - 'playbooks.yaml: source-backed coverage for schema_param_raise_filter_stacksize'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: raise_filter_stacksize
+    excerpt: Raise stack size when filtering VSEARCH clusters
+- id: schema_param_retain_untrimmed
+  label: Schema parameter `retain_untrimmed` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_retain_untrimmed'
+  - 'playbooks.yaml: source-backed coverage for schema_param_retain_untrimmed'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: retain_untrimmed
+    excerpt: Cutadapt will retain untrimmed reads, choose only if input reads are
+      not expected to contain primer sequences.
+- id: schema_param_sample_inference
+  label: Schema parameter `sample_inference` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_sample_inference'
+  - 'playbooks.yaml: source-backed coverage for schema_param_sample_inference'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sample_inference
+    excerpt: 'Mode of sample inference: "independent", "pooled" or "pseudo"'
+- id: schema_param_save_intermediates
+  label: Schema parameter `save_intermediates` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_save_intermediates'
+  - 'playbooks.yaml: source-backed coverage for schema_param_save_intermediates'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_intermediates
+    excerpt: Save intermediate results such as QIIME2's qza and qzv files
+- id: schema_param_sbdiexport
+  label: Schema parameter `sbdiexport` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_sbdiexport'
+  - 'playbooks.yaml: source-backed coverage for schema_param_sbdiexport'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sbdiexport
+    excerpt: If data should be exported in SBDI (Swedish biodiversity infrastructure)
+      Excel format.
+- id: schema_param_show_hidden
+  label: Schema parameter `show_hidden` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: schema lookup coverage only: parameter documentation display
+    option, not a runtime route.'
+  - 'playbooks.yaml: schema lookup coverage only: parameter documentation display
+    option, not a runtime route.'
+  - 'assets/schema-groups/*.yaml: exact field preserved for schema_param_show_hidden'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: show_hidden
+    excerpt: Display hidden parameters in the help message (only works when --help
+      or --help_full are provided).
+- id: schema_param_sidle_ref_taxonomy
+  label: Schema parameter `sidle_ref_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_sidle_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_sidle_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sidle_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: schema_param_single_end
+  label: Schema parameter `single_end` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_single_end'
+  - 'playbooks.yaml: source-backed coverage for schema_param_single_end'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: single_end
+    excerpt: If data is single-ended Illumina reads instead of paired-end
+- id: schema_param_sintax_ref_taxonomy
+  label: Schema parameter `sintax_ref_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_sintax_ref_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_sintax_ref_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: sintax_ref_taxonomy
+    excerpt: Name of supported database, and optionally also version number
+- id: schema_param_skip_abundance_tables
+  label: Schema parameter `skip_abundance_tables` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_abundance_tables'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_abundance_tables'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_abundance_tables
+    excerpt: Skip producing any relative abundance tables
+- id: schema_param_skip_alpha_rarefaction
+  label: Schema parameter `skip_alpha_rarefaction` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_alpha_rarefaction'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_alpha_rarefaction'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_alpha_rarefaction
+    excerpt: Skip alpha rarefaction
+- id: schema_param_skip_barplot
+  label: Schema parameter `skip_barplot` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_barplot'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_barplot'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_barplot
+    excerpt: Skip producing barplot
+- id: schema_param_skip_barrnap
+  label: Schema parameter `skip_barrnap` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_barrnap'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_barrnap'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_barrnap
+    excerpt: Skip annotating SSU matches.
+- id: schema_param_skip_cutadapt
+  label: Schema parameter `skip_cutadapt` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_cutadapt'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_cutadapt'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_cutadapt
+    excerpt: Skip primer trimming with cutadapt. This is not recommended! Use only
+      in case primer sequences were removed before and the data does not contain any
+      primer sequences.
+- id: schema_param_skip_dada_addspecies
+  label: Schema parameter `skip_dada_addspecies` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_dada_addspecies'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_dada_addspecies'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_dada_addspecies
+    excerpt: Skip species level when using DADA2 for taxonomic classification. This
+      reduces the required memory dramatically under certain conditions. Incompatible
+      with `--sbdiexport`
+- id: schema_param_skip_dada_quality
+  label: Schema parameter `skip_dada_quality` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_dada_quality'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_dada_quality'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_dada_quality
+    excerpt: Skip quality check with DADA2. Can only be skipped when `--trunclenf`
+      and `--trunclenr` are set.
+- id: schema_param_skip_dada_taxonomy
+  label: Schema parameter `skip_dada_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_dada_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_dada_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_dada_taxonomy
+    excerpt: Skip taxonomic classification with DADA2
+- id: schema_param_skip_diversity_indices
+  label: Schema parameter `skip_diversity_indices` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_diversity_indices'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_diversity_indices'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_diversity_indices
+    excerpt: Skip alpha and beta diversity analysis
+- id: schema_param_skip_fastqc
+  label: Schema parameter `skip_fastqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_fastqc'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_fastqc'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_fastqc
+    excerpt: Skip FastQC
+- id: schema_param_skip_multiqc
+  label: Schema parameter `skip_multiqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for schema_param_skip_multiqc'
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_multiqc'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_multiqc'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_multiqc
+    excerpt: Skip MultiQC reporting
+- id: schema_param_skip_phyloseq
+  label: Schema parameter `skip_phyloseq` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_phyloseq'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_phyloseq'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_phyloseq
+    excerpt: Skip exporting phyloseq rds object(s)
+- id: schema_param_skip_qiime
+  label: Schema parameter `skip_qiime` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_qiime'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_qiime'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_qiime
+    excerpt: Skip all steps that are executed by QIIME2, including QIIME2 software
+      download, taxonomy assignment by QIIME2, barplots, relative abundance tables,
+      diversity analysis, differential abundance testing.
+- id: schema_param_skip_qiime_downstream
+  label: Schema parameter `skip_qiime_downstream` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_qiime_downstream'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_qiime_downstream'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_qiime_downstream
+    excerpt: Skip steps that are executed by QIIME2 except for taxonomic classification.
+      Skip steps including barplots, relative abundance tables, diversity analysis,
+      differential abundance testing.
+- id: schema_param_skip_report
+  label: Schema parameter `skip_report` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for schema_param_skip_report'
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_report'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_report'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_report
+    excerpt: Skip Markdown summary report
+- id: schema_param_skip_taxonomy
+  label: Schema parameter `skip_taxonomy` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_taxonomy'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_taxonomy'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_taxonomy
+    excerpt: Skip taxonomic classification. Incompatible with `--sbdiexport`
+- id: schema_param_skip_tse
+  label: Schema parameter `skip_tse` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_skip_tse'
+  - 'playbooks.yaml: source-backed coverage for schema_param_skip_tse'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_tse
+    excerpt: Skip exporting TreeSummarizedExperiment rds object(s)
+- id: schema_param_validate_params
+  label: Schema parameter `validate_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_validate_params'
+  - 'playbooks.yaml: source-backed coverage for schema_param_validate_params'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validate_params
+    excerpt: Boolean whether to validate parameters against the schema at runtime
+- id: schema_param_version
+  label: Schema parameter `version` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_version'
+  - 'playbooks.yaml: source-backed coverage for schema_param_version'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: version
+    excerpt: Display version and exit.
+- id: schema_param_vsearch_cluster
+  label: Schema parameter `vsearch_cluster` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_vsearch_cluster'
+  - 'playbooks.yaml: source-backed coverage for schema_param_vsearch_cluster'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: vsearch_cluster
+    excerpt: Post-cluster ASVs with VSEARCH
+- id: documented_output_contamination
+  label: Documented `contamination` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for documented_output_contamination'
+  - 'qc-rules.yaml: source-backed coverage for documented_output_contamination'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: contamination
+- id: documented_output_counts
+  label: Documented `counts` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for documented_output_counts'
+  - 'qc-rules.yaml: source-backed coverage for documented_output_counts'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: counts
+- id: documented_output_matrix
+  label: Documented `matrix` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for documented_output_matrix'
+  - 'qc-rules.yaml: source-backed coverage for documented_output_matrix'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: matrix
+- id: documented_output_multiqc
+  label: Documented `multiqc` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for documented_output_multiqc'
+  - 'qc-rules.yaml: source-backed coverage for documented_output_multiqc'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/README.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/usage.md
+    excerpt: multiqc
+- id: documented_output_quantification
+  label: Documented `quantification` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for documented_output_quantification'
+  - 'qc-rules.yaml: source-backed coverage for documented_output_quantification'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: quantification
+- id: documented_output_report
+  label: Documented `report` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for documented_output_report'
+  - 'qc-rules.yaml: source-backed coverage for documented_output_report'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/README.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/usage.md
+    excerpt: report
+- id: schema_param_dada_min_boot
+  label: Schema parameter `dada_min_boot` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_dada_min_boot'
+  - 'playbooks.yaml: source-backed coverage for schema_param_dada_min_boot'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: dada_min_boot
+    excerpt: The minimum bootstrap confidence (out of 100 trials) for assigning a
+      taxonomic level with DADA2. Matches `minBoot` in DADA2's assignTaxonomy method.
+- id: schema_param_exclude_taxa
+  label: Schema parameter `exclude_taxa` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_exclude_taxa'
+  - 'playbooks.yaml: source-backed coverage for schema_param_exclude_taxa'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: exclude_taxa
+    excerpt: Comma separated list of unwanted taxa, to skip taxa filtering use "none"
+- id: schema_param_kraken2_assign_taxlevels
+  label: Schema parameter `kraken2_assign_taxlevels` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_kraken2_assign_taxlevels'
+  - 'playbooks.yaml: source-backed coverage for schema_param_kraken2_assign_taxlevels'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: kraken2_assign_taxlevels
+    excerpt: Comma separated list of taxonomic levels used in Kraken2. Will overwrite
+      default values.
+- id: schema_param_kraken2_confidence
+  label: Schema parameter `kraken2_confidence` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_kraken2_confidence'
+  - 'playbooks.yaml: source-backed coverage for schema_param_kraken2_confidence'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: kraken2_confidence
+    excerpt: Confidence score threshold for taxonomic classification.
+- id: schema_param_kraken2_ref_tax_custom
+  label: Schema parameter `kraken2_ref_tax_custom` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_kraken2_ref_tax_custom'
+  - 'playbooks.yaml: source-backed coverage for schema_param_kraken2_ref_tax_custom'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: kraken2_ref_tax_custom
+    excerpt: Path to a custom Kraken2 reference taxonomy database (*.tar.gz|*.tgz
+      archive or folder)
+- id: schema_param_metadata
+  label: Schema parameter `metadata` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_metadata'
+  - 'playbooks.yaml: source-backed coverage for schema_param_metadata'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: metadata
+    excerpt: Path to metadata sheet, when missing most downstream analysis are skipped
+      (barplots, PCoA plots, ...).
+- id: schema_param_multiqc_methods_description
+  label: Schema parameter `multiqc_methods_description` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'artifact-contracts.yaml: source-backed coverage for schema_param_multiqc_methods_description'
+  - 'param-presets.yaml: source-backed coverage for schema_param_multiqc_methods_description'
+  - 'playbooks.yaml: source-backed coverage for schema_param_multiqc_methods_description'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: multiqc_methods_description
+    excerpt: Custom MultiQC yaml file containing HTML including a methods description.
+- id: schema_param_pplace_aln
+  label: Schema parameter `pplace_aln` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_pplace_aln'
+  - 'playbooks.yaml: source-backed coverage for schema_param_pplace_aln'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pplace_aln
+    excerpt: File with reference sequences. Requires also `--pplace_tree` and `--pplace_model`.
+- id: schema_param_pplace_model
+  label: Schema parameter `pplace_model` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_pplace_model'
+  - 'playbooks.yaml: source-backed coverage for schema_param_pplace_model'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pplace_model
+    excerpt: Phylogenetic model to use in placement, e.g. 'LG+F' or 'GTR+I+F'. Requires
+      also `--pplace_tree` and `--pplace_aln`.
+- id: schema_param_pplace_tree
+  label: Schema parameter `pplace_tree` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: source-backed coverage for schema_param_pplace_tree'
+  - 'playbooks.yaml: source-backed coverage for schema_param_pplace_tree'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: pplace_tree
+    excerpt: Newick file with reference phylogenetic tree. Requires also `--pplace_aln`
+      and `--pplace_model`.

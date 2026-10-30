@@ -1,0 +1,78 @@
+status: resolved
+gaps:
+- id: documented_prerequisite_database
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered as public repository accession resolution plus dbGaP JWT prerequisite guidance in playbooks, presets, and QC rules.
+- id: prerequisite_skip_fastq_download
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered by metadata_only playbook, preset, artifact contracts, and QC expectations.
+- id: schema_param_download_method
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered by default_run, sratools_download, and aspera_download playbooks and presets.
+- id: schema_param_force_sratools_download
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Deprecated in the current schema; use download_method=sratools instead.
+- id: schema_param_help
+  source: capability-audit.yaml
+  status: scoped_out
+  action: CLI help display does not launch analysis and is not a nextmcp runtime route.
+- id: schema_param_monochrome_logs
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Log color preference does not change run planning or outputs.
+- id: schema_param_nf_core_pipeline
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered by downstream_samplesheet playbook and preset.
+- id: schema_param_plaintext_email
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Email formatting does not change analysis route or published data outputs.
+- id: schema_param_publish_dir_mode
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Publish mode is an infrastructure/output-copy behavior; exact schema lookup is preserved, but ordinary playbooks use the default copy mode.
+- id: schema_param_skip_fastq_download
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered by metadata_only playbook, preset, artifact contract, and QC rule.
+- id: schema_param_validate_params
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Validation behavior is preserved in the schema lookup layer; ordinary runtime planning should keep the default true value.
+- id: schema_param_validationfailunrecognisedparams
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Validation display/failure behavior is a generic schema validation setting, not a fetchngs analysis route.
+- id: schema_param_validationlenientmode
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Lenient schema parsing is not a fetchngs analysis route.
+- id: schema_param_validationshowhiddenparams
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Hidden-parameter display is not a fetchngs analysis route.
+- id: schema_param_version
+  source: capability-audit.yaml
+  status: scoped_out
+  action: Version display exits without running analysis.
+- id: documented_output_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered by multiqc_config artifact and downstream_samplesheet guidance.
+- id: documented_output_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Covered by pipeline_info artifact and run_completion QC rule.
+- id: replace_generic_artifact_contract
+  source: artifact-contracts.yaml
+  status: resolved
+  action: Replaced with source-backed fastq, samplesheet, metadata, and pipeline_info contracts.
+- id: replace_generic_qc_rule
+  source: qc-rules.yaml
+  status: resolved
+  action: Replaced with source-backed completion, samplesheet, FASTQ, md5, metadata-only, downstream samplesheet, and dbGaP checks.

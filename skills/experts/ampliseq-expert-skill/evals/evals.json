@@ -1,0 +1,222 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Mixed-source offline evals for ampliseq-expert-skill. These evals test runtime planning, parameter mapping, route selection, output review, historical reuse, and source-backed coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch",
+    "sources": {
+      "asset": "Tests whether the agent uses packaged expert skill assets correctly.",
+      "authoring_bundle": "Tests whether source-derived facts are covered or explicitly scoped out.",
+      "audit": "Tests high-impact capability and authoring-gap handling."
+    }
+  },
+  "summary": {
+    "eval_count": 10,
+    "asset_eval_count": 3,
+    "authoring_bundle_eval_count": 4,
+    "audit_eval_count": 3
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, draft the nextmcp launch plan for nf-core/ampliseq pipeline parameters. The project is my-project. The user confirmed the server-local input at /data/samplesheet.csv and wants results under /results/ampliseq. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and the nextflow_run argument shape.",
+      "expected_output": "A launch plan that keeps project as a top-level nextflow_run argument, puts ordinary pipeline options under params, puts resource caps in a server-local override config passed through config_files using process.resourceLimits, omits profile by default, and avoids nextflow_inspect_pipeline.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument, not inside params.",
+        "Mentions input and outdir under params.",
+        "Mentions resource caps under config_files or an override config using process.resourceLimits, not params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Uses nextflow_run(prepare=true) only as an optional check when launch uncertainty remains."
+      ],
+      "files": []
+    },
+    {
+      "id": "source-coverage-required-inputs",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "authoring_bundle.schema",
+        "assets/schema-index.yaml",
+        "assets/schema-groups/*.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, explain how to prepare a dry run for nf-core/ampliseq pipeline parameters when the source schema requires or commonly uses these fields: outdir. Do not launch anything. State which schema lookup assets you would open to confirm exact names, defaults, and placeholder values.",
+      "expected_output": "A schema-backed preparation plan that mentions the required or common input fields, uses schema-index.yaml plus the matching schema group for exact lookup, and keeps server-local paths inside params.",
+      "assertions": [
+        "Uses schema-index or grouped schema assets for exact mapping when needed.",
+        "Mentions input and outdir under params.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, answer a user who says: 'The nf-core/ampliseq pipeline parameters run finished, and I need to review the main published outputs and QC reports. What nextmcp calls should I make first, and which artifact or report paths should I inspect?' Do not assume concrete paths that have not come from nextmcp.",
+      "expected_output": "A post-run review plan that starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then uses run_artifacts for relevant sections, then fs_read only for explicit report or table paths. It should use artifact contracts and QC rules instead of guessing output paths.",
+      "assertions": [
+        "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) or equivalent summary-first call.",
+        "Uses run_artifacts before reading individual output files.",
+        "Uses fs_read only after an explicit path is known.",
+        "Grounds output choices in artifact-contracts.yaml or QC rules.",
+        "Does not jump straight to raw logs as the default first step."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, plan how to recover a previous nf-core/ampliseq pipeline parameters run when the user only remembers one output filename fragment. The project is my-project. Do not launch anything; return the search and compatibility-check sequence.",
+      "expected_output": "A historical reuse plan that searches with run_list(project=..., pipeline=\"ampliseq\", artifact_path_contains=...), inspects run_get(include=[\"artifact_summary\"]), uses run_artifacts, treats artifacts.json and pipeline_fingerprint as historical facts, and confirms route compatibility through pipeline_info/params.json or equivalent metadata before recommending reuse.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains when only an artifact fragment is known.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires route compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+        "Does not guess old output directories as the default safe path."
+      ],
+      "files": []
+    },
+    {
+      "id": "source-coverage-documented-prerequisite-database",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "assets/playbooks.yaml",
+        "assets/qc-rules.yaml",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/ampliseq/README.md",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/usage.md"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, decide whether this source-derived nf-core/ampliseq pipeline parameters runtime prerequisite capability is covered for runtime planning: Documented `database` prerequisite should be explicit in planning. Do not inspect the pipeline source at runtime. Return the packaged playbook, preset, schema lookup, output/QC asset, or explicit scoped-out reason that handles it.",
+      "expected_output": "A coverage answer grounded in packaged assets. It should either point to the playbook, preset, schema group, step recipe, artifact contract, or QC rule that covers the capability, or explicitly say the capability is scoped out with a reason.",
+      "assertions": [
+        "Starts from packaged playbooks or presets rather than authoring-time inspection.",
+        "Uses schema-index or grouped schema assets for exact mapping when needed.",
+        "Scopes out the mode with a reason if the packaged assets do not support it.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "source-coverage-schema-param-addsh",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "assets/playbooks.yaml",
+        "authoring_bundle.schema"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, decide whether this source-derived nf-core/ampliseq pipeline parameters schema parameter capability is covered for runtime planning: Schema parameter `addsh` may change run planning. Do not inspect the pipeline source at runtime. Return the packaged playbook, preset, schema lookup, output/QC asset, or explicit scoped-out reason that handles it.",
+      "expected_output": "A coverage answer grounded in packaged assets. It should either point to the playbook, preset, schema group, step recipe, artifact contract, or QC rule that covers the capability, or explicitly say the capability is scoped out with a reason.",
+      "assertions": [
+        "Starts from packaged playbooks or presets rather than authoring-time inspection.",
+        "Uses schema-index or grouped schema assets for exact mapping when needed.",
+        "Scopes out the mode with a reason if the packaged assets do not support it.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "source-coverage-documented-prerequisite-index",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "assets/playbooks.yaml",
+        "assets/qc-rules.yaml",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/ampliseq/README.md",
+        "authoring_bundle.documents:/root/key_projects/nextmcp/nf_pipeline/ampliseq/docs/output.md"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, decide whether this source-derived nf-core/ampliseq pipeline parameters runtime prerequisite capability is covered for runtime planning: Documented `index` prerequisite should be explicit in planning. Do not inspect the pipeline source at runtime. Return the packaged playbook, preset, schema lookup, output/QC asset, or explicit scoped-out reason that handles it.",
+      "expected_output": "A coverage answer grounded in packaged assets. It should either point to the playbook, preset, schema group, step recipe, artifact contract, or QC rule that covers the capability, or explicitly say the capability is scoped out with a reason.",
+      "assertions": [
+        "Starts from packaged playbooks or presets rather than authoring-time inspection.",
+        "Uses schema-index or grouped schema assets for exact mapping when needed.",
+        "Scopes out the mode with a reason if the packaged assets do not support it.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "negative-scope-documented-prerequisite-license",
+      "source": "audit",
+      "category": "negative_scope",
+      "source_materials": [
+        "assets/authoring-gaps.yaml",
+        "assets/capability-audit.yaml"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, answer a nf-core/ampliseq pipeline parameters user whose request depends on the capability tracked by authoring item `documented_prerequisite_license` from `capability-audit.yaml`. The authoring action says: Cover this capability in the listed assets or mark it scoped out with a reason. Do not pretend the skill has complete source-backed coverage. Return the safest planning answer and say what must be reviewed or scoped out before launch. Check the current status in authoring-gaps.yaml and capability-audit.yaml first. If resolved, explain the supported behavior with evidence; scope it out only if the packaged materials remain insufficient.",
+      "expected_output": "A current-status-aware answer: explain supported behavior with packaged evidence for resolved items; otherwise state the limitation and required review without claiming unsupported coverage.",
+      "assertions": [
+        "Checks the current authoring-gaps.yaml or capability-audit.yaml status without assuming the item is unresolved.",
+        "Scopes out the mode with a reason if the packaged assets do not support it.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "negative-scope-replace-generic-artifact-contract",
+      "source": "audit",
+      "category": "negative_scope",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/authoring-gaps.yaml"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, answer a nf-core/ampliseq pipeline parameters user whose request depends on the capability tracked by authoring item `replace_generic_artifact_contract` from `artifact-contracts.yaml`. The authoring action says: Replace the generic results-root contract with source-backed published outputs. Do not pretend the skill has complete source-backed coverage. Return the safest planning answer and say what must be reviewed or scoped out before launch. Check the current status in authoring-gaps.yaml and capability-audit.yaml first. If resolved, explain the supported behavior with evidence; scope it out only if the packaged materials remain insufficient.",
+      "expected_output": "A current-status-aware answer: explain supported behavior with packaged evidence for resolved items; otherwise state the limitation and required review without claiming unsupported coverage.",
+      "assertions": [
+        "Checks the current authoring-gaps.yaml or capability-audit.yaml status without assuming the item is unresolved.",
+        "Scopes out the mode with a reason if the packaged assets do not support it.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "negative-scope-replace-generic-qc-rule",
+      "source": "audit",
+      "category": "negative_scope",
+      "source_materials": [
+        "assets/authoring-gaps.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the ampliseq-expert-skill, answer a nf-core/ampliseq pipeline parameters user whose request depends on the capability tracked by authoring item `replace_generic_qc_rule` from `qc-rules.yaml`. The authoring action says: Replace the generic completion check with source-backed QC and troubleshooting rules. Do not pretend the skill has complete source-backed coverage. Return the safest planning answer and say what must be reviewed or scoped out before launch. Check the current status in authoring-gaps.yaml and capability-audit.yaml first. If resolved, explain the supported behavior with evidence; scope it out only if the packaged materials remain insufficient.",
+      "expected_output": "A current-status-aware answer: explain supported behavior with packaged evidence for resolved items; otherwise state the limitation and required review without claiming unsupported coverage.",
+      "assertions": [
+        "Checks the current authoring-gaps.yaml or capability-audit.yaml status without assuming the item is unresolved.",
+        "Scopes out the mode with a reason if the packaged assets do not support it.",
+        "Does not use nextflow_inspect_pipeline for runtime planning.",
+        "Does not invent unsupported enum values or parameter names."
+      ],
+      "files": []
+    }
+  ]
+}

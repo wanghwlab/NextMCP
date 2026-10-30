@@ -1,0 +1,44 @@
+group:
+  id: qualimap_options
+  label: Qualimap Options
+  selection_rule: Use this group for parameters defined under the `Qualimap Options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/qualimap_options.md
+  - assets/schema-groups/qualimap_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `qualimap_options` for exact lookup.
+parameters:
+- group_id: qualimap_options
+  name: bamqc_regions_file
+  source_name: bamqc_regions_file
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: A GFF or BED file containing the target regions which will be passed
+    to Qualimap/Bamqc.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/bamqc_regions_file.bed
+  example_values:
+  - <server_input_root>/bamqc_regions_file.bed
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Qualimap Options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    pattern: ^\S+\.gff|\.bed(\.gz)?$
+    description: A GFF or BED file containing the target regions which will be passed
+      to Qualimap/Bamqc.
+    help_text: Setting this option could be useful if you want calculate coverage
+      stats over a list of regions, i.e. for targeted methylation sequencing data.
+    fa_icon: fas fa-file

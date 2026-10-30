@@ -1,0 +1,99 @@
+artifacts:
+  - id: multiqc_report
+    path: multiqc/<aligner>/multiqc_report.html
+    produced_when: skip_multiqc is false.
+    meaning: Main cross-sample QC report and first review target after a successful run.
+    review_notes:
+      - Compare raw FastQC with trimmed-read FastQC under trimgalore/fastqc/.
+      - Check alignment, deduplication, methylation extraction, optional Qualimap, preseq, and targeted metrics as applicable.
+
+  - id: pipeline_info
+    path: pipeline_info/
+    produced_when: Every completed run.
+    meaning: Execution reports, timeline, trace, DAG, software versions, validated samplesheet, and params.json.
+    review_notes:
+      - Use pipeline_info/params.json to confirm route compatibility during historical reuse.
+      - Use execution_trace and execution_report for runtime troubleshooting.
+
+  - id: bismark_outputs
+    path: bismark/
+    produced_when: aligner is bismark or bismark_hisat.
+    meaning: Bismark alignment, deduplication, methylation calls, per-sample reports, and summary reports.
+    review_order:
+      - bismark/alignments/logs/
+      - bismark/deduplicated/logs/
+      - bismark/methylation_calls/
+      - bismark/reports/
+      - bismark/summary/
+
+  - id: bwameth_outputs
+    path: bwameth/
+    produced_when: aligner is bwameth.
+    meaning: BWA-Meth alignments, sorted or duplicate-marked BAMs, and samtools stats.
+    review_order:
+      - bwameth/alignments/samtools_stats/
+      - bwameth/deduplicated/
+      - bwameth/deduplicated/logs/
+
+  - id: methyldackel_outputs
+    path: methyldackel/
+    produced_when: aligner is bwameth and taps is false.
+    meaning: MethylDackel methylation bedGraph, M-bias, and optional methylKit outputs.
+    review_order:
+      - methyldackel/*.bedGraph
+      - methyldackel/mbias/
+      - methyldackel/*methylKit*
+
+  - id: bwamem_outputs
+    path: bwamem/
+    produced_when: aligner is bwamem.
+    meaning: BWA-MEM alignments, duplicate-marked BAMs, and samtools or Picard metrics for TAPS-oriented runs.
+    review_order:
+      - bwamem/alignments/samtools_stats/
+      - bwamem/deduplicated/
+      - bwamem/deduplicated/picard_metrics/
+
+  - id: rastair_outputs
+    path: rastair/
+    produced_when: taps is true or aligner is bwamem.
+    meaning: Rastair TAPS conversion calls, M-bias, dynamic trimming table, and methylKit-formatted files.
+    review_order:
+      - rastair/call/
+      - rastair/mbias/
+      - rastair/mbiasparser/
+      - rastair/methylkit/
+
+  - id: targeted_bedgraph
+    path: bismark/methylation_calls/bedGraph/*targeted.bedGraph or methyldackel/*targeted.bedGraph
+    produced_when: run_targeted_sequencing is true.
+    meaning: Methylation bedGraph calls filtered to target_regions_file.
+    review_notes:
+      - Not produced for TAPS or aligner=bwamem.
+
+  - id: enrichment_metrics
+    path: enrichment_metrics/
+    produced_when: run_targeted_sequencing and collecthsmetrics are true.
+    meaning: Picard CollectHsMetrics output for targeted methylation enrichment.
+
+  - id: optional_qc
+    path: qualimap/bamqc/ and preseq/
+    produced_when: run_qualimap or run_preseq are true.
+    meaning: Optional general alignment QC and library complexity estimates.
+
+  - id: saved_intermediates
+    path: trimgalore/, <aligner>/alignments/, <aligner>/reference_genome/
+    produced_when: save_trimmed, save_align_intermeds, unmapped, skip_deduplication, rrbs, or save_reference request extra files.
+    meaning: Reusable or inspection-oriented intermediate files.
+
+historical_reuse:
+  search_fragments:
+    - multiqc_report.html
+    - pipeline_info/params.json
+    - bismark/methylation_calls
+    - methyldackel
+    - rastair/call
+    - targeted.bedGraph
+  compatibility_checks:
+    - run_get(include=["artifact_summary"]) on candidate runs
+    - run_artifacts(...) to locate artifacts.json, pipeline_fingerprint, and pipeline_info/params.json
+    - Confirm aligner, taps, run_targeted_sequencing, and reference-related params before reuse.

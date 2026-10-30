@@ -1,0 +1,104 @@
+checks:
+- id: run_completion
+  severity: high
+  source: run_get(include=["progress","diagnosis","artifact_summary","next_actions"])
+  good_signal: Run succeeded and artifact summary includes multiqc, pipeline_info, and the expected
+    analysis output sections.
+  bad_signal: Run failed, stalled, or reports a blocking diagnosis.
+  action: Inspect run_get detail or run_logs only after the summary identifies the failed step.
+- id: strandedness
+  severity: high
+  source: multiqc/multiqc_report.html
+  good_signal: Provided or Salmon-inferred strandedness agrees with RSeQC-derived strandedness.
+  bad_signal: MultiQC strandedness checks show failures or undetermined libraries.
+  action: Check the samplesheet strandedness column; rerun with corrected values instead of trusting
+    downstream quantification blindly.
+- id: input_linting
+  severity: high
+  source: fq_lint/
+  good_signal: fq lint reports pass for raw and processed FASTQ stages.
+  bad_signal: fq lint exits non-zero or flags malformed FASTQ names/pairs.
+  action: Fix samplesheet paths or FASTQ formatting; use extra_fqlint_args only for a known validator
+    issue accepted by the user.
+- id: adapter_trimming
+  severity: medium
+  source: preprocessing/trimgalore/ or preprocessing/fastp/
+  good_signal: Trim reports and post-trim FastQC show expected adapter removal and acceptable read
+    retention.
+  bad_signal: min_trimmed_reads failures, extreme adapter contamination, or unexpected read length
+    distributions.
+  action: Confirm trimmer choice, adapter settings, and min_trimmed_reads.
+- id: rrna_filtering
+  severity: medium
+  source: preprocessing/sortmerna/
+  good_signal: SortMeRNA logs show expected rRNA removal and enough non-rRNA reads remain.
+  bad_signal: Most reads are removed unexpectedly or the rRNA database/index is missing.
+  action: Confirm ribo_database_manifest, sortmerna_index, and license suitability for the database.
+- id: bbsplit_screening
+  severity: medium
+  source: preprocessing/bbsplit/
+  good_signal: BBSplit stats match the expected primary and contaminant fractions.
+  bad_signal: Reads mostly assign to contaminant references or the BBSplit index cannot be created/reused.
+  action: Confirm bbsplit_fasta_list or bbsplit_index and inspect saved split reads if needed.
+- id: star_alignment
+  severity: high
+  source: alignment/star/log/*.Log.final.out and MultiQC STAR section
+  good_signal: Most reads are uniquely mapped and unmapped fractions are low for the assay.
+  bad_signal: Very low unique mapping, high unmapped reads, or STAR memory/index failures.
+  action: Confirm reference FASTA/GTF, STAR index compatibility, read length, trimming, and resourceLimits
+    config.
+- id: bam_index_type
+  severity: medium
+  source: alignment/star/sorted/ and alignment/star/deduplicated/
+  good_signal: BAM indexes are present as BAI for normal contigs or CSI when bam_csi_index is true.
+  bad_signal: Large contigs trigger index failures because bam_csi_index was not used.
+  action: Rerun with bam_csi_index true for references with contigs too large for BAI.
+- id: riboseq_periodicity
+  severity: high
+  source: riboseq_qc/ribotish/, riboseq_qc/ribocode/, and riboseq_qc/ribotricer/ when run_ribotricer=true
+  good_signal: Metagene plots, read length distributions, and P-site offsets show expected ribosome
+    footprint behavior.
+  bad_signal: Weak periodicity, poor metagene signal, missing protocol inference, or unstable P-site
+    offsets.
+  action: Review library type, trimming/read length and annotation. Ribo-TISH and RiboCode run by
+    default; Ribotricer is opt-in through run_ribotricer and its absence is not a failed default run.
+- id: salmon_quantification
+  severity: medium
+  source: quantification/salmon/
+  good_signal: Gene and transcript matrices plus per-sample quant.sf files are present.
+  bad_signal: Missing transcriptome BAMs, incompatible library type, or low assigned fragments.
+  action: Check salmon_quant_libtype, strandedness, STAR transcriptome alignment, and reference transcript
+    FASTA/tx2gene generation.
+- id: translational_efficiency
+  severity: high
+  source: translational_efficiency/anota2seq/
+  good_signal: anota2seq result tables and diagnostic plots exist for requested contrasts.
+  bad_signal: Missing contrasts, sample type mismatch, grouping column mismatch, or poor model diagnostics.
+  action: Confirm samplesheet type values, contrast columns, batch/pair columns, and sample pairing
+    before interpreting translation or buffering results.
+- id: release_and_route_consistency
+  severity: high
+  source: Stored launch_spec, pipeline_info and route-specific outputs
+  good_signal: Official nf-core/riboseq 2.0.0, matching inputs/references, and outputs for the selected
+    route.
+  bad_signal: Unpinned release, a local customized checkout, incompatible references, or missing selected-route
+    outputs.
+  action: Verify the actual revision and read references/07_version_update.md. Do not infer success
+    or biological quality from process exit alone.
+- id: bowtie2_reference_depletion
+  severity: high
+  source: preprocessing/bowtie2_rrna/*.bowtie2.log and MultiQC
+  good_signal: Reference manifest matches intended targets, retained reads remain sufficient, and
+    downstream mapping/periodicity is coherent.
+  bad_signal: Unexpected depletion, poor retention, or assumed tRNA removal without tRNA reference
+    sequences.
+  action: Confirm FASTA paths and sequence composition; distinguish rRNA depletion from novel-transcript
+    rrna_blacklist filtering.
+- id: psite_and_te_definition
+  severity: high
+  source: psites/plastid/, psites/ribowaltz/, pipeline_info and selected TE outputs
+  good_signal: Offsets and periodicity are credible and count definition matches the declared TE method.
+  bad_signal: Unreviewed offsets, skip_plastid fallback, or mixing alignment/pseudo/P-site counts
+    between analyses.
+  action: Check te_quantification_method, skip_plastid, contrasts and replication; inspect model diagnostics
+    before interpreting TE.

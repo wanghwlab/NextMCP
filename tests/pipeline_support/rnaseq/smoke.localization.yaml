@@ -1,0 +1,113 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: rnaseq
+case_id: smoke
+localized_root: /data/rnaseq_test_data
+mode: requires-local-cache
+
+local_file_inventory:
+  - role: input_samplesheet
+    config_field: params.input
+    localized_path: /data/rnaseq_test_data/samplesheet_test_local.csv
+  - role: genome_fasta
+    config_field: params.fasta
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genome.fasta
+  - role: annotation_gtf
+    config_field: params.gtf
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes_with_empty_tid.gtf.gz
+  - role: annotation_gff
+    config_field: params.gff
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes.gff.gz
+  - role: transcript_fasta
+    config_field: params.transcript_fasta
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/transcriptome.fasta
+  - role: additional_fasta
+    config_field: params.additional_fasta
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/gfp.fa.gz
+  - role: bbsplit_fasta_list
+    config_field: params.bbsplit_fasta_list
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/bbsplit_fasta_list.txt
+  - role: hisat2_index
+    config_field: params.hisat2_index
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/hisat2.tar.gz
+  - role: salmon_index
+    config_field: params.salmon_index
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/salmon.tar.gz
+
+url_inventory: []
+rewritten_manifests: []
+
+config_override_files:
+  - path: /data/rnaseq_test_data/project-files/pipeline-support-rnaseq/profile_test_overrides.config
+    content: |
+      process {
+          resourceLimits = [
+              cpus  : 4,
+              memory: '15.GB',
+              time  : '1.h'
+          ]
+      }
+
+      process {
+          withName: 'RSEM_PREPAREREFERENCE_GENOME|SENTIEON_RSEMPREPAREREFERENCE_GENOME' {
+              ext.args2 = "--genomeSAindexNbases 7"
+          }
+      }
+
+agent_param_mapping:
+  - config_field: params.input
+    official_param: input
+    localized_path: /data/rnaseq_test_data/samplesheet_test_local.csv
+  - config_field: params.fasta
+    official_param: fasta
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genome.fasta
+  - config_field: params.gtf
+    official_param: gtf
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes_with_empty_tid.gtf.gz
+  - config_field: params.gff
+    official_param: gff
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes.gff.gz
+  - config_field: params.transcript_fasta
+    official_param: transcript_fasta
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/transcriptome.fasta
+  - config_field: params.additional_fasta
+    official_param: additional_fasta
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/gfp.fa.gz
+  - config_field: params.bbsplit_fasta_list
+    official_param: bbsplit_fasta_list
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/bbsplit_fasta_list.txt
+  - config_field: params.hisat2_index
+    official_param: hisat2_index
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/hisat2.tar.gz
+  - config_field: params.salmon_index
+    official_param: salmon_index
+    localized_path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/salmon.tar.gz
+  - config_field: params.skip_bbsplit
+    official_param: skip_bbsplit
+    value: false
+  - config_field: params.pseudo_aligner
+    official_param: pseudo_aligner
+    value: salmon
+  - config_field: params.umitools_bc_pattern
+    official_param: umitools_bc_pattern
+    value: NNNN
+
+ignored_upstream_params:
+  - config_field: params.modules_testdata_base_path
+    reason: The nf-test module base path is not needed for the cache-backed smoke case.
+  - config_field: params.pipelines_testdata_base_path
+    reason: The upstream pipeline testdata base path is bypassed by the local cache paths in conf/test.config.
+  - config_field: params.hisat2_build_memory
+    reason: The tests/nextflow.config HISAT2 build override is not needed for the default STAR plus Salmon route.
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+  - config_field: aws.client.anonymous
+    reason: No S3 access is required after the local cache has been prepared.
+  - config_field: process.withName:'.*'
+    reason: Harness-wide nf-test resource caps are not merged into this smoke case.
+  - config_field: process.withName:'FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS:FQ_LINT_AFTER_SORTMERNA'
+    reason: The nf-test-only ext.args reset is not required for the canonical default route.
+
+notes:
+  - The current vendored rnaseq test route already assumes a server-local cache.
+  - "localize_testdata.py only validates the cache and writes the config override file."

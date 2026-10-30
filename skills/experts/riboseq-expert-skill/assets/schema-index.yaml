@@ -1,0 +1,101 @@
+grouping_strategy: schema top-level sections from nextflow_schema.json allOf order for riboseq
+groups:
+- id: input_output_options
+  label: Input/output options
+  use_when: The runtime agent needs exact parameter mapping for the `Input/output options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/input_output_options.yaml
+  reference_path: references/schema-groups/input_output_options.md
+  parameter_count: 5
+- id: reference_genome_options
+  label: Reference genome options
+  use_when: The runtime agent needs exact parameter mapping for the `Reference genome options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `reference_genome_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/reference_genome_options.yaml
+  reference_path: references/schema-groups/reference_genome_options.md
+  parameter_count: 15
+- id: read_trimming_options
+  label: Read trimming options
+  use_when: The runtime agent needs exact parameter mapping for the `Read trimming options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `read_trimming_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/read_trimming_options.yaml
+  reference_path: references/schema-groups/read_trimming_options.md
+  parameter_count: 5
+- id: read_filtering_options
+  label: Read filtering options
+  use_when: The runtime agent needs exact parameter mapping for the `Read filtering options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `read_filtering_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/read_filtering_options.yaml
+  reference_path: references/schema-groups/read_filtering_options.md
+  parameter_count: 8
+- id: umi_options
+  label: UMI options
+  use_when: The runtime agent needs exact parameter mapping for the `UMI options` top-level section
+    of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `umi_options` for exact
+    lookup.
+  asset_path: assets/schema-groups/umi_options.yaml
+  reference_path: references/schema-groups/umi_options.md
+  parameter_count: 10
+- id: alignment_options
+  label: Alignment options
+  use_when: The runtime agent needs exact parameter mapping for the `Alignment options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `alignment_options` for
+    exact lookup.
+  asset_path: assets/schema-groups/alignment_options.yaml
+  reference_path: references/schema-groups/alignment_options.md
+  parameter_count: 14
+- id: riboseq_specific_options
+  label: Riboseq-specific options
+  use_when: The runtime agent needs exact parameter mapping for the `Riboseq-specific options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `riboseq_specific_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/riboseq_specific_options.yaml
+  reference_path: references/schema-groups/riboseq_specific_options.md
+  parameter_count: 31
+- id: optional_outputs
+  label: Optional outputs
+  use_when: The runtime agent needs exact parameter mapping for the `Optional outputs` top-level section
+    of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `optional_outputs` for
+    exact lookup.
+  asset_path: assets/schema-groups/optional_outputs.yaml
+  reference_path: references/schema-groups/optional_outputs.md
+  parameter_count: 8
+- id: process_skipping_options
+  label: Process skipping options
+  use_when: The runtime agent needs exact parameter mapping for the `Process skipping options` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `process_skipping_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/process_skipping_options.yaml
+  reference_path: references/schema-groups/process_skipping_options.md
+  parameter_count: 29
+- id: institutional_config_options
+  label: Institutional config options
+  use_when: The runtime agent needs exact parameter mapping for the `Institutional config options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `institutional_config_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/institutional_config_options.yaml
+  reference_path: references/schema-groups/institutional_config_options.md
+  parameter_count: 7
+- id: generic_options
+  label: Generic options
+  use_when: The runtime agent needs exact parameter mapping for the `Generic options` top-level section
+    of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `generic_options` for exact
+    lookup.
+  asset_path: assets/schema-groups/generic_options.yaml
+  reference_path: references/schema-groups/generic_options.md
+  parameter_count: 15

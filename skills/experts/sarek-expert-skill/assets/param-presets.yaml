@@ -1,0 +1,160 @@
+channel_boundaries:
+  params: Ordinary Sarek options, including inputs, references, route selectors, tool choices,
+    annotation databases, cache switches, and save toggles.
+  config_files: Server-local Nextflow config files, including resource caps through
+    process.resourceLimits and executor-specific overrides.
+  from_run_id: Public restart path for a previous nextmcp run.
+  extra_args: Use only when no normalized nextflow_run field covers a needed CLI flag.
+presets:
+  default_mapping:
+    use_when: Start from FastQ, Spring-compressed FastQ, or unmapped BAM and use the default
+      mapping route.
+    params:
+      input: <server_input_root>/sarek_samplesheet.csv
+      outdir: <server_output_root>/sarek
+      step: mapping
+      genome: GATK.GRCh38
+    placeholders:
+      input: <server_input_root>/sarek_samplesheet.csv
+      outdir: <server_output_root>/sarek
+    notes:
+      - Confirm the samplesheet and referenced read paths are server-local.
+      - Add tools only when the user wants variant calling, annotation, CNV, SV, MSI, or BBSplit.
+  targeted_or_wes:
+    use_when: WES or targeted panel data.
+    params:
+      input: <server_input_root>/sarek_samplesheet.csv
+      outdir: <server_output_root>/sarek_wes
+      step: mapping
+      genome: GATK.GRCh38
+      wes: true
+      intervals: <server_reference_root>/targets.padded.bed
+    notes:
+      - Use a BED intervals file for WES or targeted sequencing.
+      - Keep no_intervals false unless the user explicitly wants to disable interval splitting.
+  germline_variants:
+    use_when: Normal samples need germline variant calling.
+    params:
+      input: <server_input_root>/sarek_samplesheet.csv
+      outdir: <server_output_root>/sarek_germline
+      step: mapping
+      genome: GATK.GRCh38
+      tools: haplotypecaller
+    optional_params:
+      joint_germline: true
+      tools: haplotypecaller,deepvariant,freebayes,mpileup,manta,tiddit,indexcov,cnvkit
+    notes:
+      - Use joint_germline for cohort genotyping with HaplotypeCaller or Sentieon Haplotyper
+        when gVCF output is planned.
+  somatic_pair:
+    use_when: Tumor-normal pair or multiple tumor samples per patient.
+    params:
+      input: <server_input_root>/sarek_tumor_normal_samplesheet.csv
+      outdir: <server_output_root>/sarek_somatic
+      step: mapping
+      genome: GATK.GRCh38
+      tools: mutect2,strelka,manta
+    optional_params:
+      only_paired_variant_calling: true
+      joint_mutect2: true
+      pon: <server_reference_root>/pon.vcf.gz
+      pon_tbi: <server_reference_root>/pon.vcf.gz.tbi
+      germline_resource: <server_reference_root>/af-only-gnomad.vcf.gz
+      germline_resource_tbi: <server_reference_root>/af-only-gnomad.vcf.gz.tbi
+    notes:
+      - Samplesheet patient IDs connect normal and tumor records; status 0 means normal and
+        status 1 means tumor.
+      - Tumor-only runs can use the same tools where supported, but caller behavior differs.
+  cnv_msi_sv:
+    use_when: Add copy-number, structural variant, and microsatellite instability outputs.
+    params:
+      input: <server_input_root>/sarek_samplesheet.csv
+      outdir: <server_output_root>/sarek_cnv_msi_sv
+      step: mapping
+      genome: GATK.GRCh38
+      tools: ascat,cnvkit,controlfreec,msisensor2,msisensorpro,manta,tiddit
+    optional_params:
+      ascat_genome: hg38
+      ascat_alleles: <server_reference_root>/ascat_alleles.zip
+      ascat_loci: <server_reference_root>/ascat_loci.zip
+      ascat_loci_gc: <server_reference_root>/ascat_loci_gc.zip
+      ascat_loci_rt: <server_reference_root>/ascat_loci_rt.zip
+      cnvkit_reference: <server_reference_root>/cnvkit_reference.cnn
+      msisensor2_models: <server_reference_root>/msisensor2_models.tar.gz
+      msisensorpro_scan: <server_reference_root>/msisensorpro_scan.list
+    notes:
+      - ASCAT requires hg19 or hg38 as ascat_genome and matching reference zips.
+      - CNVkit can build a reference or reuse cnvkit_reference.
+  annotation_only:
+    use_when: Annotate existing VCF files.
+    params:
+      input: <server_input_root>/sarek_vcf_samplesheet.csv
+      outdir: <server_output_root>/sarek_annotation
+      step: annotate
+      genome: GATK.GRCh38
+      tools: vep,snpeff
+    optional_params:
+      tools: merge,vep,snpeff,bcfann,snpsift
+      vep_cache: <server_reference_root>/vep_cache
+      snpeff_cache: <server_reference_root>/snpeff_cache
+      snpsift_databases: <server_reference_root>/snpsift_databases.csv
+      bcftools_annotations: <server_reference_root>/annotations.vcf.gz
+      bcftools_annotations_tbi: <server_reference_root>/annotations.vcf.gz.tbi
+      bcftools_header_lines: <server_reference_root>/bcftools_header_lines.txt
+    notes:
+      - Starting from annotate expects a VCF samplesheet.
+      - Sorted VCFs are expected when Sarek starts annotation-only.
+  sentieon:
+    use_when: The user wants Sentieon acceleration and confirms server-side license setup.
+    params:
+      input: <server_input_root>/sarek_samplesheet.csv
+      outdir: <server_output_root>/sarek_sentieon
+      step: mapping
+      genome: GATK.GRCh38
+      aligner: sentieon-bwamem
+      tools: sentieon_dedup,sentieon_haplotyper
+    optional_params:
+      sentieon_haplotyper_emit_mode: gvcf
+      joint_germline: true
+      sentieon_dnascope_emit_mode: variant
+      sentieon_dnascope_model: <server_reference_root>/SentieonDNAscopeModel.model
+    notes:
+      - The license should exist as a Nextflow secret named SENTIEON_LICENSE_BASE64.
+      - Do not put the license value in params or git.
+  umi:
+    use_when: UMIs are present in read headers or BAM tags.
+    params:
+      input: <server_input_root>/sarek_umi_samplesheet.csv
+      outdir: <server_output_root>/sarek_umi
+      step: mapping
+      genome: GATK.GRCh38
+      umi_in_read_header: true
+    optional_params:
+      umi_location: <schema lookup required>
+      umi_length: <integer>
+      umi_tag: RX
+      umi_read_structure: <fgbio read structure>
+      group_by_umi_strategy: Adjacency
+    notes:
+      - Duplex UMIs and UMIs in extra FASTQ index files are out of Sarek's direct route.
+      - GATK MarkDuplicates Spark does not support UMIs.
+  reference_or_cache_build:
+    use_when: Build reference indexes or download snpEff/VEP caches for later reuse.
+    params:
+      input: false
+      outdir: <server_output_root>/sarek_reference_build
+      genome: GATK.GRCh38
+      build_only_index: true
+      save_reference: true
+    optional_params:
+      tools: vep,snpeff
+      download_cache: true
+      outdir_cache: <server_reference_root>/sarek_cache
+    notes:
+      - Use this before large runs when references or annotation caches are not already available.
+restart:
+  public_field: from_run_id
+  planning_steps:
+    - run_get(detail="full") on the source run when compatibility matters.
+    - Confirm launch_spec, nextflow_session_uuid, and resume compatibility fields.
+    - Reuse from_run_id in nextflow_run only after checking the source run layout and params.

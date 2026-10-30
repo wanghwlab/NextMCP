@@ -1,0 +1,140 @@
+presets:
+  standard_run:
+    use_when: Normal Nanopore DNA, cDNA, or directRNA run after the user confirms server-local
+      inputs.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: DNA
+      outdir: <server_output_root>/nanoseq
+      skip_demultiplexing: true
+      aligner: minimap2
+    placeholders:
+      input: Server-local CSV with group, replicate, barcode, input_file, fasta, and gtf columns.
+      protocol: DNA, cDNA, or directRNA.
+      outdir: Server-local publish directory.
+    route_shaping:
+      - input
+      - protocol
+      - outdir
+      - skip_demultiplexing
+      - input_path
+      - barcode_kit
+      - aligner
+      - run_nanolyse
+      - skip_alignment
+      - skip_qc
+      - skip_multiqc
+    lookup_groups:
+      - input_output_options
+      - demultiplexing_options
+      - alignment_options
+      - process_skipping_options
+  demultiplex_with_qcat:
+    use_when: One pooled or non-demultiplexed FASTQ needs qcat demultiplexing before alignment.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: DNA
+      outdir: <server_output_root>/nanoseq_demux
+      skip_demultiplexing: false
+      input_path: <server_input_root>/undemultiplexed.fastq.gz
+      barcode_kit: NBD103/NBD104
+    optional_params:
+      barcode_both_ends: Require barcodes at both read ends.
+      trim_barcodes: Trim barcodes from output FASTQ files.
+      qcat_detect_middle: Search adapters across the whole read.
+      qcat_min_score: qcat score threshold, default 60.
+    lookup_groups:
+      - demultiplexing_options
+  dna_variant_calling:
+    use_when: DNA data needs short and/or structural variants.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: DNA
+      outdir: <server_output_root>/nanoseq_dna_variants
+      skip_demultiplexing: true
+      aligner: minimap2
+      call_variants: true
+      variant_caller: medaka
+      structural_variant_caller: sniffles
+    optional_params:
+      variant_caller: medaka, deepvariant, or pepper_margin_deepvariant.
+      structural_variant_caller: sniffles or cutesv.
+      skip_vc: Skip short variants.
+      skip_sv: Skip structural variants.
+      split_mnps: Split medaka MNPs into SNPs.
+      phase_vcf: Phase medaka VCF output.
+      deepvariant_gpu: Use pepper_margin_deepvariant GPU mode; confirm server GPU resources.
+    lookup_groups:
+      - variant_calling_options
+      - alignment_options
+  rna_quantification:
+    use_when: cDNA or directRNA data needs transcript reconstruction, counts, or differential
+      analysis.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: cDNA
+      outdir: <server_output_root>/nanoseq_rna_quant
+      skip_demultiplexing: true
+      quantification_method: bambu
+    optional_params:
+      quantification_method: bambu or stringtie2.
+      skip_quantification: Skip transcript reconstruction and quantification.
+      skip_differential_analysis: Skip DESeq2 and DEXSeq.
+      stranded: Automatically activated for directRNA; set explicitly only when the user requests
+        strand-specific handling.
+    lookup_groups:
+      - differential_analysis_options
+      - alignment_options
+  directrna_modification:
+    use_when: directRNA input directories need xPore or m6Anet RNA modification analysis.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: directRNA
+      outdir: <server_output_root>/nanoseq_directrna_mods
+      skip_demultiplexing: true
+      skip_modification_analysis: false
+    optional_params:
+      skip_xpore: Skip xPore differential modification analysis.
+      skip_m6anet: Skip m6Anet m6A detection.
+      skip_quantification: Set true if the user wants modification outputs without transcript
+        quantification.
+    placeholders:
+      input_file: Each samplesheet input_file should point at a server-local directory containing
+        fast5 and fastq subdirectories.
+    lookup_groups:
+      - rna_modification_analysis_options
+      - differential_analysis_options
+  rna_fusion:
+    use_when: cDNA or directRNA data needs JAFFAL fusion detection.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: cDNA
+      outdir: <server_output_root>/nanoseq_fusion
+      skip_demultiplexing: true
+      skip_fusion_analysis: false
+    optional_params:
+      jaffal_ref_dir: Server-local JAFFAL reference directory. If omitted, the workflow attempts to
+        fetch and unpack a reference.
+    lookup_groups:
+      - rna_fusion_analysis_options
+  aligned_bam_input:
+    use_when: Samplesheet input_file values are existing BAM files and the user wants to skip
+      alignment.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      protocol: cDNA
+      outdir: <server_output_root>/nanoseq_bam_input
+      skip_demultiplexing: true
+      skip_alignment: true
+    caveats:
+      - skip_alignment skips alignment and downstream alignment-dependent processes in the main
+        branch; use only when the requested route is compatible with BAM inputs.
+    lookup_groups:
+      - alignment_options
+nextmcp_boundaries:
+  project: Required nextmcp project container, resolved on the nextmcp server.
+  params: Use for pipeline parameters such as input, protocol, outdir, demultiplexing choices,
+    alignment choices, variant calling, RNA analysis switches, and skip/save toggles.
+  config_files: Use for Nextflow config files and resource caps such as process.resourceLimits.
+  from_run_id: Public restart path for reusing a previous nextmcp run.
+  extra_args: Use only when no normalized nextflow_run field covers the needed CLI flag.

@@ -1,0 +1,861 @@
+group:
+  id: taxonomic_assignment
+  label: Taxonomic assignment
+  selection_rule: Use this group for parameters defined under the `Taxonomic assignment`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/taxonomic_assignment.md
+  - assets/schema-groups/taxonomic_assignment.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `taxonomic_assignment` for exact lookup.
+parameters:
+- group_id: taxonomic_assignment
+  name: addsh
+  source_name: addsh
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If ASVs should be assigned to UNITE species hypotheses (SHs). Only
+    relevant for ITS data.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: boolean
+    description: If ASVs should be assigned to UNITE species hypotheses (SHs). Only
+      relevant for ITS data.
+- group_id: taxonomic_assignment
+  name: cut_dada_ref_taxonomy
+  source_name: cut_dada_ref_taxonomy
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If the expected amplified sequences are extracted from the DADA2 reference
+    taxonomy database
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/cut_dada_ref_taxonomy
+  example_values:
+  - <server_reference_root>/cut_dada_ref_taxonomy
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: boolean
+    help_text: Expected amplified sequences are extracted from the DADA2 reference
+      taxonomy using the primer sequences, that might improve classification. This
+      is not applied to species classification (assignSpecies) but only for lower
+      taxonomic levels (assignTaxonomy).
+    description: If the expected amplified sequences are extracted from the DADA2
+      reference taxonomy database
+- group_id: taxonomic_assignment
+  name: cut_its
+  source_name: cut_its
+  type: string
+  required: false
+  default: none
+  enum: &id001
+  - none
+  - full
+  - its1
+  - its2
+  description: 'Part of ITS region to use for taxonomy assignment: "full", "its1",
+    or "its2"'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - none
+  - full
+  - its1
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: If data is long read ITS sequences, that need to be cut to ITS region
+      (full ITS, only ITS1, or only ITS2) for taxonomy assignment.
+    description: 'Part of ITS region to use for taxonomy assignment: "full", "its1",
+      or "its2"'
+    default: none
+    enum: *id001
+- group_id: taxonomic_assignment
+  name: dada_addspecies_allowmultiple
+  source_name: dada_addspecies_allowmultiple
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If multiple exact matches against different species are returned
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: boolean
+    help_text: Defines the behavior when multiple exact matches against different
+      species are returned. By default only unambiguous identifications are returned.
+      If TRUE, a concatenated string of all exactly matched species is returned.
+    description: If multiple exact matches against different species are returned
+- group_id: taxonomic_assignment
+  name: dada_ref_taxonomy
+  source_name: dada_ref_taxonomy
+  type: string
+  required: false
+  default: silva=138.2
+  enum: &id002
+  - coidb
+  - coidb=221216
+  - greengenes2
+  - greengenes2=2024.09
+  - gtdb
+  - gtdb=R05-RS95
+  - gtdb=R06-RS202
+  - gtdb=R07-RS207
+  - gtdb=R08-RS214
+  - gtdb=R09-RS220
+  - gtdb=R10-RS226
+  - midori2-co1
+  - midori2-co1=gb250
+  - pr2
+  - pr2=4.13.0
+  - pr2=4.14.0
+  - pr2=5.0.0
+  - pr2=5.1.0
+  - rdp
+  - rdp=18
+  - sbdi-gtdb
+  - sbdi-gtdb=R10-RS226-2
+  - sbdi-gtdb=R09-RS220-2
+  - sbdi-gtdb=R09-RS220-1
+  - sbdi-gtdb=R08-RS214-1
+  - sbdi-gtdb=R07-RS207-1
+  - sbdi-gtdb=R06-RS202-3
+  - sbdi-gtdb=R06-RS202-1
+  - silva
+  - silva=138.2
+  - silva=138
+  - silva=132
+  - unite-alleuk
+  - unite-alleuk=10.0
+  - unite-alleuk=9.0
+  - unite-alleuk=8.3
+  - unite-alleuk=8.2
+  - unite-fungi
+  - unite-fungi=10.0
+  - unite-fungi=9.0
+  - unite-fungi=8.3
+  - unite-fungi=8.2
+  - zehr-nifh
+  - zehr-nifh=2.5.0
+  description: Name of supported database, and optionally also version number
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/dada_ref_taxonomy
+  example_values:
+  - coidb
+  - coidb=221216
+  - greengenes2
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: 'Choose any of the supported databases, and optionally also specify
+      the version. Database and version are separated by an equal sign (`=`, e.g.
+      `silva=138`) . This will download the desired database, format it to produce
+      a file that is compatible with DADA2''s assignTaxonomy and another file that
+      is compatible with DADA2''s addSpecies.
+
+
+      The following databases are supported:
+
+      - GTDB - Genome Taxonomy Database - 16S rRNA
+
+      - SBDI-GTDB, a Sativa-vetted version of the GTDB 16S rRNA
+
+      - PR2 - Protist Reference Ribosomal Database - 18S rRNA
+
+      - RDP - Ribosomal Database Project - 16S rRNA
+
+      - SILVA ribosomal RNA gene database project - 16S rRNA
+
+      - UNITE - eukaryotic nuclear ribosomal ITS region - ITS
+
+      - COIDB - eukaryotic Cytochrome Oxidase I (COI) from The Barcode of Life Data
+      System (BOLD) - COI
+
+
+      Generally, using `gtdb`, `pr2`, `rdp`, `sbdi-gtdb`, `silva`, `coidb`, `unite-fungi`,
+      or `unite-alleuk` will select the most recent supported version.
+
+
+      Please note that commercial/non-academic entities [require licensing](https://www.arb-silva.de/silva-license-information)
+      for SILVA v132 database (non-default) but not from v138 on (default).'
+    description: Name of supported database, and optionally also version number
+    default: silva=138.2
+    enum: *id002
+- group_id: taxonomic_assignment
+  name: dada_taxonomy_rc
+  source_name: dada_taxonomy_rc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If reverse-complement of each sequences will be also tested for classification
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: boolean
+    help_text: Reverse-complement of each sequences will be used for classification
+      if it is a better match to the reference sequences than the forward sequence.
+    description: If reverse-complement of each sequences will be also tested for classification
+- group_id: taxonomic_assignment
+  name: kraken2_assign_taxlevels
+  source_name: kraken2_assign_taxlevels
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Comma separated list of taxonomic levels used in Kraken2. Will overwrite
+    default values.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: Typically useful when providing a custom Kraken2 reference taxonomy
+      database with `--kraken2_ref_tax_custom`. In case a database is given with `--kraken2_ref_taxonomy`,
+      the default taxonomic levels will be overwritten with `--kraken2_assign_taxlevels`.
+    description: Comma separated list of taxonomic levels used in Kraken2. Will overwrite
+      default values.
+- group_id: taxonomic_assignment
+  name: kraken2_confidence
+  source_name: kraken2_confidence
+  type: number
+  required: false
+  default: 0.0
+  enum: null
+  description: Confidence score threshold for taxonomic classification.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.0
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: number
+    default: 0.0
+    help_text: Increasing the threshold will require more k-mers to match at a taxonomic
+      levels and reduce the taxonomic levels shown until the threshold is met.
+    description: Confidence score threshold for taxonomic classification.
+    minimum: 0
+    maximum: 1
+- group_id: taxonomic_assignment
+  name: kraken2_ref_tax_custom
+  source_name: kraken2_ref_tax_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to a custom Kraken2 reference taxonomy database (*.tar.gz|*.tgz
+    archive or folder)
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/kraken2_ref_tax_custom
+  example_values:
+  - <server_reference_root>/kraken2_ref_tax_custom
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: Overwrites `--kraken2_ref_taxonomy`. Consider also setting `--kraken2_assign_taxlevels`.
+      Can be compressed tar archive (.tar.gz|.tgz) or folder containing the database.
+      See also https://benlangmead.github.io/aws-indexes/k2.
+    description: Path to a custom Kraken2 reference taxonomy database (*.tar.gz|*.tgz
+      archive or folder)
+- group_id: taxonomic_assignment
+  name: kraken2_ref_taxonomy
+  source_name: kraken2_ref_taxonomy
+  type: string
+  required: false
+  default: null
+  enum: &id003
+  - silva
+  - silva=138
+  - silva=132
+  - rdp
+  - rdp=18
+  - greengenes
+  - greengenes=13.5
+  - standard
+  - standard=20240904
+  - standard=20230605
+  description: Name of supported database, and optionally also version number
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/kraken2_ref_taxonomy
+  example_values:
+  - silva
+  - silva=138
+  - silva=132
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: 'Choose any of the supported databases, and optionally also specify
+      the version. Database and version are separated by an equal sign (`=`, e.g.
+      `silve=138`) . This will download the desired database and initiate taxonomic
+      classification with Kraken2 and the chosen database.
+
+
+      Consider using `--kraken2_confidence` to set a confidence score threshold.
+
+
+      The following databases are supported:
+
+      - RDP - Ribosomal Database Project - 16S rRNA
+
+      - SILVA ribosomal RNA gene database project - 16S rRNA
+
+      - Greengenes - 16S rRNA
+
+      - Standard Kraken2 database (RefSeq archaea, bacteria, viral, plasmid, human,
+      UniVec_Core) - any amplicon
+
+
+      Generally, using `rdp`, `silva`, `greengenes`, `standard` will select the most
+      recent supported version.
+
+
+      Please note that commercial/non-academic entities [require licensing](https://www.arb-silva.de/silva-license-information)
+      for SILVA v132 database (non-default) but not from v138 on.'
+    description: Name of supported database, and optionally also version number
+    enum: *id003
+- group_id: taxonomic_assignment
+  name: pplace_alnmethod
+  source_name: pplace_alnmethod
+  type: string
+  required: false
+  default: hmmer
+  enum: &id004
+  - hmmer
+  - mafft
+  description: Method used for alignment, "hmmer" or "mafft"
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - hmmer
+  - mafft
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    description: Method used for alignment, "hmmer" or "mafft"
+    default: hmmer
+    enum: *id004
+- group_id: taxonomic_assignment
+  name: pplace_model
+  source_name: pplace_model
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Phylogenetic model to use in placement, e.g. 'LG+F' or 'GTR+I+F'. Requires
+    also `--pplace_tree` and `--pplace_aln`.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    description: Phylogenetic model to use in placement, e.g. 'LG+F' or 'GTR+I+F'.
+      Requires also `--pplace_tree` and `--pplace_aln`.
+- group_id: taxonomic_assignment
+  name: qiime_ref_taxonomy
+  source_name: qiime_ref_taxonomy
+  type: string
+  required: false
+  default: null
+  enum: &id005
+  - silva=138
+  - silva
+  - greengenes85
+  - greengenes2
+  - greengenes2=2024.09
+  - greengenes2=2022.10
+  description: Name of supported database, and optionally also version number
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/qiime_ref_taxonomy
+  example_values:
+  - silva=138
+  - silva
+  - greengenes85
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: 'Choose any of the supported databases, and optionally also specify
+      the version. Database and version are separated by an equal sign (`=`, e.g.
+      `silva=138`) . This will download the desired database and initiate taxonomic
+      classification with QIIME2 and the chosen database.
+
+
+      If both, `--dada_ref_taxonomy` and `--qiime_ref_taxonomy` are used, DADA2 classification
+      will be used for downstream analysis.
+
+
+      The following databases are supported:
+
+      - SILVA ribosomal RNA gene database project - 16S rRNA
+
+      - UNITE - eukaryotic nuclear ribosomal ITS region - ITS
+
+      - Greengenes (only testing!)
+
+
+      Generally, using `silva`, `unite-fungi`, or `unite-alleuk` will select the most
+      recent supported version. For testing purposes, the tiny database `greengenes85`
+      (dereplicated at 85% sequence similarity) is available. For details on what
+      values are valid, please either use an invalid value such as `x` (causing the
+      pipeline to send an error message with all valid values) or see `conf/ref_databases.config`.'
+    description: Name of supported database, and optionally also version number
+    enum: *id005
+- group_id: taxonomic_assignment
+  name: sintax_ref_taxonomy
+  source_name: sintax_ref_taxonomy
+  type: string
+  required: false
+  default: null
+  enum: &id006
+  - coidb
+  - coidb=221216
+  - unite-fungi
+  - unite-fungi=10.0
+  - unite-fungi=9.0
+  - unite-fungi=8.3
+  - unite-fungi=8.2
+  - unite-alleuk
+  - unite-alleuk=10.0
+  - unite-alleuk=9.0
+  - unite-alleuk=8.3
+  - unite-alleuk=8.2
+  description: Name of supported database, and optionally also version number
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/sintax_ref_taxonomy
+  example_values:
+  - coidb
+  - coidb=221216
+  - unite-fungi
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: 'Choose any of the supported databases, and optionally also specify
+      the version. Database and version are separated by an equal sign (`=`, e.g.
+      `coidb=221216`) . This will download the desired database and initiate taxonomic
+      classification with VSEARCH sintax and the chosen database, which if needed
+      is formatted to produce a file that is compatible with VSEARCH sintax.
+
+
+      The following databases are supported:
+
+      - COIDB - eukaryotic Cytochrome Oxidase I (COI) from The Barcode of Life Data
+      System (BOLD) - COI
+
+      - UNITE - eukaryotic nuclear ribosomal ITS region - ITS
+
+
+      Generally, using `coidb`, `unite-fungi`, or `unite-alleuk` will select the most
+      recent supported version.'
+    description: Name of supported database, and optionally also version number
+    enum: *id006
+- group_id: taxonomic_assignment
+  name: classifier
+  source_name: classifier
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to QIIME2 trained classifier file (typically *-classifier.qza)
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    description: Path to QIIME2 trained classifier file (typically *-classifier.qza)
+    help_text: "If you have trained a compatible classifier before, from sources such\
+      \ as SILVA (https://www.arb-silva.de/), Greengenes (http://greengenes.secondgenome.com/downloads)\
+      \ or RDP (https://rdp.cme.msu.edu/). \n\nFor example:\n\n```bash\n--classifier\
+      \ \"FW_primer-RV_primer-classifier.qza\"\n```\n\nPlease note the following requirements:\n\
+      \n1. The path must be enclosed in quotes\n2. The classifier is a Naive Bayes\
+      \ classifier produced by `qiime feature-classifier fit-classifier-naive-bayes`\
+      \ (e.g. by this pipeline)\n3. The primer pair for the amplicon PCR and the computing\
+      \ of the classifier are exactly the same (or full-length, potentially lower\
+      \ performance)\n4. The classifier has to be trained by the same version of scikit-learn\
+      \ as this version of the pipeline uses"
+- group_id: taxonomic_assignment
+  name: dada_assign_chunksize
+  source_name: dada_assign_chunksize
+  type: integer
+  required: false
+  default: 10000
+  enum: null
+  description: ASV fasta will be subset into chunks of this size for classification
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/dada_assign_chunksize
+  example_values:
+  - <server_reference_root>/dada_assign_chunksize
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: integer
+    help_text: Chunks for DADA2's assignTaxonomy and addSpecies can speed up the process
+      and lower required memory.
+    description: ASV fasta will be subset into chunks of this size for classification
+    default: 10000
+- group_id: taxonomic_assignment
+  name: dada_assign_taxlevels
+  source_name: dada_assign_taxlevels
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Comma separated list of taxonomic levels used in DADA2's assignTaxonomy
+    function
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: Typically useful when providing a custom DADA2 reference taxonomy database
+      with `--dada_ref_tax_custom`. If DADA2's addSpecies is used (default), the last
+      element(s) of the comma separated string must be 'Genus' or 'Genus,Species'.
+    description: Comma separated list of taxonomic levels used in DADA2's assignTaxonomy
+      function
+- group_id: taxonomic_assignment
+  name: dada_min_boot
+  source_name: dada_min_boot
+  type: integer
+  required: false
+  default: 50
+  enum: null
+  description: The minimum bootstrap confidence (out of 100 trials) for assigning
+    a taxonomic level with DADA2. Matches `minBoot` in DADA2's assignTaxonomy method.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 50
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: integer
+    default: 50
+    fa_icon: fas fa-greater-than-equal
+    description: The minimum bootstrap confidence (out of 100 trials) for assigning
+      a taxonomic level with DADA2. Matches `minBoot` in DADA2's assignTaxonomy method.
+    minimum: 0
+    maximum: 100
+- group_id: taxonomic_assignment
+  name: dada_ref_tax_custom
+  source_name: dada_ref_tax_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to a custom DADA2 reference taxonomy database
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/dada_ref_tax_custom
+  example_values:
+  - <server_reference_root>/dada_ref_tax_custom
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: 'Overwrites `--dada_ref_taxonomy`. Either `--skip_dada_addspecies`
+      (no species annotation) or `--dada_ref_tax_custom_sp` (species annotation) is
+      additionally required. Consider also setting `--dada_assign_taxlevels`.
+
+
+      Must be compatible to DADA2''s assignTaxonomy function: ''Can be compressed.
+      This reference fasta file should be formatted so that the id lines correspond
+      to the taxonomy (or classification) of the associated sequence, and each taxonomic
+      level is separated by a semicolon.'' See also https://rdrr.io/bioc/dada2/man/assignTaxonomy.html'
+    description: Path to a custom DADA2 reference taxonomy database
+- group_id: taxonomic_assignment
+  name: dada_ref_tax_custom_sp
+  source_name: dada_ref_tax_custom_sp
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to a custom DADA2 reference taxonomy database for species assignment
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/dada_ref_tax_custom_sp
+  example_values:
+  - <server_reference_root>/dada_ref_tax_custom_sp
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: 'Requires `--dada_ref_tax_custom`. Must be compatible to DADA2''s addSpecies
+      function: ''Can be compressed. This reference fasta file should be formatted
+      so that the id lines correspond to the genus-species binomial of the associated
+      sequence.'' See also https://rdrr.io/bioc/dada2/man/addSpecies.html'
+    description: Path to a custom DADA2 reference taxonomy database for species assignment
+- group_id: taxonomic_assignment
+  name: its_partial
+  source_name: its_partial
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Cutoff for partial ITS sequences. Only full sequences by default.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: integer
+    help_text: If using cut_its, this option allows partial ITS sequences, longer
+      than the specified cutoff.
+    description: Cutoff for partial ITS sequences. Only full sequences by default.
+    default: 0
+- group_id: taxonomic_assignment
+  name: pplace_aln
+  source_name: pplace_aln
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: File with reference sequences. Requires also `--pplace_tree` and `--pplace_model`.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    description: File with reference sequences. Requires also `--pplace_tree` and
+      `--pplace_model`.
+- group_id: taxonomic_assignment
+  name: pplace_name
+  source_name: pplace_name
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: A name for the run
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    description: A name for the run
+    hidden: true
+- group_id: taxonomic_assignment
+  name: pplace_taxonomy
+  source_name: pplace_taxonomy
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Tab-separated file with taxonomy assignments of reference sequences.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: Headerless, tab-separated, first column with tree leaves, second column
+      with taxonomy ranks separated by semicolon `;`. The results take precedence
+      over DADA2 and QIIME2 classifications.
+    description: Tab-separated file with taxonomy assignments of reference sequences.
+- group_id: taxonomic_assignment
+  name: pplace_tree
+  source_name: pplace_tree
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Newick file with reference phylogenetic tree. Requires also `--pplace_aln`
+    and `--pplace_model`.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    description: Newick file with reference phylogenetic tree. Requires also `--pplace_aln`
+      and `--pplace_model`.
+- group_id: taxonomic_assignment
+  name: qiime_ref_tax_custom
+  source_name: qiime_ref_tax_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to files of a custom QIIME2 reference taxonomy database (tarball,
+    or two comma-separated files)
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/qiime_ref_tax_custom
+  example_values:
+  - <server_reference_root>/qiime_ref_tax_custom
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic assignment
+  raw_schema:
+    type: string
+    help_text: Overwrites `--qiime_ref_taxonomy`. Either path to tarball (`*.tar.gz`
+      or `*.tgz`) that contains sequence (`*.fna`) and taxonomy (`*.tax`) data, or
+      alternatively a comma separated pair of filepaths to sequence (`*.fna`) and
+      taxonomy (`*.tax`) data (possibly gzipped `*.gz`).
+    description: Path to files of a custom QIIME2 reference taxonomy database (tarball,
+      or two comma-separated files)

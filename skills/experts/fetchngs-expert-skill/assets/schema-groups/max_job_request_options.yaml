@@ -1,0 +1,97 @@
+group:
+  id: max_job_request_options
+  label: Max job request options
+  selection_rule: Use this group for parameters defined under the `Max job request
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/max_job_request_options.md
+  - assets/schema-groups/max_job_request_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `max_job_request_options` for exact lookup.
+parameters:
+- group_id: max_job_request_options
+  name: max_cpus
+  source_name: max_cpus
+  type: integer
+  required: false
+  default: 16
+  enum: null
+  description: Maximum number of CPUs that can be requested for any single job.
+  classification: lookup_only
+  channel: config_files
+  placeholder: <server_input_root>/resource_override.config
+  example_values:
+  - <server_input_root>/resource_override.config
+  mapping_notes: Do not pass under `nextflow_run(params=...)`. Render this value into
+    a small server-local override config and pass that file through `nextflow_run(config_files=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Max job request options
+  raw_schema:
+    type: integer
+    description: Maximum number of CPUs that can be requested for any single job.
+    default: 16
+    fa_icon: fas fa-microchip
+    hidden: true
+    help_text: Use to set an upper-limit for the CPU requirement for each process.
+      Should be an integer e.g. `--max_cpus 1`
+- group_id: max_job_request_options
+  name: max_memory
+  source_name: max_memory
+  type: string
+  required: false
+  default: 128.GB
+  enum: null
+  description: Maximum amount of memory that can be requested for any single job.
+  classification: lookup_only
+  channel: config_files
+  placeholder: <server_input_root>/resource_override.config
+  example_values:
+  - <server_input_root>/resource_override.config
+  mapping_notes: Do not pass under `nextflow_run(params=...)`. Render this value into
+    a small server-local override config and pass that file through `nextflow_run(config_files=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Max job request options
+  raw_schema:
+    type: string
+    description: Maximum amount of memory that can be requested for any single job.
+    default: 128.GB
+    fa_icon: fas fa-memory
+    pattern: ^\d+(\.\d+)?\.?\s*(K|M|G|T)?B$
+    hidden: true
+    help_text: Use to set an upper-limit for the memory requirement for each process.
+      Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`
+- group_id: max_job_request_options
+  name: max_time
+  source_name: max_time
+  type: string
+  required: false
+  default: 240.h
+  enum: null
+  description: Maximum amount of time that can be requested for any single job.
+  classification: lookup_only
+  channel: config_files
+  placeholder: <server_input_root>/resource_override.config
+  example_values:
+  - <server_input_root>/resource_override.config
+  mapping_notes: Do not pass under `nextflow_run(params=...)`. Render this value into
+    a small server-local override config and pass that file through `nextflow_run(config_files=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Max job request options
+  raw_schema:
+    type: string
+    description: Maximum amount of time that can be requested for any single job.
+    default: 240.h
+    fa_icon: far fa-clock
+    pattern: ^(\d+\.?\s*(s|m|h|d|day)\s*)+$
+    hidden: true
+    help_text: Use to set an upper-limit for the time requirement for each process.
+      Should be a string in the format integer-unit e.g. `--max_time '2.h'`

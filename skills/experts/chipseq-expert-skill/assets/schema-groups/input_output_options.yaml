@@ -1,0 +1,210 @@
+group:
+  id: input_output_options
+  label: Input/output options
+  selection_rule: Use this group for parameters defined under the `Input/output options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/input_output_options.md
+  - assets/schema-groups/input_output_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `input_output_options` for exact lookup.
+parameters:
+- group_id: input_output_options
+  name: input
+  source_name: input
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: Path to comma-separated file containing information about the samples
+    in the experiment.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/input.csv
+  example_values:
+  - <server_output_root>/input.csv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    schema: assets/schema_input.json
+    mimetype: text/csv
+    pattern: ^\S+\.csv$
+    description: Path to comma-separated file containing information about the samples
+      in the experiment.
+    help_text: You will need to create a design file with information about the samples
+      in your experiment before running the pipeline. Use this parameter to specify
+      its location. It has to be a comma-separated file with 5 columns, and a header
+      row. See [usage docs](https://nf-co.re/chipseq/docs/usage#introduction).
+    fa_icon: fas fa-file-csv
+- group_id: input_output_options
+  name: outdir
+  source_name: outdir
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: The output directory where the results will be saved. You have to use
+    absolute paths to storage on Cloud infrastructure.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/chipseq
+  example_values:
+  - <server_output_root>/chipseq
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The output directory where the results will be saved. You have to
+      use absolute paths to storage on Cloud infrastructure.
+    fa_icon: fas fa-folder-open
+- group_id: input_output_options
+  name: read_length
+  source_name: read_length
+  type: integer
+  required: false
+  default: null
+  enum: &id001
+  - 50
+  - 75
+  - 100
+  - 150
+  - 200
+  description: Read length used to calculate MACS3 genome size for peak calling if
+    `--macs_gsize` isn't provided.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/read_length
+  example_values:
+  - 50
+  - 75
+  - 100
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    description: Read length used to calculate MACS3 genome size for peak calling
+      if `--macs_gsize` isn't provided.
+    fa_icon: fas fa-chart-area
+    help_text: Read length together with the genome fasta are used to calculate MACS3
+      genome size using the `khmer` program as explained [here](https://deeptools.readthedocs.io/en/develop/content/feature/effectiveGenomeSize.html#effective-genome-size).
+      For all the genomes present in the `igenomes.config` the genome size has been
+      already precomputed and the read length is then used to retrieve the corresponding
+      value
+    enum: *id001
+- group_id: input_output_options
+  name: email
+  source_name: email
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Email address for completion summary.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/email
+  example_values:
+  - <server_output_root>/email
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Email address for completion summary.
+    fa_icon: fas fa-envelope
+    help_text: Set this parameter to your e-mail address to get a summary e-mail with
+      details of the run sent to you when the workflow exits. If set in your user
+      config file (`~/.nextflow/config`) then you don't need to specify this on the
+      command line for every run.
+    pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+- group_id: input_output_options
+  name: fragment_size
+  source_name: fragment_size
+  type: integer
+  required: false
+  default: 200
+  enum: null
+  description: Estimated fragment size used to extend single-end reads.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/fragment_size
+  example_values:
+  - <server_output_root>/fragment_size
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: integer
+    description: Estimated fragment size used to extend single-end reads.
+    fa_icon: fas fa-chart-area
+    default: 200
+- group_id: input_output_options
+  name: multiqc_title
+  source_name: multiqc_title
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: MultiQC report title. Printed as page header, used for filename if
+    not otherwise specified.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/multiqc_title
+  example_values:
+  - <server_output_root>/multiqc_title
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: MultiQC report title. Printed as page header, used for filename if
+      not otherwise specified.
+    fa_icon: fas fa-file-signature
+- group_id: input_output_options
+  name: seq_center
+  source_name: seq_center
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Sequencing center information to be added to read group of BAM files.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/seq_center
+  example_values:
+  - <server_output_root>/seq_center
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Sequencing center information to be added to read group of BAM files.
+    fa_icon: fas fa-synagogue

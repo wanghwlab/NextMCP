@@ -1,0 +1,357 @@
+group:
+  id: quality_control_for_long_reads_options
+  label: Quality control for long reads options
+  selection_rule: Use this group for parameters defined under the `Quality control
+    for long reads options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/quality_control_for_long_reads_options.md
+  - assets/schema-groups/quality_control_for_long_reads_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `quality_control_for_long_reads_options` for exact lookup.
+parameters:
+- group_id: quality_control_for_long_reads_options
+  name: keep_lambda
+  source_name: keep_lambda
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Keep reads similar to the ONT internal standard Escherichia virus Lambda
+    genome.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Keep reads similar to the ONT internal standard Escherichia virus
+      Lambda genome.
+- group_id: quality_control_for_long_reads_options
+  name: lambda_reference
+  source_name: lambda_reference
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Genome reference used to remove ONT Lambda contaminant reads.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/lambda_reference
+  example_values:
+  - <server_input_root>/lambda_reference
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: string
+    description: Genome reference used to remove ONT Lambda contaminant reads.
+    format: file-path
+    exists: true
+    help_text: 'If not supplied, and keeping lambda is turned off, an included genome
+      (GCA_000840245.1) will be used '
+- group_id: quality_control_for_long_reads_options
+  name: longread_adaptertrimming_tool
+  source_name: longread_adaptertrimming_tool
+  type: string
+  required: false
+  default: porechop_abi
+  enum: &id001
+  - porechop
+  - porechop_abi
+  description: Specify which long read adapter trimming tool to use.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - porechop
+  - porechop_abi
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: string
+    description: Specify which long read adapter trimming tool to use.
+    enum: *id001
+    default: porechop_abi
+- group_id: quality_control_for_long_reads_options
+  name: longread_filtering_tool
+  source_name: longread_filtering_tool
+  type: string
+  required: false
+  default: filtlong
+  enum: &id002
+  - filtlong
+  - nanoq
+  - chopper
+  description: Specify which long read filtering tool to use.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - filtlong
+  - nanoq
+  - chopper
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: string
+    description: Specify which long read filtering tool to use.
+    enum: *id002
+    default: filtlong
+- group_id: quality_control_for_long_reads_options
+  name: save_filtered_longreads
+  source_name: save_filtered_longreads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save the resulting length filtered long read FASTQ files
+    to --outdir.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_filtered_longreads
+  example_values:
+  - <server_input_root>/save_filtered_longreads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Specify to save the resulting length filtered long read FASTQ files
+      to --outdir.
+- group_id: quality_control_for_long_reads_options
+  name: save_lambdaremoved_reads
+  source_name: save_lambdaremoved_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save input FASTQ files with lamba reads removed  to --outdir.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_lambdaremoved_reads
+  example_values:
+  - <server_input_root>/save_lambdaremoved_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Specify to save input FASTQ files with lamba reads removed  to --outdir.
+- group_id: quality_control_for_long_reads_options
+  name: save_porechop_reads
+  source_name: save_porechop_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to save the resulting clipped FASTQ files to --outdir.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_porechop_reads
+  example_values:
+  - <server_input_root>/save_porechop_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Specify to save the resulting clipped FASTQ files to --outdir.
+- group_id: quality_control_for_long_reads_options
+  name: skip_adapter_trimming
+  source_name: skip_adapter_trimming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip removing adapter sequences from long reads.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Skip removing adapter sequences from long reads.
+- group_id: quality_control_for_long_reads_options
+  name: skip_longread_filtering
+  source_name: skip_longread_filtering
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip filtering long reads.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Skip filtering long reads.
+- group_id: quality_control_for_long_reads_options
+  name: skip_longread_qc
+  source_name: skip_longread_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all default QC steps for long reads (adapter trimming, filtering,
+    removal of lambda sequences).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: boolean
+    description: Skip all default QC steps for long reads (adapter trimming, filtering,
+      removal of lambda sequences).
+    help: Skips adapter trimming and filtering, but not host sequence removal.
+- group_id: quality_control_for_long_reads_options
+  name: longreads_keep_percent
+  source_name: longreads_keep_percent
+  type: integer
+  required: false
+  default: 90
+  enum: null
+  description: Keep this percent of bases.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/longreads_keep_percent
+  example_values:
+  - <server_input_root>/longreads_keep_percent
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: integer
+    default: 90
+    description: Keep this percent of bases.
+- group_id: quality_control_for_long_reads_options
+  name: longreads_length_weight
+  source_name: longreads_length_weight
+  type: integer
+  required: false
+  default: 10
+  enum: null
+  description: The higher the more important is read length when choosing the best
+    reads.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/longreads_length_weight
+  example_values:
+  - <server_input_root>/longreads_length_weight
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: integer
+    default: 10
+    description: The higher the more important is read length when choosing the best
+      reads.
+    help_text: 'The default value focuses on length instead of quality to improve
+      assembly size.
+
+      In order to assign equal weights to read lengths and read qualities set this
+      parameter to 1.
+
+      This might be useful, for example, to benefit indirectly from the removal of
+      short host reads (causing lower qualities for reads not overlapping filtered
+      short reads).'
+- group_id: quality_control_for_long_reads_options
+  name: longreads_min_length
+  source_name: longreads_min_length
+  type: integer
+  required: false
+  default: 1000
+  enum: null
+  description: Discard any read which is shorter than this value.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/longreads_min_length
+  example_values:
+  - <server_input_root>/longreads_min_length
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: integer
+    default: 1000
+    description: Discard any read which is shorter than this value.
+- group_id: quality_control_for_long_reads_options
+  name: longreads_min_quality
+  source_name: longreads_min_quality
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Discard any read which has a mean quality score lower than this value.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/longreads_min_quality
+  example_values:
+  - <server_input_root>/longreads_min_quality
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Quality control for long reads options
+  raw_schema:
+    type: integer
+    description: Discard any read which has a mean quality score lower than this value.

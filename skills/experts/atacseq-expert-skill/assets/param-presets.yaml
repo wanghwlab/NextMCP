@@ -1,0 +1,144 @@
+presets:
+  default_atacseq:
+    use_when: Standard ATAC-seq analysis with default BWA aligner and broad peak calling.
+    params:
+      outdir: <server_output_root>/atacseq
+      aligner: bwa
+    notes:
+      - Confirm input samplesheet exists on the server with sample,fastq_1,fastq_2,replicate columns.
+      - Confirm reference genome via --genome or provide --fasta and --gtf.
+      - Default aligner is BWA; default MACS2 mode is broadPeak.
+      - read_length is required if --macs_gsize is not provided.
+
+  narrow_peak:
+    use_when: Call narrow peaks instead of broad peaks (e.g. for TF footprinting or precise open chromatin regions).
+    params:
+      outdir: <server_output_root>/atacseq
+      aligner: bwa
+      narrow_peak: true
+    notes:
+      - narrow_peak runs MACS2 in narrowPeak mode.
+      - Can be combined with --aligner to switch aligners without re-running upstream steps (use -resume).
+
+  with_control:
+    use_when: Control samples are available for MACS2 peak calling.
+    params:
+      outdir: <server_output_root>/atacseq
+      with_control: true
+    notes:
+      - Samplesheet must include control and control_replicate columns.
+      - Control sample names must match entries in the sample column.
+
+  bowtie2_align:
+    use_when: Bowtie2 is preferred over BWA for alignment.
+    params:
+      outdir: <server_output_root>/atacseq
+      aligner: bowtie2
+    notes:
+      - bowtie2_index can be provided to avoid index building; otherwise built from --fasta.
+      - All downstream results will be placed in bowtie2/ directory.
+
+  star_align:
+    use_when: STAR is preferred (e.g. for splice-aware alignment or specific experimental needs).
+    params:
+      outdir: <server_output_root>/atacseq
+      aligner: star
+    notes:
+      - star_index can be provided to avoid index building; otherwise built from --fasta.
+      - save_unaligned is available for STAR to output unmapped reads.
+
+  chromap_align:
+    use_when: Chromap is preferred for fast alignment (single-end or when speed is critical).
+    params:
+      outdir: <server_output_root>/atacseq
+      aligner: chromap
+    notes:
+      - chromap_index can be provided to avoid index building.
+      - Paired-end Chromap output is currently excluded from downstream analysis due to known issues; single-end is processed normally.
+
+  skip_trimming_run:
+    use_when: Input FastQ files are already adapter-trimmed and quality-filtered.
+    params:
+      outdir: <server_output_root>/atacseq
+      skip_trimming: true
+    notes:
+      - Only use when adapters and low-quality bases are already removed.
+      - FastQC before/after trimming will not be available for comparison.
+
+  save_all_intermediates:
+    use_when: Keep all intermediate files for downstream manual inspection or debugging.
+    params:
+      outdir: <server_output_root>/atacseq
+      save_align_intermeds: true
+      save_trimmed: true
+      save_unaligned: true
+      save_macs_pileup: true
+      save_reference: true
+    notes:
+      - Increases disk usage significantly.
+      - Useful for benchmarking aligners or debugging specific steps.
+
+  deseq2_rlog:
+    use_when: Prefer DESeq2 rlog transformation over vst (e.g. for smaller experiments).
+    params:
+      outdir: <server_output_root>/atacseq
+      deseq2_vst: false
+    notes:
+      - rlog is the DESeq2 native transformation and may be preferred for small sample sizes.
+      - vst is the default and is better suited to larger experiments.
+
+  lightweight_run:
+    use_when: Reduce runtime and output size by skipping non-essential QC and reporting.
+    params:
+      outdir: <server_output_root>/atacseq
+      skip_ataqv: true
+      skip_plot_fingerprint: true
+      skip_plot_profile: true
+      skip_preseq: true
+      skip_igv: true
+    notes:
+      - Core alignment, peak calling, consensus peaks, and DESeq2 QC are still performed.
+      - MultiQC and FastQC remain unless explicitly skipped.
+
+  keep_filtered_reads:
+    use_when: Retain duplicate, mitochondrial, or multi-mapped reads for special analysis needs.
+    params:
+      outdir: <server_output_root>/atacseq
+      keep_dups: true
+      keep_mito: true
+      keep_multi_map: true
+    notes:
+      - keep_dups retains PCR duplicates (not recommended for standard ATAC-seq).
+      - keep_mito retains mitochondrial reads (may inflate duplication estimates).
+      - keep_multi_map retains multi-mapping reads.
+
+  single_end_run:
+    use_when: Data is single-end instead of paired-end.
+    params:
+      outdir: <server_output_root>/atacseq
+    notes:
+      - Pipeline auto-detects single-end from samplesheet (fastq_2 column empty).
+      - No explicit parameter needed; ensure samplesheet correctly marks single-end samples.
+
+  skip_merge_replicates:
+    use_when: Do not merge biological replicates; analyze each replicate independently.
+    params:
+      outdir: <server_output_root>/atacseq
+      skip_merge_replicates: true
+    notes:
+      - Only library-level merging is performed; no merged_replicate/ outputs.
+      - Useful when replicates are biologically distinct and should not be pooled.
+
+placeholders:
+  input: <server_input_root>/samplesheet.csv
+  outdir: <server_output_root>/atacseq
+  fasta: <server_reference_root>/genome.fa
+  gtf: <server_reference_root>/genes.gtf
+  gene_bed: <server_reference_root>/genes.bed
+  bwa_index: <server_reference_root>/bwa/
+  bowtie2_index: <server_reference_root>/bowtie2/
+  star_index: <server_reference_root>/star/
+  chromap_index: <server_reference_root>/chromap/
+  macs_gsize: "2.7e9"
+  read_length: 150
+  blacklist: <server_reference_root>/blacklist.bed

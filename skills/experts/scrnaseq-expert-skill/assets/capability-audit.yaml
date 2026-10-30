@@ -1,0 +1,298 @@
+pipeline_id: scrnaseq
+status: resolved
+summary:
+  total: 40
+  high_impact: 31
+  needs_review: 0
+  covered: 31
+  scoped_out: 9
+capabilities:
+  - id: documented_prerequisite_index
+    label: Documented index prerequisites are explicit in planning.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_cellranger_index
+    label: cellranger_index runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_cellranger_vdj_index
+    label: cellranger_vdj_index runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_cellrangerarc_config
+    label: cellrangerarc_config runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_cellrangerarc_reference
+    label: cellrangerarc_reference runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_kallisto_index
+    label: kallisto_index runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_kb_workflow
+    label: kb_workflow route prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_motifs
+    label: motifs prerequisite for Cell Ranger ARC reference builds.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_simpleaf_index
+    label: simpleaf_index runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: prerequisite_star_index
+    label: star_index runtime prerequisite.
+    kind: runtime_prerequisite
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml, qc-rules.yaml]
+  - id: schema_param_aligner
+    label: aligner changes the run route.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_help
+    label: help displays CLI help and is not an analysis route.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Non-runtime CLI help flag; exact schema lookup still preserves the parameter.
+  - id: schema_param_help_full
+    label: help_full displays detailed CLI help and is not an analysis route.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Non-runtime CLI help flag; exact schema lookup still preserves the parameter.
+  - id: schema_param_igenomes_ignore
+    label: igenomes_ignore affects reference config selection.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_kb_workflow
+    label: kb_workflow changes Kallisto/BUS behavior.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_monochrome_logs
+    label: monochrome_logs changes log presentation only.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Log color presentation does not change route choice, inputs, outputs, or QC.
+  - id: schema_param_plaintext_email
+    label: plaintext_email changes notification presentation only.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Email rendering format is not a runtime analysis route.
+  - id: schema_param_publish_dir_mode
+    label: publish_dir_mode changes output publishing behavior.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_save_align_intermeds
+    label: save_align_intermeds changes published STAR and Cell Ranger intermediates.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_save_reference
+    label: save_reference changes reusable reference outputs.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_show_hidden
+    label: show_hidden displays hidden help fields only.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Help display option; exact schema lookup still preserves the parameter.
+  - id: schema_param_simpleaf_umi_resolution
+    label: simpleaf_umi_resolution changes Simpleaf UMI handling.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_skip_cellbender
+    label: skip_cellbender controls CellBender filtering.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_skip_cellranger_renaming
+    label: skip_cellranger_renaming affects Cell Ranger FASTQ handling.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_skip_cellrangermulti_vdjref
+    label: skip_cellrangermulti_vdjref affects Cell Ranger Multi reference building.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_skip_emptydrops
+    label: skip_emptydrops is deprecated in favor of skip_cellbender.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Deprecated schema field; use skip_cellbender for current route planning.
+  - id: schema_param_skip_fastqc
+    label: skip_fastqc changes raw-read QC output.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+  - id: schema_param_skip_multiqc
+    label: skip_multiqc changes MultiQC output.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+    coverage: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+  - id: schema_param_star_feature
+    label: star_feature changes STARsolo feature output.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+    coverage: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+  - id: schema_param_validate_params
+    label: validate_params controls schema validation.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Keep the pipeline default validation behavior; not a user-facing analysis route.
+  - id: schema_param_version
+    label: version displays version and exits.
+    kind: schema_parameter
+    impact: high
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Non-analysis introspection flag; this skill records pipeline version in metadata.
+  - id: documented_output_bam
+    label: BAM outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: documented_output_counts
+    label: Count outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: documented_output_matrix
+    label: Matrix outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: documented_output_multiqc
+    label: MultiQC outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: documented_output_quantification
+    label: Quantification outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: documented_output_report
+    label: Report outputs need artifact and review guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: documented_output_salmon
+    label: Salmon/Simpleaf output guidance.
+    kind: documented_output
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, qc-rules.yaml]
+    coverage: [artifact-contracts.yaml, qc-rules.yaml]
+  - id: schema_param_multiqc_methods_description
+    label: multiqc_methods_description customizes report methods text.
+    kind: schema_parameter
+    impact: medium
+    status: covered
+    required_assets: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+    coverage: [artifact-contracts.yaml, param-presets.yaml, playbooks.yaml]
+    scope_out_reason: Custom MultiQC methods prose is a presentation override; exact schema lookup preserves the field.
+  - id: schema_param_protocol
+    label: protocol changes chemistry handling and is route-shaping.
+    kind: schema_parameter
+    impact: medium
+    status: covered
+    required_assets: [param-presets.yaml, playbooks.yaml]
+    coverage: [param-presets.yaml, playbooks.yaml]

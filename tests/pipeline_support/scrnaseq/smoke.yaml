@@ -1,0 +1,87 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: scrnaseq
+case_id: smoke
+description: Minimal end-to-end MCP smoke test for scrnaseq using the upstream STAR route.
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/scrnaseq
+  config: conf/test.config
+  shared_test_config: tests/nextflow.config
+  notes:
+    - Resolve params from the normal pipeline runtime config chain.
+    - Merge only the shared test values from tests/nextflow.config that materially affect the smoke route.
+    - Keep the upstream STAR aligner route from conf/test.config as the canonical smoke path.
+
+local_data_contract:
+  profile_name: test
+  localized_root: /data/nextmcp/testdata/scrnaseq/test
+  path_layout_rule: prefix_map_pipeline_testdata_and_rewrite_samplesheet
+  rewritten_manifests:
+    - role: input_samplesheet
+      original_name: samplesheet-2-0.csv
+      localized_name: samplesheet-2-0_local.csv
+      expected_path: /data/nextmcp/testdata/scrnaseq/test/rewrites/pipeline-data/samplesheet-2-0_local.csv
+
+launch:
+  pipeline: scrnaseq
+  project: pipeline-support-scrnaseq
+  run_name: smoke
+  config_files:
+    - /data/nextmcp/testdata/scrnaseq/test/project-files/pipeline-support-scrnaseq/max_resources.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/scrnaseq/test/project-files/pipeline-support-scrnaseq/max_resources.config
+      purpose: Keep max_cpus, max_memory, and max_time in Nextflow config scope for the smoke run.
+      content: |
+        params.max_cpus = 2
+        params.max_memory = '6.GB'
+        params.max_time = '6.h'
+  params:
+    input: /data/nextmcp/testdata/scrnaseq/test/rewrites/pipeline-data/samplesheet-2-0_local.csv
+    fasta: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/GRCm38.p6.genome.chr19.fa
+    gtf: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/gencode.vM19.annotation.chr19.gtf
+    aligner: star
+    protocol: 10XV2
+    skip_cellbender: true
+    validationSchemaIgnoreParams: genomes
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    path_checks:
+      - param: input
+        role: read
+        allowed: true
+        exists: true
+      - param: fasta
+        role: read
+        allowed: true
+        exists: true
+      - param: gtf
+        role: read
+        allowed: true
+        exists: true
+      - param: outdir
+        role: write
+        allowed: true
+  run:
+    ok: true
+    final_status: succeeded
+  observability:
+    process_get_status: succeeded
+    required_log_streams:
+      - nextflow
+  artifacts:
+    required_paths:
+      - multiqc
+      - star
+      - star/mtx_conversions/combined_filtered_matrix.h5ad
+      - star/Sample_X/Sample_X.Solo.out/Gene/filtered/matrix.mtx.gz
+
+prompt_brief_path: tests/pipeline_support/scrnaseq/smoke.task.md

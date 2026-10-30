@@ -1,0 +1,99 @@
+playbooks:
+- id: standard_all_tools_run
+  use_when: The user wants the default full rnafusion analysis.
+  prerequisites:
+  - Confirm project id.
+  - Confirm server-local samplesheet path and that it has sample and strandedness columns.
+  - Confirm server-local genomes_base exists and contains rnafusion references.
+  - Confirm server-local outdir parent exists or is acceptable for creation.
+  recommended_preset: full_detection_all_tools
+  decision_notes:
+  - Use tools=all unless the user asks for a subset.
+  - Omit profile by default and rely on the server default profile.
+  - Use nextflow_run(prepare=true) if any path or output target is uncertain.
+  outputs_to_review:
+  - fusionreport/<sample>/<sample>_fusionreport_index.html
+  - fusionreport/<sample>/<sample>.fusionreport_filtered.tsv
+  - fusioninspector/<sample>/<sample>.FusionInspector.fusions.tsv
+  - arriba_visualisation/<sample>_combined_fusions_arriba_visualisation.pdf
+  - vcf/<sample>_fusion_data.vcf
+  - multiqc/multiqc_report.html
+  - pipeline_info/params_<timestamp>.json
+- id: selected_tools_run
+  use_when: The user names specific tools, wants a smaller run, or wants to avoid one caller.
+  prerequisites:
+  - Confirm the comma-delimited tools string matches schema allowed values.
+  - Confirm input columns support the selected tools.
+  - Confirm tool-specific references exist under genomes_base or exact reference params.
+  recommended_preset: selected_tools
+  decision_notes:
+  - Include fusionreport when downstream FusionInspector should consume caller outputs.
+  - Include fastp when the user wants trimming before callers.
+  - Do not include ctatsplicing with conda or mamba profiles.
+  outputs_to_review:
+  - Caller-specific directories matching selected tools.
+  - fusionreport and fusioninspector only when those tools were selected and not skipped.
+  - multiqc/multiqc_report.html unless skip_qc is true.
+- id: build_references
+  use_when: References need to be downloaded or built on the server before analysis.
+  prerequisites:
+  - Confirm server-local genomes_base target.
+  - Decide whether COSMIC credentials are available and licensed for the user.
+  - Confirm tools to build, or use all for the full reference set.
+  recommended_preset: build_references_all
+  decision_notes:
+  - The docs recommend downloading references from the nf-core AWS megatests bucket when possible.
+  - Building references can take about 24 hours on HPC.
+  - Use no_cosmic=true when COSMIC credentials or license coverage are not available.
+  outputs_to_review:
+  - <server_reference_root>/rnafusion/<genome>/arriba/
+  - <server_reference_root>/rnafusion/<genome>/fusion_report_db/
+  - <server_reference_root>/rnafusion/<genome>/gencode_v<version>/
+- id: fusioninspector_only
+  use_when: The user already has a fusion list and wants FusionInspector validation or visualization.
+  prerequisites:
+  - Confirm fusioninspector_fusions is a server-local TSV with GENE1--GENE2 rows.
+  - Confirm input samplesheet can provide reads or aligned inputs for FusionInspector.
+  - Confirm STAR-Fusion reference files through genomes_base or starfusion_ref.
+  recommended_preset: fusioninspector_only
+  decision_notes:
+  - Use tools=fusioninspector.
+  - Use skip_qc=true, skip_vis=true, and skip_vcf=true when the user wants only FusionInspector output.
+  outputs_to_review:
+  - fusioninspector/<sample>/<sample>.FusionInspector.fusions.tsv
+  - fusioninspector/<sample>/<sample>.fusion_inspector_web.html
+- id: no_cosmic_route
+  use_when: The user cannot or does not want to use COSMIC.
+  prerequisites:
+  - Confirm no COSMIC credentials should be used.
+  - Confirm whether the run is reference building or normal analysis against existing no-COSMIC references.
+  recommended_preset: no_cosmic_reference_build
+  decision_notes:
+  - Set no_cosmic=true for reference building.
+  - Explain that fusion-report database hit scoring changes when COSMIC is absent.
+  outputs_to_review:
+  - fusionreport outputs, with database interpretation noting no COSMIC contribution.
+- id: trimming_for_fusioncatcher
+  use_when: FusionCatcher is selected and read length is above the recommended 100 bp.
+  prerequisites:
+  - Confirm fastp is selected or acceptable.
+  - Confirm trim_tail_fusioncatcher value removes the intended 3-prime bases.
+  recommended_preset: fusioncatcher_trimmed
+  decision_notes:
+  - trim_tail_fusioncatcher triggers a second fastp process for FusionCatcher-specific reads.
+  outputs_to_review:
+  - fastp/<sample>_trimmed_for_fusioncatcher.fastp.html
+  - fusioncatcher/<sample>.fusion-genes.txt
+- id: post_run_review
+  use_when: A run finished and the user wants result review.
+  prerequisites:
+  - Confirm run_id and project.
+  recommended_preset: null
+  decision_notes:
+  - Start with run_get(include=["progress","artifact_summary","diagnosis","next_actions"]).
+  - Use run_artifacts before fs_read of concrete files.
+  outputs_to_review:
+  - fusionreport filtered table and HTML index.
+  - FusionInspector TSV and web report.
+  - VCF when skip_vcf is false.
+  - MultiQC and Picard/FastQC outputs when skip_qc is false.

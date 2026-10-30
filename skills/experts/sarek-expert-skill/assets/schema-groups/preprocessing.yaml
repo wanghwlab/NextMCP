@@ -1,0 +1,180 @@
+group:
+  id: preprocessing
+  label: Preprocessing
+  selection_rule: Use this group for parameters defined under the `Preprocessing`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/preprocessing.md
+  - assets/schema-groups/preprocessing.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `preprocessing` for exact lookup.
+parameters:
+- group_id: preprocessing
+  name: aligner
+  source_name: aligner
+  type: string
+  required: false
+  default: bwa-mem
+  enum: &id001
+  - bwa-mem
+  - bwa-mem2
+  - dragmap
+  - sentieon-bwamem
+  - parabricks
+  description: Specify aligner to be used to map reads to reference genome.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/aligner
+  example_values:
+  - bwa-mem
+  - bwa-mem2
+  - dragmap
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Preprocessing
+  raw_schema:
+    type: string
+    default: bwa-mem
+    fa_icon: fas fa-puzzle-piece
+    enum: *id001
+    description: Specify aligner to be used to map reads to reference genome.
+    help_text: 'Sarek will build missing indices automatically if not provided. Set
+      `--bwa false` if indices should be (re-)built.
+
+      If DragMap is selected as aligner, it is recommended to skip baserecalibration
+      with `--skip_tools baserecalibrator`. For more info see [here](https://gatk.broadinstitute.org/hc/en-us/articles/4407897446939--How-to-Run-germline-single-sample-short-variant-discovery-in-DRAGEN-mode).'
+- group_id: preprocessing
+  name: save_mapped
+  source_name: save_mapped
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save mapped files.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Preprocessing
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-download
+    description: Save mapped files.
+    help_text: If the parameter `--split-fastq` is used, the sharded bam files are
+      merged and converted to CRAM before saving them.
+- group_id: preprocessing
+  name: save_output_as_bam
+  source_name: save_output_as_bam
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Saves output from mapping (if `--save_mapped`), Markduplicates & Baserecalibration
+    as BAM file instead of CRAM
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Preprocessing
+  raw_schema:
+    type: boolean
+    description: Saves output from mapping (if `--save_mapped`), Markduplicates &
+      Baserecalibration as BAM file instead of CRAM
+    fa_icon: fas fa-download
+- group_id: preprocessing
+  name: sentieon_consensus
+  source_name: sentieon_consensus
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Generate consensus reads with Sentieon dedup rather than choosing one
+    best read.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Preprocessing
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-tape
+    description: Generate consensus reads with Sentieon dedup rather than choosing
+      one best read.
+    help_text: If set, the Sentieon dedup output will combine duplicate reads into
+      single consensus read. This is only relevant if `--tools` contains `sentieon_dedup`.
+- group_id: preprocessing
+  name: markduplicates_pixel_distance
+  source_name: markduplicates_pixel_distance
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Pixel distance for GATK MarkDuplicates.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Preprocessing
+  raw_schema:
+    type: integer
+    help_text: Pixel distance for GATK MarkDuplicates.
+- group_id: preprocessing
+  name: use_gatk_spark
+  source_name: use_gatk_spark
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Enable usage of GATK Spark implementation for duplicate marking and/or
+    base quality score recalibration
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Preprocessing
+  raw_schema:
+    type: string
+    fa_icon: fas fa-forward
+    description: Enable usage of GATK Spark implementation for duplicate marking and/or
+      base quality score recalibration
+    help_text: 'Multiple separated with commas.
+
+
+      > The GATK4 Base Quality Score recalibration tools `Baserecalibrator` and `ApplyBQSR`
+      are currently available as Beta release. Please be aware that `--use_gatk_spark`
+      is not compatible with `--save_output_as_bam --save_mapped`. Use with caution!'
+    pattern: ^((baserecalibrator|markduplicates)?,?)*(?<!,)$

@@ -1,0 +1,323 @@
+group:
+  id: reference_genome_options
+  label: Reference genome options
+  selection_rule: Use this group for parameters defined under the `Reference genome
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/reference_genome_options.md
+  - assets/schema-groups/reference_genome_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `reference_genome_options` for exact lookup.
+parameters:
+- group_id: reference_genome_options
+  name: fai
+  source_name: fai
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to FASTA genome index file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/fai
+  example_values:
+  - <server_reference_root>/fai
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    mimetype: text/plain
+    pattern: ^\S+\.fn?ai(\.gz)?$
+    description: Path to FASTA genome index file.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: fasta
+  source_name: fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to FASTA genome file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    mimetype: text/plain
+    pattern: ^\S+\.fn?a(sta)?(\.gz)?$
+    description: Path to FASTA genome file.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: fusion_annot_lib
+  source_name: fusion_annot_lib
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Fusion Annotation Library to be used in STARFUSION_BUILD.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/fusion_annot_lib
+  example_values:
+  - <server_reference_root>/fusion_annot_lib
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.dat\.gz$
+    description: Path to Fusion Annotation Library to be used in STARFUSION_BUILD.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: gtf
+  source_name: gtf
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to GTF genome file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genes.gtf
+  example_values:
+  - <server_reference_root>/genes.gtf
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.gtf?(\.gz)?$
+    description: Path to GTF genome file.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: no_cosmic
+  source_name: no_cosmic
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Avoid using Cosmic DB (for example in clinical case applications where
+    a paid license applies.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/no_cosmic
+  example_values:
+  - <server_reference_root>/no_cosmic
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    fa_icon: far fa-file-code
+    description: Avoid using Cosmic DB (for example in clinical case applications
+      where a paid license applies.
+- group_id: reference_genome_options
+  name: references_only
+  source_name: references_only
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip running the analysis, only builds the references
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/references_only
+  example_values:
+  - <server_reference_root>/references_only
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    description: Skip running the analysis, only builds the references
+    fa_icon: fas fa-book
+- group_id: reference_genome_options
+  name: refflat
+  source_name: refflat
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to GTF genome file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/refflat
+  example_values:
+  - <server_reference_root>/refflat
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.refflat?$
+    description: Path to GTF genome file.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: rrna_intervals
+  source_name: rrna_intervals
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to ribosomal interval list.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/rrna_intervals
+  example_values:
+  - <server_reference_root>/rrna_intervals
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.interval_list?$
+    description: Path to ribosomal interval list.
+    fa_icon: far fa-file-code
+- group_id: reference_genome_options
+  name: dfam_version
+  source_name: dfam_version
+  type:
+  - number
+  - 'null'
+  required: false
+  default: null
+  enum: null
+  description: Version of dfam to use
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/dfam_version
+  example_values:
+  - <server_reference_root>/dfam_version
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type:
+    - number
+    - 'null'
+    description: Version of dfam to use
+    fa_icon: fas fa-code-branch
+- group_id: reference_genome_options
+  name: genome
+  source_name: genome
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Name of iGenomes reference.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/genome
+  example_values:
+  - <server_reference_root>/genome
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: Name of iGenomes reference.
+    fa_icon: fas fa-book
+- group_id: reference_genome_options
+  name: pfam_version
+  source_name: pfam_version
+  type:
+  - number
+  - 'null'
+  required: false
+  default: null
+  enum: null
+  description: Version of pfam to use
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/pfam_version
+  example_values:
+  - <server_reference_root>/pfam_version
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type:
+    - number
+    - 'null'
+    description: Version of pfam to use
+    fa_icon: fas fa-code-branch
+- group_id: reference_genome_options
+  name: species
+  source_name: species
+  type: string
+  required: false
+  default: homo_sapiens
+  enum: null
+  description: 'Which species dfam should automatically download, default: homo_sapiens.'
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/species
+  example_values:
+  - <server_reference_root>/species
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    description: 'Which species dfam should automatically download, default: homo_sapiens.'
+    fa_icon: far fa-file-code
+    default: homo_sapiens

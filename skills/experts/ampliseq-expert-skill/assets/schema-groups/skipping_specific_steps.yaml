@@ -1,0 +1,420 @@
+group:
+  id: skipping_specific_steps
+  label: Skipping specific steps
+  selection_rule: Use this group for parameters defined under the `Skipping specific
+    steps` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/skipping_specific_steps.md
+  - assets/schema-groups/skipping_specific_steps.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `skipping_specific_steps` for exact lookup.
+parameters:
+- group_id: skipping_specific_steps
+  name: skip_abundance_tables
+  source_name: skip_abundance_tables
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip producing any relative abundance tables
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/skip_abundance_tables
+  example_values:
+  - <server_input_root>/skip_abundance_tables
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip producing any relative abundance tables
+- group_id: skipping_specific_steps
+  name: skip_alpha_rarefaction
+  source_name: skip_alpha_rarefaction
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip alpha rarefaction
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip alpha rarefaction
+- group_id: skipping_specific_steps
+  name: skip_barplot
+  source_name: skip_barplot
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip producing barplot
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip producing barplot
+- group_id: skipping_specific_steps
+  name: skip_barrnap
+  source_name: skip_barrnap
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip annotating SSU matches.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip annotating SSU matches.
+- group_id: skipping_specific_steps
+  name: skip_cutadapt
+  source_name: skip_cutadapt
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip primer trimming with cutadapt. This is not recommended! Use only
+    in case primer sequences were removed before and the data does not contain any
+    primer sequences.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip primer trimming with cutadapt. This is not recommended! Use
+      only in case primer sequences were removed before and the data does not contain
+      any primer sequences.
+- group_id: skipping_specific_steps
+  name: skip_dada_addspecies
+  source_name: skip_dada_addspecies
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip species level when using DADA2 for taxonomic classification. This
+    reduces the required memory dramatically under certain conditions. Incompatible
+    with `--sbdiexport`
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip species level when using DADA2 for taxonomic classification.
+      This reduces the required memory dramatically under certain conditions. Incompatible
+      with `--sbdiexport`
+- group_id: skipping_specific_steps
+  name: skip_dada_quality
+  source_name: skip_dada_quality
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip quality check with DADA2. Can only be skipped when `--trunclenf`
+    and `--trunclenr` are set.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip quality check with DADA2. Can only be skipped when `--trunclenf`
+      and `--trunclenr` are set.
+- group_id: skipping_specific_steps
+  name: skip_dada_taxonomy
+  source_name: skip_dada_taxonomy
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip taxonomic classification with DADA2
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip taxonomic classification with DADA2
+- group_id: skipping_specific_steps
+  name: skip_diversity_indices
+  source_name: skip_diversity_indices
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip alpha and beta diversity analysis
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_diversity_indices
+  example_values:
+  - <server_reference_root>/skip_diversity_indices
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip alpha and beta diversity analysis
+- group_id: skipping_specific_steps
+  name: skip_fastqc
+  source_name: skip_fastqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip FastQC
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip FastQC
+- group_id: skipping_specific_steps
+  name: skip_multiqc
+  source_name: skip_multiqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MultiQC reporting
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip MultiQC reporting
+- group_id: skipping_specific_steps
+  name: skip_phyloseq
+  source_name: skip_phyloseq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip exporting phyloseq rds object(s)
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip exporting phyloseq rds object(s)
+- group_id: skipping_specific_steps
+  name: skip_qiime
+  source_name: skip_qiime
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all steps that are executed by QIIME2, including QIIME2 software
+    download, taxonomy assignment by QIIME2, barplots, relative abundance tables,
+    diversity analysis, differential abundance testing.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip all steps that are executed by QIIME2, including QIIME2 software
+      download, taxonomy assignment by QIIME2, barplots, relative abundance tables,
+      diversity analysis, differential abundance testing.
+- group_id: skipping_specific_steps
+  name: skip_qiime_downstream
+  source_name: skip_qiime_downstream
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip steps that are executed by QIIME2 except for taxonomic classification.
+    Skip steps including barplots, relative abundance tables, diversity analysis,
+    differential abundance testing.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip steps that are executed by QIIME2 except for taxonomic classification.
+      Skip steps including barplots, relative abundance tables, diversity analysis,
+      differential abundance testing.
+- group_id: skipping_specific_steps
+  name: skip_report
+  source_name: skip_report
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Markdown summary report
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip Markdown summary report
+- group_id: skipping_specific_steps
+  name: skip_taxonomy
+  source_name: skip_taxonomy
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip taxonomic classification. Incompatible with `--sbdiexport`
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip taxonomic classification. Incompatible with `--sbdiexport`
+- group_id: skipping_specific_steps
+  name: skip_tse
+  source_name: skip_tse
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip exporting TreeSummarizedExperiment rds object(s)
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skipping specific steps
+  raw_schema:
+    type: boolean
+    description: Skip exporting TreeSummarizedExperiment rds object(s)

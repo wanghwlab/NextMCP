@@ -1,0 +1,125 @@
+group:
+  id: alignment_options
+  label: Alignment options
+  selection_rule: Use this group for parameters defined under the `Alignment options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/alignment_options.md
+  - assets/schema-groups/alignment_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `alignment_options` for exact lookup.
+parameters:
+- group_id: alignment_options
+  name: aligner
+  source_name: aligner
+  type: string
+  required: false
+  default: minimap2
+  enum: null
+  description: Specifies the aligner to use i.e. 'minimap2' or 'graphmap2'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - minimap2
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    default: minimap2
+    description: Specifies the aligner to use i.e. 'minimap2' or 'graphmap2'.
+    fa_icon: fas fa-align-center
+- group_id: alignment_options
+  name: save_align_intermeds
+  source_name: save_align_intermeds
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the '.sam' files from the alignment step - not done by default.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: Save the '.sam' files from the alignment step - not done by default.
+- group_id: alignment_options
+  name: skip_alignment
+  source_name: skip_alignment
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip alignment and downstream processes.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Skip alignment and downstream processes.
+    fa_icon: fas fa-fast-forward
+- group_id: alignment_options
+  name: stranded
+  source_name: stranded
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies if the data is strand-specific. Automatically activated when
+    using '--protocol directRNA'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Specifies if the data is strand-specific. Automatically activated
+      when using '--protocol directRNA'.
+    help_text: 'When using `--protocol`/`--stranded` the following command-line arguments
+      will be set for `minimap2` and `graphmap2`:
+
+
+      | `nanoseq` input              | `minimap2` presets  | `graphmap2` presets |
+
+      |------------------------------|---------------------|---------------------|
+
+      | `--protocol DNA`             | -ax map-ont         | no presets          |
+
+      | `--protocol cDNA`            | -ax splice          | -x rnaseq           |
+
+      | `--protocol directRNA`       | -ax splice -uf -k14 | -x rnaseq           |
+
+      | `--protocol cDNA --stranded` | -ax splice -uf      | -x rnaseq           |'
+    fa_icon: fas fa-exchange-alt

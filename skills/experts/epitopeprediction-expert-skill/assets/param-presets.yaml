@@ -1,0 +1,94 @@
+channel_boundaries:
+  project: top-level nextflow_run argument
+  run_id: optional top-level nextflow_run argument for naming
+  run_name: optional top-level nextflow_run argument for display naming
+  params: pipeline-facing values such as input, outdir, tools, reference choices, output toggles, and NetMHC paths
+  config_files: server-local Nextflow config files and resource-cap overrides
+  from_run_id: only public restart route
+  extra_args: only when no normalized nextmcp field covers the required Nextflow CLI flag
+presets:
+  standard_prediction:
+    use_when: Standard prediction with packaged predictors after server-local inputs are confirmed.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/epitopeprediction
+      tools: mhcnuggets
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/epitopeprediction
+    notes:
+      - Samplesheet filenames may be VCF, VCF.GZ, FASTA/FA, or TSV.
+      - Peptide TSV input must contain the peptide_col_name column, default sequence.
+  netmhc_prediction:
+    use_when: Prediction with NetMHCpan and/or NetMHCIIpan.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/epitopeprediction-netmhc
+      tools: netmhcpan,netmhciipan
+      min_peptide_length_classI: 8
+      max_peptide_length_classI: 12
+      min_peptide_length_classII: 12
+      max_peptide_length_classII: 25
+      netmhcpan_path: <server_software_root>/netMHCpan-4.1b.Linux.tar.gz
+      netmhciipan_path: <server_software_root>/netMHCIIpan-4.3e.Linux.tar.gz
+    placeholders:
+      netmhcpan_path: <server_software_root>/netMHCpan-4.1b.Linux.tar.gz
+      netmhciipan_path: <server_software_root>/netMHCIIpan-4.3e.Linux.tar.gz
+    notes:
+      - Include only the NetMHC path parameters for tools selected in tools.
+      - netmhc_system defaults to linux and is only relevant for conda-style NetMHC execution.
+  fasta_only_variant_output:
+    use_when: Generate FASTA output from annotated variant input and skip binding prediction.
+    params:
+      input: <server_input_root>/variant_samplesheet.csv
+      outdir: <server_output_root>/epitopeprediction-fasta
+      fasta_output: true
+      fasta_peptide_flanking_region_size: 25
+    placeholders:
+      input: <server_input_root>/variant_samplesheet.csv
+    notes:
+      - Use with VCF input. The schema notes VEP annotation is recommended.
+      - The workflow empties the peptide prediction channel after FASTA output, so do not promise predictions/[sample].tsv for this route.
+  reporting_shape:
+    use_when: User asks to change the final table shape or MultiQC presentation.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/epitopeprediction-reporting
+      binder_only: true
+      wide_format_output: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      multiqc_methods_description: <server_input_root>/multiqc_methods_description.yml
+    notes:
+      - binder_only removes non-binders from final predictions.
+      - wide_format_output spreads predictor and allele metrics across columns.
+  variant_split_optimisation:
+    use_when: Large VCF input should be split by variant count or distance instead of chromosome.
+    params:
+      input: <server_input_root>/variant_samplesheet.csv
+      outdir: <server_output_root>/epitopeprediction-split
+      split_by_variants: true
+      split_by_variants_distance: 110000
+    placeholders:
+      input: <server_input_root>/variant_samplesheet.csv
+    notes:
+      - split_by_variants_size default 0 means the script chooses a size from the number of variants.
+resource_override_example:
+  channel: config_files
+  config_text: |
+    process {
+      resourceLimits = [
+        memory: 64.GB,
+        cpus  : 16,
+        time  : 24.h
+      ]
+    }
+non_runtime_or_low_impact:
+  - help
+  - help_full
+  - show_hidden
+  - version
+  - monochrome_logs
+  - plaintext_email
+  - validate_params
+  - publish_dir_mode

@@ -1,0 +1,82 @@
+artifacts:
+- id: results_root
+  path: results/<run_id>/
+  produced_when: The main pipeline entry finishes successfully.
+  meaning: Primary published results root for review and downstream handoff.
+- id: raw_fastqc
+  path: fastqc/
+  produced_when: Raw read QC is not skipped.
+  meaning: FastQC HTML and zip files before trimming.
+- id: trimmed_reads
+  path: trimgalore/
+  produced_when: Trimming runs; trimmed FastQ files are saved only when save_trimmed
+    is true.
+  meaning: Trim Galore logs, optional trimmed reads, and post-trimming FastQC reports.
+- id: library_alignment
+  path: <ALIGNER>/library/
+  produced_when: Alignment completes. BAM files appear here only when save_align_intermeds
+    is true.
+  meaning: Library-level alignment files and samtools statistics.
+- id: merged_filtered_bam
+  path: <ALIGNER>/merged_library/
+  produced_when: Library-level BAMs are merged, duplicates are marked, and filtering
+    completes.
+  meaning: Final filtered BAM files, samtools statistics, Picard metrics, and Preseq
+    complexity output.
+- id: bigwig_tracks
+  path: <ALIGNER>/merged_library/bigwig/
+  produced_when: BAM to bedGraph/bigWig conversion completes.
+  meaning: Normalized bigWig tracks for genome browser viewing and downstream plots.
+- id: chipseq_qc
+  path: <ALIGNER>/merged_library/phantompeakqualtools/ and <ALIGNER>/merged_library/deepTools/
+  produced_when: SPP and deepTools QC steps are not skipped.
+  meaning: NSC/RSC strand cross-correlation, plotFingerprint, plotProfile, and heatmap
+    QC outputs.
+- id: macs3_peaks
+  path: <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/
+  produced_when: MACS3 peak calling completes.
+  meaning: Per-sample broadPeak or narrowPeak files, MACS3 reports, HOMER annotations,
+    FRiP tables, peak counts, and peak QC plots.
+- id: consensus_peaks
+  path: <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/
+  produced_when: skip_consensus_peaks is false.
+  meaning: Consensus BED and SAF files, featureCounts matrices, boolean peak membership
+    tables, HOMER annotations, and UpSetR intersection plots by antibody.
+- id: deseq2_qc
+  path: <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/deseq2/
+  produced_when: Consensus peak analysis runs and skip_deseq2_qc is false.
+  meaning: DESeq2 PCA, sample distance, variance-stabilized object, size factors,
+    and R session information for exploratory differential binding QC.
+- id: multiqc_report
+  path: multiqc/<PEAK_TYPE>/multiqc_report.html
+  produced_when: skip_multiqc is false.
+  meaning: Main aggregate QC report for FastQC, trimming, alignment, peak, consensus,
+    and DESeq2 summary sections.
+- id: igv_session
+  path: igv/<PEAK_TYPE>/igv_session.xml
+  produced_when: skip_igv is false.
+  meaning: IGV session using normalized bigWig tracks, per-sample peaks, consensus
+    peaks, and differential sites when present.
+- id: saved_reference
+  path: genome/index/
+  produced_when: The pipeline builds indices and save_reference is true.
+  meaning: Reusable BWA, Bowtie2, Chromap, or STAR indices for later chipseq runs.
+- id: pipeline_info
+  path: pipeline_info/
+  produced_when: Every successful or partially completed Nextflow run.
+  meaning: Nextflow execution reports, software versions, validated samplesheet,
+    and params.json for compatibility checks and historical reuse.
+review_order:
+- run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+- pipeline_info/params.json
+- multiqc/<PEAK_TYPE>/multiqc_report.html
+- <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/
+- <ALIGNER>/merged_library/macs3/<PEAK_TYPE>/consensus/<ANTIBODY>/
+- igv/<PEAK_TYPE>/igv_session.xml
+historical_reuse:
+- Use run_list(project=..., pipeline="chipseq", artifact_path_contains=...) when
+  the user remembers only an output fragment.
+- Use run_get(include=["artifact_summary"]) before run_artifacts.
+- Treat artifacts.json and pipeline_fingerprint as historical facts.
+- Confirm compatibility through pipeline_info/params.json before recommending reuse
+  or launching from_run_id.

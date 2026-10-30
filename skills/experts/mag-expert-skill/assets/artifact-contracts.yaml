@@ -1,0 +1,98 @@
+artifacts:
+  - id: results_root
+    path: results/<run_id>/
+    produced_when: The main pipeline entry finishes successfully.
+    meaning: Project-owned published results root for review and downstream handoff.
+  - id: multiqc_report
+    path: multiqc/multiqc_report.html
+    produced_when: MultiQC completes.
+    meaning: Primary cross-sample report for read QC, preprocessing, assembly QC, bin QC, and workflow traceability.
+  - id: pipeline_params
+    path: pipeline_info/params.json
+    produced_when: Every completed run.
+    meaning: Run parameter record used to confirm route compatibility for reruns and historical reuse.
+  - id: pipeline_info
+    path: pipeline_info/
+    produced_when: Every completed run.
+    meaning: Nextflow execution timeline, trace, report, DAG, software versions, and pipeline reports.
+  - id: short_read_qc
+    path: QC_shortreads/
+    produced_when: Short reads are supplied and short-read QC is not skipped.
+    meaning: FastQC, trimming, PhiX removal, host removal, and optional saved short-read intermediates.
+  - id: long_read_qc
+    path: QC_longreads/
+    produced_when: Long reads are supplied and long-read QC is not skipped.
+    meaning: NanoPlot, adapter trimming, Lambda removal, and filtering outputs for long reads.
+  - id: bbnorm_reads
+    path: bbmap/bbnorm/
+    produced_when: bbnorm is true; reads are saved when save_bbnorm_reads is true.
+    meaning: Digital normalization logs and optional normalized reads.
+  - id: assemblies
+    path: Assembly/
+    produced_when: assembly_input is not supplied.
+    meaning: MEGAHIT, SPAdes, SPAdesHybrid, Flye, MetaMDBG assemblies plus QUAST, ALE, and mapping QC where applicable.
+  - id: gene_prediction
+    path: Annotation/Prodigal/
+    produced_when: skip_prodigal is false.
+    meaning: Assembly-level predicted gene GFF, protein FASTA, nucleotide FASTA, and summary files.
+  - id: virus_identification
+    path: VirusIdentification/geNomad/
+    produced_when: run_virus_identification is true.
+    meaning: geNomad viral and plasmid classification summaries, sequences, protein predictions, and logs.
+  - id: binning
+    path: GenomeBinning/
+    produced_when: skip_binning is false.
+    meaning: Bins, unbinned contigs, depth summaries, contig-to-bin map, bin QC, and bin summary outputs.
+  - id: bin_summary
+    path: GenomeBinning/bin_summary.tsv
+    produced_when: Bin QC, QUAST, GTDB-Tk, CAT, or pyDamage summary stages run.
+    meaning: Primary MAG table combining depth, quality, taxonomy, and damage metrics where available.
+  - id: bin_depths
+    path: GenomeBinning/depths/
+    produced_when: Binning preparation computes coverage.
+    meaning: Contig and bin depth tables and heatmaps; mapping behavior depends on binning_map_mode.
+  - id: bin_qc
+    path: GenomeBinning/QC/
+    produced_when: skip_binqc is false or QUAST/GUNC summaries are generated.
+    meaning: BUSCO, CheckM, CheckM2, GUNC, QUAST, pyDamage, and merged bin QC summaries.
+  - id: dastool_refinement
+    path: GenomeBinning/DASTool/
+    produced_when: refine_bins_dastool is true and enough bins pass DAS Tool criteria.
+    meaning: Refined bins, refinement summary, contig-to-bin maps, and DASTool logs.
+  - id: cat_taxonomy
+    path: Taxonomy/CAT/
+    produced_when: cat_db or cat_db_generate is supplied.
+    meaning: CAT bin taxonomy, optional unbinned contig taxonomy, and optional generated CAT database.
+  - id: gtdbtk_taxonomy
+    path: Taxonomy/GTDB-Tk/gtdbtk_summary.tsv
+    produced_when: skip_gtdbtk is false, bin QC is not skipped, and BUSCO, CheckM, or CheckM2 runs.
+    meaning: Summary of bacterial and archaeal GTDB-Tk classifications, filtered bins, and failed genomes.
+  - id: prokka_annotation
+    path: Annotation/Prokka/
+    produced_when: skip_prokka is false and bins are available.
+    meaning: Prokaryotic genome annotation files including GFF, GBK, FAA, FFN, TSV, and logs.
+  - id: metaeuk_annotation
+    path: Annotation/MetaEuk/
+    produced_when: skip_metaeuk is false and metaeuk_db or metaeuk_mmseqs_db is supplied for eukaryotic or unclassified bins.
+    meaning: Eukaryotic genome annotation FASTA, codon FASTA, header map, and GFF outputs.
+  - id: ancient_dna
+    path: Ancient_DNA/
+    produced_when: ancient_dna is true.
+    meaning: pyDamage contig and bin summaries plus optional FreeBayes/BCFtools consensus recall files.
+  - id: bigmag_summary
+    path: GenomeBinning/BIgMAG/bigmag_summary.tsv
+    produced_when: generate_bigmag_file is true with BUSCO, GUNC, CheckM2, and GTDB-Tk available.
+    meaning: Upload-ready BIgMAG dashboard input table.
+reuse_guidance:
+  search_with_artifact_path_contains:
+    - pipeline_info/params.json
+    - multiqc/multiqc_report.html
+    - GenomeBinning/bin_summary.tsv
+    - GenomeBinning/BIgMAG/bigmag_summary.tsv
+    - Taxonomy/GTDB-Tk/gtdbtk_summary.tsv
+    - Taxonomy/CAT/bat_summary.tsv
+    - Ancient_DNA/pydamage
+  required_confirmation:
+    - Read run_get(include=["artifact_summary"]) before raw files.
+    - Use run_artifacts to inspect artifacts.json and pipeline_fingerprint.
+    - Read pipeline_info/params.json before deciding that a previous artifact is route-compatible.

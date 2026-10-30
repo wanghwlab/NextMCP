@@ -1,0 +1,202 @@
+group:
+  id: multiregion_taxonomic_database
+  label: Multi-region taxonomic database
+  selection_rule: Use this group for parameters defined under the `Multi-region taxonomic
+    database` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/multiregion_taxonomic_database.md
+  - assets/schema-groups/multiregion_taxonomic_database.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `multiregion_taxonomic_database` for exact lookup.
+parameters:
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_taxonomy
+  source_name: sidle_ref_taxonomy
+  type: string
+  required: false
+  default: null
+  enum: &id001
+  - silva
+  - silva=128
+  - greengenes
+  - greengenes=13_8
+  - greengenes88
+  description: Name of supported database, and optionally also version number
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/sidle_ref_taxonomy
+  example_values:
+  - silva
+  - silva=128
+  - greengenes
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: string
+    help_text: ''
+    description: Name of supported database, and optionally also version number
+    enum: *id001
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_aln_custom
+  source_name: sidle_ref_aln_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to multiple sequence alignment of reference taxonomy sequences
+    in fasta format
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/sidle_ref_aln_custom
+  example_values:
+  - <server_reference_root>/sidle_ref_aln_custom
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: string
+    help_text: 'May be used with `--sidle_ref_tax_custom`. Allows sequence reconstruction.
+      Example usage: `--sidle_ref_aln_custom ''rep_set_aligned_99.fasta''`'
+    description: Path to multiple sequence alignment of reference taxonomy sequences
+      in fasta format
+    pattern: ^.*\.(fasta|fas|fna|fa|ffn)$
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_cleaning
+  source_name: sidle_ref_cleaning
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Arguments for `qiime sidle reconstruct-taxonomy` regarding ad-hoc cleaning
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: string
+    help_text: Recommended with `--sidle_ref_tax_custom`, default '--p-database silva'
+      was recommended with SILVA 128. Therefore, ad-hoc database cleaning will be
+      performed automatically, specifically with regard to the `define-missing` and
+      `ambiguity-handling` parameters.  Overwrites recommended settings for database
+      chosen by `--sidle_ref_taxonomy`
+    description: Arguments for `qiime sidle reconstruct-taxonomy` regarding ad-hoc
+      cleaning
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_degenerates
+  source_name: sidle_ref_degenerates
+  type: integer
+  required: false
+  default: 5
+  enum: null
+  description: Exclude reference sequences with more than this much degenerates
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 5
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: integer
+    default: 5
+    min: 0
+    help_text: Only effective with `--sidle_ref_tax_custom`. Recommended with `--sidle_ref_tax_custom`,
+      default 5 was recommended with SILVA 128. Sets `--p-num-degenerates` for `qiime
+      rescript cull-seqs`.
+    description: Exclude reference sequences with more than this much degenerates
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_seq_custom
+  source_name: sidle_ref_seq_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to reference taxonomy sequences in fasta format
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/sidle_ref_seq_custom
+  example_values:
+  - <server_reference_root>/sidle_ref_seq_custom
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: string
+    help_text: 'Use with `--sidle_ref_tax_custom`. Example usage: `--sidle_ref_seq_custom
+      ''rep_set_99.fasta''`'
+    description: Path to reference taxonomy sequences in fasta format
+    pattern: ^.*\.(fasta|fas|fna|fa|ffn)$
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_tax_custom
+  source_name: sidle_ref_tax_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to reference taxonomy strings (headerless, *.txt)
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: string
+    help_text: 'Use with `--sidle_ref_seq_custom`. Consider also setting `--sidle_ref_aln_custom`
+      and `--sidle_ref_tree_custom`. The taxonomy file must be headerless and follow
+      the format of `qiime tools import`''s `HeaderlessTSVTaxonomyFormat`. Example
+      usage: `--sidle_ref_tax_custom ''taxonomy_99_taxonomy.txt''`'
+    description: Path to reference taxonomy strings (headerless, *.txt)
+    pattern: ^.*\.txt$
+- group_id: multiregion_taxonomic_database
+  name: sidle_ref_tree_custom
+  source_name: sidle_ref_tree_custom
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to SIDLE reference taxonomy tree (*.qza)
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Multi-region taxonomic database
+  raw_schema:
+    type: string
+    help_text: Use with `--sidle_ref_aln_custom`. Recommended with `--sidle_ref_tax_custom`.
+      Allows phylogenetic tree reconstruction and therefore diversity analysis. Overwrites
+      tree chosen by `--sidle_ref_taxonomy`
+    description: Path to SIDLE reference taxonomy tree (*.qza)
+    pattern: ^.*\.qza$

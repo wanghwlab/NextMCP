@@ -1,0 +1,124 @@
+presets:
+  simpleaf_default:
+    use_when: Default Simpleaf route for barcode-based scRNA-seq.
+    params:
+      aligner: simpleaf
+      protocol: <10XV2|10XV3|10XV4|dropseq|custom_simpleaf_protocol>
+    placeholders:
+      input: <server_input_root>/scrnaseq_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq
+      fasta: <server_reference_root>/genome.fa.gz
+      gtf: <server_reference_root>/genes.gtf.gz
+      simpleaf_index: <server_reference_root>/simpleaf_index
+    notes:
+      - Do not leave protocol as auto for Simpleaf.
+      - Use transcript_fasta plus txp2gene when the route needs explicit transcript references.
+  starsolo:
+    use_when: STARsolo alignment and count route.
+    params:
+      aligner: star
+      protocol: <10XV2|10XV3|10XV4|dropseq|smartseq|custom_star_protocol>
+      star_feature: Gene
+    placeholders:
+      input: <server_input_root>/scrnaseq_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq_star
+      star_index: <server_reference_root>/star_index
+      fasta: <server_reference_root>/genome.fa.gz
+      gtf: <server_reference_root>/genes.gtf.gz
+    notes:
+      - Use star_feature=GeneFull for pre-mRNA counts.
+      - Use star_feature="Gene Velocyto" when the user asks for RNA velocity matrix output.
+      - Set save_align_intermeds=true only when published BAMs are needed.
+  kallisto_bus:
+    use_when: Kallisto/BUS route.
+    params:
+      aligner: kallisto
+      protocol: <10XV2|10XV3|10XV4|dropseq|smartseq|custom_kallisto_protocol>
+      kb_workflow: standard
+    placeholders:
+      input: <server_input_root>/scrnaseq_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq_kallisto
+      kallisto_index: <server_reference_root>/kallisto_index
+      txp2gene: <server_reference_root>/txp2gene.tsv
+    notes:
+      - Use kb_workflow=lamanno or kb_workflow=nac only when requested and supported by the
+        reference inputs.
+  cellranger:
+    use_when: 10x Cell Ranger count route.
+    params:
+      aligner: cellranger
+      protocol: auto
+    placeholders:
+      input: <server_input_root>/cellranger_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq_cellranger
+      cellranger_index: <server_reference_root>/refdata-gex-GRCh38
+    notes:
+      - Keep skip_cellranger_renaming false or omitted unless FASTQ names already follow 10x
+        conventions.
+      - Cell Ranger software availability is a server runtime prerequisite.
+  cellrangerarc:
+    use_when: 10x Multiome ATAC + GEX route through Cell Ranger ARC.
+    params:
+      aligner: cellrangerarc
+      protocol: auto
+    placeholders:
+      input: <server_input_root>/cellrangerarc_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq_cellrangerarc
+      cellranger_index: <server_reference_root>/refdata-cellranger-arc
+      motifs: <server_reference_root>/motifs.txt
+      cellrangerarc_config: <server_reference_root>/cellrangerarc_config.csv
+    notes:
+      - Samplesheet needs sample_type and fastq_barcode columns for ATAC rows.
+      - If cellrangerarc_config is used, also set cellrangerarc_reference to the genome name
+        used in that config.
+  cellrangermulti:
+    use_when: Cell Ranger Multi route for GEX plus VDJ, antibody capture, CRISPR, FFPE, CMO,
+      or OCM feature barcode data.
+    params:
+      aligner: cellrangermulti
+      protocol: auto
+    placeholders:
+      input: <server_input_root>/cellrangermulti_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq_cellrangermulti
+      cellranger_multi_barcodes: <server_input_root>/cellranger_multi_barcodes.csv
+      cellranger_index: <server_reference_root>/refdata-gex-GRCh38
+      cellranger_vdj_index: <server_reference_root>/refdata-cellranger-vdj
+      gex_frna_probe_set: <server_reference_root>/frna_probe_set.csv
+      fb_reference: <server_reference_root>/feature_reference.csv
+    notes:
+      - Set skip_cellrangermulti_vdjref=true when no VDJ data is present and no VDJ reference
+        should be built.
+      - Provide cellranger_multi_barcodes for multiplexed samples.
+  cellbender_filtering:
+    use_when: Keep CellBender remove-background filtering enabled.
+    params:
+      skip_cellbender: false
+    placeholders:
+      input: <server_input_root>/scrnaseq_samplesheet.csv
+      outdir: <server_output_root>/scrnaseq_cellbender
+    notes:
+      - The source workflow skips CellBender for cellrangerarc.
+  reference_build_or_reuse:
+    use_when: Build or publish reusable indices.
+    params:
+      save_reference: true
+    placeholders:
+      fasta: <server_reference_root>/genome.fa.gz
+      gtf: <server_reference_root>/genes.gtf.gz
+      outdir: <server_output_root>/scrnaseq_reference_build
+    notes:
+      - For reuse, prefer an aligner-specific index parameter instead of rebuilding.
+  resource_override_config:
+    use_when: User asks for CPU, memory, or time caps.
+    channel: config_files
+    config_body: |
+      process {
+        resourceLimits = [
+          cpus: 16,
+          memory: '64.GB',
+          time: '24.h'
+        ]
+      }
+    notes:
+      - Pass the server-local config path through nextflow_run(config_files=[...]).
+      - Do not put max_cpus, max_memory, or max_time in nextflow_run(params=...).

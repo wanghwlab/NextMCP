@@ -1,0 +1,86 @@
+group:
+  id: differential_analysis_options
+  label: Differential analysis options
+  selection_rule: Use this group for parameters defined under the `Differential analysis
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/differential_analysis_options.md
+  - assets/schema-groups/differential_analysis_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `differential_analysis_options` for exact lookup.
+parameters:
+- group_id: differential_analysis_options
+  name: quantification_method
+  source_name: quantification_method
+  type: string
+  required: false
+  default: bambu
+  enum: null
+  description: 'Specifies the transcript quantification method to use (available are:
+    bambu or stringtie2). Only available when protocol is cDNA or directRNA.'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - bambu
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Differential analysis options
+  raw_schema:
+    type: string
+    default: bambu
+    description: 'Specifies the transcript quantification method to use (available
+      are: bambu or stringtie2). Only available when protocol is cDNA or directRNA.'
+    fa_icon: fas fa-bezier-curve
+- group_id: differential_analysis_options
+  name: skip_differential_analysis
+  source_name: skip_differential_analysis
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip differential analysis with DESeq2 and DEXSeq.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Differential analysis options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip differential analysis with DESeq2 and DEXSeq.
+- group_id: differential_analysis_options
+  name: skip_quantification
+  source_name: skip_quantification
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip transcript quantification and differential analysis.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Differential analysis options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip transcript quantification and differential analysis.

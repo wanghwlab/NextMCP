@@ -1,0 +1,122 @@
+group:
+  id: kallisto_bus_options
+  label: Kallisto/BUS Options
+  selection_rule: Use this group for parameters defined under the `Kallisto/BUS Options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/kallisto_bus_options.md
+  - assets/schema-groups/kallisto_bus_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `kallisto_bus_options` for exact lookup.
+parameters:
+- group_id: kallisto_bus_options
+  name: kb_t1c
+  source_name: kb_t1c
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a path to the cDNA transcripts-to-capture.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/kb_t1c
+  example_values:
+  - <server_input_root>/kb_t1c
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Kallisto/BUS Options
+  raw_schema:
+    type: string
+    description: Specify a path to the cDNA transcripts-to-capture.
+    fa_icon: fas fa-rainbow
+    format: file-path
+    exists: true
+- group_id: kallisto_bus_options
+  name: kb_t2c
+  source_name: kb_t2c
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a path to the intron transcripts-to-capture.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/kb_t2c
+  example_values:
+  - <server_input_root>/kb_t2c
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Kallisto/BUS Options
+  raw_schema:
+    type: string
+    description: Specify a path to the intron transcripts-to-capture.
+    fa_icon: fas fa-rainbow
+    format: file-path
+    exists: true
+- group_id: kallisto_bus_options
+  name: kb_workflow
+  source_name: kb_workflow
+  type: string
+  required: false
+  default: standard
+  enum: &id001
+  - standard
+  - lamanno
+  - nac
+  description: 'Type of workflow. Use `nac` for an index type that can quantify nascent
+    and mature RNA. Use `lamanno` for RNA velocity based on La Manno et al. 2018 logic.
+    (default: standard)'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - standard
+  - lamanno
+  - nac
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Kallisto/BUS Options
+  raw_schema:
+    type: string
+    default: standard
+    description: 'Type of workflow. Use `nac` for an index type that can quantify
+      nascent and mature RNA. Use `lamanno` for RNA velocity based on La Manno et
+      al. 2018 logic. (default: standard)'
+    fa_icon: fas fa-rainbow
+    enum: *id001
+- group_id: kallisto_bus_options
+  name: kallisto_index
+  source_name: kallisto_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a path to the precomputed Kallisto index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/kallisto_index
+  example_values:
+  - <server_reference_root>/kallisto_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Kallisto/BUS Options
+  raw_schema:
+    type: string
+    description: Specify a path to the precomputed Kallisto index.
+    fa_icon: fas fa-rainbow
+    format: path
+    exists: true

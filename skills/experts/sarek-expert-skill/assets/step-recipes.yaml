@@ -1,0 +1,136 @@
+steps:
+  - id: launch
+    purpose: Confirm inputs, prepare launch layout when needed, launch Sarek, then inspect
+      summarized state before raw logs.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+      - step
+    tool_sequence:
+      - project_list() when the project id is unknown
+      - project_get(project) when the project root or prior runs matter
+      - fs_list(mode="manifest") when one server path still needs confirmation
+      - nextflow_run(prepare=true) when launch layout is still uncertain
+      - nextflow_run(pipeline="sarek", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(...) before reading specific outputs
+      - run_logs() or fs_read() only after a concrete path is known
+    outputs:
+      - run layout
+      - results/<run_id>/
+      - status summary
+  - id: samplesheet_validation
+    purpose: Match `step` to required samplesheet columns before launch.
+    recipes:
+      - step: mapping
+        columns: patient,sample,lane plus fastq_1/fastq_2, spring_1/spring_2, spring_1, or bam
+      - step: markduplicates
+        columns: patient,sample plus bam+bai or cram+crai
+      - step: prepare_recalibration
+        columns: patient,sample plus bam+bai or cram+crai
+      - step: recalibrate
+        columns: patient,sample plus bam+bai+table or cram+crai+table
+      - step: variant_calling
+        columns: patient,sample plus bam+bai or cram+crai
+      - step: annotate
+        columns: patient,sample,vcf and optional variantcaller
+    failure_checks:
+      - Missing patient/sample columns break all routes.
+      - Duplicate lane/patient/sample entries should be fixed in the samplesheet before launch.
+      - Tumor-normal pairing depends on shared patient, distinct sample, and status values.
+  - id: reference_selection
+    purpose: Choose between iGenomes presets and explicit server-local reference files.
+    params_channel:
+      - genome
+      - igenomes_ignore
+      - fasta
+      - fasta_fai
+      - dict
+      - dbsnp
+      - dbsnp_tbi
+      - known_indels
+      - known_indels_tbi
+      - germline_resource
+      - germline_resource_tbi
+      - pon
+      - pon_tbi
+    checks:
+      - If genome is omitted or igenomes_ignore is true, confirm fasta at minimum and look up exact
+        reference fields in reference_genome_options.
+      - Index files with matching TBI/FAI names should be confirmed together.
+      - Prefer server-confirmed prebuilt indices over rebuilds for large references.
+  - id: targeted_wes
+    purpose: Plan WES or targeted panel runs.
+    params_channel:
+      - wes
+      - intervals
+      - nucleotides_per_second
+      - no_intervals
+    checks:
+      - Set wes=true for exome or panel data.
+      - Use a BED intervals file for targeted data.
+      - Do not set no_intervals with Mutect2 somatic runs unless the user accepts that limitation.
+  - id: sentieon
+    purpose: Plan Sentieon routes without exposing secrets.
+    params_channel:
+      - aligner
+      - tools
+      - sentieon_consensus
+      - sentieon_dnascope_emit_mode
+      - sentieon_haplotyper_emit_mode
+      - sentieon_dnascope_model
+      - sentieon_dnascope_pcr_indel_model
+    checks:
+      - The license belongs in a server-side Nextflow secret, not params.
+      - Use aligner sentieon-bwamem for Sentieon BWA mem.
+      - Use tools sentieon_dedup, sentieon_dnascope, sentieon_haplotyper, or sentieon_tnscope.
+  - id: annotation
+    purpose: Plan SnpEff, VEP, merge, SnpSift, or bcftools annotate.
+    params_channel:
+      - tools
+      - snpeff_cache
+      - snpeff_db
+      - vep_cache
+      - vep_cache_version
+      - vep_genome
+      - vep_species
+      - snpsift_databases
+      - bcftools_annotations
+      - bcftools_annotations_tbi
+      - bcftools_header_lines
+      - bcftools_columns
+      - dbnsfp
+      - dbnsfp_tbi
+      - spliceai_snv
+      - spliceai_snv_tbi
+      - spliceai_indel
+      - spliceai_indel_tbi
+    checks:
+      - VCF input for annotate should be sorted and bgzip/tabix compatible.
+      - Pair VEP plugin data files with their required indexes.
+      - Use download_cache/build_only_index when caches must be created first.
+  - id: restart
+    purpose: Restart or rerun safely through nextmcp.
+    minimal_inputs:
+      - project
+      - from_run_id
+    tool_sequence:
+      - run_get(detail="full") on the source run
+      - inspect launch_spec, nextflow_session_uuid, and compatibility fields
+      - nextflow_run(prepare=true, from_run_id=...) when layout needs checking
+      - nextflow_run(from_run_id=...)
+    outputs:
+      - restart plan
+      - compatibility notes
+  - id: resource_caps
+    purpose: Apply resource caps through config_files rather than params.
+    config_example: |
+      process {
+        resourceLimits = [cpus: 32, memory: '256.GB', time: '72.h']
+      }
+    tool_sequence:
+      - write or confirm a small server-local override config
+      - nextflow_run(..., config_files=["<server_project_root>/configs/sarek-resources.config"])
+    outputs:
+      - launch spec with config_files

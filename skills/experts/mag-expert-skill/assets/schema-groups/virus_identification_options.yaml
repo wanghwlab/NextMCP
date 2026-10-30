@@ -1,0 +1,108 @@
+group:
+  id: virus_identification_options
+  label: Virus identification options
+  selection_rule: Use this group for parameters defined under the `Virus identification
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/virus_identification_options.md
+  - assets/schema-groups/virus_identification_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `virus_identification_options` for exact lookup.
+parameters:
+- group_id: virus_identification_options
+  name: run_virus_identification
+  source_name: run_virus_identification
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run virus identification.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Virus identification options
+  raw_schema:
+    type: boolean
+    description: Run virus identification.
+- group_id: virus_identification_options
+  name: genomad_db
+  source_name: genomad_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Database for virus classification with geNomad
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/genomad_db
+  example_values:
+  - <server_reference_root>/genomad_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Virus identification options
+  raw_schema:
+    type: string
+    description: Database for virus classification with geNomad
+    help_text: Must be a directory containing the uncompressed contents from https://zenodo.org/doi/10.5281/zenodo.6994741
+      (nf-core/mag tested with v1.1)
+    format: path
+    exists: true
+- group_id: virus_identification_options
+  name: genomad_min_score
+  source_name: genomad_min_score
+  type: number
+  required: false
+  default: 0.7
+  enum: null
+  description: Minimum geNomad score for a sequence to be considered viral
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.7
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Virus identification options
+  raw_schema:
+    type: number
+    default: 0.7
+    description: Minimum geNomad score for a sequence to be considered viral
+- group_id: virus_identification_options
+  name: genomad_splits
+  source_name: genomad_splits
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Number of groups that geNomad's MMSeqs2 databse should be split into
+    (reduced memory requirements)
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Virus identification options
+  raw_schema:
+    type: integer
+    default: 1
+    description: Number of groups that geNomad's MMSeqs2 databse should be split into
+      (reduced memory requirements)

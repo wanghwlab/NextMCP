@@ -1,0 +1,390 @@
+group:
+  id: alignment_options
+  label: Alignment options
+  selection_rule: Use this group for parameters defined under the `Alignment options` top-level schema
+    section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/alignment_options.md
+  - assets/schema-groups/alignment_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section `alignment_options`
+    for exact lookup.
+parameters:
+- group_id: alignment_options
+  name: aligner
+  source_name: aligner
+  type: string
+  required: false
+  default: star
+  enum: &id001
+  - star
+  description: Specifies the alignment algorithm to use - available options are currently 'star'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - star
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    default: star
+    description: Specifies the alignment algorithm to use - available options are currently 'star'.
+    fa_icon: fas fa-map-signs
+    enum: *id001
+- group_id: alignment_options
+  name: bam_csi_index
+  source_name: bam_csi_index
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Create a CSI index for BAM files instead of the traditional BAI index. This will be
+    required for genomes with larger chromosome sizes.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Create a CSI index for BAM files instead of the traditional BAI index. This will
+      be required for genomes with larger chromosome sizes.
+    fa_icon: fas fa-sort-alpha-down
+- group_id: alignment_options
+  name: extra_star_align_args
+  source_name: extra_star_align_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra arguments to pass to STAR alignment command in addition to defaults defined by
+    the pipeline. Only available for the STAR-Salmon route.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    description: Extra arguments to pass to STAR alignment command in addition to defaults defined
+      by the pipeline. Only available for the STAR-Salmon route.
+    fa_icon: fas fa-plus
+- group_id: alignment_options
+  name: pseudo_aligner
+  source_name: pseudo_aligner
+  type: string
+  required: false
+  default: salmon
+  enum: &id002
+  - salmon
+  - kallisto
+  description: Pseudo-aligner used for translational efficiency quantification under `--te_quantification_method
+    pseudo`.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - salmon
+  - kallisto
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    default: salmon
+    description: Pseudo-aligner used for translational efficiency quantification under `--te_quantification_method
+      pseudo`.
+    help_text: Only takes effect when `--te_quantification_method pseudo` is set. It does not change
+      the primary STAR alignment, the alignment-mode Salmon quantification of the transcriptome BAM,
+      or strandedness inference, all of which always use STAR and Salmon. With `kallisto`, single-end
+      libraries additionally require `--kallisto_quant_fraglen` and `--kallisto_quant_fraglen_sd`.
+    fa_icon: fas fa-fish
+    enum: *id002
+- group_id: alignment_options
+  name: pseudo_aligner_kmer_size
+  source_name: pseudo_aligner_kmer_size
+  type: integer
+  required: false
+  default: 23
+  enum: null
+  description: Kmer length passed to Salmon indexing for pseudo-alignment quantification.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 23
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: integer
+    default: 23
+    minimum: 1
+    description: Kmer length passed to Salmon indexing for pseudo-alignment quantification.
+    help_text: This parameter controls the k-mer size when building the Salmon index. In this pipeline,
+      it primarily affects the TE pseudo-alignment method (--te_quantification_method pseudo). The
+      default of 23 is suitable for short Ribo-seq reads. It is also used internally for strandedness
+      detection, where the exact value is less critical.
+    fa_icon: fas fa-ruler-horizontal
+- group_id: alignment_options
+  name: salmon_quant_libtype
+  source_name: salmon_quant_libtype
+  type: string
+  required: false
+  default: null
+  enum: &id003
+  - A
+  - IS
+  - ISF
+  - ISR
+  - IU
+  - MS
+  - MSF
+  - MSR
+  - MU
+  - OS
+  - OSF
+  - OSR
+  - OU
+  - SF
+  - SR
+  - U
+  description: Override Salmon library type inferred based on strandedness defined in meta object.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - A
+  - IS
+  - ISF
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    fa_icon: fas fa-fast-forward
+    description: ' Override Salmon library type inferred based on strandedness defined in meta object.'
+    help_text: See [Salmon docs](https://salmon.readthedocs.io/en/latest/library_type.html).
+    enum: *id003
+- group_id: alignment_options
+  name: star_ignore_sjdbgtf
+  source_name: star_ignore_sjdbgtf
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: When using pre-built STAR indices do not re-extract and use splice junctions from the
+    GTF file.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass the value under nextflow_run(params=...) using the exact schema type, enum and
+    constraints; this field is not a filesystem path.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-ban
+    description: When using pre-built STAR indices do not re-extract and use splice junctions from
+      the GTF file.
+- group_id: alignment_options
+  name: stranded_threshold
+  source_name: stranded_threshold
+  type: number
+  required: false
+  default: 0.8
+  enum: null
+  description: The fraction of stranded reads that must be assigned to a strandedness for confident
+    assignment. Must be at least 0.5.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.8
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: number
+    minimum: 0.5
+    maximum: 1
+    default: 0.8
+    description: The fraction of stranded reads that must be assigned to a strandedness for confident
+      assignment. Must be at least 0.5.
+- group_id: alignment_options
+  name: unstranded_threshold
+  source_name: unstranded_threshold
+  type: number
+  required: false
+  default: 0.1
+  enum: null
+  description: The difference in fraction of stranded reads assigned to 'forward' and 'reverse' below
+    which a sample is classified as 'unstranded'. By default the forward and reverse fractions must
+    differ by less than 0.1 for the sample to be called as unstranded.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.1
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: number
+    minimum: 0
+    maximum: 1
+    default: 0.1
+    description: The difference in fraction of stranded reads assigned to 'forward' and 'reverse'
+      below which a sample is classified as 'unstranded'. By default the forward and reverse fractions
+      must differ by less than 0.1 for the sample to be called as unstranded.
+- group_id: alignment_options
+  name: extra_kallisto_quant_args
+  source_name: extra_kallisto_quant_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra arguments to pass to the kallisto quant command in addition to defaults defined
+    by the pipeline.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    description: Extra arguments to pass to the kallisto quant command in addition to defaults defined
+      by the pipeline.
+    fa_icon: fas fa-plus
+- group_id: alignment_options
+  name: extra_salmon_quant_args
+  source_name: extra_salmon_quant_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra arguments to pass to Salmon quant command in addition to defaults defined by
+    the pipeline.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    description: Extra arguments to pass to Salmon quant command in addition to defaults defined by
+      the pipeline.
+    fa_icon: fas fa-plus
+- group_id: alignment_options
+  name: kallisto_quant_fraglen
+  source_name: kallisto_quant_fraglen
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Estimated average fragment length required by kallisto for single-end libraries.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: integer
+    fa_icon: fas fa-ruler-horizontal
+    description: Estimated average fragment length required by kallisto for single-end libraries.
+    help_text: kallisto cannot infer the fragment length distribution from single-end reads and refuses
+      to run without it. Required whenever `--pseudo_aligner kallisto` is combined with `--te_quantification_method
+      pseudo`, because Ribo-seq libraries are single-end.
+- group_id: alignment_options
+  name: kallisto_quant_fraglen_sd
+  source_name: kallisto_quant_fraglen_sd
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Estimated standard deviation of the fragment length required by kallisto for single-end
+    libraries.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: integer
+    fa_icon: fas fa-ruler-horizontal
+    description: Estimated standard deviation of the fragment length required by kallisto for single-end
+      libraries.
+- group_id: alignment_options
+  name: seq_center
+  source_name: seq_center
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Sequencing center information to be added to read group of BAM files.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    description: Sequencing center information to be added to read group of BAM files.
+    fa_icon: fas fa-synagogue

@@ -1,0 +1,113 @@
+group:
+  id: skip_pipeline_steps
+  label: Skip pipeline steps
+  selection_rule: Use this group for parameters defined under the `Skip pipeline steps`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/skip_pipeline_steps.md
+  - assets/schema-groups/skip_pipeline_steps.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `skip_pipeline_steps` for exact lookup.
+parameters:
+- group_id: skip_pipeline_steps
+  name: skip_deduplication
+  source_name: skip_deduplication
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip deduplication step after alignment.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip pipeline steps
+  raw_schema:
+    type: boolean
+    description: Skip deduplication step after alignment.
+    help_text: 'Deduplication removes PCR duplicate reads after alignment. Specifying
+      this option will skip this step, leaving duplicate reads in your data.
+
+
+      Note that this is turned on automatically if `--rrbs` is specified.'
+    fa_icon: fas fa-fast-forward
+- group_id: skip_pipeline_steps
+  name: skip_fastqc
+  source_name: skip_fastqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip FastQC
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip pipeline steps
+  raw_schema:
+    type: boolean
+    description: Skip FastQC
+    fa_icon: fas fa-fast-forward
+- group_id: skip_pipeline_steps
+  name: skip_multiqc
+  source_name: skip_multiqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MultiQC
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip pipeline steps
+  raw_schema:
+    type: boolean
+    description: Skip MultiQC
+    fa_icon: fas fa-fast-forward
+- group_id: skip_pipeline_steps
+  name: skip_trimming
+  source_name: skip_trimming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip read trimming.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip pipeline steps
+  raw_schema:
+    type: boolean
+    description: Skip read trimming.
+    fa_icon: fas fa-fast-forward

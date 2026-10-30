@@ -1,0 +1,68 @@
+version: "2026-03-18"
+
+output_fields:
+  - primary_mode
+  - modifiers
+  - evidence
+  - next_action
+
+primary_modes:
+  profile-only:
+    meaning: >-
+      Runtime config chain is sufficient to reconstruct the upstream smoke run.
+      Typical sources are nextflow.config plus conf/test.config or conf/test_*.config.
+    use_when:
+      - test profile directly includes conf/test*.config
+      - test input values are present in runtime config files
+      - tests/nextflow.config is not needed to resolve base paths or shared params
+    next_action: "build smoke contract from runtime config"
+
+  profile-plus-tests-config:
+    meaning: >-
+      Runtime config chain is still the base route, but tests/nextflow.config
+      contributes shared paths, params, or resource settings needed to match the
+      upstream test route.
+    use_when:
+      - conf/test*.config depends on params set only in tests/nextflow.config
+      - tests/*.nf.test says the rest comes from shared config
+      - remote base-path params are only defined in tests/nextflow.config
+    next_action: "merge tests/nextflow.config into extraction"
+
+  requires-local-cache:
+    meaning: >-
+      The current repository test route already points at fixed server-local
+      files or cached mirrors, so generic remote-first extraction is not enough.
+    use_when:
+      - conf/test*.config uses hard-coded /data or other server-local paths
+      - repo test route assumes a predownloaded bundle
+      - generic users would not have these paths by default
+    next_action: "require local cache manifest before smoke generation"
+
+  unsuitable-for-generic-smoke:
+    meaning: >-
+      Upstream tests are not a good default source for a generic nextmcp smoke
+      task without special adapters or significant manual work.
+    use_when:
+      - route depends on unavailable licenses or secrets
+      - route is tightly coupled to nf-test internals and no clean runtime path is visible
+      - missing local state makes the pipeline non-portable for batch evaluation
+    next_action: "skip from standard batch"
+
+modifiers:
+  localize-remote-inputs:
+    meaning: "Remote URLs or manifests must be localized to server-local paths before stable smoke use."
+
+  environment-sensitive:
+    meaning: >-
+      Runtime depends on licenses, auth, cloud-specific access, or other
+      environment state that should be recorded as an adapter requirement.
+
+  igenome-sensitive:
+    meaning: >-
+      Upstream smoke route depends on genome or igenomes resolution and may be
+      changed by server-side overrides such as igenomes_ignore.
+
+  snapshot-rich:
+    meaning: >-
+      nf-test snapshot material is rich enough to derive a compact artifact
+      assertion set after the run.

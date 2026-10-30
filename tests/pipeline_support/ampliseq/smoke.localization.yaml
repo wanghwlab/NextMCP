@@ -1,0 +1,323 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: ampliseq
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/ampliseq/test
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/
+    localized_prefix: /data/nextmcp/testdata/ampliseq/test/pipeline-data/
+  - remote_prefix: https://github.com/nf-core/test-datasets/raw/
+    localized_prefix: /data/nextmcp/testdata/ampliseq/test/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/ampliseq
+  config: conf/test.config
+  resolved_runtime_chain:
+    pipelines_testdata_base_path: https://raw.githubusercontent.com/nf-core/test-datasets/
+    test_profile: test
+    nf_test_case: tests/default.nf.test::-profile test
+  resolved_params:
+    input: /data/nextmcp/testdata/ampliseq/test/rewrites/pipeline-data/ampliseq/samplesheets/Samplesheet_local.tsv
+    metadata: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/samplesheets/Metadata.tsv
+    FW_primer: GTGYCAGCMGCCGCGGTAA
+    RV_primer: GGACTACNVGGGTWTCTAAT
+    dada_ref_taxonomy: gtdb=R07-RS207
+    cut_dada_ref_taxonomy: true
+    qiime_ref_taxonomy: greengenes85
+    max_len_asv: 255
+    filter_ssu: bac
+    min_samples: 2
+    min_frequency: 10
+    metadata_category_barplot: treatment1,badpairwise10
+    tax_agglom_max: 4
+    sbdiexport: true
+    qiime_adonis_formula: treatment1,mix8
+    diversity_rarefaction_depth: 500
+    vsearch_cluster: true
+    ancombc: true
+    ancombc_formula: treatment1
+    ancombc_formula_reflvl: treatment1::b
+    ancombc_effect_size: 2
+    ancombc_significance: 0.00001
+
+runtime_hints:
+  process_resource_limits:
+    from_conf_test_config:
+      cpus: 4
+      memory: 15.GB
+      time: 1.h
+  launch_rule: >-
+    Build the smoke contract from nextflow.config plus conf/test.config, keep
+    the upstream resourceLimits in one small config file, and do not merge
+    tests/nextflow.config because its branch-pin base path is not needed for
+    the pipeline-level smoke route. Keep primers and other route-shaping
+    values in launch params instead of config scope because
+    `nf_pipeline/ampliseq/conf/modules.config` passes SBDI primer values
+    through config-scoped `ext.args`, and a config-only params block can
+    resolve there as literal `null`.
+  manifest_rule: >-
+    Download and rewrite the upstream samplesheet because the `forwardReads`
+    and `reverseReads` columns point at nested GitHub FASTQ URLs that need
+    server-local copies.
+  reference_rule: >-
+    Also localize the QIIME2 Greengenes85 reference pair because the selected
+    route otherwise stages `85_otus.fasta` and `85_otu_taxonomy.txt` from
+    `data.qiime2.org` at runtime, then rewrite that pair to `.fna` and `.tax`
+    filenames so the launch can use official param `qiime_ref_tax_custom`.
+  artifact_rule: >-
+    Keep assertions focused on summary_report, overall_summary, DADA2, MultiQC,
+    SBDI, and VSEARCH anchor files derived from tests/default.nf.test.snap plus
+    tests/.nftignore.
+
+config_override_files:
+  - path: /data/nextmcp/testdata/ampliseq/test/project-files/pipeline-support-ampliseq/profile_test_overrides.config
+    source_fields:
+      - process.resourceLimits.cpus
+      - process.resourceLimits.memory
+      - process.resourceLimits.time
+    purpose: Keep only the upstream test profile resource caps in config scope, and leave primers plus other route-shaping values in nextflow_run params.
+    content: |
+      process {
+          resourceLimits = [
+              cpus: 4,
+              memory: '15.GB',
+              time: '1.h'
+          ]
+      }
+
+url_inventory:
+  - role: input_samplesheet
+    config_field: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/ampliseq/samplesheets/Samplesheet.tsv
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/samplesheets/Samplesheet.tsv
+  - role: metadata_table
+    config_field: metadata
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/ampliseq/samplesheets/Metadata.tsv
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/samplesheets/Metadata.tsv
+  - role: qiime_greengenes85_fasta
+    config_field: params.qiime_ref_databases.greengenes85.file[0]
+    original_value: https://data.qiime2.org/2023.7/tutorials/training-feature-classifiers/85_otus.fasta
+    localized_value: /data/nextmcp/testdata/ampliseq/test/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/85_otus.fasta
+  - role: qiime_greengenes85_taxonomy
+    config_field: params.qiime_ref_databases.greengenes85.file[1]
+    original_value: https://data.qiime2.org/2023.7/tutorials/training-feature-classifiers/85_otu_taxonomy.txt
+    localized_value: /data/nextmcp/testdata/ampliseq/test/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/85_otu_taxonomy.txt
+    download_redirect_target: https://s3-us-west-2.amazonaws.com/qiime2-data/2023.7/tutorials/training-feature-classifiers/85_otu_taxonomy.txt
+  - role: sampleID_1a_read_1
+    config_field: input.samplesheet[].forwardReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/1a_S103_L001_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1a_S103_L001_R1_001.fastq.gz
+  - role: sampleID_1a_read_2
+    config_field: input.samplesheet[].reverseReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/1a_S103_L001_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1a_S103_L001_R2_001.fastq.gz
+  - role: sampleID_1_read_1
+    config_field: input.samplesheet[].forwardReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/1_S57_L001_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1_S57_L001_R1_001.fastq.gz
+  - role: sampleID_1_read_2
+    config_field: input.samplesheet[].reverseReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/1_S57_L001_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1_S57_L001_R2_001.fastq.gz
+  - role: sampleID_2a_read_1
+    config_field: input.samplesheet[].forwardReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/2a_S104_L001_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2a_S104_L001_R1_001.fastq.gz
+  - role: sampleID_2a_read_2
+    config_field: input.samplesheet[].reverseReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/2a_S104_L001_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2a_S104_L001_R2_001.fastq.gz
+  - role: sampleID_2_read_1
+    config_field: input.samplesheet[].forwardReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/2_S58_L001_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2_S58_L001_R1_001.fastq.gz
+  - role: sampleID_2_read_2
+    config_field: input.samplesheet[].reverseReads
+    original_value: https://github.com/nf-core/test-datasets/raw/ampliseq/testdata/2_S58_L001_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2_S58_L001_R2_001.fastq.gz
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/samplesheets/Samplesheet.tsv
+    localized_path: /data/nextmcp/testdata/ampliseq/test/rewrites/pipeline-data/ampliseq/samplesheets/Samplesheet_local.tsv
+    rewritten_columns:
+      - forwardReads
+      - reverseReads
+    localized_rows:
+      - sampleID: sampleID_1a
+        forwardReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1a_S103_L001_R1_001.fastq.gz
+        reverseReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1a_S103_L001_R2_001.fastq.gz
+      - sampleID: sampleID_1
+        forwardReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1_S57_L001_R1_001.fastq.gz
+        reverseReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/1_S57_L001_R2_001.fastq.gz
+      - sampleID: sampleID_2a
+        forwardReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2a_S104_L001_R1_001.fastq.gz
+        reverseReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2a_S104_L001_R2_001.fastq.gz
+      - sampleID: sampleID_2
+        forwardReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2_S58_L001_R1_001.fastq.gz
+        reverseReads: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata/2_S58_L001_R2_001.fastq.gz
+
+rewritten_support_files:
+  - role: qiime_greengenes85_reference_pair
+    original_paths:
+      - /data/nextmcp/testdata/ampliseq/test/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/85_otus.fasta
+      - /data/nextmcp/testdata/ampliseq/test/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/85_otu_taxonomy.txt
+    localized_paths:
+      - /data/nextmcp/testdata/ampliseq/test/rewrites/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/greengenes85.fna
+      - /data/nextmcp/testdata/ampliseq/test/rewrites/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/greengenes85.tax
+    rationale: >-
+      `qiime_ref_tax_custom` accepts a local `.fna,.tax` pair, so rewrite the
+      downloaded Greengenes85 files to those expected suffixes.
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/ampliseq/samplesheets/Samplesheet.tsv
+    localized_value: /data/nextmcp/testdata/ampliseq/test/rewrites/pipeline-data/ampliseq/samplesheets/Samplesheet_local.tsv
+  - config_field: metadata
+    official_param: metadata
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/ampliseq/samplesheets/Metadata.tsv
+    localized_value: /data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/samplesheets/Metadata.tsv
+  - config_field: FW_primer
+    official_param: FW_primer
+    original_value: GTGYCAGCMGCCGCGGTAA
+    localized_value: GTGYCAGCMGCCGCGGTAA
+  - config_field: RV_primer
+    official_param: RV_primer
+    original_value: GGACTACNVGGGTWTCTAAT
+    localized_value: GGACTACNVGGGTWTCTAAT
+  - config_field: dada_ref_taxonomy
+    official_param: dada_ref_taxonomy
+    original_value: gtdb=R07-RS207
+    localized_value: gtdb=R07-RS207
+  - config_field: cut_dada_ref_taxonomy
+    official_param: cut_dada_ref_taxonomy
+    original_value: true
+    localized_value: true
+  - config_field: qiime_ref_taxonomy
+    official_param: qiime_ref_tax_custom
+    original_value: greengenes85
+    localized_value: /data/nextmcp/testdata/ampliseq/test/rewrites/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/greengenes85.fna,/data/nextmcp/testdata/ampliseq/test/rewrites/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/greengenes85.tax
+  - config_field: max_len_asv
+    official_param: max_len_asv
+    original_value: 255
+    localized_value: 255
+  - config_field: filter_ssu
+    official_param: filter_ssu
+    original_value: bac
+    localized_value: bac
+  - config_field: min_samples
+    official_param: min_samples
+    original_value: 2
+    localized_value: 2
+  - config_field: min_frequency
+    official_param: min_frequency
+    original_value: 10
+    localized_value: 10
+  - config_field: metadata_category_barplot
+    official_param: metadata_category_barplot
+    original_value: treatment1,badpairwise10
+    localized_value: treatment1,badpairwise10
+  - config_field: tax_agglom_max
+    official_param: tax_agglom_max
+    original_value: 4
+    localized_value: 4
+  - config_field: sbdiexport
+    official_param: sbdiexport
+    original_value: true
+    localized_value: true
+  - config_field: qiime_adonis_formula
+    official_param: qiime_adonis_formula
+    original_value: treatment1,mix8
+    localized_value: treatment1,mix8
+  - config_field: diversity_rarefaction_depth
+    official_param: diversity_rarefaction_depth
+    original_value: 500
+    localized_value: 500
+  - config_field: vsearch_cluster
+    official_param: vsearch_cluster
+    original_value: true
+    localized_value: true
+  - config_field: ancombc
+    official_param: ancombc
+    original_value: true
+    localized_value: true
+  - config_field: ancombc_formula
+    official_param: ancombc_formula
+    original_value: treatment1
+    localized_value: treatment1
+  - config_field: ancombc_formula_reflvl
+    official_param: ancombc_formula_reflvl
+    original_value: treatment1::b
+    localized_value: treatment1::b
+  - config_field: ancombc_effect_size
+    official_param: ancombc_effect_size
+    original_value: 2
+    localized_value: 2
+  - config_field: ancombc_significance
+    official_param: ancombc_significance
+    original_value: 0.00001
+    localized_value: 0.00001
+  - config_field: process.resourceLimits
+    official_param: null
+    original_value: "{cpus: 4, memory: 15.GB, time: 1.h}"
+    localized_value: Execution note only. Keep in config_files, not in nextflow_run params.
+
+ignored_upstream_params:
+  - config_field: "tests/nextflow.config:params.pipelines_testdata_base_path"
+    reason: The nf-test-only `refs/heads/ampliseq` branch pin is not needed for the pipeline-level smoke route and should not be copied into a nextmcp runtime task.
+  - config_field: "tests/nextflow.config:params.modules_testdata_base_path"
+    reason: nf-test module defaults are not needed for the pipeline-level smoke route.
+  - config_field: "tests/nextflow.config:aws.client.anonymous"
+    reason: The selected smoke route fetches GitHub-hosted inputs and does not depend on anonymous S3 access.
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+
+natural_language_execution_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `ampliseq` lightweight example in project
+  `pipeline-withskill-ampliseq`. Use the rewritten samplesheet, the local metadata
+  table, and the server-local paired-end FASTQ files referenced by the
+  samplesheet. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/ampliseq/test/rewrites/pipeline-data/ampliseq/samplesheets/Samplesheet_local.tsv`
+  - Metadata table: `/data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/samplesheets/Metadata.tsv`
+  - FASTQ bundle root: `/data/nextmcp/testdata/ampliseq/test/pipeline-data/ampliseq/testdata`
+  - Local QIIME2 Greengenes85 FASTA: `/data/nextmcp/testdata/ampliseq/test/rewrites/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/greengenes85.fna`
+  - Local QIIME2 Greengenes85 taxonomy: `/data/nextmcp/testdata/ampliseq/test/rewrites/downloads/data.qiime2.org/2023.7/tutorials/training-feature-classifiers/greengenes85.tax`
+  
+  ## Workflow goal
+  
+  - Run the paired-end Illumina amplicon route represented by the samplesheet.
+  - Use forward primer sequence `GTGYCAGCMGCCGCGGTAA` and reverse primer sequence
+    `GGACTACNVGGGTWTCTAAT`.
+  - Keep the metadata-dependent downstream analyses active, including average barplots, adonis-style
+    testing, and ANCOMBC-style differential-abundance testing.
+  - Use the listed local Greengenes85 reference files instead of downloading taxonomy references at
+    runtime.
+  - Keep DADA2 taxonomic assignment against GTDB release R07-RS207, with the local Greengenes85
+    FASTA/taxonomy pair used as the custom QIIME2 reference pair and trimmed to the amplicon region.
+  - Keep bacterial SSU filtering with the `bac` setting, maximum ASV length 255, at least 2 samples
+    per retained feature, and minimum feature frequency 10.
+  - Use taxonomic agglomeration up to level 4, diversity rarefaction depth 500, VSEARCH clustering,
+    and SBDI export behavior used by the upstream lightweight example.
+  - For metadata-dependent analyses, use average barplot categories `treatment1` and `badpairwise10`,
+    adonis-style terms `treatment1` and `mix8`, and ANCOMBC-style testing on `treatment1` with
+    reference level `treatment1::b`, effect-size threshold 2, and significance threshold 0.00001.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/ampliseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-ampliseq` as project name.
+  - Do not use the `ampliseq` expert skill.

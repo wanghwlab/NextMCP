@@ -1,0 +1,164 @@
+group:
+  id: read_trimming_options
+  label: Read trimming options
+  selection_rule: Use this group for parameters defined under the `Read trimming options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/read_trimming_options.md
+  - assets/schema-groups/read_trimming_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `read_trimming_options` for exact lookup.
+parameters:
+- group_id: read_trimming_options
+  name: adapter_fasta
+  source_name: adapter_fasta
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: 'Path to adapter fasta file: default: []'
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Read trimming options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: \S+\.f(n|ast)?a$
+    description: 'Path to adapter fasta file: default: []'
+    fa_icon: fas fa-cut
+- group_id: read_trimming_options
+  name: min_trimmed_reads
+  source_name: min_trimmed_reads
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: 'FASTP: Inputs with fewer than this reads will be filtered out of the
+    "reads" output channel'
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/min_trimmed_reads
+  example_values:
+  - <server_input_root>/min_trimmed_reads
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: integer
+    default: 1
+    fa_icon: fas fa-search-minus
+    description: 'FASTP: Inputs with fewer than this reads will be filtered out of
+      the "reads" output channel'
+- group_id: read_trimming_options
+  name: save_merged
+  source_name: save_merged
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: 'FASTP: Specify true to save merged reads'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-download
+    description: 'FASTP: Specify true to save merged reads'
+- group_id: read_trimming_options
+  name: save_trimmed_fail
+  source_name: save_trimmed_fail
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: 'FASTP: Specify true to save files that failed to pass trimming thresholds'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: boolean
+    fa_icon: far fa-times-circle
+    description: 'FASTP: Specify true to save files that failed to pass trimming thresholds'
+- group_id: read_trimming_options
+  name: trim_tail
+  source_name: trim_tail
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: The amount of bases to trim at the tail of each read, none will be
+    trimmed by default
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: integer
+    description: The amount of bases to trim at the tail of each read, none will be
+      trimmed by default
+    minimum: 0
+    fa_icon: fas fa-cut
+- group_id: read_trimming_options
+  name: trim_tail_fusioncatcher
+  source_name: trim_tail_fusioncatcher
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: The amount of bases to trim at the tail of each read for fusioncatcher,
+    none will be trimmed by default
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: integer
+    description: The amount of bases to trim at the tail of each read for fusioncatcher,
+      none will be trimmed by default
+    minimum: 0
+    fa_icon: fas fa-cut

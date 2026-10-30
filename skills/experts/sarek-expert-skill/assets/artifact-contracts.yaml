@@ -1,0 +1,95 @@
+artifacts:
+  - id: preprocessing
+    path: results/<run_id>/preprocessing/
+    produced_when: Mapping, markduplicates, recalibration, UMI, BBSplit, or Parabricks routes run.
+    meaning: Intermediate alignment and preprocessing outputs. Mapped CRAM/BAM files are published
+      only when save_mapped and related save switches request them.
+    review_order: 20
+    notable_children:
+      - preprocessing/fastp/
+      - preprocessing/umi/
+      - preprocessing/bbsplit/
+      - preprocessing/mapped/
+      - preprocessing/markduplicates/
+      - preprocessing/sentieon_dedup/
+      - preprocessing/recal_table/
+      - preprocessing/recalibrated/
+      - preprocessing/parabricks/
+      - preprocessing/csv/
+  - id: variant_calling
+    path: results/<run_id>/variant_calling/
+    produced_when: tools includes one or more variant, CNV, SV, MSI, or post-calling tools.
+    meaning: Caller-specific VCFs, indexes, CNV/SV/MSI outputs, filtered/normalized/consensus
+      outputs, and concatenated germline VCFs.
+    review_order: 30
+    notable_children:
+      - variant_calling/bcftools/
+      - variant_calling/deepvariant/
+      - variant_calling/freebayes/
+      - variant_calling/haplotypecaller/
+      - variant_calling/mutect2/
+      - variant_calling/strelka/
+      - variant_calling/manta/
+      - variant_calling/tiddit/
+      - variant_calling/ascat/
+      - variant_calling/cnvkit/
+      - variant_calling/controlfreec/
+      - variant_calling/msisensor2/
+      - variant_calling/msisensor/
+      - variant_calling/filtered/
+      - variant_calling/normalized/
+      - variant_calling/consensus/
+      - variant_calling/concat/
+  - id: annotation
+    path: results/<run_id>/annotation/
+    produced_when: tools includes snpeff, vep, merge, bcfann, or snpsift.
+    meaning: Annotated VCFs from SnpEff, VEP, merged annotation, bcftools annotate, or SnpSift.
+    review_order: 40
+  - id: reports
+    path: results/<run_id>/reports/
+    produced_when: QC and reporting tools are not skipped.
+    meaning: Tool-specific reports collected by MultiQC or used for focused QC review.
+    review_order: 50
+    notable_children:
+      - reports/fastqc/
+      - reports/fastp/
+      - reports/mosdepth/
+      - reports/ngscheckmate/
+      - reports/markduplicates/
+      - reports/sentieon_dedup/
+      - reports/samtools/
+      - reports/bcftools/
+      - reports/vcftools/
+      - reports/SnpEff/
+      - reports/EnsemblVEP/
+      - reports/umi/
+  - id: multiqc
+    path: results/<run_id>/multiqc/multiqc_report.html
+    produced_when: multiqc is not listed in skip_tools.
+    meaning: Aggregated run QC report.
+    review_order: 10
+  - id: pipeline_info
+    path: results/<run_id>/pipeline_info/
+    produced_when: Every normal run.
+    meaning: Launch parameters, software versions, execution reports, timeline, trace, DAG, and
+      provenance files used for review and reuse checks.
+    review_order: 5
+    notable_children:
+      - pipeline_info/params.json
+      - pipeline_info/nf_core_sarek_software_mqc_versions.yml
+      - pipeline_info/execution_report_*.html
+      - pipeline_info/execution_trace_*.txt
+      - pipeline_info/execution_timeline_*.html
+historical_reuse:
+  search_with_artifact_path_contains:
+    - pipeline_info/params.json
+    - multiqc_report.html
+    - variant_calling/mutect2
+    - variant_calling/haplotypecaller
+    - annotation
+    - preprocessing/csv
+  compatibility_checks:
+    - Read run_get(include=["artifact_summary"]) before run_artifacts.
+    - Treat artifacts.json and pipeline_fingerprint as historical facts.
+    - Confirm compatibility through pipeline_info/params.json or equivalent run metadata before
+      recommending reuse.

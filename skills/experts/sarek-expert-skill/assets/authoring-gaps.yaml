@@ -1,0 +1,22 @@
+status: resolved
+gaps:
+  - id: initial_scaffold_gaps
+    source: capability-audit.yaml
+    status: resolved
+    action: Replace starter scaffold placeholders with source-backed Sarek assets.
+    resolution: Covered in pipeline-profile.yaml, playbooks.yaml, step-recipes.yaml,
+      param-presets.yaml, artifact-contracts.yaml, qc-rules.yaml, references, and complete schema
+      groups.
+  - id: replace_generic_artifact_contract
+    source: artifact-contracts.yaml
+    status: resolved
+    action: Replace generic results-root contract with source-backed published outputs.
+    resolution: artifact-contracts.yaml now lists preprocessing, variant_calling, annotation,
+      reports, multiqc, and pipeline_info outputs with reuse fragments.
+  - id: replace_generic_qc_rule
+    source: qc-rules.yaml
+    status: resolved
+    action: Replace generic completion check with source-backed QC and troubleshooting rules.
+    resolution: qc-rules.yaml now covers samplesheet shape, reference/index pairs, tumor-normal
+      pairing, targeted intervals, Sentieon prerequisites, annotation outputs, MultiQC, and run
+      completion.

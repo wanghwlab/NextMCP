@@ -1,0 +1,84 @@
+group:
+  id: skip_steps
+  label: Skip steps
+  selection_rule: Use this group for parameters defined under the `Skip steps` top-level
+    schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/skip_steps.md
+  - assets/schema-groups/skip_steps.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `skip_steps` for exact lookup.
+parameters:
+- group_id: skip_steps
+  name: skip_qc
+  source_name: skip_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip QC steps
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip steps
+  raw_schema:
+    type: boolean
+    description: Skip QC steps
+    fa_icon: fas fa-forward
+- group_id: skip_steps
+  name: skip_vcf
+  source_name: skip_vcf
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip vcf creation step
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip steps
+  raw_schema:
+    type: boolean
+    description: Skip vcf creation step
+    fa_icon: fas fa-forward
+- group_id: skip_steps
+  name: skip_vis
+  source_name: skip_vis
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip visualisation steps
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Skip steps
+  raw_schema:
+    type: boolean
+    description: Skip visualisation steps
+    fa_icon: fas fa-forward

@@ -1,0 +1,301 @@
+group:
+  id: umi_processing
+  label: Unique Molecular Identifiers
+  selection_rule: Use this group for parameters defined under the `Unique Molecular
+    Identifiers` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/umi_processing.md
+  - assets/schema-groups/umi_processing.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `umi_processing` for exact lookup.
+parameters:
+- group_id: umi_processing
+  name: bbsplit_fasta_list
+  source_name: bbsplit_fasta_list
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to comma-separated file containing a list of reference genomes
+    to filter reads against with BBSplit. You have to also explicitly set `--tools
+    bbsplit` if you want to use BBSplit.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/plain
+    fa_icon: fas fa-list-alt
+    description: Path to comma-separated file containing a list of reference genomes
+      to filter reads against with BBSplit. You have to also explicitly set `--tools
+      bbsplit` if you want to use BBSplit.
+    help_text: "The file should contain 2 columns: short name and full path to reference\
+      \ genome(s) e.g. \n```\nmm10,/path/to/mm10.fa\necoli,/path/to/ecoli.fa\n```"
+- group_id: umi_processing
+  name: group_by_umi_strategy
+  source_name: group_by_umi_strategy
+  type: string
+  required: false
+  default: Adjacency
+  enum: &id001
+  - Identity
+  - Edit
+  - Adjacency
+  - Paired
+  description: Default strategy for fgbio UMI-based consensus read generation
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - Identity
+  - Edit
+  - Adjacency
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: string
+    default: Adjacency
+    fa_icon: fas fa-tape
+    description: 'Default strategy for fgbio UMI-based consensus read generation '
+    enum: *id001
+- group_id: umi_processing
+  name: save_bbsplit_reads
+  source_name: save_bbsplit_reads
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: If this option is specified, FastQ files split by reference will be
+    saved in the results directory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/save_bbsplit_reads
+  example_values:
+  - <server_input_root>/save_bbsplit_reads
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-save
+    description: If this option is specified, FastQ files split by reference will
+      be saved in the results directory.
+- group_id: umi_processing
+  name: umi_base_skip
+  source_name: umi_base_skip
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Number of bases to skip after the UMI(s) in the read when extracting
+    with fastp.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: integer
+    minimum: 0
+    fa_icon: fas fa-tape
+    description: Number of bases to skip after the UMI(s) in the read when extracting
+      with fastp.
+    help_text: If UMIs are being extracted using fastp, specify the number of bases
+      to skip after the UMI here. This will trim some bases after the UMI.
+- group_id: umi_processing
+  name: umi_in_read_header
+  source_name: umi_in_read_header
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Move UMIs from fastq read headers to a tag prior to deduplication.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-tape
+    description: Move UMIs from fastq read headers to a tag prior to deduplication.
+    help_text: Set to true if UMIs are already present in the header of the read,
+      for instance from using OverrideCycles in bclconvert or umi_tools/extract.
+- group_id: umi_processing
+  name: umi_length
+  source_name: umi_length
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Length of the UMI(s) in the read.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: integer
+    minimum: 1
+    fa_icon: fas fa-tape
+    description: Length of the UMI(s) in the read.
+    help_text: If UMIs are being extracted using fastp, specify the length of the
+      UMI here. This will be used to extract UMIs from reads and store them in the
+      RX tag.
+- group_id: umi_processing
+  name: umi_location
+  source_name: umi_location
+  type: string
+  required: false
+  default: null
+  enum: &id002
+  - read1
+  - read2
+  - per_read
+  - index1
+  - index2
+  - per_index
+  description: Location of the UMI(s) to be extracted with fastp.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - read1
+  - read2
+  - per_read
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: string
+    fa_icon: fas fa-tape
+    description: Location of the UMI(s) to be extracted with fastp.
+    help_text: Use if UMIs are not present in the read header, but in a specific location
+      within the reads/fastq header index. This will be used to extract UMIs from
+      reads or index in the fastq header and store them in the RX tag.
+    enum: *id002
+- group_id: umi_processing
+  name: umi_read_structure
+  source_name: umi_read_structure
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify UMI read structure for fgbio UMI consensus read generation
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: string
+    fa_icon: fas fa-tape
+    description: Specify UMI read structure for fgbio UMI consensus read generation
+    help_text: 'One structure if UMI is present on one end (i.e. ''+T 2M11S+T''),
+      or two structures separated by a blank space if UMIs a present on both ends
+      (i.e. ''2M11S+T 2M11S+T''); please note, this does not handle duplex-UMIs.
+
+
+      For more info on UMI usage in the pipeline, also check docs [here](./docs/usage/#how-to-handle-umis).'
+- group_id: umi_processing
+  name: umi_tag
+  source_name: umi_tag
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Tag detailing where UMIs are present inside the bam/cram file (e.g.
+    RX).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: string
+    fa_icon: fas fa-tape
+    description: Tag detailing where UMIs are present inside the bam/cram file (e.g.
+      RX).
+    help_text: If UMIs are already present in the cram/bam file, this details the
+      tag which will be used in GATK MarkDuplicates and Sentieon dedup. This should
+      be set to RX if restarting from bam files where the UMIs have been extracted
+      by the umi_in_read_header or umi_length options. Note this is not compatible
+      with MarkDuplicates Spark.
+- group_id: umi_processing
+  name: bbsplit_index
+  source_name: bbsplit_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to directory or tar.gz archive for pre-built BBSplit index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/bbsplit_index
+  example_values:
+  - <server_reference_root>/bbsplit_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Unique Molecular Identifiers
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    fa_icon: fas fa-bezier-curve
+    description: Path to directory or tar.gz archive for pre-built BBSplit index.
+    help_text: The BBSplit index will have to be built at least once with this pipeline
+      (see `--save_reference` to save index). It can then be provided via `--bbsplit_index`
+      for future runs.

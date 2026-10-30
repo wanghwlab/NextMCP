@@ -1,0 +1,132 @@
+pipeline:
+  id: scrnaseq
+  name: nf-core/scrnaseq
+  version: 4.1.0
+  summary: Pipeline for processing barcode-based 10x Genomics single-cell RNA-seq data
+    with Simpleaf, STARsolo, Kallisto/BUS, Cell Ranger, Cell Ranger ARC, Cell Ranger
+    Multi, matrix conversion, optional CellBender filtering, and MultiQC reporting.
+source_basis:
+  authoring_source: repository-local inspect-equivalent bundle
+  pipeline_directory: /root/key_projects/nextmcp/nf_pipeline/scrnaseq
+  schema: nextflow_schema.json
+  documents:
+    - README.md
+    - docs/README.md
+    - docs/usage.md
+    - docs/output.md
+  source_files:
+    - main.nf
+    - nextflow.config
+    - workflows/scrnaseq.nf
+    - conf/modules.config
+path_boundary:
+  rule: All runtime path values, the project identifier, and relative path-like values in
+    params or config_files resolve on the nextmcp server filesystem.
+  placeholders:
+    input: <server_input_root>/scrnaseq_samplesheet.csv
+    outdir: <server_output_root>/scrnaseq
+    references: <server_reference_root>/...
+required_inputs:
+  - name: input
+    required_for: all pipeline runs
+    placeholder: <server_input_root>/scrnaseq_samplesheet.csv
+    notes: CSV samplesheet. Standard runs require sample, fastq_1, and fastq_2; Cell
+      Ranger ARC and Cell Ranger Multi require additional columns described in playbooks.
+  - name: outdir
+    required_for: published results
+    placeholder: <server_output_root>/scrnaseq
+    notes: Published result directory on the nextmcp server.
+  - name: protocol
+    required_for: non-Cell-Ranger aligners
+    placeholder: 10XV3
+    notes: The schema default is auto, but workflow source only allows auto for
+      cellranger, cellrangerarc, and cellrangermulti. Use a concrete protocol for
+      simpleaf, star, or kallisto.
+  - name: fasta and gtf
+    required_for: explicit reference builds when genome or prebuilt aligner index is not used
+    placeholder: <server_reference_root>/genome.fa.gz and <server_reference_root>/genes.gtf.gz
+    notes: Used to build or validate references for Simpleaf, STARsolo, Kallisto/BUS,
+      Cell Ranger, Cell Ranger ARC, or Cell Ranger Multi routes.
+supported_modes:
+  - id: simpleaf_default
+    entry_target: pipeline id scrnaseq
+    use_when: Default single-cell RNA-seq pseudo-alignment route using Simpleaf and AlevinQC.
+    required_assets:
+      - playbooks.yaml#simpleaf_default
+      - param-presets.yaml#simpleaf_default
+  - id: starsolo
+    entry_target: pipeline id scrnaseq
+    use_when: User requests STARsolo, full STAR alignment outputs, pre-mRNA counts, or RNA
+      velocity matrix generation.
+    required_assets:
+      - playbooks.yaml#starsolo
+      - param-presets.yaml#starsolo
+  - id: kallisto_bus
+    entry_target: pipeline id scrnaseq
+    use_when: User requests Kallisto/BUS, BUS files, or a Kallisto-specific workflow such as
+      standard, lamanno, or nac.
+    required_assets:
+      - playbooks.yaml#kallisto_bus
+      - param-presets.yaml#kallisto_bus
+  - id: cellranger
+    entry_target: pipeline id scrnaseq
+    use_when: User requests 10x Cell Ranger count outputs, web summaries, filtered matrices,
+      or Cell Ranger-compatible reference use.
+    required_assets:
+      - playbooks.yaml#cellranger
+      - param-presets.yaml#cellranger
+  - id: cellrangerarc
+    entry_target: pipeline id scrnaseq
+    use_when: User requests 10x Multiome ATAC + GEX through Cell Ranger ARC.
+    required_assets:
+      - playbooks.yaml#cellrangerarc
+      - param-presets.yaml#cellrangerarc
+  - id: cellrangermulti
+    entry_target: pipeline id scrnaseq
+    use_when: User requests Cell Ranger Multi for GEX plus VDJ, antibody capture, CRISPR,
+      FFPE, CMO, or OCM feature barcode data.
+    required_assets:
+      - playbooks.yaml#cellrangermulti
+      - param-presets.yaml#cellrangermulti
+  - id: cellbender_filtering
+    entry_target: pipeline id scrnaseq
+    use_when: User wants CellBender remove-background filtering on raw matrices after the
+      aligner route. Not used for cellrangerarc.
+    required_assets:
+      - playbooks.yaml#cellbender_filtering
+      - artifact-contracts.yaml#cellbender_outputs
+  - id: reference_build_or_reuse
+    entry_target: pipeline id scrnaseq
+    use_when: User wants to build, save, or reuse Simpleaf, STAR, Kallisto, Cell Ranger, or
+      Cell Ranger ARC/Multi reference directories.
+    required_assets:
+      - playbooks.yaml#reference_build_or_reuse
+      - artifact-contracts.yaml#reference_outputs
+  - id: historical_reuse
+    entry_target: previous nextmcp runs
+    use_when: User wants to find a prior report, matrix, index, or web summary before rerunning.
+    required_assets:
+      - playbooks.yaml#historical_reuse
+      - artifact-contracts.yaml#pipeline_info
+limitations:
+  - The pipeline is designed for barcode-based single-cell protocols. Smart-seq2 should be
+    handled by an RNA-seq workflow instead.
+  - Cell Ranger, Cell Ranger ARC, and Cell Ranger Multi may require licensed software and
+    10x-compatible references already available on the nextmcp server or buildable from
+    server-local FASTA/GTF inputs.
+  - Do not pass client-local paths. Confirm server-local inputs with nextmcp tools or use paths
+    the user already confirmed exist on the server.
+  - The schema default protocol is auto, but source code restricts auto to Cell Ranger routes.
+resource_override:
+  channel: config_files
+  syntax: |
+    process {
+      resourceLimits = [
+        cpus: 16,
+        memory: '64.GB',
+        time: '24.h'
+      ]
+    }
+  notes: max_cpus, max_memory, and max_time are not ordinary pipeline params for nextmcp
+    launches. Put resource caps in a small server-local config file and pass it through
+    nextflow_run(config_files=[...]).

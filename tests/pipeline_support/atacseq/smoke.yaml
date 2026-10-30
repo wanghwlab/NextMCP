@@ -1,0 +1,85 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: atacseq
+case_id: smoke
+description: Minimal end-to-end MCP smoke test for atacseq using the upstream bwa test route.
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/atacseq
+  config: conf/test.config
+  notes:
+    - Resolve params directly from nextflow.config plus conf/test.config.
+    - Keep the upstream test profile as the canonical lightweight test setup.
+    - Prefer the plain test route over test_controls and test_full for the default smoke contract.
+    - Do not merge nf-test harness files because this route does not depend on tests/nextflow.config.
+    - The pipeline repository does not provide allowed .nf.test or .snap evidence here, so artifact assertions stay minimal.
+
+local_data_contract:
+  profile_name: test
+  localized_root: /data/nextmcp/testdata/atacseq/test
+  path_layout_rule: prefix_map_pipeline_testdata_and_rewrite_samplesheet
+  rewritten_manifests:
+    - role: input_samplesheet
+      original_name: samplesheet_test.csv
+      localized_name: samplesheet_test_local.csv
+      expected_path: /data/nextmcp/testdata/atacseq/test/rewrites/pipeline-data/samplesheet/v2.0/samplesheet_test_local.csv
+
+launch:
+  pipeline: atacseq
+  project: pipeline-support-atacseq
+  run_name: smoke
+  config_files:
+    - /data/nextmcp/testdata/atacseq/test/project-files/pipeline-support-atacseq/max_resources.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/atacseq/test/project-files/pipeline-support-atacseq/max_resources.config
+      purpose: Keep max_cpus, max_memory, and max_time in Nextflow config scope for the smoke run.
+      content: |
+        params.max_cpus = 2
+        params.max_memory = '6.GB'
+        params.max_time = '6.h'
+  params:
+    input: /data/nextmcp/testdata/atacseq/test/rewrites/pipeline-data/samplesheet/v2.0/samplesheet_test_local.csv
+    aligner: bwa
+    read_length: 50
+    mito_name: MT
+    fasta: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genome.fa
+    gtf: /data/nextmcp/testdata/atacseq/test/pipeline-data/reference/genes.gtf
+    fingerprint_bins: 100
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    path_checks:
+      - param: input
+        role: read
+        allowed: true
+        exists: true
+      - param: fasta
+        role: read
+        allowed: true
+        exists: true
+      - param: gtf
+        role: read
+        allowed: true
+        exists: true
+      - param: outdir
+        role: write
+        allowed: true
+  run:
+    ok: true
+    final_status: succeeded
+  observability:
+    process_get_status: succeeded
+    required_log_streams:
+      - nextflow
+  artifacts:
+    required_paths:
+      - multiqc
+
+prompt_brief_path: tests/pipeline_support/atacseq/smoke.task.md

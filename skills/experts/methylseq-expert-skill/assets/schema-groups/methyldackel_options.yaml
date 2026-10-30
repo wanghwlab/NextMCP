@@ -1,0 +1,143 @@
+group:
+  id: methyldackel_options
+  label: MethylDackel options
+  selection_rule: Use this group for parameters defined under the `MethylDackel options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/methyldackel_options.md
+  - assets/schema-groups/methyldackel_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `methyldackel_options` for exact lookup.
+parameters:
+- group_id: methyldackel_options
+  name: all_contexts
+  source_name: all_contexts
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Call methylation in all three CpG, CHG and CHH contexts.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: MethylDackel options
+  raw_schema:
+    type: boolean
+    description: Call methylation in all three CpG, CHG and CHH contexts.
+    help_text: By default MethylDackel calls methylation just in the CpG context.
+      The `--all_contexts` parameter sets MethylDackel to run with options `--CHH`
+      and `--CHG` to call methylation in all three contexts.
+    fa_icon: fas fa-ellipsis-h
+- group_id: methyldackel_options
+  name: ignore_flags
+  source_name: ignore_flags
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: MethylDackel - ignore SAM flags
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: MethylDackel options
+  raw_schema:
+    type: boolean
+    description: MethylDackel - ignore SAM flags
+    fa_icon: fas fa-eye-slash
+    help_text: Run MethylDackel with the `--ignore_flags` option, to ignore SAM flags.
+- group_id: methyldackel_options
+  name: merge_context
+  source_name: merge_context
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Merges methylation metrics of the Cytosines in a given context.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: MethylDackel options
+  raw_schema:
+    type: boolean
+    description: Merges methylation metrics of the Cytosines in a given context.
+    help_text: By default methylation results are provided at the Cytosine level.
+      This parameter specifies MethylDackel to run with the `--mergeContext` option,
+      which will merge the metrics of the Cytosines in contexts CpG and CHG.
+    fa_icon: fa fa-magnet
+- group_id: methyldackel_options
+  name: methyl_kit
+  source_name: methyl_kit
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save files for use with methylKit
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: MethylDackel options
+  raw_schema:
+    type: boolean
+    description: Save files for use with methylKit
+    help_text: Run MethylDackel with the `--methyl_kit` option, to produce files suitable
+      for use with the methylKit R package.
+    fa_icon: fas fa-ellipsis-h
+- group_id: methyldackel_options
+  name: min_depth
+  source_name: min_depth
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: Specify a minimum read coverage for MethylDackel to report a methylation
+    call.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: MethylDackel options
+  raw_schema:
+    type: integer
+    description: Specify a minimum read coverage for MethylDackel to report a methylation
+      call.
+    default: 0
+    fa_icon: fas fa-angle-double-down

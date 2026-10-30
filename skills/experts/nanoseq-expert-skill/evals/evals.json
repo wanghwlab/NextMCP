@@ -1,0 +1,226 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Mixed-source offline evals for nanoseq-expert-skill. These evals test runtime planning, parameter mapping, route selection, output review, historical reuse, and source-backed coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch",
+    "sources": {
+      "asset": "Tests whether the agent uses packaged expert skill assets correctly.",
+      "authoring_bundle": "Tests whether source-derived facts are covered or explicitly scoped out.",
+      "audit": "Tests high-impact capability and authoring-gap handling."
+    }
+  },
+  "summary": {
+    "eval_count": 10,
+    "asset_eval_count": 5,
+    "authoring_bundle_eval_count": 3,
+    "audit_eval_count": 2
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, draft the nextmcp launch plan for nf-core/nanoseq. The project is my-project. The user confirmed the server-local input at /data/samplesheet.csv, protocol DNA, and wants results under /results/nanoseq. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and the nextflow_run argument shape.",
+      "expected_output": "A launch plan that keeps project as a top-level nextflow_run argument, puts input/protocol/outdir under params, puts resource caps in a server-local override config passed through config_files, omits profile by default, and avoids authoring-time pipeline inspection.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument, not inside params.",
+        "Mentions input, protocol, and outdir under params.",
+        "Mentions resource caps under config_files or an override config, not params.",
+        "Does not use authoring-time inspection for runtime planning.",
+        "Uses nextflow_run(prepare=true) only as an optional check when launch uncertainty remains."
+      ],
+      "files": []
+    },
+    {
+      "id": "demultiplexing-route",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/demultiplexing_options.yaml"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, plan a qcat demultiplexing run. The user has a pooled FASTQ at /data/run1/reads.fastq.gz, a samplesheet at /data/run1/samplesheet.csv, protocol DNA, barcode kit NBD103/NBD104, and project my-project. Return the nextflow_run params shape and the outputs to review.",
+      "expected_output": "A demultiplexing plan with skip_demultiplexing=false, input_path, barcode_kit, input, protocol, outdir, qcat output paths, and summary-first nextmcp status calls.",
+      "assertions": [
+        "Sets skip_demultiplexing=false.",
+        "Uses input_path and barcode_kit under params.",
+        "Mentions qcat/fastq barcode outputs and none.fastq.gz.",
+        "Keeps all paths server-local.",
+        "Does not put barcode settings in config_files."
+      ],
+      "files": []
+    },
+    {
+      "id": "dna-variant-route",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/step-recipes.yaml",
+        "assets/schema-groups/variant_calling_options.yaml",
+        "authoring_bundle.source_files:workflows/nanoseq.nf"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, plan DNA short and structural variant calling with nf-core/nanoseq. The user wants medaka for short variants, cutesv for structural variants, and asks whether this works with protocol cDNA. Do not launch anything.",
+      "expected_output": "A source-backed answer that says variant calling is DNA-only, uses call_variants=true with protocol DNA, maps medaka/cutesv fields under params, and rejects cDNA for this route.",
+      "assertions": [
+        "States variant calling requires protocol DNA.",
+        "Uses call_variants=true.",
+        "Uses variant_caller=medaka and structural_variant_caller=cutesv under params.",
+        "Does not claim cDNA is valid for DNA variant calling.",
+        "Mentions selected variant output directories."
+      ],
+      "files": []
+    },
+    {
+      "id": "directrna-modification-route",
+      "source": "authoring_bundle",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/rna_modification_analysis_options.yaml",
+        "nf_pipeline/nanoseq/docs/usage.md"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, plan a directRNA modification run where the samplesheet input_file values point to per-sample directories. The user wants xPore but not m6Anet. Explain the required directory layout and params.",
+      "expected_output": "A directRNA plan that requires fast5 and fastq subdirectories, uses protocol directRNA, skip_modification_analysis=false, skip_m6anet=true, and keeps skip_xpore false or omitted.",
+      "assertions": [
+        "Requires protocol directRNA.",
+        "Mentions fast5 and fastq subdirectories.",
+        "Sets skip_modification_analysis=false.",
+        "Sets skip_m6anet=true for xPore-only.",
+        "Does not use the route for DNA or cDNA."
+      ],
+      "files": []
+    },
+    {
+      "id": "rna-quantification-stringtie",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/artifact-contracts.yaml",
+        "assets/schema-groups/differential_analysis_options.yaml"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, plan a cDNA run that uses StringTie2 and featureCounts for transcript quantification but skips differential analysis. Return params and output paths to review.",
+      "expected_output": "A cDNA quantification plan with quantification_method=stringtie2, skip_differential_analysis=true, skip_quantification=false or omitted, and StringTie2 output paths.",
+      "assertions": [
+        "Uses protocol cDNA.",
+        "Uses quantification_method=stringtie2.",
+        "Sets skip_differential_analysis=true.",
+        "Mentions stringtie2/stringtie.merged.gtf and counts tables.",
+        "Does not route this as DNA variant calling."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, answer a user who says: 'The nanoseq run finished, and I need to review the main published outputs and QC reports. What nextmcp calls should I make first, and which artifact or report paths should I inspect?' Do not assume concrete paths that have not come from nextmcp.",
+      "expected_output": "A post-run review plan that starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then uses run_artifacts for relevant sections, then fs_read only for explicit report or table paths. It should mention MultiQC, pipeline_info, route-specific outputs, and artifact contracts.",
+      "assertions": [
+        "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) or equivalent summary-first call.",
+        "Uses run_artifacts before reading individual output files.",
+        "Uses fs_read only after an explicit path is known.",
+        "Mentions MultiQC and pipeline_info.",
+        "Does not jump straight to raw logs as the default first step."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, plan how to recover a previous nf-core/nanoseq run when the user only remembers jaffa_results.csv. The project is my-project. Do not launch anything; return the search and compatibility-check sequence.",
+      "expected_output": "A historical reuse plan that searches with run_list(project=..., pipeline=\"nanoseq\", artifact_path_contains=\"jaffal/jaffa_results.csv\"), inspects run_get(include=[\"artifact_summary\"]), uses run_artifacts, treats artifacts.json and pipeline_fingerprint as historical facts, and confirms route compatibility through pipeline_info/params.json.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains when only an artifact fragment is known.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires route compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+        "Does not guess old output directories as the default safe path."
+      ],
+      "files": []
+    },
+    {
+      "id": "schema-lookup-required-inputs",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "authoring_bundle.schema",
+        "assets/schema-index.yaml",
+        "assets/schema-groups/input_output_options.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, explain how to confirm exact mapping for input, protocol, outdir, and multiqc_title. State which schema lookup assets you would open and where the values belong in nextflow_run.",
+      "expected_output": "A schema-backed preparation answer that points to schema-index.yaml and input_output_options, puts the fields under params, and keeps paths server-local.",
+      "assertions": [
+        "Uses schema-index or grouped schema assets for exact mapping.",
+        "Mentions input_output_options.",
+        "Puts input, protocol, outdir, and multiqc_title under params.",
+        "Keeps path values server-local.",
+        "Does not invent unsupported parameter names."
+      ],
+      "files": []
+    },
+    {
+      "id": "audit-capability-covered",
+      "source": "audit",
+      "category": "capability_coverage",
+      "source_materials": [
+        "assets/capability-audit.yaml",
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, decide whether capability schema_param_call_variants is covered for runtime planning. Return the packaged playbook, preset, schema lookup, or output/QC asset that handles it.",
+      "expected_output": "A coverage answer that points to DNA variant playbook/preset and variant_calling_options schema group, without using authoring-time inspection.",
+      "assertions": [
+        "Starts from packaged playbooks or presets.",
+        "Mentions variant_calling_options or call_variants exact lookup.",
+        "Does not say the capability is unresolved.",
+        "Does not use authoring-time inspection for runtime planning.",
+        "Does not invent unsupported enum values."
+      ],
+      "files": []
+    },
+    {
+      "id": "audit-gaps-resolved",
+      "source": "audit",
+      "category": "authoring_gaps",
+      "source_materials": [
+        "assets/authoring-gaps.yaml",
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the nanoseq-expert-skill, answer whether the starter scaffold gaps for generic artifact contracts and generic QC rules are still open. If resolved, say which assets now cover them.",
+      "expected_output": "A maintenance answer that says the gaps are resolved and points to artifact-contracts.yaml and qc-rules.yaml.",
+      "assertions": [
+        "Mentions authoring-gaps.yaml status resolved.",
+        "Points to artifact-contracts.yaml for published outputs.",
+        "Points to qc-rules.yaml for QC rules.",
+        "Does not claim unresolved scaffold gaps remain.",
+        "Does not use runtime pipeline inspection."
+      ],
+      "files": []
+    }
+  ]
+}

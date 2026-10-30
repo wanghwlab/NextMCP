@@ -1,0 +1,67 @@
+checks:
+  - id: run_completion
+    severity: high
+    source: run_get(include=["progress","diagnosis","artifact_summary"])
+    good_signal: Run succeeded and artifact_summary includes pipeline_info plus the expected
+      route-specific output families.
+    bad_signal: Run failed, stalled, or reports a blocking diagnosis.
+    action: Read summarized diagnosis and next_actions first, then inspect run_logs or concrete
+      output files only after the path is known.
+  - id: samplesheet_shape
+    severity: high
+    source: samplesheet and schema_input rules
+    good_signal: Rows have patient and sample, unique lane/patient/sample keys, and columns matching
+      the selected step.
+    bad_signal: Missing lane for mapping, missing index for BAM/CRAM starts, missing table for
+      recalibrate, or missing vcf for annotate.
+    action: Fix the server-local samplesheet and rerun. Use from_run_id only when the source run is
+      compatible.
+  - id: reference_and_index_pairs
+    severity: high
+    source: reference_genome_options schema group and PREPARE_GENOME routing
+    good_signal: FASTA, FAI, dict, VCF, TBI, PON, known sites, ASCAT, MSI, and annotation files are
+      present in matched pairs where required.
+    bad_signal: Tabix or fai failures, missing Sentieon model, missing PON TBI, missing dbNSFP TBI,
+      or cache path mismatch.
+    action: Confirm server-local paths with fs_list(mode="manifest") and use exact schema lookup for
+      the missing field.
+  - id: tumor_normal_pairing
+    severity: high
+    source: usage samplesheet rules and workflow pairing logic
+    good_signal: Shared patient values connect normal and tumor samples, status 0 marks normal,
+      status 1 marks tumor, and sample IDs are distinct.
+    bad_signal: Tumor-normal outputs missing, tumor-only outputs produced unexpectedly, or duplicate
+      normal samples per patient where a caller allows only one.
+    action: Inspect samplesheet rows before changing tools; pairing errors are usually input
+      metadata problems.
+  - id: targeted_wes_intervals
+    severity: medium
+    source: main_options schema group
+    good_signal: WES or panel runs use wes=true and a BED intervals file.
+    bad_signal: Excessive process count, missing interval outputs, or Mutect2 with incompatible
+      no_intervals planning.
+    action: Add or fix intervals, set wes=true, and only use no_intervals after checking the chosen
+      callers.
+  - id: sentieon_prerequisites
+    severity: high
+    source: usage Sentieon docs and schema groups
+    good_signal: License is configured as SENTIEON_LICENSE_BASE64 on the server, and Sentieon tools
+      have model and emit-mode params when needed.
+    bad_signal: License failure, missing sentieon_dnascope_model, or unsupported Sentieon route.
+    action: Ask the user or admin to confirm the server-side secret; never request or store the
+      license value in params.
+  - id: annotation_outputs
+    severity: medium
+    source: annotation outputs and reports
+    good_signal: annotation/ plus reports/SnpEff or reports/EnsemblVEP exist for requested tools,
+      and VCF headers record annotation versions.
+    bad_signal: Missing annotation directory, missing cache, SnpEff chromosome mismatch, or missing
+      plugin database files.
+    action: Check cache paths, species/genome/cache version params, and plugin file/index pairs.
+  - id: multiqc_and_versions
+    severity: medium
+    source: multiqc and pipeline_info
+    good_signal: multiqc_report.html, multiqc_data, and software versions YAML exist.
+    bad_signal: MultiQC missing despite not being skipped, incomplete versions, or report sections
+      absent for requested tools.
+    action: Use run_artifacts first, then fs_read exact MultiQC data or version files as needed.

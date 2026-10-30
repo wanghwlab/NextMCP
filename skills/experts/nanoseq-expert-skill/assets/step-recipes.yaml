@@ -1,0 +1,190 @@
+steps:
+  - id: launch
+    purpose: Confirm inputs, prepare the run when needed, launch nanoseq, then inspect status before
+      raw files.
+    minimal_inputs:
+      - project
+      - input
+      - protocol
+      - outdir
+    tool_sequence:
+      - project_list() when the project id is unknown.
+      - project_get(project) when the project root or prior runs matter.
+      - fs_list(mode="manifest") when one server-local path still needs confirmation.
+      - nextflow_run(prepare=true) when launch layout is still uncertain.
+      - nextflow_run(pipeline="nanoseq", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    outputs:
+      - run layout
+      - results/<run_id>/
+      - status summary
+  - id: demultiplexing_qcat
+    purpose: Split pooled Nanopore reads by barcode before sample-level analysis.
+    minimal_inputs:
+      - input
+      - input_path
+      - protocol
+      - barcode_kit
+    params:
+      skip_demultiplexing: false
+      input_path: <server_input_root>/undemultiplexed.fastq.gz
+      barcode_kit: NBD103/NBD104
+    optional_params:
+      - barcode_both_ends
+      - trim_barcodes
+      - qcat_detect_middle
+      - qcat_min_score
+    outputs:
+      - qcat/fastq/<barcode*>.fastq.gz
+      - qcat/fastq/none.fastq.gz
+    failure_checks:
+      - Missing input_path causes the workflow to exit before qcat.
+      - Unsupported barcode_kit causes validation failure.
+  - id: nanolyse_filtering
+    purpose: Remove lambda or custom DNA contaminant reads from FASTQ files before QC and alignment.
+    minimal_inputs:
+      - input
+      - protocol
+      - run_nanolyse
+    params:
+      run_nanolyse: true
+    optional_params:
+      nanolyse_fasta: <server_reference_root>/contaminants.fa.gz
+    outputs:
+      - nanolyse/<SAMPLE>.fastq.gz
+      - nanolyse/<SAMPLE>.nanolyse.log
+    failure_checks:
+      - In offline mode, provide nanolyse_fasta because the workflow cannot download the default
+        lambda reference.
+  - id: alignment_and_tracks
+    purpose: Build or reuse reference indexes, align reads, sort/index BAM, and create bigWig or
+      bigBed tracks.
+    minimal_inputs:
+      - input
+      - protocol
+      - aligner
+    params:
+      aligner: minimap2
+      skip_alignment: false
+    optional_params:
+      - save_align_intermeds
+      - skip_bigwig
+      - skip_bigbed
+      - stranded
+    outputs:
+      - <ALIGNER>/<SAMPLE>.sorted.bam
+      - <ALIGNER>/<SAMPLE>.sorted.bam.bai
+      - <ALIGNER>/samtools_stats/
+      - <ALIGNER>/bigwig/
+      - <ALIGNER>/bigbed/
+    failure_checks:
+      - protocol must be DNA, cDNA, or directRNA.
+      - aligner must be minimap2 or graphmap2.
+  - id: dna_variant_calling
+    purpose: Call short and structural variants for DNA runs after alignment.
+    minimal_inputs:
+      - protocol
+      - call_variants
+      - variant_caller
+      - structural_variant_caller
+    params:
+      protocol: DNA
+      call_variants: true
+      variant_caller: medaka
+      structural_variant_caller: sniffles
+    optional_params:
+      - skip_vc
+      - skip_sv
+      - split_mnps
+      - phase_vcf
+      - deepvariant_gpu
+    outputs:
+      - variant_calling/medaka_variant/<SAMPLE>.vcf.gz
+      - variant_calling/deepvariant/<SAMPLE>.vcf.gz
+      - variant_calling/margin_pepper_deepvariant/<SAMPLE>.vcf.gz
+      - variant_calling/sniffles/<SAMPLE>.vcf.gz
+      - variant_calling/cutesv/<SAMPLE>.vcf.gz
+    failure_checks:
+      - call_variants with non-DNA protocol fails validation.
+      - deepvariant and pepper_margin_deepvariant require Docker or Singularity according to the
+        schema help text.
+      - deepvariant_gpu needs matching GPU scheduling outside ordinary params.
+  - id: rna_quantification
+    purpose: Reconstruct transcripts, quantify genes/transcripts, and optionally run DESeq2 and
+      DEXSeq.
+    minimal_inputs:
+      - protocol
+      - quantification_method
+      - samplesheet fasta and gtf values
+    params:
+      protocol: cDNA
+      quantification_method: bambu
+      skip_quantification: false
+    optional_params:
+      - skip_differential_analysis
+      - stranded
+    outputs:
+      - bambu/extended_annotations.gtf
+      - bambu/counts_gene.txt
+      - bambu/counts_transcript.txt
+      - stringtie2/stringtie.merged.gtf
+      - stringtie2/counts_gene.txt
+      - stringtie2/counts_transcript.txt
+      - <QUANTIFICATION_METHOD>/deseq2/deseq2.results.txt
+      - <QUANTIFICATION_METHOD>/dexseq/dexseq.results.txt
+    failure_checks:
+      - Quantification only runs for cDNA or directRNA.
+      - Differential analysis requires suitable conditions and replicates in the samplesheet.
+  - id: directrna_modification
+    purpose: Use Nanopolish signal alignment, then xPore and/or m6Anet for RNA modification output.
+    minimal_inputs:
+      - protocol
+      - input directories with fast5 and fastq subdirectories
+      - sorted BAM from alignment
+    params:
+      protocol: directRNA
+      skip_modification_analysis: false
+    optional_params:
+      - skip_xpore
+      - skip_m6anet
+    outputs:
+      - rna_modifications/xpore/diffmod/diffmod_outputs/diffmod.table
+      - rna_modifications/m6anet/inference/<sample_name>/data.result.csv.gz
+    failure_checks:
+      - Modification analysis only runs for directRNA.
+      - Missing FAST5 or FASTQ directories blocks Nanopolish event alignment.
+  - id: rna_fusion_jaffal
+    purpose: Run JAFFAL fusion detection for cDNA or directRNA samples.
+    minimal_inputs:
+      - protocol
+      - FASTQ reads
+    params:
+      skip_fusion_analysis: false
+    optional_params:
+      jaffal_ref_dir: <server_reference_root>/JAFFAL
+    outputs:
+      - jaffal/jaffa_results.csv
+      - jaffal/jaffa_results.fasta
+    failure_checks:
+      - Fusion analysis only runs for cDNA or directRNA.
+      - If jaffal_ref_dir is omitted, the server must be able to fetch and unpack the reference.
+  - id: restart_or_reuse
+    purpose: Restart from a previous nextmcp run or reuse a prior artifact after compatibility
+      checks.
+    minimal_inputs:
+      - project
+      - from_run_id or artifact_path_contains
+    tool_sequence:
+      - run_get(detail="full") on the source run when restart safety matters.
+      - nextflow_run(..., from_run_id=<run_id>) for public restart.
+      - run_list(project=..., pipeline="nanoseq", artifact_path_contains=...) when searching by
+        remembered output.
+      - run_get(include=["artifact_summary"])
+      - run_artifacts(...)
+      - fs_read(...) for pipeline_info/params.json after the path is known.
+    outputs:
+      - launch_spec
+      - nextflow_session_uuid
+      - artifacts.json
+      - pipeline_fingerprint
+      - pipeline_info/params.json

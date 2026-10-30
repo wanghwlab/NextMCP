@@ -1,0 +1,216 @@
+group:
+  id: variant_calling_options
+  label: Variant calling options
+  selection_rule: Use this group for parameters defined under the `Variant calling
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/variant_calling_options.md
+  - assets/schema-groups/variant_calling_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `variant_calling_options` for exact lookup.
+parameters:
+- group_id: variant_calling_options
+  name: call_variants
+  source_name: call_variants
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies if variant calling will executed.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: boolean
+    description: Specifies if variant calling will executed.
+    fa_icon: fas fa-exchange-alt
+- group_id: variant_calling_options
+  name: deepvariant_gpu
+  source_name: deepvariant_gpu
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies whether to call variants with pepper_margin_deepvariant in
+    GPU mode.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-exchange-alt
+    description: Specifies whether to call variants with pepper_margin_deepvariant
+      in GPU mode.
+- group_id: variant_calling_options
+  name: phase_vcf
+  source_name: phase_vcf
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies if vcf will be phased when using medaka.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-exchange-alt
+    description: Specifies if vcf will be phased when using medaka.
+- group_id: variant_calling_options
+  name: skip_sv
+  source_name: skip_sv
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip structural variant calling.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip structural variant calling.
+- group_id: variant_calling_options
+  name: skip_vc
+  source_name: skip_vc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip variant calling.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip variant calling.
+- group_id: variant_calling_options
+  name: split_mnps
+  source_name: split_mnps
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies if MNPs will be split into SNPs when using medaka.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: boolean
+    description: Specifies if MNPs will be split into SNPs when using medaka.
+    fa_icon: fas fa-file-alt
+- group_id: variant_calling_options
+  name: structural_variant_caller
+  source_name: structural_variant_caller
+  type: string
+  required: false
+  default: sniffles
+  enum: null
+  description: 'Specifies the variant caller that will be used to call structural
+    variants (available are: sniffles and cutesv). Structural variant calling is only
+    available if ''--call_variants'' is set and the protocol is set to `DNA`.'
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - sniffles
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: string
+    default: sniffles
+    description: 'Specifies the variant caller that will be used to call structural
+      variants (available are: sniffles and cutesv). Structural variant calling is
+      only available if ''--call_variants'' is set and the protocol is set to `DNA`.'
+    fa_icon: fas fa-bezier-curve
+- group_id: variant_calling_options
+  name: variant_caller
+  source_name: variant_caller
+  type: string
+  required: false
+  default: medaka
+  enum: null
+  description: 'Specifies the variant caller that will used to call small variants
+    (available are: medaka, deepvariant, and pepper_margin_deepvariant). Variant calling
+    is only available if ''--call_variants'' is set and the protocol is set to `DNA`.
+    Please note `deepvariant` and `pepper_margin_deepvariant` are only avaible if
+    using singularity or docker.'
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - medaka
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Variant calling options
+  raw_schema:
+    type: string
+    default: medaka
+    description: 'Specifies the variant caller that will used to call small variants
+      (available are: medaka, deepvariant, and pepper_margin_deepvariant). Variant
+      calling is only available if ''--call_variants'' is set and the protocol is
+      set to `DNA`. Please note `deepvariant` and `pepper_margin_deepvariant` are
+      only avaible if using singularity or docker.'
+    fa_icon: fas fa-bezier-curve

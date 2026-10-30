@@ -1,0 +1,163 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: nanoseq
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/nanoseq/test
+
+path_prefix_mappings:
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/
+    localized_prefix: /data/nextmcp/testdata/nanoseq/test/pipeline-data/
+  - remote_prefix: https://github.com/nf-core/test-datasets/raw/
+    localized_prefix: /data/nextmcp/testdata/nanoseq/test/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/nanoseq
+  config: conf/test.config
+  resolved_runtime_chain:
+    test_profile: test
+    aligner: minimap2
+  resolved_params:
+    input: /data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv
+    input_path: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+    protocol: DNA
+    aligner: minimap2
+    barcode_kit: NBD103/NBD104
+    skip_quantification: true
+    skip_bigwig: true
+    skip_bigbed: true
+    skip_fusion_analysis: true
+    skip_modification_analysis: true
+
+runtime_hints:
+  launch_rule: Build the smoke contract from nextflow.config plus conf/test.config because the route is profile-only, but keep max_cpus, max_memory, and max_time in a small override config passed through config_files.
+  manifest_rule: Download and rewrite the upstream samplesheet because its `fasta` column points at a nested remote reference FASTA that must become a server-local path.
+  artifact_rule: Keep artifact assertions minimal because the vendored nanoseq checkout does not expose top-level `.nf.test` or `.snap` evidence for this route.
+
+config_override_files:
+  - path: /data/nextmcp/testdata/nanoseq/test/project-files/pipeline-support-nanoseq/max_resources.config
+    source_fields:
+      - max_cpus
+      - max_memory
+      - max_time
+    purpose: Keep smoke resource caps in config scope instead of nextflow_run params.
+    content: |
+      params.max_cpus = 2
+      params.max_memory = '6.GB'
+      params.max_time = '12.h'
+
+url_inventory:
+  - role: input_samplesheet
+    config_field: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/nanoseq/3.0/samplesheet/samplesheet_nobc_dx.csv
+    localized_value: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx.csv
+  - role: input_fastq
+    config_field: input_path
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+    localized_value: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+  - role: reference_fasta
+    config_field: input.samplesheet[].fasta
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/nanoseq/reference/hg19_KCMF1.fa
+    localized_value: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/reference/hg19_KCMF1.fa
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx.csv
+    localized_path: /data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv
+    rewritten_columns:
+      - fasta
+    localized_rows:
+      - group: sample
+        replicate: "1"
+        barcode: "6"
+        input_file: ""
+        fasta: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/reference/hg19_KCMF1.fa
+        gtf: ""
+      - group: sample
+        replicate: "2"
+        barcode: "12"
+        input_file: ""
+        fasta: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/reference/hg19_KCMF1.fa
+        gtf: ""
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/nanoseq/3.0/samplesheet/samplesheet_nobc_dx.csv
+    localized_value: /data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv
+  - config_field: input_path
+    official_param: input_path
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+    localized_value: /data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz
+  - config_field: protocol
+    official_param: protocol
+    original_value: DNA
+    localized_value: DNA
+  - config_field: nextflow.config:aligner
+    official_param: aligner
+    original_value: minimap2
+    localized_value: minimap2
+  - config_field: barcode_kit
+    official_param: barcode_kit
+    original_value: NBD103/NBD104
+    localized_value: NBD103/NBD104
+  - config_field: skip_quantification
+    official_param: skip_quantification
+    original_value: true
+    localized_value: true
+  - config_field: skip_bigwig
+    official_param: skip_bigwig
+    original_value: true
+    localized_value: true
+  - config_field: skip_bigbed
+    official_param: skip_bigbed
+    original_value: true
+    localized_value: true
+  - config_field: skip_fusion_analysis
+    official_param: skip_fusion_analysis
+    original_value: true
+    localized_value: true
+  - config_field: skip_modification_analysis
+    official_param: skip_modification_analysis
+    original_value: true
+    localized_value: true
+
+ignored_upstream_params:
+  - config_field: params.outdir
+    reason: Omit the upstream outdir so nextmcp can bind the project-owned default results directory.
+
+natural_language_execution_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `nanoseq` lightweight example in project
+  `pipeline-withskill-nanoseq`. Use the rewritten samplesheet, the local
+  nondemultiplexed FASTQ, and the server-local reference FASTA copied from the
+  upstream example. Keep the project-owned default results directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/nanoseq/test/rewrites/pipeline-data/nanoseq/3.0/samplesheet/samplesheet_nobc_dx_local.csv`
+  - Nondemultiplexed FASTQ: `/data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/fastq/nondemultiplexed/sample_nobc_dx.fastq.gz`
+  - Reference FASTA: `/data/nextmcp/testdata/nanoseq/test/pipeline-data/nanoseq/reference/hg19_KCMF1.fa`
+  
+  ## Workflow goal
+  
+  - Run the DNA Nanopore route represented by the rewritten samplesheet.
+  - Start from the nondemultiplexed FASTQ and keep the demultiplexing step active with barcode kit
+    `NBD103/NBD104`.
+  - Keep the two sample replicates represented by samplesheet barcodes 6 and 12.
+  - Align with the default minimap2 path after demultiplexing.
+  - Skip quantification, genome-browser track generation, fusion analysis, and modification analysis
+    branches that are outside this small DNA demultiplexing and alignment test.
+  - Keep the upstream test resource caps at 2 CPUs, 6.GB memory, and 12.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/nanoseq/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-nanoseq` as project name.
+  - Do not use the `nanoseq` expert skill.

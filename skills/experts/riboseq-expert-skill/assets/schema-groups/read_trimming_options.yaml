@@ -1,0 +1,137 @@
+group:
+  id: read_trimming_options
+  label: Read trimming options
+  selection_rule: Use this group for parameters defined under the `Read trimming options` top-level
+    schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/read_trimming_options.md
+  - assets/schema-groups/read_trimming_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section `read_trimming_options`
+    for exact lookup.
+parameters:
+- group_id: read_trimming_options
+  name: extra_trimgalore_args
+  source_name: extra_trimgalore_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra arguments to pass to Trim Galore! command in addition to defaults defined by
+    the pipeline.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: string
+    description: Extra arguments to pass to Trim Galore! command in addition to defaults defined by
+      the pipeline.
+    fa_icon: fas fa-plus
+- group_id: read_trimming_options
+  name: fastp_merge
+  source_name: fastp_merge
+  type: boolean
+  required: false
+  default: false
+  enum: null
+  description: For paired-end data processed with fastp, merge overlapping read pairs into a single
+    read.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: boolean
+    default: false
+    fa_icon: fas fa-compress-alt
+    description: For paired-end data processed with fastp, merge overlapping read pairs into a single
+      read.
+- group_id: read_trimming_options
+  name: min_trimmed_reads
+  source_name: min_trimmed_reads
+  type: integer
+  required: false
+  default: 10000
+  enum: null
+  description: Minimum number of trimmed reads below which samples are removed from further processing.
+    Some downstream steps in the pipeline will fail if this threshold is too low.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 10000
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes before changing
+    this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: integer
+    default: 10000
+    fa_icon: fas fa-hand-paper
+    description: Minimum number of trimmed reads below which samples are removed from further processing.
+      Some downstream steps in the pipeline will fail if this threshold is too low.
+- group_id: read_trimming_options
+  name: trimmer
+  source_name: trimmer
+  type: string
+  required: false
+  default: trimgalore
+  enum: &id001
+  - trimgalore
+  - fastp
+  description: Specifies the trimming tool to use - available options are 'trimgalore' and 'fastp'.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - trimgalore
+  - fastp
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: string
+    default: trimgalore
+    description: Specifies the trimming tool to use - available options are 'trimgalore' and 'fastp'.
+    fa_icon: fas fa-cut
+    enum: *id001
+- group_id: read_trimming_options
+  name: extra_fastp_args
+  source_name: extra_fastp_args
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Extra arguments to pass to fastp command in addition to defaults defined by the pipeline.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Read trimming options
+  raw_schema:
+    type: string
+    description: Extra arguments to pass to fastp command in addition to defaults defined by the pipeline.
+    fa_icon: fas fa-plus

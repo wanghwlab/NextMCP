@@ -1,0 +1,17 @@
+status: resolved
+gaps:
+- id: documented_prerequisite_pre_built
+  status: scoped_out
+  reason: Keyword or internal-entry audit hint, not an independently exposed runtime parameter or
+    user workflow. Follow the documented concrete modes, schema fields and output catalog; this package
+    does not invent a standalone action for this hint.
+- id: documented_output_stringtie
+  status: scoped_out
+  reason: Keyword or internal-entry audit hint, not an independently exposed runtime parameter or
+    user workflow. Follow the documented concrete modes, schema fields and output catalog; this package
+    does not invent a standalone action for this hint.
+- id: published_outputs_nextflow
+  status: scoped_out
+  reason: Keyword or internal-entry audit hint, not an independently exposed runtime parameter or
+    user workflow. Follow the documented concrete modes, schema fields and output catalog; this package
+    does not invent a standalone action for this hint.

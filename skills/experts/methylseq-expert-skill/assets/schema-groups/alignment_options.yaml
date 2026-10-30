@@ -1,0 +1,89 @@
+group:
+  id: alignment_options
+  label: Alignment options
+  selection_rule: Use this group for parameters defined under the `Alignment options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/alignment_options.md
+  - assets/schema-groups/alignment_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `alignment_options` for exact lookup.
+parameters:
+- group_id: alignment_options
+  name: aligner
+  source_name: aligner
+  type: string
+  required: true
+  default: bismark
+  enum: &id001
+  - bismark
+  - bismark_hisat
+  - bwameth
+  - bwamem
+  description: Alignment tool to use.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - bismark
+  - bismark_hisat
+  - bwameth
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: string
+    default: bismark
+    description: Alignment tool to use.
+    fa_icon: fas fa-dot-circle
+    enum: *id001
+    help_text: 'The nf-core/methylseq package is actually two pipelines in one. The
+      default workflow uses [Bismark](http://www.bioinformatics.babraham.ac.uk/projects/bismark/)
+      with [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) as alignment
+      tool: unless specified otherwise, nf-core/methylseq will run this pipeline.
+
+
+      Since bismark v0.21.0 it is also possible to use [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
+      as alignment tool. To run this workflow, invoke the pipeline with the command
+      line flag `--aligner bismark_hisat`. HISAT2 also supports splice-aware alignment
+      if analysis of RNA is desired (e.g. [SLAMseq](https://science.sciencemag.org/content/360/6390/800)
+      experiments), a file containing a list of known splicesites can be provided
+      with `--known_splices`.
+
+
+      The second workflow uses [BWA-Meth](https://github.com/brentp/bwa-meth) and
+      [MethylDackel](https://github.com/dpryan79/methyldackel) instead of Bismark.
+      To run this workflow, run the pipeline with the command line flag `--aligner
+      bwameth`.'
+- group_id: alignment_options
+  name: use_mem2
+  source_name: use_mem2
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Use BWA-MEM2 algorithm for BWA-Meth indexing and alignment.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Alignment options
+  raw_schema:
+    type: boolean
+    description: Use BWA-MEM2 algorithm for BWA-Meth indexing and alignment.
+    fa_icon: fas fa-forward
+    help_text: When using the BWA-Meth aligner (`--aligner bwameth`), this parameter
+      enables the BWA-MEM2 algorithm which can provide improved performance and accuracy.
+      The BWA-MEM2 algorithm is a drop-in replacement for BWA-MEM that is generally
+      faster and more accurate. This option only applies when using BWA-Meth aligner.

@@ -1,0 +1,108 @@
+pipeline:
+  id: methylseq
+  name: nf-core/methylseq
+  version: 4.2.0
+  summary: Methylation analysis for bisulfite, TAPS, and related short-read libraries.
+source_basis:
+  - "authoring bundle fields: schema, documents, and source_files"
+  - "pipeline directory: /root/key_projects/nextmcp/nf_pipeline/methylseq"
+  - "targeted extra: workflows/methylseq/main.nf"
+required_inputs:
+  - name: input
+    required_for: All analysis runs
+    placeholder: <server_input_root>/samplesheet.csv
+    notes: Server-local CSV samplesheet with sample, fastq_1, fastq_2, and genome columns.
+  - name: outdir
+    required_for: Published results
+    placeholder: <server_output_root>/methylseq
+    notes: Server-local results directory.
+  - name: aligner
+    required_for: All analysis runs
+    placeholder: bismark
+    notes: Exact enum is bismark, bismark_hisat, bwameth, or bwamem.
+  - name: reference
+    required_for: Genome-dependent alignment and methylation calling
+    placeholder: <server_reference_root>/...
+    notes: Use genome from configured iGenomes, or provide fasta plus the aligner-specific index paths.
+supported_modes:
+  - id: bismark_default
+    entry_target: pipeline id methylseq
+    use_when: Default bisulfite route with Bismark and Bowtie2.
+    route_shaping_params:
+      aligner: bismark
+    main_outputs:
+      - bismark/alignments/
+      - bismark/deduplicated/
+      - bismark/methylation_calls/
+      - bismark/reports/
+      - bismark/summary/
+  - id: bismark_hisat
+    entry_target: pipeline id methylseq
+    use_when: Bismark route using HISAT2, including splice-aware use cases such as SLAM-seq.
+    route_shaping_params:
+      aligner: bismark_hisat
+      known_splices: <server_reference_root>/splices.gtf
+    main_outputs:
+      - bismark/alignments/
+      - bismark/methylation_calls/
+      - bismark/reports/
+  - id: bwameth_methyldackel
+    entry_target: pipeline id methylseq
+    use_when: BWA-Meth alignment with MethylDackel methylation extraction.
+    route_shaping_params:
+      aligner: bwameth
+      use_mem2: false
+    main_outputs:
+      - bwameth/alignments/
+      - bwameth/deduplicated/
+      - methyldackel/
+  - id: bwameth_mem2
+    entry_target: pipeline id methylseq
+    use_when: BWA-Meth route with the BWA-MEM2 algorithm.
+    route_shaping_params:
+      aligner: bwameth
+      use_mem2: true
+    main_outputs:
+      - bwameth/alignments/
+      - bwameth/deduplicated/
+      - methyldackel/
+  - id: bwameth_gpu
+    entry_target: pipeline id methylseq
+    use_when: GPU accelerated BWA-Meth through the server runtime profile.
+    route_shaping_params:
+      aligner: bwameth
+    profile_note: Pass profile only when the user requests GPU or the server default is unsuitable.
+    main_outputs:
+      - bwameth/alignments/
+      - methyldackel/
+  - id: taps_bwamem_rastair
+    entry_target: pipeline id methylseq
+    use_when: TAPS data or BWA-MEM route that should use Rastair for conversion-rate calls.
+    route_shaping_params:
+      aligner: bwamem
+      taps: true
+    main_outputs:
+      - bwamem/alignments/
+      - bwamem/deduplicated/
+      - rastair/call/
+      - rastair/mbias/
+      - rastair/methylkit/
+  - id: targeted_sequencing
+    entry_target: pipeline id methylseq
+    use_when: Region-focused methylation analysis with a target BED file.
+    route_shaping_params:
+      run_targeted_sequencing: true
+      target_regions_file: <server_reference_root>/targets.bed
+      collecthsmetrics: true
+    constraints:
+      - Not compatible with TAPS or aligner=bwamem because that route uses Rastair.
+    main_outputs:
+      - bismark/methylation_calls/bedGraph/*targeted.bedGraph
+      - methyldackel/*targeted.bedGraph
+      - enrichment_metrics/
+assumptions:
+  - Runtime planning uses packaged assets and does not start with nextflow_inspect_pipeline.
+  - All paths are resolved on the nextmcp server filesystem.
+limitations:
+  - Long-read methylation workflows are not covered by this pipeline.
+  - Conda or Mamba is not suitable for the Parabricks GPU route.

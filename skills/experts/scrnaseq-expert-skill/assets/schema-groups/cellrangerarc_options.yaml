@@ -1,0 +1,79 @@
+group:
+  id: cellrangerarc_options
+  label: Cellranger ARC Options
+  selection_rule: Use this group for parameters defined under the `Cellranger ARC
+    Options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/cellrangerarc_options.md
+  - assets/schema-groups/cellrangerarc_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `cellrangerarc_options` for exact lookup.
+parameters:
+- group_id: cellrangerarc_options
+  name: cellrangerarc_config
+  source_name: cellrangerarc_config
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a config file to create the cellranger-arc index.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger ARC Options
+  raw_schema:
+    type: string
+    description: Specify a config file to create the cellranger-arc index.
+- group_id: cellrangerarc_options
+  name: cellrangerarc_reference
+  source_name: cellrangerarc_reference
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify the genome reference name used in the config file to create
+    a cellranger-arc index.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger ARC Options
+  raw_schema:
+    type: string
+    description: Specify the genome reference name used in the config file to create
+      a cellranger-arc index.
+- group_id: cellrangerarc_options
+  name: motifs
+  source_name: motifs
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a motif file to create a cellranger-arc index. Can be taken,
+    e.g., from the JASPAR database.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/motifs
+  example_values:
+  - <server_reference_root>/motifs
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger ARC Options
+  raw_schema:
+    type: string
+    description: Specify a motif file to create a cellranger-arc index. Can be taken,
+      e.g., from the JASPAR database.

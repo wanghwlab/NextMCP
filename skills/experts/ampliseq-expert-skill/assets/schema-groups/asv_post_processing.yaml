@@ -1,0 +1,282 @@
+group:
+  id: asv_post_processing
+  label: ASV post processing
+  selection_rule: Use this group for parameters defined under the `ASV post processing`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/asv_post_processing.md
+  - assets/schema-groups/asv_post_processing.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `asv_post_processing` for exact lookup.
+parameters:
+- group_id: asv_post_processing
+  name: filter_codons
+  source_name: filter_codons
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Filter ASVs based on codon usage
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: boolean
+    description: Filter ASVs based on codon usage
+    help_text: ASVs will be filtered to contain no stop codon in their coding sequence
+      and that their length is a multiple of 3.
+- group_id: asv_post_processing
+  name: filter_ssu
+  source_name: filter_ssu
+  type: string
+  required: false
+  default: null
+  enum: &id001
+  - bac,arc,mito,euk
+  - bac
+  - arc
+  - mito
+  - euk
+  - bac,arc
+  - bac,mito
+  - bac,euk
+  - arc,mito
+  - arc,euk
+  - mito,euk
+  - bac,arc,mito
+  - bac,mito,euk
+  - arc,mito,euk
+  description: Enable SSU filtering. Comma separated list of kingdoms (domains) in
+    Barrnap, a combination (or one) of "bac", "arc", "mito", and "euk". ASVs that
+    have their lowest evalue in that kingdoms are kept.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - bac,arc,mito,euk
+  - bac
+  - arc
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: string
+    description: Enable SSU filtering. Comma separated list of kingdoms (domains)
+      in Barrnap, a combination (or one) of "bac", "arc", "mito", and "euk". ASVs
+      that have their lowest evalue in that kingdoms are kept.
+    enum: *id001
+- group_id: asv_post_processing
+  name: raise_filter_stacksize
+  source_name: raise_filter_stacksize
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Raise stack size when filtering VSEARCH clusters
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: boolean
+    default: true
+    fa_icon: fas fa-angle-double-up
+    description: Raise stack size when filtering VSEARCH clusters
+    help_text: Setting to true adds 'ulimit -s unlimited' to the beginning of the
+      filt_clusters.py command.
+- group_id: asv_post_processing
+  name: vsearch_cluster
+  source_name: vsearch_cluster
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Post-cluster ASVs with VSEARCH
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: boolean
+    description: Post-cluster ASVs with VSEARCH
+    help_text: ASVs will be clustered with VSEARCH using the id value found in `--vsearch_cluster_id`.
+- group_id: asv_post_processing
+  name: max_len_asv
+  source_name: max_len_asv
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Maximum ASV length
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: integer
+    description: Maximum ASV length
+    help_text: 'Remove ASV that are above the maximum length threshold (default: filter
+      is disabled, otherwise 1000000). Lowering the threshold might reduce false positive
+      ASVs (e.g. PCR off-targets).'
+- group_id: asv_post_processing
+  name: min_len_asv
+  source_name: min_len_asv
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Minimal ASV length
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: integer
+    description: Minimal ASV length
+    help_text: 'Remove ASV that are below the minimum length threshold (default: filter
+      is disabled, otherwise 1). Increasing the threshold might reduce false positive
+      ASVs (e.g. PCR off-targets).'
+- group_id: asv_post_processing
+  name: orf_end
+  source_name: orf_end
+  type: integer
+  required: false
+  default: null
+  enum: null
+  description: Ending position of codon tripletts
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: integer
+    description: Ending position of codon tripletts
+    help_text: 'By default, when `--filter_codons` is set, the codons are checked
+      until the end of the ASV sequences. If you would like to change this setting,
+      you can specify until which position of the ASV sequences the codon triplets
+      are checked.
+
+
+      Please note that the length of the ASV from the beginning or from the `--orf_start`
+      until this position must be a multiple of 3.'
+- group_id: asv_post_processing
+  name: orf_start
+  source_name: orf_start
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Starting position of codon tripletts
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: integer
+    default: 1
+    description: Starting position of codon tripletts
+    help_text: By default, when `--filter_codons` is set, the codons start from the
+      first position of the ASV sequences. The start of the codons can be changed
+      to any position.
+- group_id: asv_post_processing
+  name: stop_codons
+  source_name: stop_codons
+  type: string
+  required: false
+  default: TAA,TAG
+  enum: null
+  description: Define stop codons
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - TAA,TAG
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: string
+    default: TAA,TAG
+    description: Define stop codons
+    help_text: By default, when `--filter_codons` is set, the codons `TAA,TAG` are
+      set as stop codons. Here you can specify any comma-separated list of codons
+      to be used as stop codons, e.g. `--stop_codons "TAA,TAG,TGA"`
+- group_id: asv_post_processing
+  name: vsearch_cluster_id
+  source_name: vsearch_cluster_id
+  type: number
+  required: false
+  default: 0.97
+  enum: null
+  description: 'Pairwise Identity value used when post-clustering ASVs if `--vsearch_cluster`
+    option is used (default: 0.97).'
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.97
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: ASV post processing
+  raw_schema:
+    type: number
+    default: 0.97
+    minimum: 0
+    maximum: 1
+    description: 'Pairwise Identity value used when post-clustering ASVs if `--vsearch_cluster`
+      option is used (default: 0.97).'
+    help_text: Lowering or increasing this value can change the number ASVs left over
+      after clustering.

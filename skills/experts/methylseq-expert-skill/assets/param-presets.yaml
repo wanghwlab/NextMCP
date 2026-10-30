@@ -1,0 +1,123 @@
+presets:
+  bismark_default:
+    use_when: Standard bisulfite analysis with Bismark and Bowtie2.
+    params:
+      aligner: bismark
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq
+      genome: <configured_genome_or_null>
+      fasta: <server_reference_root>/genome.fa
+      bismark_index: <server_reference_root>/BismarkIndex
+    notes:
+      - Use either genome or explicit reference paths. If bismark_index is set, fasta is still mandatory by schema guidance.
+
+  bismark_hisat:
+    use_when: Bismark route with HISAT2, including splice-aware or SLAM-seq planning.
+    params:
+      aligner: bismark_hisat
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq_hisat
+      fasta: <server_reference_root>/genome.fa
+      bismark_index: <server_reference_root>/BismarkHisatIndex
+      known_splices: <server_reference_root>/annotation.gtf
+    notes:
+      - Add slamseq=true only when the user requests SLAM-seq mode.
+
+  bwameth_methyldackel:
+    use_when: BWA-Meth route with MethylDackel methylation extraction.
+    params:
+      aligner: bwameth
+      use_mem2: false
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq_bwameth
+      fasta: <server_reference_root>/genome.fa
+      fasta_index: <server_reference_root>/genome.fa.fai
+      bwameth_index: <server_reference_root>/
+    notes:
+      - bwameth_index is the directory containing bwa-meth reference files, not the full file prefix.
+
+  bwameth_mem2:
+    use_when: BWA-Meth route using the BWA-MEM2 algorithm.
+    params:
+      aligner: bwameth
+      use_mem2: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq_bwameth_mem2
+      fasta: <server_reference_root>/genome.fa
+      fasta_index: <server_reference_root>/genome.fa.fai
+      bwameth_index: <server_reference_root>/
+    notes:
+      - If GPU acceleration is requested, profile selection is a runtime environment choice, not an ordinary params field.
+
+  taps_bwamem:
+    use_when: TAPS libraries or BWA-MEM route with Rastair outputs.
+    params:
+      aligner: bwamem
+      taps: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq_taps
+      fasta: <server_reference_root>/genome.fa
+      fasta_index: <server_reference_root>/genome.fa.fai
+      bwamem_index: <server_reference_root>/
+    notes:
+      - Do not combine with run_targeted_sequencing.
+
+  targeted_bismark:
+    use_when: Targeted methylation kit analysis on a Bismark route.
+    params:
+      aligner: bismark
+      run_targeted_sequencing: true
+      collecthsmetrics: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq_targeted
+      target_regions_file: <server_reference_root>/targets.bed
+      fasta: <server_reference_root>/genome.fa
+      fasta_index: <server_reference_root>/genome.fa.fai
+      bismark_index: <server_reference_root>/BismarkIndex
+    notes:
+      - target_regions_file is mandatory when run_targeted_sequencing is true.
+
+  special_library:
+    use_when: Library-specific trimming or interpretation preset is needed.
+    params:
+      pbat: false
+      rrbs: false
+      single_cell: false
+      accel: false
+      zymo: false
+      em_seq: false
+      nomeseq: false
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/methylseq_special_library
+    notes:
+      - Set only the library flags the user confirms.
+      - Use skip_trimming_presets=true only when the user wants manual trimming controls.
+
+  optional_qc:
+    use_when: Additional QC or saved intermediate files are requested.
+    params:
+      run_qualimap: true
+      run_preseq: true
+      save_align_intermeds: false
+      save_trimmed: false
+      unmapped: false
+      save_reference: false
+    placeholders:
+      bamqc_regions_file: <server_reference_root>/regions.bed
+    notes:
+      - These switches increase output volume. Enable only requested outputs.
+
+  reuse_lookup:
+    use_when: Historical output discovery; this preset is not passed to nextflow_run.
+    params: {}
+    placeholders:
+      artifact_path_contains: multiqc_report.html
+    notes:
+      - Use run_list and run_artifacts. Do not launch a run for reuse lookup.

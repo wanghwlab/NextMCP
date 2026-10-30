@@ -1,0 +1,957 @@
+group:
+  id: annotation
+  label: Annotation
+  selection_rule: Use this group for parameters defined under the `Annotation` top-level
+    schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/annotation.md
+  - assets/schema-groups/annotation.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `annotation` for exact lookup.
+parameters:
+- group_id: annotation
+  name: bcftools_annotations
+  source_name: bcftools_annotations
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: A vcf file containing custom annotations to be used with bcftools annotate.
+    Needs to be bgzipped.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/bcftools_annotations
+  example_values:
+  - <server_reference_root>/bcftools_annotations
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.vcf\.gz$
+    exists: true
+    fa_icon: fas fa-file
+    description: A vcf file containing custom annotations to be used with bcftools
+      annotate. Needs to be bgzipped.
+- group_id: annotation
+  name: bcftools_annotations_tbi
+  source_name: bcftools_annotations_tbi
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Index file for `bcftools_annotations`
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/bcftools_annotations_tbi
+  example_values:
+  - <server_reference_root>/bcftools_annotations_tbi
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.vcf\.gz\.tbi$
+    exists: true
+    fa_icon: fas fa-file
+    description: Index file for `bcftools_annotations`
+- group_id: annotation
+  name: condel_config
+  source_name: condel_config
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Condel config file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/config.yaml
+  example_values:
+  - <server_input_root>/config.yaml
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to Condel config file.
+    help_text: To be used with `--vep_condel`. Path to the Condel plugin configuration
+      file (e.g., condel_SP.conf).
+- group_id: annotation
+  name: dbnsfp
+  source_name: dbnsfp
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to dbNSFP processed file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/dbnsfp
+  example_values:
+  - <server_reference_root>/dbnsfp
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.gz$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to dbNSFP processed file.
+    help_text: 'Will not work without a provided `dbnsfp_tbi`. To be used with `--vep_dbnsfp`.
+
+      dbNSFP files and more information are available at https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#dbnsfp
+      and https://sites.google.com/site/jpopgen/dbNSFP/'
+- group_id: annotation
+  name: dbnsfp_tbi
+  source_name: dbnsfp_tbi
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to dbNSFP tabix indexed file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/dbnsfp_tbi
+  example_values:
+  - <server_reference_root>/dbnsfp_tbi
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.gz\.(csi|tbi)$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to dbNSFP tabix indexed file.
+    help_text: To be used with `--vep_dbnsfp`.
+- group_id: annotation
+  name: mastermind_file
+  source_name: mastermind_file
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to Mastermind cited variants VCF file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/mastermind_file
+  example_values:
+  - <server_input_root>/mastermind_file
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.vcf\.gz$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to Mastermind cited variants VCF file.
+    help_text: To be used with `--vep_mastermind`. Download from https://www.genomenon.com/cvr/.
+      File must be bgzipped and tabix indexed.
+- group_id: annotation
+  name: mastermind_mutations
+  source_name: mastermind_mutations
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Mastermind plugin mutations parameter.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-align-center
+    description: Mastermind plugin mutations parameter.
+    help_text: 'Set to true to return citations for all mutations/transcripts (default:
+      false, matches specific mutation). To be used with `--vep_mastermind`.'
+- group_id: annotation
+  name: mastermind_url
+  source_name: mastermind_url
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Mastermind plugin url parameter.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-external-link-alt
+    description: Mastermind plugin url parameter.
+    help_text: 'Set to 1 to return the built Mastermind URL (default: 0). To be used
+      with `--vep_mastermind`.'
+- group_id: annotation
+  name: mastermind_var_iden
+  source_name: mastermind_var_iden
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Mastermind plugin var_iden parameter.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: far fa-address-card
+    description: Mastermind plugin var_iden parameter.
+    help_text: 'Set to true to return only Mastermind variant identifiers as gene:key
+      format (default: false). To be used with `--vep_mastermind`.'
+- group_id: annotation
+  name: phenotypes_file
+  source_name: phenotypes_file
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to phenotype annotation GFF/GVF file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/phenotypes_file
+  example_values:
+  - <server_reference_root>/phenotypes_file
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.(gff|gvf)(\.gz)?$
+    fa_icon: fas fa-file
+    description: Path to phenotype annotation GFF/GVF file.
+    help_text: Optional parameter for `--vep_phenotypes`. If not specified, the plugin
+      automatically downloads phenotype data files on first run.
+- group_id: annotation
+  name: phenotypes_file_tbi
+  source_name: phenotypes_file_tbi
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to phenotype annotation tabix indexed file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/phenotypes_file_tbi
+  example_values:
+  - <server_reference_root>/phenotypes_file_tbi
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.(gff|gvf)\.gz\.(csi|tbi)$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to phenotype annotation tabix indexed file.
+    help_text: Required when using a gzipped `--phenotypes_file`. To be used with
+      `--vep_phenotypes`.
+- group_id: annotation
+  name: snpsift_databases
+  source_name: snpsift_databases
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to CSV samplesheet specifying SnpSift annotation databases.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/snpsift_databases.csv
+  example_values:
+  - <server_reference_root>/snpsift_databases.csv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    pattern: ^\S+\.csv$
+    schema: assets/schema_snpsift_databases.json
+    fa_icon: fas fa-database
+    description: Path to CSV samplesheet specifying SnpSift annotation databases.
+    help_text: 'CSV with columns: vcf (required), fields (required if vardb not provided,
+      semicolon-separated INFO fields), tbi (optional, defaults to vcf.tbi), prefix
+      (optional, prefix for annotated fields), vardb (optional, path to pre-built
+      .snpsift.vardb directory). If vardb is empty, the database will be built automatically.
+      See assets/snpsift_databases_example.csv.'
+- group_id: annotation
+  name: spliceai_indel
+  source_name: spliceai_indel
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to spliceai raw scores indel file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/spliceai_indel
+  example_values:
+  - <server_input_root>/spliceai_indel
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    fa_icon: fas fa-file
+    format: file-path
+    pattern: ^\S+\.vcf\.gz$
+    exists: true
+    description: Path to spliceai raw scores indel file.
+    help_text: To be used with `--vep_spliceai`.
+- group_id: annotation
+  name: spliceai_indel_tbi
+  source_name: spliceai_indel_tbi
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to spliceai raw scores indel tabix indexed file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/spliceai_indel_tbi
+  example_values:
+  - <server_input_root>/spliceai_indel_tbi
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.vcf\.gz\.(csi|tbi)$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to spliceai raw scores indel tabix indexed file.
+    help_text: To be used with `--vep_spliceai`.
+- group_id: annotation
+  name: spliceai_snv
+  source_name: spliceai_snv
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to spliceai raw scores snv file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/spliceai_snv
+  example_values:
+  - <server_input_root>/spliceai_snv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.vcf\.gz$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to spliceai raw scores snv file.
+    help_text: To be used with `--vep_spliceai`.
+- group_id: annotation
+  name: spliceai_snv_tbi
+  source_name: spliceai_snv_tbi
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to spliceai raw scores snv tabix indexed file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/spliceai_snv_tbi
+  example_values:
+  - <server_input_root>/spliceai_snv_tbi
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: file-path
+    pattern: ^\S+\.vcf\.gz\.(csi|tbi)$
+    exists: true
+    fa_icon: fas fa-file
+    description: Path to spliceai raw scores snv tabix indexed file.
+    help_text: To be used with `--vep_spliceai`.
+- group_id: annotation
+  name: vep_condel
+  source_name: vep_condel
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP Condel plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP Condel plugin.
+    help_text: Calculates the Consensus Deleteriousness score for missense mutations
+      using SIFT and PolyPhen-2 predictions. For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#condel).
+- group_id: annotation
+  name: vep_dbnsfp
+  source_name: vep_dbnsfp
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP dbNSFP plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/vep_dbnsfp
+  example_values:
+  - <server_reference_root>/vep_dbnsfp
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP dbNSFP plugin.
+    help_text: For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#dbnsfp).
+- group_id: annotation
+  name: vep_include_fasta
+  source_name: vep_include_fasta
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Allow usage of fasta file for annotation with VEP
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/genome.fa
+  example_values:
+  - <server_reference_root>/genome.fa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-align-justify
+    description: Allow usage of fasta file for annotation with VEP
+    help_text: 'By pointing VEP to a FASTA file, it is possible to retrieve reference
+      sequence locally. This enables VEP to retrieve HGVS notations (--hgvs), check
+      the reference sequence given in input data, and construct transcript models
+      from a GFF or GTF file without accessing a database.
+
+
+      For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#fasta).'
+- group_id: annotation
+  name: vep_loftee
+  source_name: vep_loftee
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP LOFTEE plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP LOFTEE plugin.
+    help_text: For details, see [here](https://github.com/konradjk/loftee).
+- group_id: annotation
+  name: vep_mastermind
+  source_name: vep_mastermind
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP Mastermind plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP Mastermind plugin.
+    help_text: Retrieves Mastermind Genomic Search Engine citation counts for variants.
+      For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#mastermind).
+- group_id: annotation
+  name: vep_out_format
+  source_name: vep_out_format
+  type: string
+  required: false
+  default: vcf
+  enum: &id001
+  - json
+  - tab
+  - vcf
+  description: VEP output-file format.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - json
+  - tab
+  - vcf
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    default: vcf
+    description: VEP output-file format.
+    enum: *id001
+    help_text: 'Sets the format of the output-file from VEP. Available formats: json,
+      tab and vcf.'
+    fa_icon: fas fa-table
+- group_id: annotation
+  name: vep_phenotypes
+  source_name: vep_phenotypes
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP Phenotypes plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP Phenotypes plugin.
+    help_text: Retrieves overlapping phenotype information from Ensembl's phenotype
+      annotation databases. For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#phenotypes).
+- group_id: annotation
+  name: vep_spliceai
+  source_name: vep_spliceai
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP SpliceAI plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP SpliceAI plugin.
+    help_text: For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#spliceai).
+- group_id: annotation
+  name: vep_spliceregion
+  source_name: vep_spliceregion
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable the use of the VEP SpliceRegion plugin.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-database
+    description: Enable the use of the VEP SpliceRegion plugin.
+    help_text: For details, see [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#spliceregion)
+      and [here](https://www.ensembl.info/2018/10/26/cool-stuff-the-vep-can-do-splice-site-variant-annotation/).
+- group_id: annotation
+  name: bcftools_columns
+  source_name: bcftools_columns
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Optional text file with list of columns to use from `bcftools_annotations`,
+    one name per row
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/bcftools_columns
+  example_values:
+  - <server_reference_root>/bcftools_columns
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    fa_icon: fas fa-align-center
+    description: Optional text file with list of columns to use from `bcftools_annotations`,
+      one name per row
+- group_id: annotation
+  name: bcftools_header_lines
+  source_name: bcftools_header_lines
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Text file with the header lines of `bcftools_annotations`
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/bcftools_header_lines
+  example_values:
+  - <server_reference_root>/bcftools_header_lines
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    fa_icon: fas fa-align-center
+    description: Text file with the header lines of `bcftools_annotations`
+- group_id: annotation
+  name: dbnsfp_consequence
+  source_name: dbnsfp_consequence
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Consequence to annotate with
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/dbnsfp_consequence
+  example_values:
+  - <server_reference_root>/dbnsfp_consequence
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    fa_icon: fas fa-arrow-alt-circle-right
+    description: Consequence to annotate with
+    help_text: 'To be used with `--vep_dbnsfp`.
+
+      This params is used to filter/limit outputs to a specific effect of the variant.
+
+      The set of consequence terms is defined by the Sequence Ontology and an overview
+      of those used in VEP can be found here: https://www.ensembl.org/info/genome/variation/prediction/predicted_data.html
+
+      If one wants to filter using several consequences, then separate those by using
+      ''&'' (i.e. ''consequence=3_prime_UTR_variant&intron_variant''.'
+- group_id: annotation
+  name: dbnsfp_fields
+  source_name: dbnsfp_fields
+  type: string
+  required: false
+  default: rs_dbSNP,HGVSc_VEP,HGVSp_VEP,1000Gp3_EAS_AF,1000Gp3_AMR_AF,LRT_score,GERP++_RS,gnomAD_exomes_AF
+  enum: null
+  description: Fields to annotate with
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/dbnsfp_fields
+  example_values:
+  - <server_reference_root>/dbnsfp_fields
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    fa_icon: fas fa-border-all
+    description: Fields to annotate with
+    default: rs_dbSNP,HGVSc_VEP,HGVSp_VEP,1000Gp3_EAS_AF,1000Gp3_AMR_AF,LRT_score,GERP++_RS,gnomAD_exomes_AF
+    help_text: 'To be used with `--vep_dbnsfp`.
+
+      This params can be used to retrieve individual values from the dbNSFP file.
+      The values correspond to the name of the columns in the dbNSFP file and are
+      separated by comma.
+
+      The column names might differ between the different dbNSFP versions. Please
+      check the Readme.txt file, which is provided with the dbNSFP file, to obtain
+      the correct column names. The Readme file contains also a short description
+      of the provided values and the version of the tools used to generate them.
+
+
+      Default value are explained below:
+
+
+      rs_dbSNP - rs number from dbSNP
+
+      HGVSc_VEP - HGVS coding variant presentation from VEP. Multiple entries separated
+      by '';'', corresponds to Ensembl_transcriptid
+
+      HGVSp_VEP - HGVS protein variant presentation from VEP. Multiple entries separated
+      by '';'', corresponds to Ensembl_proteinid
+
+      1000Gp3_EAS_AF - Alternative allele frequency in the 1000Gp3 East Asian descendent
+      samples
+
+      1000Gp3_AMR_AF - Alternative allele counts in the 1000Gp3 American descendent
+      samples
+
+      LRT_score - Original LRT two-sided p-value (LRTori), ranges from 0 to 1
+
+      GERP++_RS - Conservation score. The larger the score, the more conserved the
+      site, ranges from -12.3 to 6.17
+
+      gnomAD_exomes_AF - Alternative allele frequency in the whole gnomAD exome samples.'
+- group_id: annotation
+  name: outdir_cache
+  source_name: outdir_cache
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: The output directory where the cache will be saved. You have to use
+    absolute paths to storage on Cloud infrastructure.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_input_root>/outdir_cache
+  example_values:
+  - <server_input_root>/outdir_cache
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The output directory where the cache will be saved. You have to use
+      absolute paths to storage on Cloud infrastructure.
+    fa_icon: fas fa-folder-open
+- group_id: annotation
+  name: phenotypes_include_types
+  source_name: phenotypes_include_types
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Phenotypes plugin feature types to include.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Annotation
+  raw_schema:
+    type: string
+    fa_icon: far fa-check-circle
+    pattern: ^((Gene|Variation|QTL|StructuralVariation|SupportingStructuralVariation|RegulatoryFeature)?&?)*(?<!&)$
+    description: Phenotypes plugin feature types to include.
+    help_text: '&-separated list of feature types to include (e.g., ''Gene&Variation'').
+      Options: Gene, Variation, QTL, StructuralVariation, SupportingStructuralVariation,
+      RegulatoryFeature. To be used with `--vep_phenotypes`.'
+- group_id: annotation
+  name: vep_custom_args
+  source_name: vep_custom_args
+  type: string
+  required: false
+  default: --everything --filter_common --per_gene --total_length --offline --format
+    vcf
+  enum: null
+  description: Add an extra custom argument to VEP.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - --everything --filter_common --per_gene --total_length --offline --format vcf
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    default: --everything --filter_common --per_gene --total_length --offline --format
+      vcf
+    fa_icon: fas fa-toolbox
+    description: Add an extra custom argument to VEP.
+    help_text: Using this params you can add custom args to VEP.
+- group_id: annotation
+  name: vep_version
+  source_name: vep_version
+  type: string
+  required: false
+  default: 115.0-0
+  enum: null
+  description: Should reflect the VEP version used in the container.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 115.0-0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Annotation
+  raw_schema:
+    type: string
+    default: 115.0-0
+    fa_icon: fas fa-toolbox
+    description: Should reflect the VEP version used in the container.
+    help_text: Used by the loftee plugin that need the full path.

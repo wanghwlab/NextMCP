@@ -1,0 +1,99 @@
+steps:
+  - id: plan_and_prepare
+    purpose: Confirm route, server-local inputs, output layout, and config boundaries before
+      launch.
+    minimal_inputs:
+      - project
+      - input
+      - outdir
+      - aligner
+      - protocol
+    tool_sequence:
+      - server_info() when default profile or server layout is unknown
+      - project_list() when the project id is unknown
+      - project_get(project) when project root or prior runs matter
+      - fs_list(mode="manifest") for each uncertain concrete server-local input, reference, or
+        config path
+      - nextflow_run(prepare=true) when launch layout or restart compatibility is uncertain
+    checks:
+      - Ordinary pipeline options stay in params.
+      - Resource caps stay in config_files.
+      - profile is omitted unless the user requests a different runtime.
+      - protocol=auto is used only for cellranger, cellrangerarc, or cellrangermulti.
+  - id: launch_main
+    purpose: Launch the selected nf-core/scrnaseq route.
+    minimal_inputs:
+      - project
+      - pipeline=scrnaseq
+      - params.input
+      - params.outdir
+      - params.aligner
+    tool_sequence:
+      - nextflow_run(pipeline="scrnaseq", project=..., params=..., config_files=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    outputs:
+      - run id
+      - results/<run_id>/
+      - artifact summary
+  - id: review_outputs
+    purpose: Review completed outputs without broad directory scans.
+    tool_sequence:
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+      - run_artifacts(run_id=..., section=...) after artifact summary identifies relevant sections
+      - fs_read(path=...) only for explicit reports, params.json, logs, or selected output files
+    outputs:
+      - pipeline_info/params.json
+      - multiqc/multiqc_report.html
+      - selected aligner output family
+      - mtx_conversions outputs
+  - id: historical_reuse
+    purpose: Recover prior runs before rerunning or reusing references.
+    minimal_inputs:
+      - project
+      - artifact filename or path fragment
+    tool_sequence:
+      - run_list(project=..., pipeline="scrnaseq", artifact_path_contains=...)
+      - run_get(include=["artifact_summary"]) for candidate runs
+      - run_artifacts(run_id=..., section=...)
+      - fs_read(path=".../pipeline_info/params.json") after the path is known
+    checks:
+      - Treat artifacts.json and pipeline_fingerprint as historical facts.
+      - Confirm compatibility through pipeline_info/params.json before reuse.
+  - id: restart
+    purpose: Restart from a prior nextmcp run when inputs and route are compatible.
+    minimal_inputs:
+      - project
+      - from_run_id
+    tool_sequence:
+      - run_get(run_id=..., detail="full")
+      - nextflow_run(prepare=true, from_run_id=...)
+      - nextflow_run(from_run_id=..., params=..., config_files=...)
+    checks:
+      - Do not use raw Nextflow resume flags as public nextflow_run inputs.
+      - Compare launch_spec, nextflow_session_uuid, and structured resume fields before launch.
+  - id: route_specific_checks
+    purpose: Check route-specific prerequisites before launch.
+    routes:
+      simpleaf_default:
+        required: [protocol, genome_or_fasta_gtf_or_simpleaf_index]
+        forbidden_defaults: [protocol=auto]
+      starsolo:
+        required: [protocol, star_index_or_fasta_gtf]
+        optional: [star_feature, save_align_intermeds, save_reference]
+      kallisto_bus:
+        required: [protocol, kallisto_index_or_fasta_gtf, txp2gene]
+        optional: [kb_workflow, kb_t1c, kb_t2c, save_reference]
+      cellranger:
+        required: [cellranger_runtime, cellranger_index_or_fasta_gtf]
+        optional: [skip_cellranger_renaming, save_align_intermeds]
+      cellrangerarc:
+        required: [cellranger_arc_runtime, cellranger_index_or_fasta_gtf, arc_samplesheet_columns]
+        optional: [motifs, cellrangerarc_config, cellrangerarc_reference]
+      cellrangermulti:
+        required: [cellranger_multi_runtime, feature_type_samplesheet_column]
+        optional:
+          - cellranger_multi_barcodes
+          - cellranger_vdj_index
+          - skip_cellrangermulti_vdjref
+          - gex_frna_probe_set
+          - fb_reference

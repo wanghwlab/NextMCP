@@ -1,0 +1,137 @@
+group:
+  id: run_optimisation
+  label: Run optimisation
+  selection_rule: Use this group for parameters defined under the `Run optimisation`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/run_optimisation.md
+  - assets/schema-groups/run_optimisation.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `run_optimisation` for exact lookup.
+parameters:
+- group_id: run_optimisation
+  name: split_by_variants
+  source_name: split_by_variants
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Split VCF file into multiple files by number of variants.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Run optimisation
+  raw_schema:
+    type: boolean
+    description: Split VCF file into multiple files by number of variants.
+- group_id: run_optimisation
+  name: peptides_split_maxchunks
+  source_name: peptides_split_maxchunks
+  type: integer
+  required: false
+  default: 100
+  enum: null
+  description: Specifies the maximum number of peptide chunks.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 100
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Run optimisation
+  raw_schema:
+    type: integer
+    default: 100
+    help_text: Used in combination with `--peptides` or `--proteins`. Maximum number
+      of peptide chunks that will be created for parallelisation.
+    description: Specifies the maximum number of peptide chunks.
+- group_id: run_optimisation
+  name: peptides_split_minchunksize
+  source_name: peptides_split_minchunksize
+  type: integer
+  required: false
+  default: 5000
+  enum: null
+  description: Specifies the minimum number of peptides that should be written into
+    one chunk.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 5000
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Run optimisation
+  raw_schema:
+    type: integer
+    default: 5000
+    help_text: 'Used in combination with `--peptides` or `--proteins`: minimum number
+      of peptides that should be written into one chunk.'
+    description: Specifies the minimum number of peptides that should be written into
+      one chunk.
+- group_id: run_optimisation
+  name: split_by_variants_distance
+  source_name: split_by_variants_distance
+  type: integer
+  required: false
+  default: 110000
+  enum: null
+  description: Number of nucleotides between previous and current variant across split.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 110000
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Run optimisation
+  raw_schema:
+    type: integer
+    default: 110000
+    description: Number of nucleotides between previous and current variant across
+      split.
+    help_text: 'This can be used to avoid that variants end up in separate splits
+      that fall onto the same transcript and therefore potentially contribute to the
+      same mutated protein. '
+    hidden: true
+- group_id: run_optimisation
+  name: split_by_variants_size
+  source_name: split_by_variants_size
+  type: integer
+  required: false
+  default: 0
+  enum: null
+  description: 'Number of variants that should be written into one file. Default:
+    number of variants divided by ten'
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Run optimisation
+  raw_schema:
+    type: integer
+    default: 0
+    description: 'Number of variants that should be written into one file. Default:
+      number of variants divided by ten'
+    hidden: true

@@ -1,0 +1,86 @@
+group:
+  id: run_pipeline_steps
+  label: Run pipeline steps
+  selection_rule: Use this group for parameters defined under the `Run pipeline steps`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/run_pipeline_steps.md
+  - assets/schema-groups/run_pipeline_steps.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `run_pipeline_steps` for exact lookup.
+parameters:
+- group_id: run_pipeline_steps
+  name: run_preseq
+  source_name: run_preseq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run preseq/lcextrap tool
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Run pipeline steps
+  raw_schema:
+    type: boolean
+    description: Run preseq/lcextrap tool
+    fa_icon: fas fa-fast-forward
+- group_id: run_pipeline_steps
+  name: run_qualimap
+  source_name: run_qualimap
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run qualimap/bamqc tool
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Run pipeline steps
+  raw_schema:
+    type: boolean
+    description: Run qualimap/bamqc tool
+    fa_icon: fas fa-fast-forward
+- group_id: run_pipeline_steps
+  name: run_targeted_sequencing
+  source_name: run_targeted_sequencing
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Run advanced analysis for targeted methylation kits with enrichment
+    of specific regions
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Run pipeline steps
+  raw_schema:
+    type: boolean
+    description: Run advanced analysis for targeted methylation kits with enrichment
+      of specific regions
+    fa_icon: fas fa-fast-forward

@@ -1,0 +1,257 @@
+group:
+  id: post_variant_calling
+  label: Post variant calling
+  selection_rule: Use this group for parameters defined under the `Post variant calling`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/post_variant_calling.md
+  - assets/schema-groups/post_variant_calling.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `post_variant_calling` for exact lookup.
+parameters:
+- group_id: post_variant_calling
+  name: concatenate_vcfs
+  source_name: concatenate_vcfs
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Option for concatenating germline vcf-files.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-tape
+    description: Option for concatenating germline vcf-files.
+    help_text: Enable concatenation of germline vcf-files from each applied variant-caller
+      into one vcf-file using bfctools concat.
+- group_id: post_variant_calling
+  name: filter_vcfs
+  source_name: filter_vcfs
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable filtering of VCFs with bcftools view
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-filter
+    description: Enable filtering of VCFs with bcftools view
+    help_text: Filtering of all vcf-files from each applied variant-caller using bfctools
+      filter and applying filtering criteria specified in --bcftools_filter_criteria.
+- group_id: post_variant_calling
+  name: normalize_vcfs
+  source_name: normalize_vcfs
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Option for normalization of vcf-files.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-angle-double-left
+    description: Option for normalization of vcf-files.
+    help_text: Normalization of all vcf-files from each applied variant-caller using
+      bfctools norm.
+- group_id: post_variant_calling
+  name: snv_consensus_calling
+  source_name: snv_consensus_calling
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Enable consensus calling of multiple VCF files from one sample
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-code-branch
+    description: Enable consensus calling of multiple VCF files from one sample
+    help_text: 'Intersects multiple VCF files from one sample using `bcftools isec`.
+      As consensus criterium `-n+${params.snv_consensus_calling}` is used, meaning
+      a variant is found in this many or more files. For details, visit: https://samtools.github.io/bcftools/bcftools.html#isec'
+- group_id: post_variant_calling
+  name: bcftools_filter_criteria
+  source_name: bcftools_filter_criteria
+  type: string
+  required: false
+  default: -f PASS,.
+  enum: null
+  description: 'Filter criteria. Uses bcftools view filter options. To customize,
+    follow instructions here: https://samtools.github.io/bcftools/bcftools.html#view'
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - -f PASS,.
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: string
+    default: -f PASS,.
+    fa_icon: fas fa-question
+    description: 'Filter criteria. Uses bcftools view filter options. To customize,
+      follow instructions here: https://samtools.github.io/bcftools/bcftools.html#view '
+- group_id: post_variant_calling
+  name: consensus_min_count
+  source_name: consensus_min_count
+  type: integer
+  required: false
+  default: 2
+  enum: null
+  description: Minimum number of variant callers calling a variant for consensus results
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 2
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: integer
+    default: 2
+    fa_icon: fab fa-deezer
+    description: Minimum number of variant callers calling a variant for consensus
+      results
+    help_text: 'Determines the minimum number of variant callers a variant must be
+      called in to be included in the consensus results. As consensus criterium `-n+${params.consensus_min_count}`
+      is used, meaning a variant is found in this many or more files. For details,
+      visit: https://samtools.github.io/bcftools/bcftools.html#isec'
+- group_id: post_variant_calling
+  name: varlociraptor_chunk_size
+  source_name: varlociraptor_chunk_size
+  type: integer
+  required: false
+  default: 15
+  enum: null
+  description: Number of chunks to split the vcf-files for varlociraptor. Minimum
+    1, indicates no splitting
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 15
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: integer
+    default: 15
+    minimum: 1
+    description: Number of chunks to split the vcf-files for varlociraptor. Minimum
+      1, indicates no splitting
+    hidden: true
+- group_id: post_variant_calling
+  name: varlociraptor_scenario_germline
+  source_name: varlociraptor_scenario_germline
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Yte compatible scenario file for germline samples. Defaults to assets/varlociraptor_germline.yte.yaml
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: string
+    description: Yte compatible scenario file for germline samples. Defaults to assets/varlociraptor_germline.yte.yaml
+- group_id: post_variant_calling
+  name: varlociraptor_scenario_somatic
+  source_name: varlociraptor_scenario_somatic
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Yte compatible scenario file for somatic samples. Defaults to assets/varlociraptor_somatic.yte.yaml
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: string
+    description: Yte compatible scenario file for somatic samples. Defaults to assets/varlociraptor_somatic.yte.yaml
+- group_id: post_variant_calling
+  name: varlociraptor_scenario_tumor_only
+  source_name: varlociraptor_scenario_tumor_only
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Yte compatible scenario file for tumor only samples. Defaults to assets/varlociraptor_tumor_only.yte.yaml
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Post variant calling
+  raw_schema:
+    type: string
+    description: Yte compatible scenario file for tumor only samples. Defaults to
+      assets/varlociraptor_tumor_only.yte.yaml

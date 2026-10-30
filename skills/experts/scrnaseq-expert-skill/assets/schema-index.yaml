@@ -1,0 +1,111 @@
+grouping_strategy: schema top-level sections from nextflow_schema.json allOf order
+  for scrnaseq
+groups:
+- id: input_output_options
+  label: Input/output options
+  use_when: The runtime agent needs exact parameter mapping for the `Input/output
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/input_output_options.yaml
+  reference_path: references/schema-groups/input_output_options.md
+  parameter_count: 4
+- id: mandatory_arguments
+  label: Mandatory arguments
+  use_when: The runtime agent needs exact parameter mapping for the `Mandatory arguments`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `mandatory_arguments`
+    for exact lookup.
+  asset_path: assets/schema-groups/mandatory_arguments.yaml
+  reference_path: references/schema-groups/mandatory_arguments.md
+  parameter_count: 3
+- id: skip_tools
+  label: Skip Tools
+  use_when: The runtime agent needs exact parameter mapping for the `Skip Tools` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `skip_tools`
+    for exact lookup.
+  asset_path: assets/schema-groups/skip_tools.yaml
+  reference_path: references/schema-groups/skip_tools.md
+  parameter_count: 4
+- id: reference_genome_options
+  label: Reference genome options
+  use_when: The runtime agent needs exact parameter mapping for the `Reference genome
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `reference_genome_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/reference_genome_options.yaml
+  reference_path: references/schema-groups/reference_genome_options.md
+  parameter_count: 9
+- id: simpleaf_options
+  label: Simpleaf Options
+  use_when: The runtime agent needs exact parameter mapping for the `Simpleaf Options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `simpleaf_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/simpleaf_options.yaml
+  reference_path: references/schema-groups/simpleaf_options.md
+  parameter_count: 2
+- id: starsolo_options
+  label: STARSolo Options
+  use_when: The runtime agent needs exact parameter mapping for the `STARSolo Options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `starsolo_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/starsolo_options.yaml
+  reference_path: references/schema-groups/starsolo_options.md
+  parameter_count: 4
+- id: kallisto_bus_options
+  label: Kallisto/BUS Options
+  use_when: The runtime agent needs exact parameter mapping for the `Kallisto/BUS
+    Options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `kallisto_bus_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/kallisto_bus_options.yaml
+  reference_path: references/schema-groups/kallisto_bus_options.md
+  parameter_count: 4
+- id: cellranger_options
+  label: Cellranger Options
+  use_when: The runtime agent needs exact parameter mapping for the `Cellranger Options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `cellranger_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/cellranger_options.yaml
+  reference_path: references/schema-groups/cellranger_options.md
+  parameter_count: 2
+- id: cellrangerarc_options
+  label: Cellranger ARC Options
+  use_when: The runtime agent needs exact parameter mapping for the `Cellranger ARC
+    Options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `cellrangerarc_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/cellrangerarc_options.yaml
+  reference_path: references/schema-groups/cellrangerarc_options.md
+  parameter_count: 3
+- id: cellranger_multi_options
+  label: Cellranger Multi options
+  use_when: The runtime agent needs exact parameter mapping for the `Cellranger Multi
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `cellranger_multi_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/cellranger_multi_options.yaml
+  reference_path: references/schema-groups/cellranger_multi_options.md
+  parameter_count: 9
+- id: institutional_config_options
+  label: Institutional config options
+  use_when: The runtime agent needs exact parameter mapping for the `Institutional
+    config options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `institutional_config_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/institutional_config_options.yaml
+  reference_path: references/schema-groups/institutional_config_options.md
+  parameter_count: 6
+- id: generic_options
+  label: Generic options
+  use_when: The runtime agent needs exact parameter mapping for the `Generic options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `generic_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/generic_options.yaml
+  reference_path: references/schema-groups/generic_options.md
+  parameter_count: 16

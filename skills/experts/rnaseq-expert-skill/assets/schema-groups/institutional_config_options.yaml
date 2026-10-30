@@ -1,0 +1,163 @@
+group:
+  id: institutional_config_options
+  label: Institutional config options
+  selection_rule: Use this group for parameters defined under the `Institutional config
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/institutional_config_options.md
+  - assets/schema-groups/institutional_config_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `institutional_config_options` for exact lookup.
+parameters:
+- group_id: institutional_config_options
+  name: config_profile_contact
+  source_name: config_profile_contact
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Institutional config contact information.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Institutional config options
+  raw_schema:
+    type: string
+    description: Institutional config contact information.
+    hidden: true
+    fa_icon: fas fa-users-cog
+- group_id: institutional_config_options
+  name: config_profile_description
+  source_name: config_profile_description
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Institutional config description.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Institutional config options
+  raw_schema:
+    type: string
+    description: Institutional config description.
+    hidden: true
+    fa_icon: fas fa-users-cog
+- group_id: institutional_config_options
+  name: config_profile_name
+  source_name: config_profile_name
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Institutional config name.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Institutional config options
+  raw_schema:
+    type: string
+    description: Institutional config name.
+    hidden: true
+    fa_icon: fas fa-users-cog
+- group_id: institutional_config_options
+  name: config_profile_url
+  source_name: config_profile_url
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Institutional config URL link.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Institutional config options
+  raw_schema:
+    type: string
+    description: Institutional config URL link.
+    hidden: true
+    fa_icon: fas fa-users-cog
+- group_id: institutional_config_options
+  name: custom_config_base
+  source_name: custom_config_base
+  type: string
+  required: false
+  default: https://raw.githubusercontent.com/nf-core/configs/master
+  enum: null
+  description: Base directory for Institutional configs.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - https://raw.githubusercontent.com/nf-core/configs/master
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Institutional config options
+  raw_schema:
+    type: string
+    description: Base directory for Institutional configs.
+    default: https://raw.githubusercontent.com/nf-core/configs/master
+    hidden: true
+    help_text: When running offline, Nextflow cannot retrieve institutional configuration
+      files from the internet. If needed, download these files from the repository
+      and specify their location with this parameter.
+    fa_icon: fas fa-users-cog
+- group_id: institutional_config_options
+  name: custom_config_version
+  source_name: custom_config_version
+  type: string
+  required: false
+  default: master
+  enum: null
+  description: Git commit id for Institutional configs.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - master
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Institutional config options
+  raw_schema:
+    type: string
+    description: Git commit id for Institutional configs.
+    default: master
+    hidden: true
+    fa_icon: fas fa-users-cog

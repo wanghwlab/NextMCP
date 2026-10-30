@@ -1,0 +1,68 @@
+group:
+  id: reference_genome_options
+  label: Reference genome options
+  selection_rule: Use this group for parameters defined under the `Reference genome
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/reference_genome_options.md
+  - assets/schema-groups/reference_genome_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `reference_genome_options` for exact lookup.
+parameters:
+- group_id: reference_genome_options
+  name: igenomes_base
+  source_name: igenomes_base
+  type: string
+  required: false
+  default: s3://ngi-igenomes/igenomes
+  enum: null
+  description: Directory / URL base for iGenomes references.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - s3://ngi-igenomes/igenomes
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: Directory / URL base for iGenomes references.
+    default: s3://ngi-igenomes/igenomes
+    fa_icon: fas fa-cloud-download-alt
+    hidden: true
+- group_id: reference_genome_options
+  name: igenomes_ignore
+  source_name: igenomes_ignore
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Do not load the iGenomes reference config.
+  classification: non_runtime
+  channel: authoring_only
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Preserved for exact schema coverage, but do not surface in ordinary
+    nextmcp runtime planning unless the user explicitly asks for this helper or metadata
+    field.
+  lookup_priority: low
+  confidence: high
+  mapping_flags: []
+  source_section: Reference genome options
+  raw_schema:
+    type: boolean
+    description: Do not load the iGenomes reference config.
+    fa_icon: fas fa-ban
+    hidden: true
+    help_text: Do not load `igenomes.config` when running the pipeline. You may choose
+      this option if you observe clashes between custom parameters and those supplied
+      in `igenomes.config`.

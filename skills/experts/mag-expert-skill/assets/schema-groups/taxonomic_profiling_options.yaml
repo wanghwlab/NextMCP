@@ -1,0 +1,449 @@
+group:
+  id: taxonomic_profiling_options
+  label: Taxonomic profiling options
+  selection_rule: Use this group for parameters defined under the `Taxonomic profiling
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/taxonomic_profiling_options.md
+  - assets/schema-groups/taxonomic_profiling_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `taxonomic_profiling_options` for exact lookup.
+parameters:
+- group_id: taxonomic_profiling_options
+  name: cat_allow_unofficial_lineages
+  source_name: cat_allow_unofficial_lineages
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Allow unofficial lineages in CAT classification.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Allow unofficial lineages in CAT classification.
+    help_text: 'By default, CAT only provides classifications enumerated at standard
+      Linnaean taxonomic ranks. This option enables the output of non-standard ranks,
+      which is useful with custom databases.
+
+
+      Note that it disables classification result summarization, as this is not supported
+      by CAT_pack summarise.'
+- group_id: taxonomic_profiling_options
+  name: cat_classify_unbinned
+  source_name: cat_classify_unbinned
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Classify unbinned contigs with CAT (contig mode).
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Classify unbinned contigs with CAT (contig mode).
+    help_text: By default, nf-core/mag only runs CAT taxonomic classification on bins.
+      Specifying this parameter will  additionally run CAT classification on all unbinned
+      contigs, which can be useful to get an idea of the taxonomic composition of
+      the unbinned contigs. In some cases this may significantly extend run time of
+      the pipeline.
+- group_id: taxonomic_profiling_options
+  name: cat_db_generate
+  source_name: cat_db_generate
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Generate CAT database.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/cat_db_generate
+  example_values:
+  - <server_reference_root>/cat_db_generate
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Generate CAT database.
+    help_text: Download the taxonomy files from NCBI taxonomy, the nr database and
+      generate CAT database. This parameter is mutually exclusive with `--cat_db`.
+      Useful to build a CAT database with the same DIAMOND version as used for running
+      CAT classification, avoiding compatibility problems.
+- group_id: taxonomic_profiling_options
+  name: cat_no_suggestive_asterisks
+  source_name: cat_no_suggestive_asterisks
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to turn off CAT marking in output files most probable hits
+    (when multiple) with an asterix.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Specify to turn off CAT marking in output files most probable hits
+      (when multiple) with an asterix.
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_max_contamination
+  source_name: gtdbtk_max_contamination
+  type: number
+  required: false
+  default: 10
+  enum: null
+  description: Max. bin contamination (in %) allowed to apply GTDB-tk classification.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_max_contamination
+  example_values:
+  - <server_reference_root>/gtdbtk_max_contamination
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: number
+    default: 10
+    description: Max. bin contamination (in %) allowed to apply GTDB-tk classification.
+    help_text: Contamination assessed with any of the bin QC tools (BUSCO, CheckM,
+      CheckM2). A bin passes if at least one QC tool reports contamination at or below
+      the threshold. If too high, GTDB-tk classification results can be impaired due
+      to contamination!
+    minimum: 0
+    maximum: 100
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_pplacer_useram
+  source_name: gtdbtk_pplacer_useram
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Speed up pplacer step of GTDB-Tk by loading to memory.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_pplacer_useram
+  example_values:
+  - <server_reference_root>/gtdbtk_pplacer_useram
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Speed up pplacer step of GTDB-Tk by loading to memory.
+    help_text: Will be faster than writing to disk (default setting), however at the
+      expense of much larger memory (RAM) requirements for GTDBTK/CLASSIFY.
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_skip_aniscreen
+  source_name: gtdbtk_skip_aniscreen
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to disable fast classification of genomes by ANI using skani
+    in GTDB-Tk.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_skip_aniscreen
+  example_values:
+  - <server_reference_root>/gtdbtk_skip_aniscreen
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Specify to disable fast classification of genomes by ANI using skani
+      in GTDB-Tk.
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_use_full_tree
+  source_name: gtdbtk_use_full_tree
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specify to have GTDBTk to use the full bacterial tree rather than the
+    split tree (requires more memory!)
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_use_full_tree
+  example_values:
+  - <server_reference_root>/gtdbtk_use_full_tree
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Specify to have GTDBTk to use the full bacterial tree rather than
+      the split tree (requires more memory!)
+- group_id: taxonomic_profiling_options
+  name: save_cat_db
+  source_name: save_cat_db
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Save the CAT database generated when specified by `--cat_db_generate`.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/save_cat_db
+  example_values:
+  - <server_reference_root>/save_cat_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Save the CAT database generated when specified by `--cat_db_generate`.
+    help_text: Useful to allow reproducibility, as old versions of prebuild CAT databases
+      do not always remain accessible and underlying NCBI taxonomy and nr databases
+      change.
+- group_id: taxonomic_profiling_options
+  name: skip_gtdbtk
+  source_name: skip_gtdbtk
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip the running of GTDB, as well as the automatic download of the
+    database
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_gtdbtk
+  example_values:
+  - <server_reference_root>/skip_gtdbtk
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: boolean
+    description: Skip the running of GTDB, as well as the automatic download of the
+      database
+- group_id: taxonomic_profiling_options
+  name: cat_db
+  source_name: cat_db
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Database for taxonomic classification of metagenome assembled genomes.
+    Can be either a zipped file or a directory containing the extracted output of
+    such.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/cat_db
+  example_values:
+  - <server_reference_root>/cat_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: string
+    description: Database for taxonomic classification of metagenome assembled genomes.
+      Can be either a zipped file or a directory containing the extracted output of
+      such.
+    help_text: E.g. https://tbb.bio.uu.nl/bastiaan/CAT_prepare/CAT_prepare_20210107.tar.gz.
+      This parameter is mutually exclusive with `--cat_db_generate`. The file needs
+      to contain a folder named `*taxonomy*` and `*database*` that hold the respective
+      files.
+    format: path
+    exists: true
+- group_id: taxonomic_profiling_options
+  name: gtdb_db
+  source_name: gtdb_db
+  type: string
+  required: false
+  default: https://data.gtdb.aau.ecogenomic.org/releases/release226/226.0/auxillary_files/gtdbtk_package/full_package/gtdbtk_r226_data.tar.gz
+  enum: null
+  description: Specify the location of a GTDBTK database. Can be either an uncompressed
+    directory or a `.tar.gz` archive. If not specified will be downloaded for you
+    when GTDBTK or binning QC is not skipped.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/gtdb_db
+  example_values:
+  - <server_reference_root>/gtdb_db
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: string
+    description: Specify the location of a GTDBTK database. Can be either an uncompressed
+      directory or a `.tar.gz` archive. If not specified will be downloaded for you
+      when GTDBTK or binning QC is not skipped.
+    default: https://data.gtdb.aau.ecogenomic.org/releases/release226/226.0/auxillary_files/gtdbtk_package/full_package/gtdbtk_r226_data.tar.gz
+    format: path
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_min_af
+  source_name: gtdbtk_min_af
+  type: number
+  required: false
+  default: 0.65
+  enum: null
+  description: Min. alignment fraction to consider closest genome.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_min_af
+  example_values:
+  - <server_reference_root>/gtdbtk_min_af
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: number
+    default: 0.65
+    description: Min. alignment fraction to consider closest genome.
+    minimum: 0
+    maximum: 1
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_min_completeness
+  source_name: gtdbtk_min_completeness
+  type: number
+  required: false
+  default: 50
+  enum: null
+  description: Min. bin completeness (in %) required to apply GTDB-tk classification.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_min_completeness
+  example_values:
+  - <server_reference_root>/gtdbtk_min_completeness
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: number
+    default: 50
+    description: Min. bin completeness (in %) required to apply GTDB-tk classification.
+    help_text: Completeness assessed with any of the bin QC tools (BUSCO, CheckM,
+      CheckM2). A bin passes if at least one QC tool reports completeness at or above
+      the threshold. Must be greater than 0 (min. 0.01) to avoid GTDB-tk errors. If
+      too low, GTDB-tk classification results can be impaired due to not enough marker
+      genes!
+    minimum: 0.01
+    maximum: 100
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_min_perc_aa
+  source_name: gtdbtk_min_perc_aa
+  type: number
+  required: false
+  default: 10
+  enum: null
+  description: Min. fraction of AA (in %) in the MSA for bins to be kept.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_min_perc_aa
+  example_values:
+  - <server_reference_root>/gtdbtk_min_perc_aa
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: number
+    default: 10
+    description: Min. fraction of AA (in %) in the MSA for bins to be kept.
+    minimum: 0
+    maximum: 100
+- group_id: taxonomic_profiling_options
+  name: gtdbtk_pplacer_cpus
+  source_name: gtdbtk_pplacer_cpus
+  type: integer
+  required: false
+  default: 1
+  enum: null
+  description: Number of CPUs used for the by GTDB-Tk run tool pplacer.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/gtdbtk_pplacer_cpus
+  example_values:
+  - <server_reference_root>/gtdbtk_pplacer_cpus
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Taxonomic profiling options
+  raw_schema:
+    type: integer
+    default: 1
+    description: Number of CPUs used for the by GTDB-Tk run tool pplacer.
+    help_text: A low number of CPUs helps to reduce the memory required/reported by
+      GTDB-Tk. See also the [GTDB-Tk documentation](https://ecogenomics.github.io/GTDBTk/faq.html#gtdb-tk-reaches-the-memory-limit-pplacer-crashes).

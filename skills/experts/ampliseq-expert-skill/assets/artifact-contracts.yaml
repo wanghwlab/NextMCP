@@ -1,0 +1,106 @@
+artifacts:
+- id: summary_report
+  path: summary_report/summary_report.html
+  produced_when: summary report is not skipped
+  meaning: Main human-readable overview with links to many interactive results.
+  review_order: 1
+- id: multiqc_report
+  path: multiqc/multiqc_report.html
+  produced_when: MultiQC is not skipped
+  meaning: Aggregated QC from supported tools and software version summaries.
+  review_order: 2
+- id: read_count_summary
+  path: overall_summary.tsv
+  produced_when: main workflow completes
+  meaning: Read retention across input, trimming, DADA2, chimera removal, and QIIME2
+    filtering.
+  review_order: 3
+- id: input_copies
+  path: input/
+  produced_when: input, metadata, or input_fasta is supplied
+  meaning: Copied inputs used by the run.
+  review_order: 4
+- id: fastqc
+  path: fastqc/*_fastqc.html
+  produced_when: FASTQ input and FastQC not skipped
+  meaning: Raw read quality reports before trimming.
+  review_order: 5
+- id: cutadapt
+  path: cutadapt/cutadapt_summary.tsv
+  produced_when: primer trimming is not skipped
+  meaning: Primer trimming and retained read counts.
+  review_order: 6
+- id: dada2_core
+  path: dada2/ASV_table.tsv
+  produced_when: DADA2 ASV inference runs
+  meaning: Core ASV count table; review with ASV_seqs.fasta and DADA2_stats.tsv.
+  review_order: 7
+- id: dada2_taxonomy
+  path: dada2/ASV_tax.*.tsv
+  produced_when: DADA2 taxonomy is enabled
+  meaning: DADA2 taxonomy assignments and reference taxonomy notes.
+  review_order: 8
+- id: optional_asv_filters
+  path: vsearch_cluster/ or barrnap/ or asv_length_filter/ or codon_filter/ or itsx/
+  produced_when: matching ASV post-processing options are enabled
+  meaning: Filtered ASV sequences, tables, and stats from optional post-processing.
+  review_order: 9
+- id: taxonomy_alternatives
+  path: sintax/ or kraken2/ or qiime2/taxonomy/ or pplace/
+  produced_when: SINTAX, Kraken2, QIIME2 taxonomy, or phylogenetic placement is enabled
+  meaning: Alternative taxonomy classifications and reference metadata.
+  review_order: 10
+- id: qiime2_abundance
+  path: qiime2/abundance_tables/feature-table.tsv
+  produced_when: QIIME2 downstream analysis is enabled
+  meaning: Filtered abundance table and BIOM/QIIME2 artifacts for downstream use.
+  review_order: 11
+- id: qiime2_relative_abundance
+  path: qiime2/rel_abundance_tables/rel-table-ASV.tsv
+  produced_when: QIIME2 downstream analysis is enabled
+  meaning: Relative abundance tables after total sum scaling.
+  review_order: 12
+- id: qiime2_visuals
+  path: qiime2/barplot/ and qiime2/alpha-rarefaction/ and qiime2/diversity/
+  produced_when: metadata and QIIME2 downstream routes allow these analyses
+  meaning: Interactive barplots, rarefaction curves, alpha/beta diversity, PCoA, PERMANOVA,
+    and ADONIS results.
+  review_order: 13
+- id: differential_abundance
+  path: qiime2/ancom/ or qiime2/ancombc/
+  produced_when: ancom or ancombc is enabled
+  meaning: Differential abundance tables and interactive plots.
+  review_order: 14
+- id: picrust2
+  path: PICRUSt2/
+  produced_when: picrust is enabled
+  meaning: Predicted EC, KO, and MetaCyc functional abundance tables.
+  review_order: 15
+- id: sbdi_export
+  path: SBDI/
+  produced_when: sbdiexport is enabled
+  meaning: SBDI submission-oriented TSV files.
+  review_order: 16
+- id: r_objects
+  path: phyloseq/ and treesummarizedexperiment/
+  produced_when: R object export is not skipped
+  meaning: Phyloseq and TreeSummarizedExperiment RDS handoff objects.
+  review_order: 17
+- id: pipeline_info
+  path: pipeline_info/params.json
+  produced_when: all normal runs
+  meaning: Run parameters, software versions, execution reports, timeline, trace,
+    and DAG for provenance and reuse checks.
+  review_order: 18
+historical_reuse:
+  search_fragments:
+  - summary_report/summary_report.html
+  - multiqc/multiqc_report.html
+  - dada2/ASV_table.tsv
+  - qiime2/abundance_tables/feature-table.tsv
+  - pipeline_info/params.json
+  compatibility_metadata:
+  - pipeline_info/params.json
+  - pipeline_info/software_versions.yml
+  - artifacts.json
+  - pipeline_fingerprint

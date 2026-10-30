@@ -1,0 +1,156 @@
+group:
+  id: process_skipping_options
+  label: Process skipping options
+  selection_rule: Use this group for parameters defined under the `Process skipping
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/process_skipping_options.md
+  - assets/schema-groups/process_skipping_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `process_skipping_options` for exact lookup.
+parameters:
+- group_id: process_skipping_options
+  name: skip_bigbed
+  source_name: skip_bigbed
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip BigBed file generation.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_bigbed
+  example_values:
+  - <server_reference_root>/skip_bigbed
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip BigBed file generation.
+- group_id: process_skipping_options
+  name: skip_bigwig
+  source_name: skip_bigwig
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip BigWig file generation.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip BigWig file generation.
+- group_id: process_skipping_options
+  name: skip_fastqc
+  source_name: skip_fastqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip FastQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip FastQC.
+- group_id: process_skipping_options
+  name: skip_multiqc
+  source_name: skip_multiqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip MultiQC.
+- group_id: process_skipping_options
+  name: skip_nanoplot
+  source_name: skip_nanoplot
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip NanoPlot.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip NanoPlot.
+- group_id: process_skipping_options
+  name: skip_qc
+  source_name: skip_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all QC steps apart from MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip all QC steps apart from MultiQC.

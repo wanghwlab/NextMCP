@@ -1,0 +1,14 @@
+status: resolved
+gaps:
+  - id: replace_generic_artifact_contract
+    source: artifact-contracts.yaml
+    status: resolved
+    resolution: Replaced scaffold output with source-backed predictions, epytope, predictor raw output, MultiQC, and pipeline_info contracts.
+  - id: replace_generic_qc_rule
+    source: qc-rules.yaml
+    status: resolved
+    resolution: Replaced scaffold completion check with samplesheet, variant annotation, NetMHC prerequisite, unsupported allele, binder interpretation, and reporting-shape checks.
+  - id: resolve_capability_audit
+    source: capability-audit.yaml
+    status: resolved
+    resolution: Covered or scoped out every generated audit item with explicit asset coverage.

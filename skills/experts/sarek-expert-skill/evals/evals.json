@@ -1,0 +1,178 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Offline evals for sarek-expert-skill. These check runtime planning, parameter mapping, route selection, output review, historical reuse, and authoring coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch"
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the sarek-expert-skill, draft the nextmcp launch plan for nf-core/sarek. The project is my-project. The user confirmed /data/sarek/samplesheet.csv on the server and wants results under /results/sarek. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and nextflow_run argument shape.",
+      "expected_output": "A plan with project as top-level nextflow_run argument, input/outdir/step under params, resource caps in a server-local config passed through config_files, default profile omitted, and no authoring-time pipeline inspection.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument.",
+        "Mentions input, outdir, and step under params.",
+        "Mentions resource caps under config_files or an override config, not params.",
+        "Does not use authoring-time pipeline inspection for runtime planning.",
+        "Uses nextflow_run(prepare=true) only as an optional check when launch uncertainty remains."
+      ],
+      "files": []
+    },
+    {
+      "id": "tumor-normal-somatic-route",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/main_options.yaml"
+      ],
+      "prompt": "Using the sarek-expert-skill, plan a tumor-normal Sarek run with Mutect2, Strelka, Manta, ASCAT, CNVkit, and MSI outputs for WES data. The user has a server-local samplesheet and target BED. Do not launch anything.",
+      "expected_output": "A route that checks patient/sample/status pairing, sets wes true, uses intervals, chooses tools from the schema-supported list, and lists PON, germline resource, ASCAT, CNVkit, and MSI prerequisites where relevant.",
+      "assertions": [
+        "Checks patient/sample/status tumor-normal pairing.",
+        "Uses wes=true and intervals for WES.",
+        "Uses supported tools values without inventing names.",
+        "Mentions prerequisite reference files and indexes.",
+        "Keeps ordinary Sarek options in params."
+      ],
+      "files": []
+    },
+    {
+      "id": "annotation-only-route",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/annotation.yaml"
+      ],
+      "prompt": "Using the sarek-expert-skill, plan annotation-only VEP, SnpEff, SnpSift, and bcftools annotate for existing VCFs on the server. Do not launch anything.",
+      "expected_output": "A route with step annotate, a VCF samplesheet, tools vep/snpEff/snpsift/bcfann or merge as appropriate, cache and database prerequisites, and exact schema lookup for plugin files.",
+      "assertions": [
+        "Sets step annotate.",
+        "Requires VCF samplesheet input.",
+        "Mentions VEP/SnpEff cache paths.",
+        "Mentions SnpSift and bcftools annotate database/index/header prerequisites.",
+        "Does not inspect pipeline source at runtime."
+      ],
+      "files": []
+    },
+    {
+      "id": "sentieon-route",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "references/03_parameters.md"
+      ],
+      "prompt": "Using the sarek-expert-skill, plan a Sentieon Haplotyper joint germline run and explain what must be checked before launch. Do not launch anything.",
+      "expected_output": "A plan that uses Sentieon tools and emit-mode params, confirms the server-side SENTIEON_LICENSE_BASE64 secret without exposing the value, and keeps license material out of params.",
+      "assertions": [
+        "Mentions the server-side SENTIEON_LICENSE_BASE64 secret.",
+        "Does not ask for or print a license value.",
+        "Uses sentieon_haplotyper and joint_germline route parameters.",
+        "Mentions sentieon_haplotyper_emit_mode gvcf for joint genotyping.",
+        "Keeps options in params except resource configs."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the sarek-expert-skill, answer a user who says: The Sarek run finished and I need to review the main published outputs and QC reports. What nextmcp calls should I make first, and which artifact or report paths should I inspect?",
+      "expected_output": "A summary-first review plan that starts with run_get include progress/artifact_summary/diagnosis/next_actions, uses run_artifacts, then reads concrete MultiQC, pipeline_info, preprocessing, variant_calling, annotation, or reports paths.",
+      "assertions": [
+        "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) or equivalent.",
+        "Uses run_artifacts before individual files.",
+        "Uses fs_read only after an explicit path is known.",
+        "Mentions pipeline_info and multiqc.",
+        "Mentions route-specific outputs such as variant_calling or annotation."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the sarek-expert-skill, plan how to recover a previous Sarek run when the user only remembers one output filename fragment. The project is my-project. Do not launch anything.",
+      "expected_output": "A search plan with run_list artifact_path_contains, run_get artifact_summary, run_artifacts, and compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+        "Does not guess old output directories as safe."
+      ],
+      "files": []
+    },
+    {
+      "id": "audit-capability-covered",
+      "source": "audit",
+      "category": "capability_coverage",
+      "source_materials": [
+        "assets/capability-audit.yaml",
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml"
+      ],
+      "prompt": "Using the sarek-expert-skill, decide whether capability schema_param_aligner is covered for runtime planning. Return the packaged playbook, preset, schema lookup, or output/QC asset that handles it.",
+      "expected_output": "A coverage answer that points to preprocessing or Sentieon playbooks/presets and the preprocessing schema group, without using authoring-time inspection.",
+      "assertions": [
+        "Starts from packaged playbooks or presets.",
+        "Mentions preprocessing schema lookup or aligner exact lookup.",
+        "Does not say the capability is unresolved.",
+        "Does not use authoring-time inspection for runtime planning.",
+        "Does not invent unsupported enum values."
+      ],
+      "files": []
+    },
+    {
+      "id": "audit-gaps-resolved",
+      "source": "audit",
+      "category": "authoring_gaps",
+      "source_materials": [
+        "assets/authoring-gaps.yaml",
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the sarek-expert-skill, answer whether the starter scaffold gaps for generic artifact contracts and generic QC rules are still open. If resolved, say which assets now cover them.",
+      "expected_output": "A maintenance answer that says the gaps are resolved and points to artifact-contracts.yaml and qc-rules.yaml.",
+      "assertions": [
+        "Mentions authoring-gaps.yaml status resolved.",
+        "Points to artifact-contracts.yaml for published outputs.",
+        "Points to qc-rules.yaml for QC rules.",
+        "Does not claim unresolved scaffold gaps remain.",
+        "Does not use runtime pipeline inspection."
+      ],
+      "files": []
+    }
+  ],
+  "summary": {
+    "eval_count": 8,
+    "asset_eval_count": 6,
+    "authoring_bundle_eval_count": 0,
+    "audit_eval_count": 2
+  }
+}

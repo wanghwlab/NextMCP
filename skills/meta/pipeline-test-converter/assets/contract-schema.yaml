@@ -1,0 +1,57 @@
+version: "2026-03-18"
+
+required_sections:
+  - mode
+  - source_route
+  - runtime_inputs
+  - localization_plan
+  - launch_plan
+  - assertions
+  - prompt_brief
+  - blockers
+
+mode_values:
+  - profile-only
+  - profile-plus-tests-config
+  - requires-local-cache
+  - unsuitable-for-generic-smoke
+
+section_expectations:
+  mode:
+    description: "Primary conversion mode used for this contract."
+
+  source_route:
+    description: >-
+      Upstream route summary: chosen profile, source files used, and why this
+      route represents the canonical smoke entry.
+
+  runtime_inputs:
+    description: >-
+      Concrete inputs, references, and process-level notes needed to reproduce
+      the route outside nf-test.
+
+  localization_plan:
+    description: >-
+      Which paths already exist locally, which remote paths need mapping or
+      download, and whether manifest rewriting is required.
+
+  launch_plan:
+    description: >-
+      The intended nextflow_run sequence. Prefer prepare first, then real run.
+      Include profile choice, params, config_files only when truly needed, and
+      any blockers from environment assumptions.
+
+  assertions:
+    description: >-
+      Minimal stable checks for smoke evaluation. Keep this small and grounded
+      in stable outputs, not full snapshot parity.
+
+  prompt_brief:
+    description: >-
+      A short user-facing request that a client agent could receive in a real
+      system evaluation before it translates the intent into nextflow_run.
+
+  blockers:
+    description: >-
+      Empty when the route is ready. Otherwise list missing cache roots, auth
+      assumptions, environment adapters, or reasons to skip the route.

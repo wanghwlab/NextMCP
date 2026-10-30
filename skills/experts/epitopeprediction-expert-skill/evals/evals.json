@@ -1,0 +1,179 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Offline evals for epitopeprediction-expert-skill. These prompts test planning, parameter mapping, output review, historical reuse, and source-backed coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch"
+  },
+  "summary": {
+    "eval_count": 8,
+    "asset_eval_count": 4,
+    "authoring_bundle_eval_count": 3,
+    "audit_eval_count": 1
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, draft a nextmcp launch plan for nf-core/epitopeprediction. The project is my-project. The user confirmed the server-local samplesheet at /data/samplesheet.csv and wants results under /results/epitopeprediction. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and the nextflow_run argument shape.",
+      "expected_output": "A launch plan that keeps project as a top-level nextflow_run argument, puts input and outdir under params, puts resource caps in a server-local override config passed through config_files using process.resourceLimits, omits profile by default, and avoids authoring-time inspection.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument, not inside params.",
+        "Mentions input and outdir under params.",
+        "Mentions resource caps under config_files or an override config using process.resourceLimits, not params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.",
+        "Uses run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) after launch.",
+        "Does not start runtime planning with authoring-time inspection."
+      ],
+      "files": []
+    },
+    {
+      "id": "netmhc-prerequisites",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/qc-rules.yaml"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, plan a NetMHCpan and NetMHCIIpan run for MHC class I and II samples. The user has not yet confirmed the NetMHC tarball paths. Do not launch anything.",
+      "expected_output": "A plan that requires tools to include netmhcpan and netmhciipan, asks for server-local netmhcpan_path and netmhciipan_path tarballs, keeps those paths in params, and recommends fs_list(mode=\"manifest\") only for concrete server paths.",
+      "assertions": [
+        "Requires netmhcpan_path when netmhcpan is selected.",
+        "Requires netmhciipan_path when netmhciipan is selected.",
+        "Keeps NetMHC paths under params.",
+        "Mentions server-local path confirmation.",
+        "Does not promise launch before prerequisites are confirmed."
+      ],
+      "files": []
+    },
+    {
+      "id": "fasta-only-output",
+      "source": "authoring_bundle",
+      "category": "route_selection",
+      "source_materials": [
+        "authoring_bundle.schema:fasta_output",
+        "assets/playbooks.yaml",
+        "assets/artifact-contracts.yaml"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, plan a run where the user wants FASTA output from annotated VCF input for handoff to another pipeline, not binding predictions.",
+      "expected_output": "A plan that uses fasta_output true, confirms annotated VCF input, expects epytope/[sample].fasta, and explicitly says predictions/[sample].tsv is not expected for this route.",
+      "assertions": [
+        "Sets or recommends fasta_output true.",
+        "Confirms VCF annotation by VEP or SnpEff.",
+        "Mentions epytope/[sample].fasta.",
+        "States that binding prediction output is skipped.",
+        "Does not require NetMHC paths for this route."
+      ],
+      "files": []
+    },
+    {
+      "id": "reporting-shape",
+      "source": "authoring_bundle",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "authoring_bundle.schema:binder_only",
+        "authoring_bundle.schema:wide_format_output",
+        "assets/param-presets.yaml",
+        "assets/artifact-contracts.yaml"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, explain how to configure a final table that keeps only binders and writes wide-format predictions. Include the output files to review after completion.",
+      "expected_output": "A plan using binder_only true and wide_format_output true under params, with review of predictions/[sample].tsv, multiqc/multiqc_report.html, and pipeline_info/params.json.",
+      "assertions": [
+        "Puts binder_only under params.",
+        "Puts wide_format_output under params.",
+        "Explains that binder_only removes non-binders.",
+        "Explains that wide_format_output changes table shape.",
+        "Grounds review in artifact-contracts.yaml outputs."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, answer a user who says the nf-core/epitopeprediction run finished and they need to review the main published outputs and QC reports. What nextmcp calls should happen first, and which artifact paths should be inspected?",
+      "expected_output": "A post-run review plan that starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then uses run_artifacts, then fs_read only for explicit report or table paths.",
+      "assertions": [
+        "Starts with a summary-first run_get call.",
+        "Uses run_artifacts before reading individual output files.",
+        "Mentions predictions/[sample].tsv for prediction routes.",
+        "Mentions multiqc/multiqc_report.html and pipeline_info/params.json.",
+        "Uses fs_read only after an explicit path is known."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, plan how to recover a previous nf-core/epitopeprediction run when the user only remembers an output filename fragment. The project is my-project. Do not launch anything; return the search and compatibility-check sequence.",
+      "expected_output": "A historical reuse plan that searches with run_list(project=..., pipeline=\"epitopeprediction\", artifact_path_contains=...), inspects run_get(include=[\"artifact_summary\"]), uses run_artifacts, treats artifacts.json and pipeline_fingerprint as historical facts, and confirms route compatibility through pipeline_info/params.json.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires route compatibility confirmation through pipeline_info/params.json.",
+        "Does not guess old output directories as the default safe path."
+      ],
+      "files": []
+    },
+    {
+      "id": "variant-input-requirements",
+      "source": "authoring_bundle",
+      "category": "coverage",
+      "source_materials": [
+        "authoring_bundle.documents:docs/usage.md",
+        "assets/qc-rules.yaml",
+        "references/06_troubleshooting.md"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, answer a user preparing VCF input who asks what must be true before launch and what to check if epytope outputs are empty.",
+      "expected_output": "A source-backed answer that requires SnpEff or VEP annotation, confirms genome_reference and optional proteome_reference, and routes empty epytope outputs through the annotated_variant_input QC rule.",
+      "assertions": [
+        "Requires SnpEff or VEP annotation for VCF input.",
+        "Mentions genome_reference.",
+        "Mentions proteome_reference as optional self-filtering input.",
+        "Connects empty epytope output to troubleshooting.",
+        "Keeps paths server-local."
+      ],
+      "files": []
+    },
+    {
+      "id": "audit-covered-low-impact-flags",
+      "source": "audit",
+      "category": "coverage",
+      "source_materials": [
+        "assets/capability-audit.yaml",
+        "assets/param-presets.yaml",
+        "assets/schema-groups/generic_options.yaml"
+      ],
+      "prompt": "Using the epitopeprediction-expert-skill, explain how help, help_full, show_hidden, and version should be treated during normal analysis planning.",
+      "expected_output": "An answer that says these are not ordinary analysis route parameters, are preserved for exact schema lookup, and should not be added to normal nextflow_run params unless the user specifically asks for help/version behavior rather than an analysis run.",
+      "assertions": [
+        "Does not include help flags in ordinary analysis presets.",
+        "Does not include version in ordinary analysis presets.",
+        "Points to exact schema lookup for these fields.",
+        "Explains that these flags print help/version rather than run analysis.",
+        "Does not invent alternate parameter names."
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pipeline Smoke Evaluator"
+  short_description: "Evaluate one completed smoke run against its hidden evaluation spec"
+  default_prompt: "Use $pipeline-smoke-evaluator to evaluate one completed smoke test using one tests/pipeline_support case directory, its hidden smoke.yaml, and a saved eval bundle."

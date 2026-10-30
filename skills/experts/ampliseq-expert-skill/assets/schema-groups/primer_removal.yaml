@@ -1,0 +1,146 @@
+group:
+  id: primer_removal
+  label: Primer removal
+  selection_rule: Use this group for parameters defined under the `Primer removal`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/primer_removal.md
+  - assets/schema-groups/primer_removal.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `primer_removal` for exact lookup.
+parameters:
+- group_id: primer_removal
+  name: double_primer
+  source_name: double_primer
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Cutadapt will be run twice to ensure removal of potential double primers
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Primer removal
+  raw_schema:
+    type: boolean
+    description: Cutadapt will be run twice to ensure removal of potential double
+      primers
+    help_text: Cutdapt will be run twice, first to remove reads without primers (default),
+      then a second time to remove reads that erroneously contain a second set of
+      primers, not to be used with `--retain_untrimmed`.
+    fa_icon: fas fa-project-diagram
+- group_id: primer_removal
+  name: ignore_failed_trimming
+  source_name: ignore_failed_trimming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Ignore files with too few reads after trimming.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Primer removal
+  raw_schema:
+    type: boolean
+    description: Ignore files with too few reads after trimming.
+    help_text: Ignore files with less reads than specified by `--min_read_counts`
+      after trimming and continue the pipeline without those samples.
+    fa_icon: fas fa-arrow-right
+- group_id: primer_removal
+  name: retain_untrimmed
+  source_name: retain_untrimmed
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Cutadapt will retain untrimmed reads, choose only if input reads are
+    not expected to contain primer sequences.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Primer removal
+  raw_schema:
+    type: boolean
+    description: Cutadapt will retain untrimmed reads, choose only if input reads
+      are not expected to contain primer sequences.
+    help_text: 'When read sequences are trimmed, untrimmed read pairs are discarded
+      routinely. Use this option to retain untrimmed read pairs. This is usually not
+      recommended and is only of advantage for specific protocols that prevent sequencing
+      PCR primers. '
+    fa_icon: far fa-plus-square
+- group_id: primer_removal
+  name: cutadapt_max_error_rate
+  source_name: cutadapt_max_error_rate
+  type: number
+  required: false
+  default: 0.1
+  enum: null
+  description: Sets the maximum error rate for valid matches of primer sequences with
+    reads for cutadapt (-e).
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 0.1
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Primer removal
+  raw_schema:
+    type: number
+    default: 0.1
+    description: Sets the maximum error rate for valid matches of primer sequences
+      with reads for cutadapt (-e).
+    fa_icon: fas fa-exclamation-circle
+- group_id: primer_removal
+  name: cutadapt_min_overlap
+  source_name: cutadapt_min_overlap
+  type: integer
+  required: false
+  default: 3
+  enum: null
+  description: Sets the minimum overlap for valid matches of primer sequences with
+    reads for cutadapt (-O).
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values:
+  - 3
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Primer removal
+  raw_schema:
+    type: integer
+    default: 3
+    description: Sets the minimum overlap for valid matches of primer sequences with
+      reads for cutadapt (-O).
+    fa_icon: fas fa-align-left

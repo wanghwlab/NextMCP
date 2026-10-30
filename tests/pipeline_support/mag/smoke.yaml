@@ -1,0 +1,193 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: mag
+case_id: smoke
+description: Minimal end-to-end MCP smoke test for mag using the upstream multirun test route.
+mode: profile-only
+
+source_profile:
+  profile: test
+  config: conf/test.config
+  source_files:
+    - nextflow.config
+    - conf/test.config
+    - tests/default.nf.test
+    - tests/default.nf.test.snap
+    - tests/.nftignore
+  rationale: >-
+    `tests/default.nf.test` uses `-profile test`, and that route keeps the
+    normal paired-end multirun assembly, binning, taxonomy, and annotation path
+    on the small upstream dataset while still applying the upstream speed
+    shortcuts, so it is the canonical smoke entry instead of the more
+    input-check-oriented `test_minimal` profile.
+
+classification:
+  primary_mode: profile-only
+  modifiers:
+    - localize-remote-inputs
+    - snapshot-rich
+  evidence:
+    - >-
+      `nextflow.config` includes `conf/test.config` under the `test` profile,
+      so the canonical lightweight route is already visible in the normal
+      runtime config chain.
+    - >-
+      `conf/test.config` sets the concrete sample sheet, BUSCO, GTDB-Tk, and
+      CAT inputs plus the speed-oriented flags that keep the upstream test
+      small without collapsing it into an input-only route.
+    - >-
+      `tests/default.nf.test` only adds the temporary `outdir` used by nf-test
+      and snapshots the software versions file plus the MultiQC subtree.
+    - >-
+      `tests/nextflow.config` changes `pipelines_testdata_base_path` to a
+      `refs/heads/mag` branch pin that does not reconstruct the same concrete
+      URLs as `conf/test.config`, so it is not required for the pipeline-level
+      smoke route.
+    - >-
+      `tests/default.nf.test.snap` and `tests/.nftignore` provide enough
+      stable MultiQC file names and md5 anchors to keep assertions compact.
+  next_action: localize inputs first
+
+local_data_contract:
+  localized_root: /data/nextmcp/testdata/mag/test
+  path_layout_rule: prefix_map_testdatasets_and_rewrite_multirun_samplesheet
+  rewritten_manifests:
+    - role: input_samplesheet
+      expected_path: /data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv
+
+launch:
+  pipeline: mag
+  project: pipeline-support-mag
+  run_name: smoke
+  params:
+    input: /data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv
+    min_length_unbinned_contigs: 1
+    max_unbinned_contigs: 2
+    skip_ale: true
+    skip_concoct: true
+    skip_comebin: true
+    skip_metabinner: true
+    busco_db: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+    busco_db_lineage: bacteria_odb10
+    busco_clean: true
+    prokka_fast_mode: true
+    gtdb_db: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+    cat_db: /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz
+    cat_no_suggestive_asterisks: true
+    gtdbtk_min_completeness: 0.01
+    gtdbtk_skip_aniscreen: true
+    gtdbtk_use_full_tree: true
+    megahit_fix_cpu_1: true
+    spades_fix_cpus: 1
+  config_files:
+    - /data/nextmcp/testdata/mag/test/project-files/pipeline-support-mag/profile_test_overrides.config
+  config_overrides:
+    - path: /data/nextmcp/testdata/mag/test/project-files/pipeline-support-mag/profile_test_overrides.config
+      content: |
+        process {
+            resourceLimits = [
+                cpus: 4,
+                memory: '15.GB',
+                time: '1.h'
+            ]
+        }
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - Start with `nextflow_run(prepare=true)` before the real launch.
+    - Omit `profile` and rely on explicit params plus one small override config.
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    required_paths:
+      - /data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R1.fastq.gz
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_R2.fastq.gz
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_sample2_R1.fastq.gz
+      - /data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data/test_minigut_sample2_R2.fastq.gz
+  run:
+    ok: true
+    final_status: succeeded
+  observability:
+    process_get_status: succeeded
+    required_log_streams:
+      - nextflow
+  artifacts:
+    required_paths:
+      - multiqc/multiqc_report.html
+      - multiqc/multiqc_data/busco_plot_bacteria_odb10.yaml
+      - multiqc/multiqc_data/multiqc_general_stats.yaml
+      - multiqc/multiqc_data/multiqc_gtdbtk.yaml
+      - multiqc/multiqc_data/multiqc_prokka.yaml
+      - multiqc/multiqc_data/multiqc_quast.yaml
+      - pipeline_info/nf_core_mag_software_mqc_versions.yml
+    content_checks:
+      - path: multiqc/multiqc_data/busco_plot_bacteria_odb10.yaml
+        kind: md5
+        expected: 8ff1b7a8628dbdfb9d176058c07c4263
+      - path: multiqc/multiqc_data/multiqc_general_stats.yaml
+        kind: md5
+        expected: eb0e0141f528d72ac61cfc98dd86f538
+      - path: multiqc/multiqc_data/multiqc_gtdbtk.yaml
+        kind: md5
+        expected: 3bbdb38502ded227673a4e25c6d7219a
+      - path: multiqc/multiqc_data/multiqc_prokka.yaml
+        kind: md5
+        expected: 7a103b0d4385c2de011fc286cb4c5cc3
+      - path: multiqc/multiqc_data/multiqc_quast.yaml
+        kind: md5
+        expected: 1be7cc2def0a960cbc3c19bdc4504c78
+
+prompt_brief: |
+  # Task
+  
+  Use the nextmcp server.
+  Run the localized `mag` multirun lightweight example in project
+  `pipeline-withskill-mag`. Use the rewritten samplesheet, the local BUSCO,
+  GTDB-Tk, and CAT database bundles, and the server-local paired-end FASTQ files
+  referenced by the samplesheet. Keep the project-owned default results
+  directory.
+  
+  ## Available inputs
+  
+  - Input samplesheet: `/data/nextmcp/testdata/mag/test/rewrites/pipeline-data/mag/samplesheets/samplesheet.multirun.v4_local.csv`
+  - BUSCO database tarball: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/busco/bacteria_odb10.2024-01-08.tar.gz`
+  - GTDB-Tk mock database: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/gtdbtk/gtdbtk_mockup_20250422.tar.gz`
+  - CAT database bundle: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/databases/cat/minigut_cat.tar.gz`
+  - FASTQ bundle root: `/data/nextmcp/testdata/mag/test/pipeline-data/mag/test_data`
+  
+  ## Workflow goal
+  
+  - Run the normal paired-end multirun assembly, binning, taxonomy, and annotation route represented
+    by the samplesheet.
+  - Use the listed local BUSCO, GTDB-Tk, and CAT databases instead of downloading databases at
+    runtime.
+  - Keep the lightweight-test behavior that limits unbinned-contig handling to minimum contig length
+    1 and at most 2 unbinned contigs.
+  - Omit the optional ALE, CONCOCT, COMEBin, and MetaBinner steps that the upstream lightweight test
+    excludes, while keeping the rest of the multirun MAG route active.
+  - Keep fast Prokka behavior, BUSCO checking against the `bacteria_odb10` lineage with cleanup, CAT
+    output formatting without suggestive asterisks, the MEGAHIT single-CPU fix, and one CPU for
+    SPAdes.
+  - For GTDB-Tk on the tiny mock bins, use full-tree classification, skip the ANI pre-screening step,
+    and use a 0.01% completeness threshold.
+  - Keep the upstream test resource caps at 4 CPUs, 15.GB memory, and 1.h runtime.
+  
+  ## restrictions
+  - Do not read pipeline README, docs, schema, source files, or online help.
+  - Do not inspect `nf_pipeline/mag/` materials.
+  - Do not reference other projects
+  
+  ## Baseline restrictions
+  - Include all restrictions above.
+  - Use `baseline-noskill-mag` as project name.
+  - Do not use the `mag` expert skill.
+prompt_brief_path: tests/pipeline_support/mag/smoke.task.md
+blockers: []

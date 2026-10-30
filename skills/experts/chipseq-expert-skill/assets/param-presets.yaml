@@ -1,0 +1,86 @@
+presets:
+  default_run:
+    use_when: Standard broadPeak run after the user confirms server-local samplesheet
+      and reference paths.
+    params:
+      aligner: bwa
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+      fasta: <server_reference_root>/genome.fa
+      gtf: <server_reference_root>/genes.gtf
+  genome_preset_run:
+    use_when: Use when the server config provides a valid nf-core genome key and
+      the user wants iGenomes-backed references.
+    params:
+      genome: <genome_key>
+      aligner: bwa
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+  narrow_peak_run:
+    use_when: Use for transcription factors or other narrow ChIP-seq marks.
+    params:
+      aligner: bwa
+      narrow_peak: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+      fasta: <server_reference_root>/genome.fa
+      gtf: <server_reference_root>/genes.gtf
+  alternate_aligner_run:
+    use_when: Use when the user requests bowtie2, chromap, or star, or wants to compare
+      aligner results under separate output subdirectories.
+    params:
+      aligner: <bwa|bowtie2|chromap|star>
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+      fasta: <server_reference_root>/genome.fa
+      gtf: <server_reference_root>/genes.gtf
+      bwa_index: <server_reference_root>/bwa_index
+      bowtie2_index: <server_reference_root>/bowtie2_index
+      chromap_index: <server_reference_root>/chromap_index
+      star_index: <server_reference_root>/star_index
+  save_reference_run:
+    use_when: Use when the pipeline must build a missing aligner index and preserve
+      it for future runs.
+    params:
+      aligner: bwa
+      save_reference: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+      fasta: <server_reference_root>/genome.fa
+      gtf: <server_reference_root>/genes.gtf
+  saved_intermediates_run:
+    use_when: Use only when the user needs trimmed FASTQ, intermediate BAM, MACS3
+      pileup, or unmapped read handoff files and accepts larger output size.
+    params:
+      save_trimmed: true
+      save_align_intermeds: true
+      save_macs_pileup: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+  qc_light_run:
+    use_when: Use only when the user explicitly wants a faster or smaller exploratory
+      run and accepts missing QC/report sections.
+    params:
+      skip_fastqc: true
+      skip_preseq: true
+      skip_spp: true
+      skip_plot_profile: true
+      skip_plot_fingerprint: true
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/chipseq
+notes:
+- Keep input, outdir, references, aligner, peak mode, save flags, and skip flags
+  in nextflow_run(params=...).
+- Put Nextflow config files and resource caps in nextflow_run(config_files=[...]).
+  For this nf-core pipeline, resource caps should use process.resourceLimits in
+  that config file; do not invent params.max_cpus, params.max_memory,
+  params.max_time, or process.maxCpus.
+- Do not place pipeline parameters in config_files; use config files only for
+  resource tuning, infrastructure settings, or module args.

@@ -1,0 +1,22 @@
+status: resolved
+gaps:
+  - id: initial_scaffold_gaps
+    source: capability-audit.yaml
+    status: resolved
+    action: Replace starter scaffold placeholders with source-backed nanoseq assets.
+    resolution: Covered in pipeline-profile.yaml, playbooks.yaml, step-recipes.yaml,
+      param-presets.yaml, artifact-contracts.yaml, qc-rules.yaml, references, and complete schema
+      groups.
+  - id: replace_generic_artifact_contract
+    source: artifact-contracts.yaml
+    status: resolved
+    action: Replace generic results-root contract with source-backed published outputs.
+    resolution: artifact-contracts.yaml now lists demultiplexing, NanoLyse, QC, alignment,
+      coverage, DNA variants, RNA quantification, differential analysis, RNA modification, fusion,
+      MultiQC, and pipeline_info outputs.
+  - id: replace_generic_qc_rule
+    source: qc-rules.yaml
+    status: resolved
+    action: Replace generic completion check with source-backed QC and troubleshooting rules.
+    resolution: qc-rules.yaml now covers route-specific inputs, outputs, QC signals, likely causes,
+      and next actions.

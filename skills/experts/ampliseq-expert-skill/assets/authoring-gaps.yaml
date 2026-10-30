@@ -1,0 +1,545 @@
+status: resolved
+gaps:
+- id: documented_prerequisite_database
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_prerequisite_index
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_prerequisite_license
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_cut_dada_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_dada_ref_tax_custom
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_dada_ref_tax_custom_sp
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_dada_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_kraken2_ref_tax_custom
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_kraken2_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_qiime_ref_tax_custom
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_qiime_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_sidle_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: prerequisite_sintax_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_addsh
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_ancom
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_ancombc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_cut_dada_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_cut_its
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_dada_addspecies_allowmultiple
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_dada_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_dada_taxonomy_rc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_double_primer
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_filter_codons
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_filter_ssu
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_help
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: 'schema lookup coverage only: help display option, not a runtime route.'
+- id: schema_param_help_full
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: 'schema lookup coverage only: full help display option, not a runtime
+    route.'
+- id: schema_param_ignore_empty_input_files
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_ignore_failed_filtering
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_ignore_failed_trimming
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_illumina_novaseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_illumina_pe_its
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_iontorrent
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_kraken2_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_mergepairs_strategy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_monochrome_logs
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: 'schema lookup coverage only: log color formatting, not a runtime route.'
+- id: schema_param_multiple_sequencing_runs
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_pacbio
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_picrust
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_plaintext_email
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: 'schema lookup coverage only: email formatting, not a runtime route.'
+- id: schema_param_pplace_alnmethod
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_publish_dir_mode
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: 'schema lookup coverage only: Nextflow publish behavior tuning, not
+    normal route selection.'
+- id: schema_param_qiime_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_quality_type
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_raise_filter_stacksize
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_retain_untrimmed
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_sample_inference
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_save_intermediates
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_sbdiexport
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_show_hidden
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: 'schema lookup coverage only: parameter documentation display option,
+    not a runtime route.'
+- id: schema_param_sidle_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_single_end
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_sintax_ref_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_abundance_tables
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_alpha_rarefaction
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_barplot
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_barrnap
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_cutadapt
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_dada_addspecies
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_dada_quality
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_dada_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_diversity_indices
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_fastqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_phyloseq
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_qiime
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_qiime_downstream
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_taxonomy
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_skip_tse
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_validate_params
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_version
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_vsearch_cluster
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_output_contamination
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_output_counts
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_output_matrix
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_output_multiqc
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_output_quantification
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: documented_output_report
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_dada_min_boot
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_exclude_taxa
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_kraken2_assign_taxlevels
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_kraken2_confidence
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_kraken2_ref_tax_custom
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_metadata
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_multiqc_methods_description
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_pplace_aln
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_pplace_model
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: schema_param_pplace_tree
+  source: capability-audit.yaml
+  status: resolved
+  action: Cover this capability in the listed assets or mark it scoped out with a
+    reason.
+  resolution: Covered in generated assets and references.
+- id: replace_generic_artifact_contract
+  source: artifact-contracts.yaml
+  status: resolved
+  action: Replace the generic results-root contract with source-backed published outputs.
+  resolution: Replaced with source-backed ampliseq output families.
+- id: replace_generic_qc_rule
+  source: qc-rules.yaml
+  status: resolved
+  action: Replace the generic completion check with source-backed QC and troubleshooting
+    rules.
+  resolution: Replaced with ampliseq input, trimming, DADA2, taxonomy, QIIME2, and
+    resource checks.

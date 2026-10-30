@@ -1,0 +1,61 @@
+group:
+  id: deseq_qc_options
+  label: Differential analysis options
+  selection_rule: Use this group for parameters defined under the `Differential analysis
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/deseq_qc_options.md
+  - assets/schema-groups/deseq_qc_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `deseq_qc_options` for exact lookup.
+parameters:
+- group_id: deseq_qc_options
+  name: deseq2_vst
+  source_name: deseq2_vst
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Use vst transformation instead of rlog with DESeq2.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Differential analysis options
+  raw_schema:
+    type: boolean
+    description: Use vst transformation instead of rlog with DESeq2.
+    help_text: See [DESeq2 docs](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#data-transformations-and-visualization).
+    fa_icon: fas fa-dolly
+    default: true
+- group_id: deseq_qc_options
+  name: skip_deseq2_qc
+  source_name: skip_deseq2_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip DESeq2 PCA and heatmap plotting.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Differential analysis options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip DESeq2 PCA and heatmap plotting.

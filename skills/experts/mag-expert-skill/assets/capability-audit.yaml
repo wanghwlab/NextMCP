@@ -1,0 +1,2506 @@
+pipeline_id: mag
+status: resolved
+summary:
+  total: 125
+  high_impact: 110
+  needs_review: 0
+  covered: 125
+  scoped_out: 0
+capabilities:
+- id: documented_prerequisite_database
+  label: Documented `database` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/output.md
+    excerpt: database
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: database
+- id: documented_prerequisite_index
+  label: Documented `index` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/output.md
+    excerpt: index
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: index
+- id: documented_prerequisite_pre_built
+  label: Documented `pre-built` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: pre-built
+- id: prerequisite_cat_db
+  label: Parameter `cat_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cat_db
+    excerpt: Database for taxonomic classification of metagenome assembled genomes.
+      Can be either a zipped file or a directory containing the extracted output of
+      such.
+- id: prerequisite_cat_db_generate
+  label: Parameter `cat_db_generate` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cat_db_generate
+    excerpt: Generate CAT database.
+- id: prerequisite_checkm2_db
+  label: Parameter `checkm2_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: checkm2_db
+    excerpt: Path to local file of an already downloaded and uncompressed CheckM2
+      database file (.dmnd file).
+- id: prerequisite_checkm2_db_version
+  label: Parameter `checkm2_db_version` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: checkm2_db_version
+    excerpt: CheckM2 database version number to download (Zenodo record ID, for reference
+      check the canonical reference https://zenodo.org/records/5571251, and pick the
+      Zenodo ID of the database version of your choice).
+- id: prerequisite_checkm_db
+  label: Parameter `checkm_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: checkm_db
+    excerpt: Path to local folder containing already downloaded and uncompressed CheckM
+      database.
+- id: prerequisite_checkm_download_url
+  label: Parameter `checkm_download_url` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: checkm_download_url
+    excerpt: URL pointing to checkM database for auto download, if local path not
+      supplied.
+- id: prerequisite_genomad_db
+  label: Parameter `genomad_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: genomad_db
+    excerpt: Database for virus classification with geNomad
+- id: prerequisite_gtdb_db
+  label: Parameter `gtdb_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gtdb_db
+    excerpt: Specify the location of a GTDBTK database. Can be either an uncompressed
+      directory or a `.tar.gz` archive. If not specified will be downloaded for you
+      when GTDBTK or binning QC is not skipped.
+- id: prerequisite_gunc_database_type
+  label: Parameter `gunc_database_type` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gunc_database_type
+    excerpt: Specify which database to auto-download if not supplying own
+- id: prerequisite_gunc_db
+  label: Parameter `gunc_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gunc_db
+    excerpt: Specify a path to a pre-downloaded GUNC dmnd database file
+- id: prerequisite_host_fasta_bowtie2index
+  label: Parameter `host_fasta_bowtie2index` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: host_fasta_bowtie2index
+    excerpt: Bowtie2 index directory corresponding to `--host_fasta` reference file
+      for host contamination removal.
+- id: prerequisite_metaeuk_db
+  label: Parameter `metaeuk_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: metaeuk_db
+    excerpt: Path to either a local fasta file of protein sequences, or to a directory
+      containing an MMseqs2-formatted database, for annotation of eukaryotic genomes.
+- id: prerequisite_metaeuk_mmseqs_db
+  label: Parameter `metaeuk_mmseqs_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: metaeuk_mmseqs_db
+    excerpt: A string containing the name of one of the databases listed in the [mmseqs2
+      documentation](https://github.com/soedinglab/MMseqs2/wiki#downloading-databases).
+      This database will be downloaded and formatted for eukaryotic genome annotation.
+      Incompatible with --metaeuk_db.
+- id: prerequisite_save_cat_db
+  label: Parameter `save_cat_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_cat_db
+    excerpt: Save the CAT database generated when specified by `--cat_db_generate`.
+- id: prerequisite_save_mmseqs_db
+  label: Parameter `save_mmseqs_db` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_mmseqs_db
+    excerpt: Save the downloaded mmseqs2 database specified in `--metaeuk_mmseqs_db`.
+- id: prerequisite_skip_gtdbtk
+  label: Parameter `skip_gtdbtk` suggests a runtime prerequisite.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_gtdbtk
+    excerpt: Skip the running of GTDB, as well as the automatic download of the database
+- id: schema_param_adapterremoval_trim_quality_stretch
+  label: Schema parameter `adapterremoval_trim_quality_stretch` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: adapterremoval_trim_quality_stretch
+    excerpt: Turn on quality trimming by consecutive stretch of low quality bases,
+      rather than by window.
+- id: schema_param_ancient_dna
+  label: Schema parameter `ancient_dna` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: ancient_dna
+    excerpt: Turn on/off the ancient DNA subworkflow
+- id: schema_param_bbnorm
+  label: Schema parameter `bbnorm` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bbnorm
+    excerpt: Run BBnorm to normalize sequence depth.
+- id: schema_param_bin_concoct_donotconcatlast
+  label: Schema parameter `bin_concoct_donotconcatlast` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bin_concoct_donotconcatlast
+    excerpt: Specify to not append the last contig less than sub-contig length to
+      the last correct length contig
+- id: schema_param_bin_domain_classification
+  label: Schema parameter `bin_domain_classification` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bin_domain_classification
+    excerpt: Enable domain-level (prokaryote or eukaryote) classification of bins
+      using Tiara. Processes which are domain-specific will then only receive bins
+      matching the domain requirement.
+- id: schema_param_bin_metabinner_scale
+  label: Schema parameter `bin_metabinner_scale` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bin_metabinner_scale
+    excerpt: Dataset scale for MetaBinner
+- id: schema_param_binning_map_mode
+  label: Schema parameter `binning_map_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: binning_map_mode
+    excerpt: Defines mapping strategy to compute co-abundances for binning, i.e. which
+      samples will be mapped against the assembly.
+- id: schema_param_busco_clean
+  label: Schema parameter `busco_clean` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: busco_clean
+    excerpt: Enable clean-up of temporary files created during BUSCO runs.
+- id: schema_param_cat_allow_unofficial_lineages
+  label: Schema parameter `cat_allow_unofficial_lineages` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cat_allow_unofficial_lineages
+    excerpt: Allow unofficial lineages in CAT classification.
+- id: schema_param_cat_classify_unbinned
+  label: Schema parameter `cat_classify_unbinned` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cat_classify_unbinned
+    excerpt: Classify unbinned contigs with CAT (contig mode).
+- id: schema_param_cat_db_generate
+  label: Schema parameter `cat_db_generate` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cat_db_generate
+    excerpt: Generate CAT database.
+- id: schema_param_cat_no_suggestive_asterisks
+  label: Schema parameter `cat_no_suggestive_asterisks` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: cat_no_suggestive_asterisks
+    excerpt: Specify to turn off CAT marking in output files most probable hits (when
+      multiple) with an asterix.
+- id: schema_param_clip_tool
+  label: Schema parameter `clip_tool` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: clip_tool
+    excerpt: Specify which adapter clipping tool to use.
+- id: schema_param_coassemble_group
+  label: Schema parameter `coassemble_group` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: coassemble_group
+    excerpt: Co-assemble samples within one group, instead of assembling each sample
+      separately.
+- id: schema_param_exclude_unbins_from_postbinning
+  label: Schema parameter `exclude_unbins_from_postbinning` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: exclude_unbins_from_postbinning
+    excerpt: Exclude unbinned contigs in the post-binning steps (bin QC, taxonomic
+      classification, and annotation steps).
+- id: schema_param_fastp_save_trimmed_fail
+  label: Schema parameter `fastp_save_trimmed_fail` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: fastp_save_trimmed_fail
+    excerpt: Save reads that fail fastp filtering in a separate file. Not used downstream.
+- id: schema_param_fastp_trim_polyg
+  label: Schema parameter `fastp_trim_polyg` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: fastp_trim_polyg
+    excerpt: Turn on detecting and trimming of poly-G tails
+- id: schema_param_generate_bigmag_file
+  label: Schema parameter `generate_bigmag_file` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: generate_bigmag_file
+    excerpt: Make a BIgMAG input file including GUNC results.
+- id: schema_param_gtdbtk_pplacer_useram
+  label: Schema parameter `gtdbtk_pplacer_useram` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gtdbtk_pplacer_useram
+    excerpt: Speed up pplacer step of GTDB-Tk by loading to memory.
+- id: schema_param_gtdbtk_skip_aniscreen
+  label: Schema parameter `gtdbtk_skip_aniscreen` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gtdbtk_skip_aniscreen
+    excerpt: Specify to disable fast classification of genomes by ANI using skani
+      in GTDB-Tk.
+- id: schema_param_gtdbtk_use_full_tree
+  label: Schema parameter `gtdbtk_use_full_tree` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gtdbtk_use_full_tree
+    excerpt: Specify to have GTDBTk to use the full bacterial tree rather than the
+      split tree (requires more memory!)
+- id: schema_param_gunc_database_type
+  label: Schema parameter `gunc_database_type` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gunc_database_type
+    excerpt: Specify which database to auto-download if not supplying own
+- id: schema_param_gunc_save_db
+  label: Schema parameter `gunc_save_db` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gunc_save_db
+    excerpt: Save the used GUNC reference files downloaded when not using --gunc_db
+      parameter.
+- id: schema_param_help
+  label: Schema parameter `help` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help
+    excerpt: Display the help message.
+- id: schema_param_help_full
+  label: Schema parameter `help_full` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help_full
+    excerpt: Display the full detailed help message.
+- id: schema_param_host_removal_save_ids
+  label: Schema parameter `host_removal_save_ids` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: host_removal_save_ids
+    excerpt: Save the read IDs of removed host reads.
+- id: schema_param_host_removal_verysensitive
+  label: Schema parameter `host_removal_verysensitive` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: host_removal_verysensitive
+    excerpt: Use the `--very-sensitive` instead of the`--sensitive`setting for Bowtie
+      2 to map reads against the host genome.
+- id: schema_param_igenomes_ignore
+  label: Schema parameter `igenomes_ignore` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: igenomes_ignore
+    excerpt: Do not load the iGenomes reference config.
+- id: schema_param_keep_lambda
+  label: Schema parameter `keep_lambda` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: keep_lambda
+    excerpt: Keep reads similar to the ONT internal standard Escherichia virus Lambda
+      genome.
+- id: schema_param_keep_phix
+  label: Schema parameter `keep_phix` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: keep_phix
+    excerpt: Keep reads similar to the Illumina internal standard PhiX genome.
+- id: schema_param_longread_adaptertrimming_tool
+  label: Schema parameter `longread_adaptertrimming_tool` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: longread_adaptertrimming_tool
+    excerpt: Specify which long read adapter trimming tool to use.
+- id: schema_param_longread_filtering_tool
+  label: Schema parameter `longread_filtering_tool` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: longread_filtering_tool
+    excerpt: Specify which long read filtering tool to use.
+- id: schema_param_megahit_fix_cpu_1
+  label: Schema parameter `megahit_fix_cpu_1` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: megahit_fix_cpu_1
+    excerpt: Fix number of CPUs for MEGAHIT to 1. Not increased with retries.
+- id: schema_param_metaeuk_mmseqs_db
+  label: Schema parameter `metaeuk_mmseqs_db` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: metaeuk_mmseqs_db
+    excerpt: A string containing the name of one of the databases listed in the [mmseqs2
+      documentation](https://github.com/soedinglab/MMseqs2/wiki#downloading-databases).
+      This database will be downloaded and formatted for eukaryotic genome annotation.
+      Incompatible with --metaeuk_db.
+- id: schema_param_monochrome_logs
+  label: Schema parameter `monochrome_logs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: monochrome_logs
+    excerpt: Use monochrome_logs
+- id: schema_param_plaintext_email
+  label: Schema parameter `plaintext_email` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: plaintext_email
+    excerpt: Send plain-text email instead of HTML.
+- id: schema_param_postbinning_input
+  label: Schema parameter `postbinning_input` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: postbinning_input
+    excerpt: Specify which binning output is sent for downstream annotation, taxonomic
+      classification, bin quality control etc.
+- id: schema_param_prokka_fast_mode
+  label: Schema parameter `prokka_fast_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: prokka_fast_mode
+    excerpt: Specify to skip CDS/product searching in Prokka runs
+- id: schema_param_prokka_with_compliance
+  label: Schema parameter `prokka_with_compliance` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: prokka_with_compliance
+    excerpt: Turn on Prokka complicance mode for truncating contig names for NCBI/ENA
+      compatibility.
+- id: schema_param_publish_dir_mode
+  label: Schema parameter `publish_dir_mode` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: publish_dir_mode
+    excerpt: Method used to save pipeline results to output directory.
+- id: schema_param_refine_bins_dastool
+  label: Schema parameter `refine_bins_dastool` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: refine_bins_dastool
+    excerpt: Turn on bin refinement using DAS Tool.
+- id: schema_param_refine_bins_dastool_savecontig2bin
+  label: Schema parameter `refine_bins_dastool_savecontig2bin` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: refine_bins_dastool_savecontig2bin
+    excerpt: Specify to save contig to bin maps used for bin refinement
+- id: schema_param_run_busco
+  label: Schema parameter `run_busco` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_busco
+    excerpt: Enable running BUSCO during bin QC.
+- id: schema_param_run_checkm
+  label: Schema parameter `run_checkm` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_checkm
+    excerpt: Enable running CheckM during bin QC.
+- id: schema_param_run_checkm2
+  label: Schema parameter `run_checkm2` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_checkm2
+    excerpt: Enable running CheckM2 during bin QC.
+- id: schema_param_run_gunc
+  label: Schema parameter `run_gunc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_gunc
+    excerpt: Turn on GUNC genome chimerism checks
+- id: schema_param_run_virus_identification
+  label: Schema parameter `run_virus_identification` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_virus_identification
+    excerpt: Run virus identification.
+- id: schema_param_save_assembly_mapped_reads
+  label: Schema parameter `save_assembly_mapped_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_assembly_mapped_reads
+    excerpt: Save the output of mapping raw reads back to assembled contigs
+- id: schema_param_save_bbnorm_reads
+  label: Schema parameter `save_bbnorm_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_bbnorm_reads
+    excerpt: Save normalized read files to output directory.
+- id: schema_param_save_busco_db
+  label: Schema parameter `save_busco_db` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_busco_db
+    excerpt: Save the used BUSCO lineage datasets provided via `--busco_db`.
+- id: schema_param_save_cat_db
+  label: Schema parameter `save_cat_db` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_cat_db
+    excerpt: Save the CAT database generated when specified by `--cat_db_generate`.
+- id: schema_param_save_checkm2_data
+  label: Schema parameter `save_checkm2_data` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_checkm2_data
+    excerpt: Save the used CheckM2 reference files downloaded when not using --checkm2_db
+      parameter.
+- id: schema_param_save_checkm_data
+  label: Schema parameter `save_checkm_data` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_checkm_data
+    excerpt: Save the used CheckM reference files downloaded when not using --checkm_db
+      parameter.
+- id: schema_param_save_clipped_reads
+  label: Schema parameter `save_clipped_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_clipped_reads
+    excerpt: Specify to save the resulting clipped FASTQ files to --outdir.
+- id: schema_param_save_filtered_longreads
+  label: Schema parameter `save_filtered_longreads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_filtered_longreads
+    excerpt: Specify to save the resulting length filtered long read FASTQ files to
+      --outdir.
+- id: schema_param_save_hostremoved_reads
+  label: Schema parameter `save_hostremoved_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_hostremoved_reads
+    excerpt: Specify to save input FASTQ files with host reads removed to --outdir.
+- id: schema_param_save_lambdaremoved_reads
+  label: Schema parameter `save_lambdaremoved_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_lambdaremoved_reads
+    excerpt: Specify to save input FASTQ files with lamba reads removed  to --outdir.
+- id: schema_param_save_mmseqs_db
+  label: Schema parameter `save_mmseqs_db` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_mmseqs_db
+    excerpt: Save the downloaded mmseqs2 database specified in `--metaeuk_mmseqs_db`.
+- id: schema_param_save_phixremoved_reads
+  label: Schema parameter `save_phixremoved_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_phixremoved_reads
+    excerpt: Specify to save input FASTQ files with phiX reads removed to --outdir.
+- id: schema_param_save_porechop_reads
+  label: Schema parameter `save_porechop_reads` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_porechop_reads
+    excerpt: Specify to save the resulting clipped FASTQ files to --outdir.
+- id: schema_param_semibin_environment
+  label: Schema parameter `semibin_environment` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: semibin_environment
+    excerpt: Pre-trained model for SemiBin2 for single sample assemblies
+- id: schema_param_show_hidden
+  label: Schema parameter `show_hidden` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: show_hidden
+    excerpt: Display hidden parameters in the help message (only works when --help
+      or --help_full are provided).
+- id: schema_param_single_end
+  label: Schema parameter `single_end` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: single_end
+    excerpt: Specifies that the input is single-end reads.
+- id: schema_param_skip_adapter_trimming
+  label: Schema parameter `skip_adapter_trimming` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_adapter_trimming
+    excerpt: Skip removing adapter sequences from long reads.
+- id: schema_param_skip_ale
+  label: Schema parameter `skip_ale` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_ale
+    excerpt: Skip ALE
+- id: schema_param_skip_ancient_damagecorrection
+  label: Schema parameter `skip_ancient_damagecorrection` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_ancient_damagecorrection
+    excerpt: deactivate damage correction of ancient contigs using variant and consensus
+      calling
+- id: schema_param_skip_binning
+  label: Schema parameter `skip_binning` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_binning
+    excerpt: Skip metagenome binning entirely
+- id: schema_param_skip_binqc
+  label: Schema parameter `skip_binqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_binqc
+    excerpt: Disable bin QC with BUSCO, CheckM or CheckM2.
+- id: schema_param_skip_clipping
+  label: Schema parameter `skip_clipping` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_clipping
+    excerpt: Skip read preprocessing using fastp or adapterremoval.
+- id: schema_param_skip_comebin
+  label: Schema parameter `skip_comebin` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_comebin
+    excerpt: Skip COMEBin Binning
+- id: schema_param_skip_concoct
+  label: Schema parameter `skip_concoct` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_concoct
+    excerpt: Skip CONCOCT Binning
+- id: schema_param_skip_flye
+  label: Schema parameter `skip_flye` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_flye
+    excerpt: Skip Flye assembly.
+- id: schema_param_skip_gtdbtk
+  label: Schema parameter `skip_gtdbtk` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_gtdbtk
+    excerpt: Skip the running of GTDB, as well as the automatic download of the database
+- id: schema_param_skip_longread_filtering
+  label: Schema parameter `skip_longread_filtering` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_longread_filtering
+    excerpt: Skip filtering long reads.
+- id: schema_param_skip_longread_qc
+  label: Schema parameter `skip_longread_qc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_longread_qc
+    excerpt: Skip all default QC steps for long reads (adapter trimming, filtering,
+      removal of lambda sequences).
+- id: schema_param_skip_maxbin2
+  label: Schema parameter `skip_maxbin2` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_maxbin2
+    excerpt: Skip MaxBin2 Binning
+- id: schema_param_skip_megahit
+  label: Schema parameter `skip_megahit` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_megahit
+    excerpt: Skip MEGAHIT assembly.
+- id: schema_param_skip_metabat2
+  label: Schema parameter `skip_metabat2` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_metabat2
+    excerpt: Skip MetaBAT2 Binning
+- id: schema_param_skip_metabinner
+  label: Schema parameter `skip_metabinner` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_metabinner
+    excerpt: Skip MetaBinner Binning
+- id: schema_param_skip_metaeuk
+  label: Schema parameter `skip_metaeuk` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_metaeuk
+    excerpt: Skip MetaEuk gene prediction and annotation
+- id: schema_param_skip_metamdbg
+  label: Schema parameter `skip_metamdbg` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_metamdbg
+    excerpt: Skip MetaDBG assembly.
+- id: schema_param_skip_prodigal
+  label: Schema parameter `skip_prodigal` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_prodigal
+    excerpt: Skip Prodigal gene prediction
+- id: schema_param_skip_prokka
+  label: Schema parameter `skip_prokka` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_prokka
+    excerpt: Skip Prokka genome annotation.
+- id: schema_param_skip_quast
+  label: Schema parameter `skip_quast` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_quast
+    excerpt: Skip metaQUAST.
+- id: schema_param_skip_semibin
+  label: Schema parameter `skip_semibin` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_semibin
+    excerpt: Skip SemiBin2 Binning
+- id: schema_param_skip_shortread_qc
+  label: Schema parameter `skip_shortread_qc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_shortread_qc
+    excerpt: Skip all default QC steps for short reads (adapter trimming, phiX removal).
+- id: schema_param_skip_spades
+  label: Schema parameter `skip_spades` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_spades
+    excerpt: Skip Illumina-only SPAdes assembly.
+- id: schema_param_skip_spadeshybrid
+  label: Schema parameter `skip_spadeshybrid` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_spadeshybrid
+    excerpt: Skip SPAdes hybrid assembly.
+- id: schema_param_spades_downstreaminput
+  label: Schema parameter `spades_downstreaminput` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: spades_downstreaminput
+    excerpt: Specify whether to use contigs or scaffolds assembled by SPAdes
+- id: schema_param_validate_params
+  label: Schema parameter `validate_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validate_params
+    excerpt: Boolean whether to validate parameters against the schema at runtime
+- id: schema_param_version
+  label: Schema parameter `version` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: version
+    excerpt: Display version and exit.
+- id: documented_output_bam
+  label: Documented `bam` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: covered by mag route assets, schema lookup, database
+    prerequisites, output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/output.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: bam
+- id: documented_output_contamination
+  label: Documented `contamination` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: covered by mag route assets, schema lookup, database
+    prerequisites, output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/output.md
+    excerpt: contamination
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: contamination
+- id: documented_output_multiqc
+  label: Documented `multiqc` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: covered by mag route assets, schema lookup, database
+    prerequisites, output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/README.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/output.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: multiqc
+- id: documented_output_report
+  label: Documented `report` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - 'artifact-contracts.yaml: covered by mag route assets, schema lookup, database
+    prerequisites, output contracts, or QC rules'
+  - 'qc-rules.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/README.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/output.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/mag/docs/usage.md
+    excerpt: report
+- id: schema_param_adapterremoval_adapter1
+  label: Schema parameter `adapterremoval_adapter1` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: adapterremoval_adapter1
+    excerpt: Forward read adapter to be trimmed by AdapterRemoval.
+- id: schema_param_adapterremoval_adapter2
+  label: Schema parameter `adapterremoval_adapter2` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: adapterremoval_adapter2
+    excerpt: Reverse read adapter to be trimmed by AdapterRemoval for paired end data.
+- id: schema_param_adapterremoval_minquality
+  label: Schema parameter `adapterremoval_minquality` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: adapterremoval_minquality
+    excerpt: The minimum base quality for low-quality base trimming by AdapterRemoval.
+- id: schema_param_assembly_input
+  label: Schema parameter `assembly_input` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: assembly_input
+    excerpt: Additional input CSV samplesheet containing information about pre-computed
+      assemblies. When set, both read pre-processing and assembly are skipped and
+      the pipeline begins at the binning stage.
+- id: schema_param_bowtie2_mode
+  label: Schema parameter `bowtie2_mode` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: bowtie2_mode
+    excerpt: Specify alternative Bowtie2 settings for aligning reads back against
+      the assembly.
+- id: schema_param_busco_db_lineage
+  label: Schema parameter `busco_db_lineage` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: busco_db_lineage
+    excerpt: Name of the BUSCO *_odb10 or *_odb12 lineage to check against. Additionally
+      supports 'auto', 'auto_prok' and 'auto_euk' for automatic lineage selection
+      mode.
+- id: schema_param_gtdb_db
+  label: Schema parameter `gtdb_db` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gtdb_db
+    excerpt: Specify the location of a GTDBTK database. Can be either an uncompressed
+      directory or a `.tar.gz` archive. If not specified will be downloaded for you
+      when GTDBTK or binning QC is not skipped.
+- id: schema_param_lambda_reference
+  label: Schema parameter `lambda_reference` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: lambda_reference
+    excerpt: Genome reference used to remove ONT Lambda contaminant reads.
+- id: schema_param_multiqc_methods_description
+  label: Schema parameter `multiqc_methods_description` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'artifact-contracts.yaml: covered by mag route assets, schema lookup, database
+    prerequisites, output contracts, or QC rules'
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: multiqc_methods_description
+    excerpt: Custom MultiQC yaml file containing HTML including a methods description.
+- id: schema_param_phix_reference
+  label: Schema parameter `phix_reference` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: phix_reference
+    excerpt: Genome reference used to remove Illumina PhiX contaminant reads.
+- id: schema_param_prokka_compliance_centre
+  label: Schema parameter `prokka_compliance_centre` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - 'param-presets.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  - 'playbooks.yaml: covered by mag route assets, schema lookup, database prerequisites,
+    output contracts, or QC rules'
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: prokka_compliance_centre
+    excerpt: Specify sequencing centre name required for Prokka's compliance mode.

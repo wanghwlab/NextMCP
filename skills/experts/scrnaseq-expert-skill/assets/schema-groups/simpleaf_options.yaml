@@ -1,0 +1,78 @@
+group:
+  id: simpleaf_options
+  label: Simpleaf Options
+  selection_rule: Use this group for parameters defined under the `Simpleaf Options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/simpleaf_options.md
+  - assets/schema-groups/simpleaf_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `simpleaf_options` for exact lookup.
+parameters:
+- group_id: simpleaf_options
+  name: simpleaf_umi_resolution
+  source_name: simpleaf_umi_resolution
+  type: string
+  required: false
+  default: cr-like
+  enum: &id001
+  - cr-like
+  - cr-like-em
+  - parsimony
+  - parsimony-em
+  - parsimony-gene
+  - parsimony-gene-em
+  description: UMI resolution strategy to deduplicate UMIs.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - cr-like
+  - cr-like-em
+  - parsimony
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Simpleaf Options
+  raw_schema:
+    type: string
+    default: cr-like
+    enum: *id001
+    description: UMI resolution strategy to deduplicate UMIs.
+    help_text: This parameter specifies the [UMI resolution strategy](https://simpleaf.readthedocs.io/en/latest/quant-command.html)
+      to use for deduplicating UMIs. The default is `cr-like`, which mimics the behavior
+      of Cell Ranger, i.e., discarding UMIs equally compatible to multiple genes.
+      Strategies that resolve multi-mapped UMIs by expectation maximization are available,
+      like `cr-like-em`, `parsimony-em`, and `parsimony-gene-em`.
+    fa_icon: fas fa-map-marked-alt
+- group_id: simpleaf_options
+  name: simpleaf_index
+  source_name: simpleaf_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Path to pre-built Simpleaf index.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/simpleaf_index
+  example_values:
+  - <server_reference_root>/simpleaf_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Simpleaf Options
+  raw_schema:
+    type: string
+    help_text: This can be used to specify a precomputed Simpleaf index in the pipeline,
+      in order to skip the generation of required indices by Simpleaf itself.
+    description: Path to pre-built Simpleaf index.
+    fa_icon: fas fa-fish
+    format: path
+    exists: true

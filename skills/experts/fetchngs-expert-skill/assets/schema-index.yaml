@@ -1,0 +1,48 @@
+grouping_strategy: schema top-level sections from nextflow_schema.json allOf order
+  for fetchngs
+groups:
+- id: input_output_options
+  label: Input/output options
+  use_when: The runtime agent needs exact parameter mapping for the `Input/output
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/input_output_options.yaml
+  reference_path: references/schema-groups/input_output_options.md
+  parameter_count: 10
+- id: institutional_config_options
+  label: Institutional config options
+  use_when: The runtime agent needs exact parameter mapping for the `Institutional
+    config options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `institutional_config_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/institutional_config_options.yaml
+  reference_path: references/schema-groups/institutional_config_options.md
+  parameter_count: 6
+- id: max_job_request_options
+  label: Max job request options
+  use_when: The runtime agent needs exact parameter mapping for the `Max job request
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `max_job_request_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/max_job_request_options.yaml
+  reference_path: references/schema-groups/max_job_request_options.md
+  parameter_count: 3
+- id: generic_options
+  label: Generic options
+  use_when: The runtime agent needs exact parameter mapping for the `Generic options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `generic_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/generic_options.yaml
+  reference_path: references/schema-groups/generic_options.md
+  parameter_count: 11
+- id: deprecated_options
+  label: Deprecated options
+  use_when: The runtime agent needs exact parameter mapping for the `Deprecated options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `deprecated_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/deprecated_options.yaml
+  reference_path: references/schema-groups/deprecated_options.md
+  parameter_count: 1

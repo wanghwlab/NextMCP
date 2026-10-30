@@ -1,0 +1,16 @@
+status: resolved
+gaps:
+- id: replace_generic_artifact_contract
+  source: artifact-contracts.yaml
+  status: resolved
+  resolution: Replaced generic results root with source-backed rnafusion output families from docs/output.md.
+- id: replace_generic_qc_rule
+  source: qc-rules.yaml
+  status: resolved
+  resolution: Replaced generic completion check with source-backed reference, caller, FusionInspector,
+    FusionCatcher, COSMIC, and QC checks.
+- id: capability_audit_items
+  source: capability-audit.yaml
+  status: resolved
+  resolution: All audit items are covered in playbooks, presets, artifact contracts, QC rules,
+    or grouped schema lookup assets.

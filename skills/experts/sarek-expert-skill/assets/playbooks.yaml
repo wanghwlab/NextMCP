@@ -1,0 +1,145 @@
+playbooks:
+  - id: standard_mapping
+    use_when: Start from FastQ, Spring-compressed FastQ, or unmapped BAM.
+    prerequisites:
+      - Confirm project id with project_list() if unknown.
+      - Confirm the server-local samplesheet path and key read paths with fs_list(mode="manifest")
+        when uncertain.
+      - Confirm input rows contain patient and sample; mapping starts also need lane and one read
+        source such as fastq_1/fastq_2, spring_1/spring_2, or bam.
+      - Confirm outdir is a server path.
+    recommended_preset: default_mapping
+    tool_order:
+      - project_get(project) when project root or recent runs matter.
+      - nextflow_run(prepare=true) when inputs, outdir, or project-owned layout are uncertain.
+      - nextflow_run(pipeline="sarek", project=..., params=...)
+      - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+    outputs_to_review:
+      - preprocessing/
+      - reports/
+      - multiqc/
+      - pipeline_info/
+  - id: step_restart_from_existing_alignment
+    use_when: The user has mapped, duplicate-marked, recalibration, CRAM/BAM, or VCF inputs and
+      wants to start at a later Sarek step.
+    prerequisites:
+      - Use schema-index.yaml and input_output_options to confirm exact step enum.
+      - For markduplicates and prepare_recalibration, samplesheet rows need bam+bai or cram+crai.
+      - For recalibrate, samplesheet rows need bam+bai+table or cram+crai+table.
+      - For variant_calling, samplesheet rows need bam+bai or cram+crai.
+      - For annotate, samplesheet rows need vcf and optional variantcaller.
+    recommended_preset: default_mapping
+    route_params:
+      step: markduplicates|prepare_recalibration|recalibrate|variant_calling|annotate
+    outputs_to_review:
+      - preprocessing/csv/
+      - variant_calling/
+      - annotation/
+      - reports/
+  - id: germline_variant_calling
+    use_when: Normal samples need germline SNV, indel, SV, CNV, or joint genotyping outputs.
+    prerequisites:
+      - Confirm tools list against main_options schema group.
+      - Confirm reference bundle includes fasta, fasta_fai, dict, dbsnp/dbsnp_tbi, known sites, and
+        germline resources required by the chosen callers.
+      - For WES or panel data, use targeted_or_wes preset.
+    recommended_preset: germline_variants
+    outputs_to_review:
+      - variant_calling/haplotypecaller/
+      - variant_calling/deepvariant/
+      - variant_calling/freebayes/
+      - variant_calling/manta/
+      - variant_calling/tiddit/
+      - reports/bcftools/
+      - reports/vcftools/
+  - id: somatic_tumor_normal
+    use_when: Tumor-normal, tumor-only, relapse, CNV, SV, or MSI analysis.
+    prerequisites:
+      - Samplesheet patient values must connect tumor and normal samples; status 0 is normal and
+        status 1 is tumor.
+      - For tumor-only or somatic Mutect2, prefer a matching pon and pon_tbi plus
+        germline_resource and germline_resource_tbi when available.
+      - For Control-FREEC, confirm cf_chrom_len when fasta_fai contains irrelevant chromosomes.
+      - For ASCAT, confirm ascat_genome and matching alleles/loci/GC/RT files.
+      - For MSI tools, confirm msisensor2_models or msisensorpro_scan when not supplied by genome.
+    recommended_preset: somatic_pair
+    outputs_to_review:
+      - variant_calling/mutect2/
+      - variant_calling/strelka/
+      - variant_calling/ascat/
+      - variant_calling/cnvkit/
+      - variant_calling/controlfreec/
+      - variant_calling/msisensor2/
+      - variant_calling/msisensor/
+  - id: annotation
+    use_when: The user wants VEP, snpEff, merge, SnpSift, or bcftools annotate on Sarek output or
+      existing VCFs.
+    prerequisites:
+      - Choose tools from vep, snpeff, merge, snpsift, and bcfann.
+      - Confirm VEP and snpEff cache paths or use download_cache/build_only_index route first.
+      - For SnpSift, confirm snpsift_databases samplesheet.
+      - For bcftools annotate, confirm annotations VCF, TBI, header lines, and column file as
+        needed.
+      - For VEP plugins, confirm paired files such as dbnsfp/dbnsfp_tbi or spliceai_snv plus
+        spliceai_snv_tbi.
+    recommended_preset: annotation_only
+    outputs_to_review:
+      - annotation/
+      - reports/SnpEff/
+      - reports/EnsemblVEP/
+      - multiqc/
+  - id: sentieon
+    use_when: The user requests Sentieon BWA mem, Dedup, DNAscope, Haplotyper, or TNscope.
+    prerequisites:
+      - Confirm the Sentieon license is already configured as a server-side Nextflow secret.
+      - Do not store or echo the license string in params or docs.
+      - For DNAscope, confirm sentieon_dnascope_model when not supplied by genome.
+      - For joint Sentieon Haplotyper, use sentieon_haplotyper_emit_mode gvcf and joint_germline.
+    recommended_preset: sentieon
+    outputs_to_review:
+      - preprocessing/sentieon_dedup/
+      - variant_calling/sentieon_dnascope/
+      - variant_calling/sentieon_haplotyper/
+      - variant_calling/sentieon_tnscope/
+  - id: umi
+    use_when: The user has UMIs in read headers or BAM/CRAM tags.
+    prerequisites:
+      - >-
+        Confirm where the UMI is stored: read header, umi_location/umi_length, umi_tag, or
+        umi_read_structure.
+      - Avoid GATK MarkDuplicates Spark with UMIs.
+      - Scope out duplex UMIs and UMIs in additional index FASTQ files; direct the user to process
+        those before Sarek.
+    recommended_preset: umi
+    outputs_to_review:
+      - preprocessing/umi/
+      - reports/umi/
+  - id: reference_or_cache_build
+    use_when: References, BBSplit indexes, SnpEff cache, or VEP cache need to be built or
+      downloaded before a run.
+    prerequisites:
+      - Use build_only_index when no sample analysis should run.
+      - Use save_reference to retain generated indexes for future runs.
+      - Use download_cache with tools vep and/or snpeff for annotation cache download.
+      - Use bbsplit_fasta_list for the first BBSplit index build, then bbsplit_index for reuse.
+    recommended_preset: reference_or_cache_build
+    outputs_to_review:
+      - reference_genome/
+      - cache/
+      - pipeline_info/
+  - id: historical_reuse
+    use_when: The user wants to recover, compare, or reuse outputs from a previous Sarek run.
+    prerequisites:
+      - Search by concrete output fragments such as pipeline_info/params.json,
+        multiqc_report.html, variant_calling/mutect2, annotation, or preprocessing/csv.
+      - Treat artifacts.json and pipeline_fingerprint as historical facts, not proof of
+        compatibility.
+    tool_order:
+      - run_list(project=..., pipeline="sarek", artifact_path_contains=...)
+      - run_get(include=["artifact_summary"]) on candidate runs.
+      - run_artifacts(...) for candidate output sections.
+      - fs_read(...) for pipeline_info/params.json or equivalent run metadata after a path is known.
+    outputs_to_review:
+      - pipeline_info/params.json
+      - pipeline_info/nf_core_sarek_software_mqc_versions.yml
+      - artifacts.json

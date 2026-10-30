@@ -1,0 +1,46 @@
+steps:
+- id: prepare_and_launch
+  purpose: Confirm server-local inputs, prepare the run layout when useful, launch
+    ampliseq, and inspect summary state before raw files.
+  minimal_inputs:
+  - project
+  - outdir
+  - one of input, input_folder, or input_fasta
+  tool_sequence:
+  - project_list() when the project id is unknown
+  - project_get(project) when project root or prior runs matter
+  - fs_list(mode="manifest") for each uncertain server-local input path
+  - nextflow_run(prepare=true) when input or run layout still needs checking
+  - nextflow_run(pipeline="ampliseq", project=..., params=...)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_artifacts(...) for the output section before fs_read()
+  - run_logs() or fs_read() only after a concrete log or output path is known
+  outputs:
+  - run_layout with runs/<run_id>/job, runs/<run_id>/work, and results/<run_id>
+  - summary state
+  - artifact summary
+- id: restart_from_previous_run
+  purpose: Reuse a previous nextmcp run through the public restart field.
+  minimal_inputs:
+  - project
+  - from_run_id
+  tool_sequence:
+  - run_get(detail="full") on the source run to inspect launch_spec, nextflow_session_uuid,
+    and resume compatibility fields
+  - nextflow_run(from_run_id=..., params=...)
+  warnings:
+  - Do not teach raw Nextflow resume flags as public nextflow_run inputs.
+  - Change params only when the source run can still be safely reused.
+- id: historical_output_recovery
+  purpose: Find previous ampliseq outputs without guessing old directories.
+  minimal_inputs:
+  - project
+  - artifact_path_contains fragment
+  tool_sequence:
+  - run_list(project=..., pipeline="ampliseq", artifact_path_contains=...)
+  - run_get(include=["artifact_summary"])
+  - run_artifacts(...)
+  - fs_read() for pipeline_info/params.json or a named report after path is known
+  compatibility_check: Use artifacts.json and pipeline_fingerprint as historical facts,
+    then confirm route compatibility with pipeline_info/params.json or equivalent
+    metadata.

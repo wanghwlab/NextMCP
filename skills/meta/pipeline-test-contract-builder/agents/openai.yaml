@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pipeline Test Contract Builder"
+  short_description: "Build hidden evaluation specs from pipeline tests"
+  default_prompt: "Use $pipeline-test-contract-builder to classify, localize, and convert this pipeline test setup into a hidden evaluation spec for a lightweight test run."

@@ -1,0 +1,116 @@
+presets:
+  standard_mixed_read_mag:
+    use_when: Normal MAG run from a server-local samplesheet.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag
+    placeholders:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag
+    confirm_before_launch:
+      - Whether short reads are paired-end or single-end.
+      - Whether group values should drive co-binning only or co-assembly too.
+      - Whether databases should be supplied as server-local paths instead of downloaded.
+      - Do not block a normal run on `checkm_db` or `checkm2_db`; run_checkm=false and run_checkm2=false in the default route, so the default route does not need them.
+  short_read_single_end:
+    use_when: Samplesheet has single-end short-read files.
+    extends: standard_mixed_read_mag
+    params:
+      single_end: true
+  long_read_only:
+    use_when: Samplesheet has only long_reads and long_reads_platform.
+    params:
+      input: <server_input_root>/longread_samplesheet.csv
+      outdir: <server_output_root>/mag_longread
+      longread_adaptertrimming_tool: porechop_abi
+      longread_filtering_tool: filtlong
+    confirm_before_launch:
+      - Whether Flye, MetaMDBG, or both should run.
+      - Whether keep_lambda should be true.
+  precomputed_assembly_binning:
+    use_when: User supplies assemblies and reads and wants to start at binning.
+    params:
+      input: <server_input_root>/reads_samplesheet.csv
+      assembly_input: <server_input_root>/assemblies.csv
+      outdir: <server_output_root>/mag_from_assemblies
+    confirm_before_launch:
+      - assembly_input columns id, group, assembler, fasta.
+      - Whether coassemble_group is needed for co-assemblies.
+  coassembly_or_cobinning:
+    use_when: User wants pooled assembly or a non-default coverage mapping mode.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag_coassembly
+      coassemble_group: true
+      binning_map_mode: group
+    notes:
+      - Default nf-core/mag uses group for co-binning but not co-assembly.
+      - Change binning_map_mode only after confirming whether coverage should use own, group, or all samples.
+  database_backed_taxonomy_and_qc:
+    use_when: User wants stable database-backed BUSCO, CheckM, CheckM2, GUNC, CAT, GTDB-Tk, geNomad, or MetaEuk results.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag_db_backed
+      busco_db: <server_reference_root>/busco/
+      busco_db_lineage: <lineage_or_auto>
+      gtdb_db: <server_reference_root>/gtdbtk_r226/
+      cat_db: <server_reference_root>/cat/CAT_nr/
+    optional_params:
+      checkm_db: <server_reference_root>/checkm/
+      checkm2_db: <server_reference_root>/checkm2/CheckM2_database.dmnd
+      gunc_db: <server_reference_root>/gunc/gunc.dmnd
+      genomad_db: <server_reference_root>/genomad/
+      metaeuk_db: <server_reference_root>/metaeuk/
+      metaeuk_mmseqs_db: <mmseqs_database_name>
+    confirm_before_launch:
+      - Do not enable metaeuk_db and metaeuk_mmseqs_db together.
+      - Only require checkm_db when run_checkm is true and only require checkm2_db when run_checkm2 is true.
+      - CAT and GTDB-Tk databases are large; prefer existing server-local paths when available.
+      - BUSCO offline mode requires busco_db_lineage to exist under the supplied busco_db.
+  ancient_dna_validation:
+    use_when: User wants pyDamage and optional consensus correction.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag_ancient_dna
+      ancient_dna: true
+      binning_map_mode: own
+    notes:
+      - binning_map_mode own is recommended for reproducible pyDamage behavior.
+      - Leave skip_ancient_damagecorrection false unless the user does not want consensus recall.
+  virus_identification:
+    use_when: User wants geNomad viral or plasmid calls.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag_virus
+      run_virus_identification: true
+      genomad_db: <server_reference_root>/genomad/
+  bigmag_summary:
+    use_when: User wants GenomeBinning/BIgMAG/bigmag_summary.tsv.
+    params:
+      input: <server_input_root>/samplesheet.csv
+      outdir: <server_output_root>/mag_bigmag
+      generate_bigmag_file: true
+      run_busco: true
+      run_checkm2: true
+      run_gunc: true
+      skip_gtdbtk: false
+    confirm_before_launch:
+      - Confirm BUSCO, CheckM2, GUNC, and GTDB-Tk database paths or downloads.
+channel_boundaries:
+  params:
+    - input/output paths such as input, assembly_input, and outdir
+    - read mode and route selectors such as single_end, coassemble_group, binning_map_mode, ancient_dna, run_virus_identification, and generate_bigmag_file
+    - pipeline database parameters such as busco_db, cat_db, gtdb_db, checkm_db, checkm2_db, gunc_db, genomad_db, metaeuk_db, and host_fasta
+    - skip/save toggles and tool-specific extra options from the schema
+  config_files:
+    - Nextflow config files
+    - resource caps using process.resourceLimits or process selectors
+    - GTDB-Tk SquashFS containerOptions overrides
+  top_level_nextflow_run:
+    - project
+    - run_id
+    - run_name
+    - from_run_id
+    - extra_args only when no normalized field covers the needed Nextflow flag
+  not_public_inputs:
+    - direct Nextflow resume flags

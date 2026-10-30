@@ -1,0 +1,62 @@
+group:
+  id: rastair_options
+  label: rastair options
+  selection_rule: Use this group for parameters defined under the `rastair options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/rastair_options.md
+  - assets/schema-groups/rastair_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `rastair_options` for exact lookup.
+parameters:
+- group_id: rastair_options
+  name: trim_OB
+  source_name: trim_OB
+  type: string
+  required: false
+  default: 0,0,10,0
+  enum: null
+  description: 'Nucleotides to exclude from methylation calling on Original Bottom
+    (strand) reads, following this pattern: R1 start, R1 end, R2 start, R2 end'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0,0,10,0
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: rastair options
+  raw_schema:
+    type: string
+    default: 0,0,10,0
+    description: 'Nucleotides to exclude from methylation calling on Original Bottom
+      (strand) reads, following this pattern: R1 start, R1 end, R2 start, R2 end'
+- group_id: rastair_options
+  name: trim_OT
+  source_name: trim_OT
+  type: string
+  required: false
+  default: 0,0,10,0
+  enum: null
+  description: 'Nucleotides to exclude from methylation calling on Original Top (strand)
+    reads, following this pattern: R1 start, R1 end, R2 start, R2 end'
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - 0,0,10,0
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: rastair options
+  raw_schema:
+    type: string
+    default: 0,0,10,0
+    description: 'Nucleotides to exclude from methylation calling on Original Top
+      (strand) reads, following this pattern: R1 start, R1 end, R2 start, R2 end'

@@ -1,0 +1,208 @@
+group:
+  id: input_output_options
+  label: Input/output options
+  selection_rule: Use this group for parameters defined under the `Input/output options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/input_output_options.md
+  - assets/schema-groups/input_output_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `input_output_options` for exact lookup.
+parameters:
+- group_id: input_output_options
+  name: assembly_input
+  source_name: assembly_input
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Additional input CSV samplesheet containing information about pre-computed
+    assemblies. When set, both read pre-processing and assembly are skipped and the
+    pipeline begins at the binning stage.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/assembly_input.csv
+  example_values:
+  - <server_output_root>/assembly_input.csv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    mimetype: text/csv
+    format: file-path
+    exists: true
+    schema: assets/schema_assembly_input.json
+    pattern: ^\S+\.csv$
+    description: Additional input CSV samplesheet containing information about pre-computed
+      assemblies. When set, both read pre-processing and assembly are skipped and
+      the pipeline begins at the binning stage.
+    help_text: If you have pre-computed assemblies from another source, it is possible
+      to jump straight to the binning stage of the pipeline by supplying these assemblies
+      in a CSV file. This CSV file must contain the required columns `id,group,assembler,fasta`
+      (including `group` for single assemblies). Short reads must still be supplied
+      to `--input` in CSV format. See [usage docs](https://nf-co.re/mag/usage#input-specifications)
+      for further details.
+    fa_icon: fas fa-file-csv
+- group_id: input_output_options
+  name: input
+  source_name: input
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: CSV samplesheet file containing information about the samples in the
+    experiment.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/input.csv
+  example_values:
+  - <server_output_root>/input.csv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    mimetype: text/csv
+    format: file-path
+    exists: true
+    schema: assets/schema_input.json
+    pattern: ^\S+\.csv$
+    description: CSV samplesheet file containing information about the samples in
+      the experiment.
+    help_text: Use this to specify the location of your input FastQ files and associated
+      metadata. Required columns are `sample` and `group`, and each row must provide
+      at least one of `short_reads_1` or `long_reads`. If `short_reads_1` is supplied,
+      `short_reads_platform` is required; if `long_reads` is supplied, `long_reads_platform`
+      is required. Optional columns include `run` and `short_reads_2`. See [usage
+      docs](https://nf-co.re/mag/usage#input-specifications).
+    fa_icon: fas fa-file-csv
+- group_id: input_output_options
+  name: outdir
+  source_name: outdir
+  type: string
+  required: true
+  default: null
+  enum: null
+  description: The output directory where the results will be saved. You have to use
+    absolute paths to storage on Cloud infrastructure.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/mag
+  example_values:
+  - <server_output_root>/mag
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    format: directory-path
+    description: The output directory where the results will be saved. You have to
+      use absolute paths to storage on Cloud infrastructure.
+    fa_icon: fas fa-folder-open
+    help_text: Specify the path to the output directory where the results will be
+      saved.
+- group_id: input_output_options
+  name: single_end
+  source_name: single_end
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Specifies that the input is single-end reads.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_output_root>/single_end
+  example_values:
+  - <server_output_root>/single_end
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: boolean
+    description: Specifies that the input is single-end reads.
+    fa_icon: fas fa-align-center
+    help_text: 'By default, the pipeline expects paired-end data. If you have single-end
+      data, you need to specify `--single_end` on the command line when you launch
+      the pipeline. A normal glob pattern, enclosed in quotation marks, can then be
+      used for `--input`. For example:
+
+
+      ```bash
+
+      --single_end --input ''*.fastq''
+
+      ```
+
+
+      It is not possible to run a mixture of single-end and paired-end files in one
+      run.'
+- group_id: input_output_options
+  name: email
+  source_name: email
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Email address for completion summary.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/email
+  example_values:
+  - <server_output_root>/email
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: low
+  mapping_flags:
+  - has_pattern_constraint
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: Email address for completion summary.
+    fa_icon: fas fa-envelope
+    help_text: Set this parameter to your e-mail address to get a summary e-mail with
+      details of the run sent to you when the workflow exits. If set in your user
+      config file (`~/.nextflow/config`) then you don't need to specify this on the
+      command line for every run.
+    pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+- group_id: input_output_options
+  name: multiqc_title
+  source_name: multiqc_title
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: MultiQC report title. Printed as page header, used for filename if
+    not otherwise specified.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_output_root>/multiqc_title
+  example_values:
+  - <server_output_root>/multiqc_title
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Input/output options
+  raw_schema:
+    type: string
+    description: MultiQC report title. Printed as page header, used for filename if
+      not otherwise specified.
+    fa_icon: fas fa-file-signature

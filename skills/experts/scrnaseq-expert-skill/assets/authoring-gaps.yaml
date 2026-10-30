@@ -1,0 +1,15 @@
+status: resolved
+gaps:
+  - id: replace_generic_artifact_contract
+    source: artifact-contracts.yaml
+    status: resolved
+    action: Replaced generic results-root contract with source-backed scrnaseq output families.
+  - id: replace_generic_qc_rule
+    source: qc-rules.yaml
+    status: resolved
+    action: Replaced generic completion check with route-specific QC and troubleshooting rules.
+  - id: capability_audit_items
+    source: capability-audit.yaml
+    status: resolved
+    action: Covered high-impact route, reference, output, and troubleshooting capabilities or
+      scoped out non-runtime help/metadata parameters.

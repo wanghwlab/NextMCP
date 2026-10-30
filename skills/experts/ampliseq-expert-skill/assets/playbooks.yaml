@@ -1,0 +1,128 @@
+playbooks:
+- id: samplesheet_fastq
+  use_when: Standard run from a server-local samplesheet. This is the safest route
+    when files are scattered or multiple sequencing runs are present.
+  prerequisites:
+  - Confirm project id with project_list() or project_get(project) if unknown.
+  - Confirm the samplesheet path on the nextmcp server. It must contain sampleID and
+    forwardReads, with reverseReads for paired-end data and run for separate sequencing
+    runs.
+  - Confirm outdir on the nextmcp server.
+  - Set FW_primer and RV_primer unless the user confirms primer trimming should be
+    skipped with skip_cutadapt.
+  recommended_preset: samplesheet_illumina_16s
+  outputs_to_review:
+  - summary_report/summary_report.html
+  - multiqc/multiqc_report.html
+  - dada2/ASV_table.tsv
+  - dada2/ASV_seqs.fasta
+  - qiime2/abundance_tables/feature-table.tsv
+  - overall_summary.tsv
+  - pipeline_info/params.json
+- id: folder_fastq
+  use_when: FASTQ files are in one folder and names follow the configured extension
+    pattern.
+  prerequisites:
+  - Confirm input_folder exists on the nextmcp server.
+  - Confirm gzip-compressed FASTQ files and extension pattern. Use multiple_sequencing_runs
+    only when one subfolder per run is present.
+  - For single-end Illumina, set single_end and use an extension pattern without read-pair
+    braces.
+  recommended_preset: folder_fastq
+  outputs_to_review:
+  - fastqc/
+  - cutadapt/cutadapt_summary.tsv
+  - dada2/DADA2_stats.tsv
+  - overall_summary.tsv
+- id: fasta_taxonomy_only
+  use_when: User supplies precomputed ASV or OTU sequences and wants taxonomy plus
+    downstream tables without FASTQ denoising.
+  prerequisites:
+  - Confirm input_fasta path on the server.
+  - 'Choose a taxonomy route and database suitable for the marker: DADA2, SINTAX,
+    Kraken2, QIIME2, or pplacer.'
+  - Use metadata only when downstream grouped analysis is needed.
+  recommended_preset: fasta_taxonomy_only
+  outputs_to_review:
+  - dada2/ or sintax/ or kraken2/ or qiime2/taxonomy/
+  - qiime2/abundance_tables/
+  - summary_report/summary_report.html
+- id: variable_length_its
+  use_when: ITS or another variable-length paired-end amplicon needs truncation disabled
+    or ITSx extraction.
+  prerequisites:
+  - Confirm that the data are variable-length amplicons.
+  - Use illumina_pe_its for paired-end Illumina ITS-like data.
+  - Use cut_its only when the user wants ITSx extraction and taxonomic classification
+    on the cut sequence.
+  - Choose a compatible ITS taxonomy database such as unite-fungi or unite-alleuk
+    when using DADA2 or SINTAX.
+  recommended_preset: its_variable_length
+  outputs_to_review:
+  - itsx/
+  - dada2/ASV_ITS_tax.*.tsv
+  - sintax/ASV_ITS_tax_sintax.*.tsv
+  - qiime2/rel_abundance_tables/
+- id: multiregion_sidle
+  use_when: Several regions should be unified into one profile with Sidle.
+  prerequisites:
+  - Use input samplesheet plus multiregion region file.
+  - Confirm each region entry has region, region_length, FW_primer, and RV_primer.
+  - Set sidle_ref_taxonomy or the custom Sidle taxonomy and sequence files.
+  - Confirm any SILVA license requirements before using licensed database material.
+  recommended_preset: multiregion_sidle
+  outputs_to_review:
+  - sidle/per-region/
+  - sidle/reconstructed/reconstructed_feature-table.tsv
+  - sidle/reconstructed/reconstructed_taxonomy.tsv
+  - sidle/reconstructed/reconstructed_tree.nwk
+- id: taxonomy_alternatives
+  use_when: The user requests SINTAX, Kraken2, QIIME2 classifier training, custom
+    DADA2/QIIME2/Kraken2 databases, or phylogenetic placement.
+  prerequisites:
+  - Confirm database choice or server-local custom database paths.
+  - For pplacer, confirm pplace_tree, pplace_aln, and pplace_model together.
+  - 'When multiple taxonomy tools run, downstream QIIME2 receives one taxonomy by
+    priority: pplacer, DADA2, SINTAX, Kraken2, QIIME2.'
+  recommended_preset: taxonomy_alternatives
+  outputs_to_review:
+  - dada2/ref_taxonomy.*.txt
+  - sintax/
+  - kraken2/
+  - qiime2/taxonomy/
+  - pplace/
+- id: downstream_metadata_analysis
+  use_when: The request depends on metadata, group comparisons, diversity plots, ANCOM,
+    ANCOM-BC, PICRUSt2, or SBDI export.
+  prerequisites:
+  - Confirm metadata path and QIIME2-compatible sample IDs.
+  - For ANCOM or ANCOM-BC, confirm the metadata column or formula and reference level
+    when needed.
+  - For PICRUSt2 or SBDI export, confirm that the marker and taxonomy route are suitable
+    for the requested downstream result.
+  recommended_preset: metadata_downstream
+  outputs_to_review:
+  - qiime2/barplot/
+  - qiime2/alpha-rarefaction/
+  - qiime2/diversity/
+  - qiime2/ancom/
+  - qiime2/ancombc/
+  - PICRUSt2/
+  - SBDI/
+  - phyloseq/
+  - treesummarizedexperiment/
+- id: historical_reuse
+  use_when: The user wants to find or reuse outputs from an earlier ampliseq run.
+  prerequisites:
+  - Search with run_list(project=..., pipeline="ampliseq", artifact_path_contains=...)
+    when the user remembers a filename or directory fragment.
+  - Read run_get(include=["artifact_summary"]) and run_artifacts(...) before reading
+    individual files.
+  - Treat artifacts.json and pipeline_fingerprint as historical facts, then confirm
+    route compatibility with pipeline_info/params.json before reuse.
+  recommended_preset: none
+  outputs_to_review:
+  - pipeline_info/params.json
+  - pipeline_info/software_versions.yml
+  - summary_report/summary_report.html
+  - multiqc/multiqc_report.html

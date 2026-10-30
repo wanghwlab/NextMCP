@@ -1,0 +1,66 @@
+grouping_strategy: schema top-level sections from nextflow_schema.json allOf order
+  for epitopeprediction
+groups:
+- id: input_output_options
+  label: Input/output options
+  use_when: The runtime agent needs exact parameter mapping for the `Input/output
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/input_output_options.yaml
+  reference_path: references/schema-groups/input_output_options.md
+  parameter_count: 4
+- id: reference_options
+  label: Reference options
+  use_when: The runtime agent needs exact parameter mapping for the `Reference options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `reference_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/reference_options.yaml
+  reference_path: references/schema-groups/reference_options.md
+  parameter_count: 2
+- id: peptide_prediction_options
+  label: Peptide prediction options
+  use_when: The runtime agent needs exact parameter mapping for the `Peptide prediction
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `peptide_prediction_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/peptide_prediction_options.yaml
+  reference_path: references/schema-groups/peptide_prediction_options.md
+  parameter_count: 11
+- id: run_optimisation
+  label: Run optimisation
+  use_when: The runtime agent needs exact parameter mapping for the `Run optimisation`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `run_optimisation`
+    for exact lookup.
+  asset_path: assets/schema-groups/run_optimisation.yaml
+  reference_path: references/schema-groups/run_optimisation.md
+  parameter_count: 5
+- id: external_software
+  label: External software
+  use_when: The runtime agent needs exact parameter mapping for the `External software`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `external_software`
+    for exact lookup.
+  asset_path: assets/schema-groups/external_software.yaml
+  reference_path: references/schema-groups/external_software.md
+  parameter_count: 4
+- id: institutional_config_options
+  label: Institutional config options
+  use_when: The runtime agent needs exact parameter mapping for the `Institutional
+    config options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `institutional_config_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/institutional_config_options.yaml
+  reference_path: references/schema-groups/institutional_config_options.md
+  parameter_count: 6
+- id: generic_options
+  label: Generic options
+  use_when: The runtime agent needs exact parameter mapping for the `Generic options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `generic_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/generic_options.yaml
+  reference_path: references/schema-groups/generic_options.md
+  parameter_count: 16

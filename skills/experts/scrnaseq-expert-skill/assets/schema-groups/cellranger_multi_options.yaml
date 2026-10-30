@@ -1,0 +1,256 @@
+group:
+  id: cellranger_multi_options
+  label: Cellranger Multi options
+  selection_rule: Use this group for parameters defined under the `Cellranger Multi
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/cellranger_multi_options.md
+  - assets/schema-groups/cellranger_multi_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `cellranger_multi_options` for exact lookup.
+parameters:
+- group_id: cellranger_multi_options
+  name: cellranger_multi_barcodes
+  source_name: cellranger_multi_barcodes
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Additional samplesheet to provide information about multiplexed samples.
+    See the 'Usage' section for more details.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/cellranger_multi_barcodes
+  example_values:
+  - <server_input_root>/cellranger_multi_barcodes
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    mimetype: text/csv
+    description: Additional samplesheet to provide information about multiplexed samples.
+      See the 'Usage' section for more details.
+- group_id: cellranger_multi_options
+  name: fb_reference
+  source_name: fb_reference
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Provide a reference file for feature barcoding (e.g. antibody measurements).
+    Please refer to the [Cell Ranger Feature Reference documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/inputs/cr-feature-ref-csv)
+    for more details.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/fb_reference
+  example_values:
+  - <server_input_root>/fb_reference
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    description: Provide a reference file for feature barcoding (e.g. antibody measurements).
+      Please refer to the [Cell Ranger Feature Reference documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/inputs/cr-feature-ref-csv)
+      for more details.
+- group_id: cellranger_multi_options
+  name: gex_barcode_sample_assignment
+  source_name: gex_barcode_sample_assignment
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: This is only necessary to override Cell Ranger's default cell calling
+    and tag calling steps. In most cases, you need to only use the `cellranger_multi_barcodes`
+    parameter. Please refer to the [10x documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-3p-multi#barcode-asst)
+    for more information about this file.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/samplesheet.csv
+  example_values:
+  - <server_input_root>/samplesheet.csv
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    format: file-path
+    mimetype: text/csv
+    exists: true
+    description: This is only necessary to override Cell Ranger's default cell calling
+      and tag calling steps. In most cases, you need to only use the `cellranger_multi_barcodes`
+      parameter. Please refer to the [10x documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-3p-multi#barcode-asst)
+      for more information about this file.
+- group_id: cellranger_multi_options
+  name: gex_cmo_set
+  source_name: gex_cmo_set
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Provide a Cell Multiplexing Oligo (CMO) description file when working
+    with multiplexed samples. This is only necessary if you with to override Cell
+    Ranger's default CMO-set. Please refer to the [10x documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-3p-multi#cmo-ref)
+    about CMO references for more details.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/gex_cmo_set
+  example_values:
+  - <server_input_root>/gex_cmo_set
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    description: Provide a Cell Multiplexing Oligo (CMO) description file when working
+      with multiplexed samples. This is only necessary if you with to override Cell
+      Ranger's default CMO-set. Please refer to the [10x documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-3p-multi#cmo-ref)
+      about CMO references for more details.
+- group_id: cellranger_multi_options
+  name: gex_frna_probe_set
+  source_name: gex_frna_probe_set
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Provide a probe set for fixed RNA-seq profiling (used with FFPE samples).
+    Please refer to the [10x documentation about probesets](https://www.10xgenomics.com/support/single-cell-gene-expression-flex/documentation/steps/probe-sets/chromium-frp-probe-set-files)
+    for more details.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/gex_frna_probe_set
+  example_values:
+  - <server_input_root>/gex_frna_probe_set
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    format: file-path
+    exists: true
+    description: Provide a probe set for fixed RNA-seq profiling (used with FFPE samples).
+      Please refer to the [10x documentation about probesets](https://www.10xgenomics.com/support/single-cell-gene-expression-flex/documentation/steps/probe-sets/chromium-frp-probe-set-files)
+      for more details.
+- group_id: cellranger_multi_options
+  name: gex_target_panel
+  source_name: gex_target_panel
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Provide a panel description for targeted sequencing.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/gex_target_panel
+  example_values:
+  - <server_input_root>/gex_target_panel
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    description: Provide a panel description for targeted sequencing.
+    format: file-path
+    exists: true
+- group_id: cellranger_multi_options
+  name: skip_cellrangermulti_vdjref
+  source_name: skip_cellrangermulti_vdjref
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip mkvdjref if not using VDJ data with cellranger/multi
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: boolean
+    description: Skip mkvdjref if not using VDJ data with cellranger/multi
+- group_id: cellranger_multi_options
+  name: vdj_inner_enrichment_primers
+  source_name: vdj_inner_enrichment_primers
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: This argument takes a .txt file containing primer sequences that were
+    used to enrich cDNA for V(D)J sequences. This is only necessary if you with to
+    override Cell Ranger's defaults.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/vdj_inner_enrichment_primers
+  example_values:
+  - <server_input_root>/vdj_inner_enrichment_primers
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local path or manifest-like
+    value. Confirm the concrete path with `fs_list(mode="manifest")` when uncertain.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    description: This argument takes a .txt file containing primer sequences that
+      were used to enrich cDNA for V(D)J sequences. This is only necessary if you
+      with to override Cell Ranger's defaults.
+    format: file-path
+    exists: true
+- group_id: cellranger_multi_options
+  name: cellranger_vdj_index
+  source_name: cellranger_vdj_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a pre-built Cell Ranger index for VDJ analysis.
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/cellranger_vdj_index
+  example_values:
+  - <server_reference_root>/cellranger_vdj_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Multi options
+  raw_schema:
+    type: string
+    format: path
+    exists: true
+    description: Specify a pre-built Cell Ranger index for VDJ analysis.

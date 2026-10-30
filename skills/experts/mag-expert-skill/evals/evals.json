@@ -1,0 +1,146 @@
+{
+  "template_name": "pipeline-expert-skill-offline-evals",
+  "template_version": "v2",
+  "purpose": "Mixed-source offline evals for mag-expert-skill. These evals test runtime planning, parameter mapping, route selection, output review, historical reuse, and source-backed coverage without launching Nextflow.",
+  "usage": {
+    "run_mode": "offline",
+    "nextflow_launch_required": false,
+    "expected_output_format": "structured plan or YAML-like summary, not a real launch",
+    "sources": {
+      "asset": "Tests whether the agent uses packaged expert skill assets correctly.",
+      "authoring_bundle": "Tests whether source-derived facts are covered or explicitly scoped out.",
+      "audit": "Tests high-impact capability and authoring-gap handling."
+    }
+  },
+  "summary": {
+    "eval_count": 6,
+    "asset_eval_count": 4,
+    "authoring_bundle_eval_count": 2,
+    "audit_eval_count": 0
+  },
+  "evals": [
+    {
+      "id": "parameter-channel-mapping",
+      "source": "asset",
+      "category": "parameter_mapping",
+      "source_materials": [
+        "assets/param-presets.yaml",
+        "references/03_parameters.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the mag-expert-skill, draft the nextmcp launch plan for nf-core/mag. The project is my-project. The user confirmed the server-local input at /data/mag/samplesheet.csv and wants results under /results/mag. They also asked to cap the run at 8 CPUs and 32 GB memory. Do not launch the run; return only the planned tool order and the nextflow_run argument shape.",
+      "expected_output": "A launch plan that keeps project as a top-level nextflow_run argument, puts input and outdir under params, puts resource caps in a server-local override config passed through config_files using process.resourceLimits, omits profile by default, and avoids authoring-time inspection.",
+      "assertions": [
+        "Mentions project as a top-level nextflow_run argument, not inside params.",
+        "Mentions input and outdir under params.",
+        "Mentions resource caps under config_files or an override config using process.resourceLimits, not params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.",
+        "Uses process.resourceLimits for the resource example.",
+        "Uses nextflow_run(prepare=true) only as an optional check when launch uncertainty remains."
+      ],
+      "files": []
+    },
+    {
+      "id": "precomputed-assembly-route",
+      "source": "authoring_bundle",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "authoring_bundle.documents:docs/usage.md",
+        "authoring_bundle.source_files:workflows/mag.nf"
+      ],
+      "prompt": "Using the mag-expert-skill, plan a dry run for a user who has server-local pre-computed assemblies at /data/mag/assemblies.csv and the matching reads samplesheet at /data/mag/reads.csv. They want to skip preprocessing and assembly and start from binning. Return the playbook, params, and checks before launch.",
+      "expected_output": "A route decision that uses the precomputed_assembly_binning playbook and preset, passes both input and assembly_input in params, explains the assembly_input columns, notes that preprocessing and assembly are skipped, and confirms coassemble_group only when assemblies are group-wise co-assemblies.",
+      "assertions": [
+        "Uses the precomputed_assembly_binning route.",
+        "Mentions input and assembly_input under params.",
+        "States the assembly_input columns id, group, assembler, and fasta.",
+        "Says reads are still required for downstream behavior.",
+        "Does not invent unsupported assembler names."
+      ],
+      "files": []
+    },
+    {
+      "id": "database-backed-qc",
+      "source": "authoring_bundle",
+      "category": "runtime_prerequisites",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/qc-rules.yaml",
+        "authoring_bundle.schema"
+      ],
+      "prompt": "Using the mag-expert-skill, plan a database-backed nf-core/mag run where the user wants BUSCO, CheckM2, GUNC, CAT, GTDB-Tk, geNomad, and MetaEuk outputs from server-local database paths. Do not launch anything. Return the params to confirm and the path-check sequence.",
+      "expected_output": "A plan grounded in database_backed_taxonomy_and_qc that confirms server-local database params, uses fs_list(mode=\"manifest\") only for concrete paths, warns that CAT and GTDB-Tk are large, avoids using metaeuk_db and metaeuk_mmseqs_db together, and keeps database paths in params.",
+      "assertions": [
+        "Mentions busco_db, checkm2_db, gunc_db, cat_db, gtdb_db, genomad_db, and metaeuk_db or metaeuk_mmseqs_db.",
+        "Keeps database paths under params.",
+        "Uses fs_list(mode=\"manifest\") only for specific server-local paths.",
+        "Warns about large CAT or GTDB-Tk databases.",
+        "Does not treat database paths as client-local."
+      ],
+      "files": []
+    },
+    {
+      "id": "ancient-dna-route",
+      "source": "asset",
+      "category": "route_selection",
+      "source_materials": [
+        "assets/playbooks.yaml",
+        "assets/param-presets.yaml",
+        "assets/qc-rules.yaml",
+        "references/02_playbooks.md"
+      ],
+      "prompt": "Using the mag-expert-skill, choose the route for an ancient DNA metagenome assembly validation run. The user wants pyDamage outputs and reproducible reruns. Return the key params, why they matter, and the outputs to review.",
+      "expected_output": "A route decision that uses ancient_dna_validation, sets ancient_dna true, recommends binning_map_mode own for reproducible pyDamage output, explains skip_ancient_damagecorrection, and reviews Ancient_DNA plus pydamage_bins_summary outputs.",
+      "assertions": [
+        "Uses the ancient_dna_validation playbook or preset.",
+        "Sets ancient_dna true.",
+        "Recommends binning_map_mode own for reproducibility.",
+        "Mentions skip_ancient_damagecorrection as the consensus recall switch.",
+        "Mentions Ancient_DNA and pydamage_bins_summary outputs."
+      ],
+      "files": []
+    },
+    {
+      "id": "outputs-and-qc-review",
+      "source": "asset",
+      "category": "outputs_qc",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "assets/qc-rules.yaml",
+        "references/05_outputs_and_qc.md"
+      ],
+      "prompt": "Using the mag-expert-skill, answer a user who says: 'The nf-core/mag run finished, and I need to review the main MAG outputs, bin QC, taxonomy, and BIgMAG file. What nextmcp calls should I make first, and which artifact or report paths should I inspect?' Do not assume concrete paths that have not come from nextmcp.",
+      "expected_output": "A post-run review plan that starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]), then uses run_artifacts for relevant sections, then fs_read only for explicit report or table paths. It should include multiqc_report, bin_summary.tsv, GenomeBinning/QC, GTDB-Tk, CAT, BIgMAG, and pipeline_info/params.json.",
+      "assertions": [
+        "Starts with run_get(include=[\"progress\",\"artifact_summary\",\"diagnosis\",\"next_actions\"]) or equivalent summary-first call.",
+        "Uses run_artifacts before reading individual output files.",
+        "Uses fs_read only after an explicit path is known.",
+        "Mentions GenomeBinning/bin_summary.tsv and GenomeBinning/QC.",
+        "Mentions pipeline_info/params.json for route confirmation."
+      ],
+      "files": []
+    },
+    {
+      "id": "historical-reuse",
+      "source": "asset",
+      "category": "historical_reuse",
+      "source_materials": [
+        "assets/artifact-contracts.yaml",
+        "references/05_outputs_and_qc.md",
+        "SKILL.md"
+      ],
+      "prompt": "Using the mag-expert-skill, plan how to recover a previous nf-core/mag run when the user only remembers that it produced gtdbtk_summary.tsv. The project is my-project. Do not launch anything; return the search and compatibility-check sequence.",
+      "expected_output": "A historical reuse plan that searches with run_list(project=..., pipeline=\"mag\", artifact_path_contains=\"Taxonomy/GTDB-Tk/gtdbtk_summary.tsv\"), inspects run_get(include=[\"artifact_summary\"]), uses run_artifacts, treats artifacts.json and pipeline_fingerprint as historical facts, and confirms route compatibility through pipeline_info/params.json before recommending reuse.",
+      "assertions": [
+        "Uses run_list with artifact_path_contains when only an artifact fragment is known.",
+        "Uses run_get(include=[\"artifact_summary\"]) before run_artifacts.",
+        "Mentions artifacts.json or pipeline_fingerprint as historical facts.",
+        "Requires route compatibility confirmation through pipeline_info/params.json or equivalent metadata.",
+        "Does not guess old output directories as the default safe path."
+      ],
+      "files": []
+    }
+  ]
+}

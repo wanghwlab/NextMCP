@@ -1,0 +1,40 @@
+group:
+  id: deprecated_options
+  label: Deprecated options
+  selection_rule: Use this group for parameters defined under the `Deprecated options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/deprecated_options.md
+  - assets/schema-groups/deprecated_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `deprecated_options` for exact lookup.
+parameters:
+- group_id: deprecated_options
+  name: force_sratools_download
+  source_name: force_sratools_download
+  type: boolean
+  required: false
+  default: null
+  enum: &id001
+  - false
+  description: This parameter has been deprecated. Please use '--download_method sratools'
+    instead.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - false
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Deprecated options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-times-circle
+    description: This parameter has been deprecated. Please use '--download_method
+      sratools' instead.
+    enum: *id001
+    hidden: true

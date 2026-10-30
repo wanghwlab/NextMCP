@@ -1,0 +1,282 @@
+group:
+  id: assembly_options
+  label: Assembly options
+  selection_rule: Use this group for parameters defined under the `Assembly options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/assembly_options.md
+  - assets/schema-groups/assembly_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `assembly_options` for exact lookup.
+parameters:
+- group_id: assembly_options
+  name: coassemble_group
+  source_name: coassemble_group
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Co-assemble samples within one group, instead of assembling each sample
+    separately.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Co-assemble samples within one group, instead of assembling each
+      sample separately.
+- group_id: assembly_options
+  name: skip_ale
+  source_name: skip_ale
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip ALE
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip ALE
+- group_id: assembly_options
+  name: skip_flye
+  source_name: skip_flye
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Flye assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip Flye assembly.
+- group_id: assembly_options
+  name: skip_megahit
+  source_name: skip_megahit
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MEGAHIT assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip MEGAHIT assembly.
+- group_id: assembly_options
+  name: skip_metamdbg
+  source_name: skip_metamdbg
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MetaDBG assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: <server_reference_root>/skip_metamdbg
+  example_values:
+  - <server_reference_root>/skip_metamdbg
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip MetaDBG assembly.
+- group_id: assembly_options
+  name: skip_quast
+  source_name: skip_quast
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip metaQUAST.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip metaQUAST.
+- group_id: assembly_options
+  name: skip_spades
+  source_name: skip_spades
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Illumina-only SPAdes assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip Illumina-only SPAdes assembly.
+- group_id: assembly_options
+  name: skip_spadeshybrid
+  source_name: skip_spadeshybrid
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip SPAdes hybrid assembly.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: boolean
+    description: Skip SPAdes hybrid assembly.
+- group_id: assembly_options
+  name: spades_downstreaminput
+  source_name: spades_downstreaminput
+  type: string
+  required: false
+  default: scaffolds
+  enum: &id001
+  - scaffolds
+  - contigs
+  description: Specify whether to use contigs or scaffolds assembled by SPAdes
+  classification: route_shaping
+  channel: params
+  placeholder: <server_input_root>/spades_downstreaminput
+  example_values:
+  - scaffolds
+  - contigs
+  mapping_notes: Map this value exactly to one current schema enum under `nextflow_run(params=...)`;
+    do not invent spelling variants.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: string
+    description: Specify whether to use contigs or scaffolds assembled by SPAdes
+    help_text: By default the SPAdes documentation recommends using scaffolds rather
+      than contigs, as these are longer as they combine multiple contigs. However
+      there is an increased risk of misassemblies or chimeras. Use this flag to specify
+      to just use contigs for downstream processes such as binning.
+    enum: *id001
+    default: scaffolds
+- group_id: assembly_options
+  name: megahit_options
+  source_name: megahit_options
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Additional custom options for MEGAHIT.
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: string
+    description: Additional custom options for MEGAHIT.
+    help_text: 'An example is adjusting presets (e.g. "--presets meta-large"), k-mers
+      (e.g. "-k 21,33,55,77") or adding other [advanced options](https://github.com/voutcn/megahit#advanced-usage).
+      For example, increase the minimum k-mer in the event of an error message such
+      as "Too many vertices in the unitig graph, you may increase the kmer size to
+      remove tons of erroneous kmers." in the MEGAHIT log file. But not --threads,
+      --memory, -o or input read files, because these are already in use. Must be
+      used like this: --megahit_options=''--presets meta-large'''
+- group_id: assembly_options
+  name: spades_options
+  source_name: spades_options
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Additional custom options for SPAdes and SPAdesHybrid. Do not specify
+    `--meta` as this will be added for you!
+  classification: lookup_only
+  channel: params
+  placeholder: null
+  example_values: []
+  mapping_notes: Preserve the current schema field name and pass under `nextflow_run(params=...)`.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Assembly options
+  raw_schema:
+    type: string
+    description: Additional custom options for SPAdes and SPAdesHybrid. Do not specify
+      `--meta` as this will be added for you!
+    help_text: 'An example is adjusting k-mers ("-k 21,33,55,77") or adding [advanced
+      options](https://github.com/ablab/spades#advanced-options). But not --meta,
+      -t, -m, -o or --out-prefix, because these are already in use. Must be used like
+      this: --spades_options=''-k 21,33,55,77'''

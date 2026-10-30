@@ -1,0 +1,193 @@
+playbooks:
+- id: standard_atacseq
+  use_when: Standard ATAC-seq analysis with default BWA aligner and broad peak calling.
+  prerequisites:
+    - Confirm server-local input samplesheet path.
+    - Confirm reference genome (--genome or --fasta + --gtf) exists on the server.
+    - Confirm outdir on the nextmcp server.
+  recommended_preset: default_atacseq
+  params_to_confirm:
+    - input
+    - outdir
+    - genome
+    - read_length
+  outputs_to_review:
+    - bwa/merged_library/*.mLb.clN.*.bam
+    - bwa/merged_library/macs2/broad_peak/
+    - bwa/merged_library/macs2/broad_peak/consensus/
+    - bwa/merged_library/macs2/broad_peak/consensus/deseq2/
+    - multiqc/broad_peak/multiqc_report.html
+    - pipeline_info/
+
+- id: narrow_peak_calling
+  use_when: Call narrow peaks instead of broad peaks (e.g. for TF footprinting or precise open chromatin regions).
+  prerequisites:
+    - User explicitly requests narrowPeak mode.
+  recommended_preset: narrow_peak
+  params_to_confirm:
+    - narrow_peak
+    - aligner
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/macs2/narrow_peak/
+    - <ALIGNER>/merged_library/macs2/narrow_peak/consensus/
+    - multiqc/narrow_peak/multiqc_report.html
+
+- id: with_controls
+  use_when: Control/input samples are available for MACS2 peak calling.
+  prerequisites:
+    - Samplesheet includes control and control_replicate columns.
+    - Control sample names match entries in the sample column.
+  recommended_preset: with_control
+  params_to_confirm:
+    - with_control
+    - input
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/qc/
+    - multiqc/<PEAK_TYPE>/multiqc_report.html
+
+- id: alternate_aligner
+  use_when: A non-default aligner (Bowtie2, Chromap, or STAR) is preferred.
+  prerequisites:
+    - Confirm aligner choice and availability of pre-built index on the server.
+  recommended_preset: bowtie2_align
+  params_to_confirm:
+    - aligner
+    - bwa_index
+    - bowtie2_index
+    - star_index
+    - chromap_index
+    - save_reference
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/*.bam
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/
+    - multiqc/<PEAK_TYPE>/multiqc_report.html
+
+- id: skip_trimming_route
+  use_when: Input FastQ files are already adapter-trimmed and quality-filtered.
+  prerequisites:
+    - Confirm that adapters and low-quality bases have already been removed.
+  recommended_preset: skip_trimming_run
+  params_to_confirm:
+    - skip_trimming
+    - input
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/*.bam
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/
+    - multiqc/<PEAK_TYPE>/multiqc_report.html
+
+- id: save_intermediates
+  use_when: Keep all intermediate files for downstream manual inspection or debugging.
+  prerequisites:
+    - Sufficient server disk space for additional outputs.
+  recommended_preset: save_all_intermediates
+  params_to_confirm:
+    - save_align_intermeds
+    - save_trimmed
+    - save_unaligned
+    - save_macs_pileup
+    - save_reference
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/library/*.bam
+    - trimgalore/*.fastq.gz
+    - <ALIGNER>/library/unmapped/*.fastq.gz
+    - genome/index/<ALIGNER>/
+
+- id: deseq2_rlog_transform
+  use_when: Prefer DESeq2 rlog transformation over the default vst for smaller experiments.
+  prerequisites:
+    - Small sample size where rlog may be preferred over vst.
+  recommended_preset: deseq2_rlog
+  params_to_confirm:
+    - deseq2_vst
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/consensus/deseq2/*.plots.pdf
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/consensus/deseq2/*.dds.RData
+
+- id: lightweight_run
+  use_when: Reduce runtime and output size by skipping non-essential QC and reporting.
+  prerequisites:
+    - User accepts reduced QC output.
+  recommended_preset: lightweight_run
+  params_to_confirm:
+    - skip_ataqv
+    - skip_plot_fingerprint
+    - skip_plot_profile
+    - skip_preseq
+    - skip_igv
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/*.bam
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/
+    - multiqc/<PEAK_TYPE>/multiqc_report.html
+
+- id: keep_filtered_reads
+  use_when: Retain duplicate, mitochondrial, or multi-mapped reads for special analysis needs.
+  prerequisites:
+    - User understands the impact on peak calling and QC interpretation.
+  recommended_preset: keep_filtered_reads
+  params_to_confirm:
+    - keep_dups
+    - keep_mito
+    - keep_multi_map
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/*.bam
+    - <ALIGNER>/merged_library/picard_metrics/*.metrics.txt
+    - <ALIGNER>/merged_library/samtools_stats/*.flagstat
+
+- id: skip_merge_replicates_route
+  use_when: Do not merge biological replicates; analyze each replicate independently.
+  prerequisites:
+    - Replicates are biologically distinct and should not be pooled.
+  recommended_preset: skip_merge_replicates
+  params_to_confirm:
+    - skip_merge_replicates
+    - input
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/*.bam
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/
+
+- id: resume_or_restart
+  use_when: Recover from a previous run or reuse compatible outputs.
+  prerequisites:
+    - Identify source run_id via run_list.
+    - Confirm compatibility through pipeline_info/params.json or artifacts.json.
+  tool_sequence:
+    - run_list(artifact_path_contains="multiqc_report.html")
+    - run_get(include=["artifact_summary","launch_spec"])
+    - nextflow_run(from_run_id=..., project=...)
+  outputs_to_review:
+    - results/<new_run_id>/
+
+- id: troubleshooting_low_signal
+  use_when: Low alignment rate, few peaks, poor FRiP, or high mitochondrial content.
+  prerequisites:
+    - Review run_get diagnosis to identify failing samples.
+  params_to_confirm:
+    - keep_mito
+    - min_trimmed_reads
+    - skip_trimming
+    - outdir
+  outputs_to_review:
+    - <ALIGNER>/merged_library/samtools_stats/*.flagstat
+    - <ALIGNER>/merged_library/picard_metrics/*.metrics.txt
+    - <ALIGNER>/merged_library/macs2/<PEAK_TYPE>/qc/*.FRiP_mqc.tsv
+    - trimgalore/logs/*.log
+    - run logs
+
+runtime_notes:
+  - All path values, project identifiers, and relative paths in params or config_files resolve on the nextmcp server filesystem.
+  - Use only paths returned by nextmcp tools or confirmed by the user.
+  - Omit `profile` by default; rely on server_info().nextflow.default_profile unless the user requests otherwise.
+  - Put Nextflow config files and resource caps in nextflow_run(config_files=[...]); use process.resourceLimits and do not invent params.max_cpus, params.max_memory, params.max_time, or process.maxCpus.
+  - Use `nextflow_run(prepare=true)` before launch when inputs or target outputs still need checking.
+  - Use `run_get(include=["progress","artifact_summary","diagnosis","next_actions"])` before raw logs.
+  - Do not use `nextflow_inspect_pipeline` for ordinary runtime planning.

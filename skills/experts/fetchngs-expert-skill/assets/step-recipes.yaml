@@ -1,0 +1,49 @@
+steps:
+- id: prepare_and_launch
+  purpose: Confirm server-local inputs, preview the project-owned layout when needed, launch fetchngs, then inspect status before reading raw files.
+  minimal_inputs:
+  - project
+  - input
+  - outdir
+  tool_sequence:
+  - project_list() when the project id is unknown
+  - project_get(project) when the project root or prior runs matter
+  - fs_list(mode="manifest") when one server path still needs confirmation
+  - nextflow_run(prepare=true) when inputs, target outputs, or restart layout are still uncertain
+  - nextflow_run(pipeline="fetchngs", project=..., params=...)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_artifacts(...) after artifact_summary names the needed output section
+  - run_logs() or fs_read() only after a concrete log or output path is known
+  outputs:
+  - run layout
+  - results/<run_id>/samplesheet/
+  - results/<run_id>/fastq/
+  - results/<run_id>/metadata/
+  - results/<run_id>/pipeline_info/
+  - status summary
+- id: restart_from_previous_run
+  purpose: Restart through nextmcp's public historical run path.
+  minimal_inputs:
+  - project
+  - from_run_id
+  tool_sequence:
+  - run_get(detail="full") on the source run to inspect launch_spec, nextflow_session_uuid, and resume compatibility fields
+  - nextflow_run(from_run_id=..., params=...)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  outputs:
+  - restarted run id
+  - compatibility notes
+- id: historical_artifact_reuse
+  purpose: Recover a previous fetchngs output when the user remembers only a filename fragment.
+  minimal_inputs:
+  - project
+  - artifact_path_contains
+  tool_sequence:
+  - run_list(project=..., pipeline="fetchngs", artifact_path_contains=...)
+  - run_get(include=["artifact_summary"]) for candidate runs
+  - run_artifacts(...) for the matching section
+  - fs_read(...) for pipeline_info/params.json or another explicit metadata file when compatibility matters
+  outputs:
+  - candidate run ids
+  - artifact paths
+  - route compatibility evidence

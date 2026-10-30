@@ -1,0 +1,277 @@
+group:
+  id: process_skipping_options
+  label: Process skipping options
+  selection_rule: Use this group for parameters defined under the `Process skipping
+    options` top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/process_skipping_options.md
+  - assets/schema-groups/process_skipping_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `process_skipping_options` for exact lookup.
+parameters:
+- group_id: process_skipping_options
+  name: deseq2_vst
+  source_name: deseq2_vst
+  type: boolean
+  required: false
+  default: true
+  enum: null
+  description: Use vst transformation instead of rlog with DESeq2.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Use vst transformation instead of rlog with DESeq2.
+    help_text: See [DESeq2 docs](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#data-transformations-and-visualization).
+    fa_icon: fas fa-dolly
+    default: true
+- group_id: process_skipping_options
+  name: skip_deseq2_qc
+  source_name: skip_deseq2_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip DESeq2 PCA and heatmap plotting.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip DESeq2 PCA and heatmap plotting.
+- group_id: process_skipping_options
+  name: skip_fastqc
+  source_name: skip_fastqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip FastQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip FastQC.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_igv
+  source_name: skip_igv
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip IGV.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip IGV.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_multiqc
+  source_name: skip_multiqc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip MultiQC.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_picard_metrics
+  source_name: skip_picard_metrics
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Picard CollectMultipleMetrics.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip Picard CollectMultipleMetrics.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_plot_fingerprint
+  source_name: skip_plot_fingerprint
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip deepTools plotFingerprint.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip deepTools plotFingerprint.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_plot_profile
+  source_name: skip_plot_profile
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip deepTools plotProfile.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip deepTools plotProfile.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_preseq
+  source_name: skip_preseq
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Preseq.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip Preseq.
+    fa_icon: fas fa-fast-forward
+- group_id: process_skipping_options
+  name: skip_qc
+  source_name: skip_qc
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip all QC steps except for MultiQC.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Set only when the user wants a different output root, saved intermediate,
+    or reporting behavior. Keep values in `params`, not `config_files`.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    fa_icon: fas fa-fast-forward
+    description: Skip all QC steps except for MultiQC.
+- group_id: process_skipping_options
+  name: skip_spp
+  source_name: skip_spp
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Skip Phantompeakqualtools.
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Process skipping options
+  raw_schema:
+    type: boolean
+    description: Skip Phantompeakqualtools.
+    fa_icon: fas fa-fast-forward

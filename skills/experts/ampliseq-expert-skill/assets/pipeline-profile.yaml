@@ -1,0 +1,59 @@
+pipeline:
+  id: ampliseq
+  name: nf-core/ampliseq
+  version: 2.16.1
+  summary: Amplicon sequencing workflow for denoising, taxonomy assignment, QIIME2
+    downstream analysis, and reports.
+source_basis:
+- repository-local inspect-equivalent authoring bundle
+- 'pipeline directory: /root/key_projects/nextmcp/nf_pipeline/ampliseq'
+- README.md, docs/usage.md, docs/output.md, main.nf, nextflow.config, and nextflow_schema.json
+required_inputs:
+- name: outdir
+  required_for: Published results
+  placeholder: <server_output_root>/ampliseq
+  notes: Server-local output directory passed under params.
+- name: one_input_source
+  required_for: Main analysis
+  placeholder: <server_input_root>/samplesheet.tsv or <server_input_root>/fastq_folder
+    or <server_input_root>/asv.fasta
+  notes: Use exactly one of input, input_folder, or input_fasta.
+supported_modes:
+- id: samplesheet_fastq
+  entry_target: pipeline id ampliseq
+  use_when: Preferred FASTQ route using a server-local samplesheet with sampleID,
+    forwardReads, optional reverseReads, and optional run.
+- id: folder_fastq
+  entry_target: pipeline id ampliseq
+  use_when: FASTQ files are already organized in one server-local folder and filenames
+    match extension.
+- id: fasta_taxonomy_only
+  entry_target: pipeline id ampliseq
+  use_when: User provides precomputed ASV or OTU sequences for taxonomy and downstream
+    analysis.
+- id: variable_length_its
+  entry_target: pipeline id ampliseq
+  use_when: ITS or other variable-length amplicons need ITS-aware trimming settings.
+- id: multiregion_sidle
+  entry_target: pipeline id ampliseq
+  use_when: Multiple 16S regions should be scaffolded with Sidle.
+- id: taxonomy_alternatives
+  entry_target: pipeline id ampliseq
+  use_when: DADA2 default taxonomy should be replaced or supplemented by SINTAX, Kraken2,
+    QIIME2, pplacer, or custom databases.
+- id: downstream_metadata_analysis
+  entry_target: pipeline id ampliseq
+  use_when: Metadata-driven barplots, diversity, ADONIS, ANCOM, ANCOM-BC, PICRUSt2,
+    or SBDI export are requested.
+resource_override:
+  channel: config_files
+  source_syntax: 'process { resourceLimits = [cpus: 8, memory: ''32.GB'', time: ''24.h'']
+    }'
+  notes: Keep max_cpus, max_memory, and max_time out of params. Use a small server-local
+    config file passed through config_files.
+limitations:
+- Biological interpretation beyond documented pipeline outputs is outside this skill.
+- Runtime paths must already exist on the nextmcp server or come from nextmcp tool
+  results.
+- Database licensing and availability must be confirmed by the user or server operator
+  when SILVA or other licensed resources are used.

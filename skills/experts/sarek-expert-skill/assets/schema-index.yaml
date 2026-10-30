@@ -1,0 +1,111 @@
+grouping_strategy: schema top-level sections from nextflow_schema.json allOf order
+  for sarek
+groups:
+- id: input_output_options
+  label: Input/output options
+  use_when: The runtime agent needs exact parameter mapping for the `Input/output
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `input_output_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/input_output_options.yaml
+  reference_path: references/schema-groups/input_output_options.md
+  parameter_count: 4
+- id: main_options
+  label: Main options
+  use_when: The runtime agent needs exact parameter mapping for the `Main options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `main_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/main_options.yaml
+  reference_path: references/schema-groups/main_options.md
+  parameter_count: 7
+- id: fastq_preprocessing
+  label: FASTQ Preprocessing
+  use_when: The runtime agent needs exact parameter mapping for the `FASTQ Preprocessing`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `fastq_preprocessing`
+    for exact lookup.
+  asset_path: assets/schema-groups/fastq_preprocessing.yaml
+  reference_path: references/schema-groups/fastq_preprocessing.md
+  parameter_count: 9
+- id: umi_processing
+  label: Unique Molecular Identifiers
+  use_when: The runtime agent needs exact parameter mapping for the `Unique Molecular
+    Identifiers` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `umi_processing`
+    for exact lookup.
+  asset_path: assets/schema-groups/umi_processing.yaml
+  reference_path: references/schema-groups/umi_processing.md
+  parameter_count: 10
+- id: preprocessing
+  label: Preprocessing
+  use_when: The runtime agent needs exact parameter mapping for the `Preprocessing`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `preprocessing`
+    for exact lookup.
+  asset_path: assets/schema-groups/preprocessing.yaml
+  reference_path: references/schema-groups/preprocessing.md
+  parameter_count: 6
+- id: variant_calling
+  label: Variant Calling
+  use_when: The runtime agent needs exact parameter mapping for the `Variant Calling`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `variant_calling`
+    for exact lookup.
+  asset_path: assets/schema-groups/variant_calling.yaml
+  reference_path: references/schema-groups/variant_calling.md
+  parameter_count: 25
+- id: post_variant_calling
+  label: Post variant calling
+  use_when: The runtime agent needs exact parameter mapping for the `Post variant
+    calling` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `post_variant_calling`
+    for exact lookup.
+  asset_path: assets/schema-groups/post_variant_calling.yaml
+  reference_path: references/schema-groups/post_variant_calling.md
+  parameter_count: 10
+- id: annotation
+  label: Annotation
+  use_when: The runtime agent needs exact parameter mapping for the `Annotation` top-level
+    section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `annotation`
+    for exact lookup.
+  asset_path: assets/schema-groups/annotation.yaml
+  reference_path: references/schema-groups/annotation.md
+  parameter_count: 33
+- id: general_reference_genome_options
+  label: General reference genome options
+  use_when: The runtime agent needs exact parameter mapping for the `General reference
+    genome options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `general_reference_genome_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/general_reference_genome_options.yaml
+  reference_path: references/schema-groups/general_reference_genome_options.md
+  parameter_count: 5
+- id: reference_genome_options
+  label: Reference genome options
+  use_when: The runtime agent needs exact parameter mapping for the `Reference genome
+    options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `reference_genome_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/reference_genome_options.yaml
+  reference_path: references/schema-groups/reference_genome_options.md
+  parameter_count: 35
+- id: institutional_config_options
+  label: Institutional config options
+  use_when: The runtime agent needs exact parameter mapping for the `Institutional
+    config options` top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `institutional_config_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/institutional_config_options.yaml
+  reference_path: references/schema-groups/institutional_config_options.md
+  parameter_count: 10
+- id: generic_options
+  label: Generic options
+  use_when: The runtime agent needs exact parameter mapping for the `Generic options`
+    top-level section of the current `nextflow_schema.json`.
+  summary: Preserves the original `nextflow_schema.json` top-level section `generic_options`
+    for exact lookup.
+  asset_path: assets/schema-groups/generic_options.yaml
+  reference_path: references/schema-groups/generic_options.md
+  parameter_count: 18

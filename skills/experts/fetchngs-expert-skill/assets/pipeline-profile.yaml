@@ -1,0 +1,52 @@
+pipeline:
+  id: fetchngs
+  name: nf-core/fetchngs
+  version: 1.12.0
+  summary: Fetch metadata and raw FASTQ files from SRA, ENA, DDBJ, and GEO accessions, then write a samplesheet for downstream analysis.
+source_basis:
+- 'authoring bundle fields: schema, documents, and source_files'
+- 'pipeline directory: /root/key_projects/nextmcp/nf_pipeline/fetchngs'
+required_inputs:
+- name: input
+  required_for: Most runs
+  placeholder: <server_input_root>/ids.csv
+  notes: File containing SRA, ENA, GEO, or DDBJ identifiers one per line. The schema accepts .csv, .tsv, or .txt files and requires the server-local path to exist.
+- name: outdir
+  required_for: Published results
+  placeholder: <server_output_root>/fetchngs
+  notes: Server-local output directory for FASTQ files, metadata, samplesheets, and pipeline_info reports.
+supported_modes:
+- id: main_entry
+  entry_target: pipeline id fetchngs
+  use_when: Standard run. Fetch metadata, download FASTQ files using FTP by default, and create samplesheet outputs.
+- id: metadata_only
+  entry_target: pipeline id fetchngs
+  use_when: User needs accessions resolved and samplesheet or metadata output but does not want FASTQ files downloaded.
+  route_params:
+    skip_fastq_download: true
+- id: sratools_download
+  entry_target: pipeline id fetchngs
+  use_when: User expects missing FTP links, more than two FASTQ files per sample, technical reads, or dbGaP access through SRA Toolkit.
+  route_params:
+    download_method: sratools
+- id: aspera_download
+  entry_target: pipeline id fetchngs
+  use_when: User explicitly asks to use Aspera and the ENA metadata exposes Aspera links.
+  route_params:
+    download_method: aspera
+- id: downstream_samplesheet
+  entry_target: pipeline id fetchngs
+  use_when: User wants an output samplesheet shaped for rnaseq, atacseq, viralrecon, or taxprofiler.
+  route_params:
+    nf_core_pipeline: <one of rnaseq, atacseq, viralrecon, taxprofiler>
+- id: dbgap_sratools
+  entry_target: pipeline id fetchngs
+  use_when: User has controlled-access dbGaP data and a server-local JWT cart file on a supported cloud platform.
+  route_params:
+    download_method: sratools
+    dbgap_key: <server_input_root>/cart.jwt
+limitations:
+- Runtime paths are on the nextmcp server filesystem, not the client machine.
+- dbGaP access requires a server-local JWT cart file generated for all runs in the experiment; the source docs state that the JWT is valid for one hour and supported on AWS or Google Cloud environments.
+- Aspera is only useful when ENA metadata includes Aspera links; otherwise the workflow routes records to FTP or sratools according to source logic.
+- The deprecated force_sratools_download parameter is not a supported route; use download_method=sratools.

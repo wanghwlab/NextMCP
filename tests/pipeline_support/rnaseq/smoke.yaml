@@ -1,0 +1,127 @@
+version: 1
+kind: pipeline_support_contract
+pipeline: rnaseq
+case_id: smoke
+
+source_profile:
+  name: test
+  config: conf/test.config
+  tests_config: tests/nextflow.config
+  test_case: "tests/default.nf.test::Params: default"
+  snapshot: tests/default.nf.test.snap
+  ignore_file: tests/.nftignore
+  selection_reason: >-
+    The top-level default case is the canonical lightweight test setup because
+    it keeps the normal STAR + Salmon plus QC route and does not add any
+    variant-specific flags beyond the upstream `test` profile.
+
+local_data_contract:
+  localized_root: /data/rnaseq_test_data
+  mode: cache_validation_only
+  required_files:
+    - role: input_samplesheet
+      path: /data/rnaseq_test_data/samplesheet_test_local.csv
+    - role: genome_fasta
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genome.fasta
+    - role: annotation_gtf
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes_with_empty_tid.gtf.gz
+    - role: annotation_gff
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes.gff.gz
+    - role: transcript_fasta
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/transcriptome.fasta
+    - role: additional_fasta
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/gfp.fa.gz
+    - role: bbsplit_fasta_list
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/bbsplit_fasta_list.txt
+    - role: hisat2_index
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/hisat2.tar.gz
+    - role: salmon_index
+      path: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/salmon.tar.gz
+  rewritten_manifests: []
+  notes:
+    - The vendored conf/test.config already points to server-local cache paths.
+    - No remote URL rewrite is required for this cache-backed smoke case.
+
+launch:
+  pipeline: rnaseq
+  project: pipeline-support-rnaseq
+  run_name: smoke
+  config_files:
+    - /data/rnaseq_test_data/project-files/pipeline-support-rnaseq/profile_test_overrides.config
+  config_overrides:
+    - path: /data/rnaseq_test_data/project-files/pipeline-support-rnaseq/profile_test_overrides.config
+      content: |
+        process {
+            resourceLimits = [
+                cpus  : 4,
+                memory: '15.GB',
+                time  : '1.h'
+            ]
+        }
+
+        process {
+            withName: 'RSEM_PREPAREREFERENCE_GENOME|SENTIEON_RSEMPREPAREREFERENCE_GENOME' {
+                ext.args2 = "--genomeSAindexNbases 7"
+            }
+        }
+  params:
+    input: /data/rnaseq_test_data/samplesheet_test_local.csv
+    fasta: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genome.fasta
+    gtf: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes_with_empty_tid.gtf.gz
+    gff: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/genes.gff.gz
+    transcript_fasta: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/transcriptome.fasta
+    additional_fasta: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/gfp.fa.gz
+    bbsplit_fasta_list: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/bbsplit_fasta_list.txt
+    hisat2_index: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/hisat2.tar.gz
+    salmon_index: /data/rnaseq_test_data/626c8fab639062eade4b10747e919341cbf9b41a/reference/salmon.tar.gz
+    skip_bbsplit: false
+    pseudo_aligner: salmon
+    umitools_bc_pattern: NNNN
+  prepare:
+    validate_params_schema: true
+  run:
+    detach: false
+  notes:
+    - >-
+      The upstream `test` profile is flattened into explicit params plus one
+      small config override file so the smoke case can still use the server's
+      default execution profile.
+    - Omit `outdir` so nextmcp binds the project-owned default results directory.
+
+assertions:
+  prepare:
+    ok: true
+    expected_path_checks:
+      - input
+      - outdir
+      - fasta
+      - gtf
+      - gff
+      - transcript_fasta
+      - additional_fasta
+      - bbsplit_fasta_list
+      - hisat2_index
+      - salmon_index
+    notes:
+      - The config override file must exist before prepare runs.
+  run:
+    ok: true
+    final_status: succeeded
+    notes:
+      - Do not require full nf-test snapshot equality for this smoke case.
+  artifacts:
+    required_paths:
+      - multiqc/star_salmon/multiqc_report.html
+      - star_salmon/RAP1_IAA_30M_REP1.markdup.sorted.bam
+      - star_salmon/salmon.merged.gene.SummarizedExperiment.rds
+      - salmon/salmon.merged.gene.SummarizedExperiment.rds
+      - custom/out/genome_gfp.gtf
+    anchor_content_checks:
+      - relative_path: custom/out/genome_gfp.gtf
+        checksum: md5:c98b12c302f15731bfc36bcf297cfe28
+      - relative_path: multiqc/star_salmon/multiqc_report_data/multiqc_featurecounts_biotype_plot.txt
+        checksum: md5:fb9db2fca737fbdcd1a921e683805d77
+    evidence:
+      nf_test: "tests/default.nf.test::Params: default"
+      snapshot: tests/default.nf.test.snap
+      ignore_file: tests/.nftignore

@@ -1,0 +1,788 @@
+pipeline_id: nanoseq
+status: covered
+summary:
+  total: 44
+  high_impact: 34
+  needs_review: 0
+capabilities:
+- id: documented_prerequisite_index
+  label: Documented `index` prerequisite should be explicit in planning.
+  kind: runtime_prerequisite
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: index
+- id: schema_param_barcode_both_ends
+  label: Schema parameter `barcode_both_ends` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: barcode_both_ends
+    excerpt: Require barcode on both ends for basecaller.
+- id: schema_param_call_variants
+  label: Schema parameter `call_variants` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: call_variants
+    excerpt: Specifies if variant calling will executed.
+- id: schema_param_deepvariant_gpu
+  label: Schema parameter `deepvariant_gpu` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: deepvariant_gpu
+    excerpt: Specifies whether to call variants with pepper_margin_deepvariant in
+      GPU mode.
+- id: schema_param_help
+  label: Schema parameter `help` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: help
+    excerpt: Display help text.
+- id: schema_param_igenomes_ignore
+  label: Schema parameter `igenomes_ignore` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: igenomes_ignore
+    excerpt: Do not load the iGenomes reference config.
+- id: schema_param_monochrome_logs
+  label: Schema parameter `monochrome_logs` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: monochrome_logs
+    excerpt: Do not use coloured log outputs.
+- id: schema_param_phase_vcf
+  label: Schema parameter `phase_vcf` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: phase_vcf
+    excerpt: Specifies if vcf will be phased when using medaka.
+- id: schema_param_plaintext_email
+  label: Schema parameter `plaintext_email` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: plaintext_email
+    excerpt: Send plain-text email instead of HTML.
+- id: schema_param_qcat_detect_middle
+  label: Schema parameter `qcat_detect_middle` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: qcat_detect_middle
+    excerpt: Search for adapters in the whole read by applying the '--detect-middle'
+      parameter in qcat.
+- id: schema_param_run_nanolyse
+  label: Schema parameter `run_nanolyse` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: run_nanolyse
+    excerpt: Filter reads from FastQ files using NanoLyse
+- id: schema_param_save_align_intermeds
+  label: Schema parameter `save_align_intermeds` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: save_align_intermeds
+    excerpt: Save the '.sam' files from the alignment step - not done by default.
+- id: schema_param_show_hidden_params
+  label: Schema parameter `show_hidden_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: show_hidden_params
+    excerpt: Show all params when using `--help`
+- id: schema_param_skip_alignment
+  label: Schema parameter `skip_alignment` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_alignment
+    excerpt: Skip alignment and downstream processes.
+- id: schema_param_skip_bigbed
+  label: Schema parameter `skip_bigbed` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_bigbed
+    excerpt: Skip BigBed file generation.
+- id: schema_param_skip_bigwig
+  label: Schema parameter `skip_bigwig` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_bigwig
+    excerpt: Skip BigWig file generation.
+- id: schema_param_skip_demultiplexing
+  label: Schema parameter `skip_demultiplexing` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_demultiplexing
+    excerpt: Skip demultiplexing with qcat.
+- id: schema_param_skip_differential_analysis
+  label: Schema parameter `skip_differential_analysis` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_differential_analysis
+    excerpt: Skip differential analysis with DESeq2 and DEXSeq.
+- id: schema_param_skip_fastqc
+  label: Schema parameter `skip_fastqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_fastqc
+    excerpt: Skip FastQC.
+- id: schema_param_skip_fusion_analysis
+  label: Schema parameter `skip_fusion_analysis` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_fusion_analysis
+    excerpt: Skip differential analysis with DESeq2 and DEXSeq.
+- id: schema_param_skip_m6anet
+  label: Schema parameter `skip_m6anet` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_m6anet
+    excerpt: Skip m6A detection with m6anet.
+- id: schema_param_skip_modification_analysis
+  label: Schema parameter `skip_modification_analysis` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_modification_analysis
+    excerpt: Skip RNA modification analysis.
+- id: schema_param_skip_multiqc
+  label: Schema parameter `skip_multiqc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_multiqc
+    excerpt: Skip MultiQC.
+- id: schema_param_skip_nanoplot
+  label: Schema parameter `skip_nanoplot` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_nanoplot
+    excerpt: Skip NanoPlot.
+- id: schema_param_skip_qc
+  label: Schema parameter `skip_qc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_qc
+    excerpt: Skip all QC steps apart from MultiQC.
+- id: schema_param_skip_quantification
+  label: Schema parameter `skip_quantification` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_quantification
+    excerpt: Skip transcript quantification and differential analysis.
+- id: schema_param_skip_sv
+  label: Schema parameter `skip_sv` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_sv
+    excerpt: Skip structural variant calling.
+- id: schema_param_skip_vc
+  label: Schema parameter `skip_vc` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_vc
+    excerpt: Skip variant calling.
+- id: schema_param_skip_xpore
+  label: Schema parameter `skip_xpore` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: skip_xpore
+    excerpt: Skip differential modification analysis with xpore.
+- id: schema_param_split_mnps
+  label: Schema parameter `split_mnps` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: split_mnps
+    excerpt: Specifies if MNPs will be split into SNPs when using medaka.
+- id: schema_param_stranded
+  label: Schema parameter `stranded` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: stranded
+    excerpt: Specifies if the data is strand-specific. Automatically activated when
+      using '--protocol directRNA'.
+- id: schema_param_trim_barcodes
+  label: Schema parameter `trim_barcodes` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: trim_barcodes
+    excerpt: Trim barcodes from the output sequences in the FastQ files from basecaller.
+- id: schema_param_validate_params
+  label: Schema parameter `validate_params` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: validate_params
+    excerpt: Boolean whether to validate parameters against the schema at runtime
+- id: schema_param_version
+  label: Schema parameter `version` may change run planning.
+  kind: schema_parameter
+  impact: high
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: version
+    excerpt: Display version and exit.
+- id: documented_output_bam
+  label: Documented `bam` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/README.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: bam
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/usage.md
+    excerpt: bam
+- id: documented_output_contamination
+  label: Documented `contamination` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: contamination
+- id: documented_output_counts
+  label: Documented `counts` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/README.md
+    excerpt: counts
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: counts
+- id: documented_output_multiqc
+  label: Documented `multiqc` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/README.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: multiqc
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/usage.md
+    excerpt: multiqc
+- id: documented_output_quantification
+  label: Documented `quantification` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/README.md
+    excerpt: quantification
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: quantification
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/usage.md
+    excerpt: quantification
+- id: documented_output_report
+  label: Documented `report` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: report
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/usage.md
+    excerpt: report
+- id: documented_output_stringtie
+  label: Documented `stringtie` outputs need artifact and review guidance.
+  kind: documented_output
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - qc-rules.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in qc-rules.yaml
+  scope_out_reason: null
+  evidence:
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/README.md
+    excerpt: stringtie
+  - source: documents
+    path: /root/key_projects/nextmcp/nf_pipeline/nanoseq/docs/output.md
+    excerpt: stringtie
+- id: schema_param_aligner
+  label: Schema parameter `aligner` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: aligner
+    excerpt: Specifies the aligner to use i.e. 'minimap2' or 'graphmap2'.
+- id: schema_param_gpu_device
+  label: Schema parameter `gpu_device` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: gpu_device
+    excerpt: Device specified in GPU mode using '--device'.
+- id: schema_param_quantification_method
+  label: Schema parameter `quantification_method` may change run planning.
+  kind: schema_parameter
+  impact: medium
+  status: covered
+  required_assets:
+  - artifact-contracts.yaml
+  - param-presets.yaml
+  - playbooks.yaml
+  coverage:
+  - Covered in artifact-contracts.yaml
+  - Covered in param-presets.yaml
+  - Covered in playbooks.yaml
+  scope_out_reason: null
+  evidence:
+  - source: schema
+    path: nextflow_schema.json
+    field: quantification_method
+    excerpt: 'Specifies the transcript quantification method to use (available are:
+      bambu or stringtie2). Only available when protocol is cDNA or directRNA.'

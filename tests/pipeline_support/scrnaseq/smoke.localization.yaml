@@ -1,0 +1,151 @@
+version: 1
+kind: pipeline_test_localization
+pipeline: scrnaseq
+case_id: smoke
+profile_name: test
+localized_root: /data/nextmcp/testdata/scrnaseq/test
+
+path_prefix_mappings:
+  - remote_prefix: https://github.com/nf-core/test-datasets/raw/scrnaseq/
+    localized_prefix: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/
+    localized_prefix: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/
+  - remote_prefix: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/scrnaseq/
+    localized_prefix: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/
+
+source_profile:
+  pipeline_root: /root/key_projects/nextmcp/nf_pipeline/scrnaseq
+  config: conf/test.config
+  shared_test_config: tests/nextflow.config
+  resolved_runtime_chain:
+    pipelines_testdata_base_path: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/scrnaseq
+    modules_testdata_base_path: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/
+    aws_client_anonymous: true
+  resolved_params:
+    input: /data/nextmcp/testdata/scrnaseq/test/rewrites/pipeline-data/samplesheet-2-0_local.csv
+    fasta: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/GRCm38.p6.genome.chr19.fa
+    gtf: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/gencode.vM19.annotation.chr19.gtf
+    aligner: star
+    protocol: 10XV2
+    skip_cellbender: true
+    validationSchemaIgnoreParams: genomes
+
+runtime_hints:
+  process_resource_limits:
+    from_conf_test_config:
+      cpus: 4
+      memory: 15.GB
+      time: 1.h
+    from_tests_nextflow_config:
+      cpus: 2
+      memory: 6.GB
+      time: 6.h
+  launch_rule: Use the shared max_* limits from tests/nextflow.config for the smoke contract, but keep them in a small override config passed through config_files. Keep conf/test.config resourceLimits as upstream task evidence only.
+
+config_override_files:
+  - path: /data/nextmcp/testdata/scrnaseq/test/project-files/pipeline-support-scrnaseq/max_resources.config
+    source_fields:
+      - tests/nextflow.config:max_cpus
+      - tests/nextflow.config:max_memory
+      - tests/nextflow.config:max_time
+    purpose: Keep smoke resource caps in config scope instead of nextflow_run params.
+    content: |
+      params.max_cpus = 2
+      params.max_memory = '6.GB'
+      params.max_time = '6.h'
+
+url_inventory:
+  - role: input_samplesheet
+    config_field: input
+    original_value: https://github.com/nf-core/test-datasets/raw/scrnaseq/samplesheet-2-0.csv
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/samplesheet-2-0.csv
+  - role: genome_fasta
+    config_field: fasta
+    original_value: https://github.com/nf-core/test-datasets/raw/scrnaseq/reference/GRCm38.p6.genome.chr19.fa
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/GRCm38.p6.genome.chr19.fa
+  - role: annotation_gtf
+    config_field: gtf
+    original_value: https://github.com/nf-core/test-datasets/raw/scrnaseq/reference/gencode.vM19.annotation.chr19.gtf
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/gencode.vM19.annotation.chr19.gtf
+  - role: sample_x_read_1
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/testdata/cellranger/Sample_X_S1_L001_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_X_S1_L001_R1_001.fastq.gz
+  - role: sample_x_read_2
+    config_field: input.samplesheet[].fastq_2
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/testdata/cellranger/Sample_X_S1_L001_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_X_S1_L001_R2_001.fastq.gz
+  - role: sample_y_lane_1_read_1
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/testdata/cellranger/Sample_Y_S1_L001_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L001_R1_001.fastq.gz
+  - role: sample_y_lane_1_read_2
+    config_field: input.samplesheet[].fastq_2
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/testdata/cellranger/Sample_Y_S1_L001_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L001_R2_001.fastq.gz
+  - role: sample_y_lane_2_read_1
+    config_field: input.samplesheet[].fastq_1
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/testdata/cellranger/Sample_Y_S1_L002_R1_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L002_R1_001.fastq.gz
+  - role: sample_y_lane_2_read_2
+    config_field: input.samplesheet[].fastq_2
+    original_value: https://raw.githubusercontent.com/nf-core/test-datasets/scrnaseq/testdata/cellranger/Sample_Y_S1_L002_R2_001.fastq.gz
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L002_R2_001.fastq.gz
+
+rewritten_manifests:
+  - role: input_samplesheet
+    original_path: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/samplesheet-2-0.csv
+    localized_path: /data/nextmcp/testdata/scrnaseq/test/rewrites/pipeline-data/samplesheet-2-0_local.csv
+    rewritten_columns:
+      - fastq_1
+      - fastq_2
+    localized_rows:
+      - sample: Sample_X
+        fastq_1: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_X_S1_L001_R1_001.fastq.gz
+        fastq_2: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_X_S1_L001_R2_001.fastq.gz
+        protocol: 10xV2
+        expected_cells: "5000"
+      - sample: Sample_Y
+        fastq_1: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L001_R1_001.fastq.gz
+        fastq_2: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L001_R2_001.fastq.gz
+        protocol: 10xV2
+        expected_cells: "5000"
+      - sample: Sample_Y
+        fastq_1: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L002_R1_001.fastq.gz
+        fastq_2: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/testdata/cellranger/Sample_Y_S1_L002_R2_001.fastq.gz
+        protocol: 10xV2
+        expected_cells: "5000"
+
+agent_param_mapping:
+  - config_field: input
+    official_param: input
+    original_value: https://github.com/nf-core/test-datasets/raw/scrnaseq/samplesheet-2-0.csv
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/rewrites/pipeline-data/samplesheet-2-0_local.csv
+  - config_field: fasta
+    official_param: fasta
+    original_value: https://github.com/nf-core/test-datasets/raw/scrnaseq/reference/GRCm38.p6.genome.chr19.fa
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/GRCm38.p6.genome.chr19.fa
+  - config_field: gtf
+    official_param: gtf
+    original_value: https://github.com/nf-core/test-datasets/raw/scrnaseq/reference/gencode.vM19.annotation.chr19.gtf
+    localized_value: /data/nextmcp/testdata/scrnaseq/test/pipeline-data/reference/gencode.vM19.annotation.chr19.gtf
+  - config_field: aligner
+    official_param: aligner
+    original_value: star
+    localized_value: star
+  - config_field: protocol
+    official_param: protocol
+    original_value: 10XV2
+    localized_value: 10XV2
+  - config_field: skip_cellbender
+    official_param: skip_cellbender
+    original_value: true
+    localized_value: true
+  - config_field: validationSchemaIgnoreParams
+    official_param: validationSchemaIgnoreParams
+    original_value: genomes
+    localized_value: genomes
+  - config_field: process.resourceLimits
+    official_param: null
+    original_value: "{cpus: 4, memory: 15.GB, time: 1.h}"
+    localized_value: "Execution note only. Keep as upstream task evidence, not a nextflow_run param."

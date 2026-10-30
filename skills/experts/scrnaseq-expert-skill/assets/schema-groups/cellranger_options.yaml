@@ -1,0 +1,66 @@
+group:
+  id: cellranger_options
+  label: Cellranger Options
+  selection_rule: Use this group for parameters defined under the `Cellranger Options`
+    top-level schema section.
+  lookup_order:
+  - assets/schema-index.yaml
+  - references/schema-groups/cellranger_options.md
+  - assets/schema-groups/cellranger_options.yaml
+  coverage_notes: Preserves the original `nextflow_schema.json` top-level section
+    `cellranger_options` for exact lookup.
+parameters:
+- group_id: cellranger_options
+  name: skip_cellranger_renaming
+  source_name: skip_cellranger_renaming
+  type: boolean
+  required: false
+  default: null
+  enum: null
+  description: Should it skip the automatic renaming included in cellranger-related
+    modules?
+  classification: route_shaping
+  channel: params
+  placeholder: null
+  example_values:
+  - true
+  - false
+  mapping_notes: Pass under `nextflow_run(params=...)`. Check playbooks and step recipes
+    before changing this route-shaping switch.
+  lookup_priority: high
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Options
+  raw_schema:
+    type: boolean
+    description: Should it skip the automatic renaming included in cellranger-related
+      modules?
+- group_id: cellranger_options
+  name: cellranger_index
+  source_name: cellranger_index
+  type: string
+  required: false
+  default: null
+  enum: null
+  description: Specify a pre-calculated cellranger index. Readily prepared indexes
+    can be obtained from the 10x Genomics website. Provide the base directory of the
+    index (e.g., '/PATH/TO/10X_REF/refdata-gex-GRCh38-2024-A/')
+  classification: lookup_only
+  channel: params
+  placeholder: <server_reference_root>/cellranger_index
+  example_values:
+  - <server_reference_root>/cellranger_index
+  mapping_notes: Pass under `nextflow_run(params=...)` as a server-local reference,
+    database, or prebuilt index value. Prefer reuse of confirmed server-side assets
+    over rebuilding when appropriate.
+  lookup_priority: medium
+  confidence: high
+  mapping_flags: []
+  source_section: Cellranger Options
+  raw_schema:
+    type: string
+    description: Specify a pre-calculated cellranger index. Readily prepared indexes
+      can be obtained from the 10x Genomics website. Provide the base directory of
+      the index (e.g., '/PATH/TO/10X_REF/refdata-gex-GRCh38-2024-A/')
+    format: path
+    exists: true

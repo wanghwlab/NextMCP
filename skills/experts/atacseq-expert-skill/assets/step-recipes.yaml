@@ -1,0 +1,19 @@
+steps:
+- id: launch
+  purpose: Confirm inputs, launch the pipeline, then inspect status before raw files.
+  minimal_inputs:
+  - project
+  - input
+  - outdir
+  tool_sequence:
+  - project_list() when the project id is unknown
+  - project_get(project) when the project root or prior runs matter
+  - fs_list(mode="manifest") when one server path still needs confirmation
+  - nextflow_run(prepare=true) when launch layout is still uncertain
+  - nextflow_run(pipeline="atacseq", project=..., params=...)
+  - run_get(include=["progress","artifact_summary","diagnosis","next_actions"])
+  - run_logs() or fs_read() after the path is known
+  outputs:
+  - run layout
+  - results/<run_id>/
+  - status summary

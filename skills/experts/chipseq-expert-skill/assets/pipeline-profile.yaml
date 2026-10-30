@@ -1,0 +1,59 @@
+pipeline:
+  id: chipseq
+  name: nf-core/chipseq
+  version: 2.1.0
+  summary: ChIP-seq QC, alignment, MACS3 peak calling, consensus peak quantification,
+    DESeq2 exploratory differential binding QC, MultiQC reporting, and IGV session
+    creation.
+source_basis:
+- 'authoring bundle fields: schema, documents, and source_files'
+- 'pipeline directory: /root/key_projects/nextmcp/nf_pipeline/chipseq'
+required_inputs:
+- name: input
+  required_for: Most runs
+  placeholder: <server_input_root>/samplesheet.csv
+  notes: Path to comma-separated file containing information about the samples in
+    the experiment. The first seven columns must be sample, fastq_1, fastq_2,
+    replicate, antibody, control, and control_replicate.
+- name: outdir
+  required_for: Published results
+  placeholder: <server_output_root>/chipseq
+  notes: Server-local output directory for published results.
+- name: fasta
+  required_for: Runs without a configured genome entry
+  placeholder: <server_reference_root>/genome.fa
+  notes: Path to FASTA genome file. Pair with gtf or gff unless a genome preset
+    supplies annotation.
+- name: gtf
+  required_for: Peak annotation and gene-based plots when genome preset is not used
+  placeholder: <server_reference_root>/genes.gtf
+  notes: GTF annotation. Use gff instead only when that is the available annotation.
+supported_modes:
+- id: main_entry
+  entry_target: pipeline id chipseq
+  use_when: Standard main pipeline route through nextmcp.
+- id: broad_peak_default
+  entry_target: pipeline id chipseq
+  use_when: Default MACS3 broadPeak mode for broad histone marks or when the user
+    does not request narrow peaks.
+- id: narrow_peak
+  entry_target: pipeline id chipseq with params.narrow_peak=true
+  use_when: Transcription factor or narrow mark workflows where MACS3 narrowPeak
+    outputs and summits are expected.
+- id: alternate_aligner
+  entry_target: pipeline id chipseq with params.aligner set to bwa, bowtie2, chromap,
+    or star
+  use_when: The user requests a specific aligner, wants unmapped reads from Bowtie2
+    or STAR, or is comparing aligner outputs.
+- id: save_reusable_reference
+  entry_target: pipeline id chipseq with params.save_reference=true
+  use_when: The server must build missing indices from FASTA and preserve them under
+    genome/index for later reuse.
+- id: historical_reuse
+  entry_target: run_list, run_get, run_artifacts, and optional nextflow_run from_run_id
+  use_when: The user asks to find, compare, reuse, or restart prior chipseq runs.
+limitations:
+- The skill does not validate biological study design beyond the samplesheet and
+  pipeline QC rules.
+- HOMER annotation is driven by the supplied GTF/GFF in this pipeline package; there
+  is no separate HOMER database parameter in the current schema.

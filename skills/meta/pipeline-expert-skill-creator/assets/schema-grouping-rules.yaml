@@ -1,0 +1,178 @@
+generator:
+  version: v1
+  output_files:
+    - assets/schema-index.yaml
+    - assets/schema-groups/*.yaml
+    - references/schema-groups/*.md when `--write-reference-drafts` is enabled
+  grouping_precedence:
+    - Prefer root `allOf` order plus referenced `definitions` or `$defs` section ids from the current `nextflow_schema.json`.
+    - Fall back to the heuristic groups in this file only when the schema does not expose stable top-level sections.
+  override_contract:
+    top_level_fields:
+      - grouping_strategy
+      - force_groups
+      - group_overrides
+      - parameter_overrides
+    group_override_fields:
+      - label
+      - use_when
+      - selection_rule
+      - coverage_notes
+    parameter_override_fields:
+      - group_id
+      - classification
+      - channel
+      - placeholder
+      - example_values
+      - mapping_notes
+      - lookup_priority
+      - confidence
+      - mapping_flags
+
+heuristics:
+  path_formats:
+    - file-path
+    - directory-path
+  config_scope_names:
+    - max_cpus
+    - max_memory
+    - max_time
+  authoring_only_names:
+    - pipelines_testdata_base_path
+  authoring_only_prefixes:
+    - config_profile_
+    - custom_config_
+    - igenomes_
+  input_name_keywords:
+    - input
+    - sample
+    - samplesheet
+    - sheet
+    - manifest
+    - reads
+    - design
+    - metadata
+    - table
+    - matrix
+  input_description_keywords:
+    - sample sheet
+    - samplesheet
+    - manifest
+    - metadata
+    - input file
+    - input directory
+  reference_name_keywords:
+    - fasta
+    - gtf
+    - gff
+    - bed
+    - genome
+    - transcript
+    - annotation
+    - db
+    - database
+    - index
+    - indices
+    - transcriptome
+    - whitelist
+    - blacklist
+  reference_description_keywords:
+    - reference genome
+    - prebuilt index
+    - pre-built index
+    - database
+    - annotation
+    - transcriptome
+    - fasta
+    - gtf
+  output_name_keywords:
+    - outdir
+    - output
+    - report
+    - publish
+    - save
+    - email
+    - notification
+    - multiqc
+  output_description_keywords:
+    - output directory
+    - output folder
+    - report
+    - multiqc
+    - email
+    - publish
+    - save intermediate
+  route_name_keywords:
+    - aligner
+    - pseudo
+    - umi
+    - kraken
+    - bracken
+    - contaminant
+    - trim
+    - dedup
+    - skip
+    - with_
+    - enable
+    - disable
+    - mode
+    - method
+    - threshold
+    - cutoff
+  route_description_keywords:
+    - route
+    - workflow
+    - aligner
+    - pseudo aligner
+    - contamination
+    - umi
+    - deduplication
+    - trimming
+    - threshold
+  non_runtime_description_keywords:
+    - institutional config
+    - test dataset
+    - hidden helper
+
+groups:
+  - id: input_paths_and_manifests
+    label: Input Paths And Manifests
+    use_when: The runtime agent needs the exact input field name or path shape for a server-local manifest or input file.
+    selection_rule: Use this group for primary inputs, samplesheets, manifests, and other path-like input files the user must provide or confirm.
+    coverage_notes: Contains path-like primary inputs plus report-side input assets that still need exact server-local path mapping.
+    placeholder_root: <server_input_root>
+
+  - id: references_and_indices
+    label: References And Indices
+    use_when: The run depends on reference files, databases, or prebuilt indices.
+    selection_rule: Use this group when reference assets shape compatibility, startup cost, or major output families.
+    coverage_notes: Contains reference genome files, databases, prebuilt index paths, and reference-behavior switches tied to compatibility or reuse.
+    placeholder_root: <server_reference_root>
+
+  - id: route_selectors_and_booleans
+    label: Route Selectors And Booleans
+    use_when: A boolean, threshold, or route-local switch materially changes which workflow branch will run.
+    selection_rule: Use this group for route-shaping switches, preprocessing toggles, UMI settings, and numeric thresholds tied to execution choice.
+    coverage_notes: Contains high-impact switches and route-local tuning values that materially change behavior.
+    placeholder_root: null
+
+  - id: enums_and_choice_params
+    label: Enums And Choice Params
+    use_when: The agent must map one exact allowed value from the current schema.
+    selection_rule: Use this group for enums or constrained choice parameters whose allowed values materially alter execution or outputs.
+    coverage_notes: Contains constrained choice parameters whose allowed values must be mapped exactly to the current schema.
+    placeholder_root: null
+
+  - id: outputs_and_reporting
+    label: Outputs And Reporting
+    use_when: The user wants to control output roots, saved intermediates, reports, or notifications.
+    selection_rule: Use this group for output destinations, reporting, publication controls, and saved intermediate toggles that affect review or reuse.
+    coverage_notes: Contains output root, saved intermediate toggles, and reporting or notification options that affect published artifacts.
+    placeholder_root: <server_output_root>
+
+  - id: tuning_metadata_and_notifications
+    label: Tuning Metadata And Notifications
+    use_when: A failure or advanced request depends on low-frequency tuning, metadata, or hidden helper fields.
+    selection_rule: Use this group for advanced tuning, institutional metadata, hidden flags, or helper fields that rarely belong in ordinary planning.
+    coverage_notes: Contains advanced tuning, hidden flags, institutional config metadata, and helper fields preserved for exact lookup.
+    placeholder_root: null
