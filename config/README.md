@@ -4,8 +4,8 @@ This directory contains the YAML template and the private configuration used by 
 NextMCP server. All deployment paths refer to the **analysis server**.
 
 | File | Purpose |
-| --- | --- | --- |
-| [config.example.yaml](config.example.yaml) |
+| --- | --- |
+| [config.example.yaml](config.example.yaml) |Editable configuration template |
 | README.md | Configuration reference and setup instructions |
 
 The instructions below follow the current configuration loader and server implementation.
