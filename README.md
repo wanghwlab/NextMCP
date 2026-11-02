@@ -1,11 +1,8 @@
 # NextMCP
 
-**An agent-oriented framework built on the Model Context Protocol that separates pipeline-agnostic execution control from pipeline-specific expertise.**
+## Overview
 
-NextMCP connects an AI agent on a client computer to a controlled Nextflow execution interface on an analysis server.
-The server provides a common execution layer for preparing launches, tracking runs,
-inspecting outputs, and recovering from failures. Client-side expert skills guide
-pipeline-specific input selection, parameter choices, quality control, and troubleshooting.
+**An agent-oriented framework built on the Model Context Protocol that separates pipeline-agnostic execution control from pipeline-specific expertise.**
 
 [Installation](#installation) · [Configuration](#configuration) ·
 [Connect a client](#connect-a-client) · [Expert skills](#expert-skills) ·
@@ -13,7 +10,6 @@ pipeline-specific input selection, parameter choices, quality control, and troub
 
 ![NextMCP architecture: client-side skill authoring and execution, server-side Nextflow tools, and a separate evaluation procedure.](Img/nextmcp-overview.jpeg)
 
-*The panel illustrates the client–server architecture, comprising a pipeline-agnostic execution layer for Nextflow and client-side expert skills. An authoring agent retrieves pipeline source materials through the execution layer to generate pipeline-specific expert skills, which guide the runtime agent in configuring and executing existing pipelines. The execution layer provides controlled pipeline inspection, workflow preparation, launching, monitoring and resumption, together with restricted filesystem access and persistent project-level run records. The lower panel illustrates the evaluation workflow used in this study. An evaluation-preparation agent derives visible task prompts and hidden evaluation specifications from pipeline repository materials. Visible prompts were provided to the runtime agent, whereas hidden specifications were withheld from it and used by the evaluator after execution. A separate evaluation agent assesses saved run evidence against predefined criteria for task-to-configuration fidelity, execution completion and required-output presence. Skill authoring and evaluation are performed separately from runtime workflow execution.*
 
 ## What NextMCP provides
 
@@ -23,21 +19,14 @@ pipeline-specific input selection, parameter choices, quality control, and troub
 - **Recovery:** inspect a previous run and request a restart using its recorded identifier.
 - **Pipeline guidance:** use client-side skills for parameters, output review, and assay-specific QC.
 
-NextMCP leaves workflow execution to Nextflow and the selected pipeline. It does not expose
-a general shell-command tool. File tools enforce configured path permissions; these controls
-do not sandbox all workflow code. Compute allocation, container availability, reference
-selection, and scientific interpretation remain deployment or user responsibilities.
-
-## Deployment model
+## Deployment NextMCP
 
 | Location | Components | Role |
 | --- | --- | --- |
 | Server | NextMCP, Nextflow, Java, container runtime, inputs and references | Execute workflows and store run records, logs, and results |
 | Client computer | Codex or Claude Code, expert skills | Interpret requests and call MCP tools |
-| SSH connection, when needed | Local port forwarding | Reach a server bound to loopback |
+| SSH connection | Local port forwarding | Reach a server bound to loopback |
 
-Installing a client skill does not install a pipeline on the server. Nextflow resolves
-remote workflow identifiers. This deployment does not require a vendored pipeline directory.
 
 ## Installation
 
@@ -75,10 +64,13 @@ docker info
 ```bash
 # Clone the NextMCP repository
 git clone https://github.com/wanghwlab/NextMCP.git
+
 # Navigate into the project directory
 cd NextMCP
+
 # Install dependencies and create the virtual environment
 uv sync --locked
+
 # Create the local configuration file from the example
 cp config/config.example.yaml config/config.yaml
 ```
@@ -110,18 +102,22 @@ Quote environment-variable values as strings in YAML. See the
 After replacing paths, create the corresponding writable directories. For this example:
 
 ```bash
+# Create the required dir
 mkdir -p /srv/nextmcp/state /srv/nextmcp/projects /srv/nextmcp/logs /srv/nextmcp/.nextflow
+
 # Validate config only
 uv run nextmcp --config config/config.yaml --check-config
+
 # Print effective config with secrets redacted
 uv run nextmcp --config config/config.yaml --dump-config
+
 # Run
 uv run nextmcp --config config/config.yaml
 ```
 
-With this configuration, the MCP endpoint is **http://127.0.0.1:8321/mcp**. The example
+*With this configuration, the MCP endpoint is **http://127.0.0.1:8321/mcp**. The example
 template uses the same 127.0.0.1:8321 listener; always use your effective host and port.
-Keep the service running in a persistent terminal or managed service. 
+Keep the service running in a persistent terminal or managed service.*
 
 ## Connect a client
 
@@ -239,7 +235,7 @@ See the [meta skill guide](skills/meta/README.md) for their roles and examples.
 
 Place the samplesheet, reads, and references on the server within readable directories.
 Confirm that the samplesheet uses server paths. In Codex, select or mention
-`$rnaseq-expert-skill`; in Claude Code, invoke `/rnaseq-expert-skill` or request it by name.
+`/rnaseq-expert-skill`; in Claude Code, invoke `/rnaseq-expert-skill` or request it by name.
 
 ```text
 # Then provide a task such as:
@@ -302,64 +298,36 @@ to create or update a package from a selected official pipeline release:
 4. Validate the package and evaluate its answers without launching Nextflow.
 5. Review changes, back up the installed skill, and install the accepted package on the client.
 
-Authoring from a separate checkout does not require server-side material inspection or
-upgrading a workflow used by an existing run. Scaffolding scripts produce editable starting
-packages; they do not complete scientific review automatically.
-
 ```bash
 uv run python skills/meta/pipeline-expert-skill-creator/scripts/validate_expert_skill.py \
   --skill-root skills/experts/rnaseq-expert-skill
 ```
 
-Each expert package's `evals/evals.json` contains evaluation prompts and assertions. Generated
-answers and scores belong in a separate workspace. Offline evaluation means no real workflow
-execution; a model CLI may still contact its provider. Heuristic grading and static validation
-do not establish biological correctness. See the
+Each expert package's `evals/evals.json` contains evaluation prompts and assertions.  See the
 [evaluation guide](skills/experts/README.md) for package contents and limitations.
 
-To evaluate all 13 current expert skills with an authenticated Codex CLI, run in Bash:
+To evaluate all 13 current expert skills with an authenticated Codex CLI:
 
 ```bash
 bash skills/experts/all_evals.sh
 ```
 
-This requests gpt-6-astra explicitly and writes new results under evaluation-output/.
-It starts independent model sessions.
-The model generates answers and local heuristic rules grade them. Model access is required;
-the script does not silently substitute another model. Use `--dry-run` to create deliberately
-failing placeholders without invoking a model. Configure an evaluation client without live
-analysis MCP connections. Full options and a PowerShell single-package example are in the
+Full options and a PowerShell single-package example are in the
 [expert evaluation guide](skills/experts/README.md#evaluate-all-13-skills).
 
 The [meta skills](skills/meta/README.md) also support visible tasks, hidden evaluation
-specifications, and run-level assessment. These are separate from ordinary analysis and
-question-based skill checks.
+specifications, and run-level assessment. *(These are separate from ordinary analysis and
+question-based skill checks.)*
 
 The [authoring guide](skills/meta/README.md#generate-or-update-an-expert-skill) provides
 source collection, staged generation, validation, evaluation, and client replacement
-commands. It also explains the six meta skills and the distinction between offline
-questions and tests that require completed workflow evidence.
+commands. 
 
-## Development
+## Cite Us
 
-```bash
-uv sync --locked --extra dev
-uv run ruff format .
-uv run ruff check .
-uv run mypy src/nextmcp
-uv run pytest
 ```
 
-`uv sync --extra dev` includes the optional development dependencies such as pytest;
-`--locked` also prevents an implicit lockfile update. `uv run pytest` runs the test suite
-inside the project environment. Ordinary analysis does not require running these tests.
-
-Tests cover service behavior, file permissions, launch handling, and skill maintenance.
-Schema checks cover packaged group consistency and generator behavior using a small
-synthetic schema. They do not establish complete coverage of an upstream release. Workflow-task definitions
-under tests/pipeline_support are separate from expert-skill questions. See the
-[test directory guide](tests/README.md) for each module, retained task inputs, and the
-scope and limitations of these checks.
+```
 
 ## License
 
