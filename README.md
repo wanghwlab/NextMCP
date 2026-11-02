@@ -8,7 +8,7 @@
 [Connect a client](#connect-a-client) · [Expert skills](#expert-skills) ·
 [First analysis](#first-analysis) · [Authoring and evaluation](#authoring-and-evaluation)
 
-![NextMCP architecture: client-side skill authoring and execution, server-side Nextflow tools, and a separate evaluation procedure.](Img/nextmcp-overview.jpeg)
+![NextMCP architecture: client-side skill authoring and execution, server-side Nextflow tools, and a separate evaluation procedure.](Img/NextMCP Architecture.pdf)
 
 
 ## What NextMCP provides
