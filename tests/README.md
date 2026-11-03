@@ -1,21 +1,17 @@
 # Software tests and workflow evaluation tasks
 
-Keep this directory in the source release. Most users do not edit or run it during ordinary
-analysis; maintainers and users validating an installation can run it with pytest.
+Maintainers and users validating an installation can run it with pytest.
 
 ```bash
+# Synchronizes the Python environment
 uv sync --extra dev
+
+# Runs pytest in the project environment
 uv run pytest
 ```
 
-The first command synchronizes the Python environment and includes the optional `dev`
-dependencies defined in `pyproject.toml`, such as pytest and lint tools. It does not install
-pipeline datasets. The second runs pytest in the project environment; pytest discovers
-`test_*.py` files under the configured test directory.
-
 `conftest.py` provides shared temporary files, isolated test configuration, and helper
-functions. Users do not replace its temporary paths with their own production server
-configuration. Tests change when behavior, supported interfaces, or source versions change.
+functions. 
 
 ## Test modules
 
@@ -37,35 +33,16 @@ configuration. Tests change when behavior, supported interfaces, or source versi
 | `test_pipeline_expert_skill_creator_generator.py` | Skill generation, validation, and offline-evaluation helpers |
 | `test_pipeline_support_contracts.py` | Task/specification structure, visibility rules, and documented launch conventions |
 
-Schema tests check the consistency of packaged groups and exercise generation with a
-small synthetic schema defined in the test itself. These checks do not establish full
-coverage of an official pipeline release; that requires the matching authoring source
-bundle. Tests of runner mechanics use mock agents and do not establish model quality.
 
 ## Two different kinds of evaluation input
 
-| Location | Evaluated behavior | Main contents | Real Nextflow execution? |
-| --- | --- | --- | --- |
-| `pipeline_support/<pipeline>/` | Translate a task into a specified run, complete it, and produce required outputs | Visible task, hidden specification, localization plan/script | Needed for actual run-level scoring; not merely to validate these files |
-| `skills/experts/<pipeline>-expert-skill/evals/` | Use a skill to answer planning, parameter, output/QC, and coverage questions | Questions, expected answers, assertions | No |
+| Location | Evaluated behavior | Main contents |
+| --- | --- | --- |
+| `pipeline_support/<pipeline>/` | Translate a task into a specified run, complete it, and produce required outputs | Visible task, hidden specification, localization plan/script |
+| `skills/experts/<pipeline>-expert-skill/evals/` | Use a skill to answer planning, parameter, output/QC, and coverage questions | Questions, expected answers, assertions |
 
 Within `pipeline_support/`, `smoke.task.md` is visible to the evaluated agent; `smoke.yaml`
 is the hidden evaluation specification. `smoke.localization.yaml` and `localize_testdata.py`
-describe and prepare local inputs. Keep hidden specifications out of the executing agent's
-context when comparing skill and no-skill conditions.
+describe and prepare local inputs.
 
-`test_pipeline_support_contracts.py` checks these reusable definitions. It supports the
-paper's method but is not an experiment log or a biological workflow. Keep it with the
-task definitions. A deliberately minimal runtime-only distribution could omit both, but
-the full source release should retain them for method reuse. Removing only the test leaves
-the definitions without their consistency checks.
-
-Some historical localization scripts still need upstream files and deployment-specific
-paths; a clean source checkout is not a prepared biological test environment. Historical
-run results are not included by retaining these task definitions.
-
-## Directory naming
-
-`tests/` is a convention, not a Python requirement. Renaming it would require updating
-pytest `testpaths`, imports such as `tests.conftest`, fixture paths, task references,
-documentation, and any automation. Keep the current name unless there is a concrete need.
+`test_pipeline_support_contracts.py` checks these reusable definitions.
