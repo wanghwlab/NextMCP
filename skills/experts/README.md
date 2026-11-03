@@ -41,7 +41,7 @@ uv run python skills/meta/pipeline-expert-skill-creator/scripts/run_offline_eval
 
 This release contains 108 questions across 13 evals/evals.json files. 
 
-## These are the current package targets.
+## These are the current package release
 
 | Pipeline | Version |
 | --- | --- |
