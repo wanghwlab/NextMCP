@@ -15,8 +15,6 @@ or evaluation is performed; the NextMCP server does not load them.
 | [pipeline-test-contract-builder](pipeline-test-contract-builder/SKILL.md) | The pipeline's own test materials and a target environment | Coordinates classification, localization, and conversion; reports readiness or blockers | Prepare a complete evaluation task |
 | [pipeline-smoke-evaluator](pipeline-smoke-evaluator/SKILL.md) | A hidden specification and evidence from a completed run | Checks task translation, completion, and required outputs | Evaluate an existing run |
 
-A "smoke contract" in existing filenames and skill text means a hidden evaluation
-specification for a lightweight workflow test. It is not a server execution API.
 
 ## How the test helpers fit together
 
@@ -30,20 +28,7 @@ Official pipeline test materials
 ```
 
 The contract builder coordinates the first three helpers. Its output contains
-classification, localization, contract, and final_status sections. It does not establish
-that an analysis ran successfully. Localization can download data and write files; it is
-not the same as offline question-based evaluation.
-
-The classifier distinguishes profile-only, profile-plus-tests-config, requires-local-cache,
-and unsuitable-for-generic-smoke setups. Its evidence comes from upstream files such as
-nextflow.config, conf/test*.config, tests/nextflow.config, and tests/*.nf.test. It does not
-assume that every pipeline has a complete or directly reusable test.
-
-The converter separates the task shown to the executing agent from the hidden launch and
-output checks. A visible task describes the workflow goal, available inputs, constraints,
-and requested deliverables. Resource caps describe the permitted CPU, memory, and runtime
-settings for that task; they are not measured resource consumption. Keep the hidden
-specification out of the executing agent's context during an ablation comparison.
+classification, localization, contract, and final_status sections.
 
 ### Example: prepare a new workflow evaluation task
 
@@ -76,8 +61,7 @@ Do not rerun the workflow.
 ```
 
 The minimum evidence is run_request.json, run_result.json, and output_checks.json.
-The evaluator returns pass, fail, or insufficient_evidence. Its output-presence check
-does not establish biological validity or replace assay-specific QC.
+The evaluator returns pass, fail, or insufficient_evidence.
 
 ## Generate or update an expert skill
 
@@ -96,9 +80,6 @@ Expert-skill authoring is a separate procedure from constructing workflow evalua
 6. Review the changes and replace the maintained source package. Back up and replace each
    client installation explicitly; editing this repository alone does not update it.
 
-A checkout used for authoring can live outside this repository. It does not need to be
-under nf_pipeline, and using it does not upgrade a server workflow or a previous run.
-Inspect nested documentation and relevant modules directly when the bundle omits them.
 
 ### Authoring commands
 
@@ -117,8 +98,7 @@ uv run python "$scripts/scaffold_expert_skill.py" \
   --output-root "$authoring_dir/rnaseq-expert-skill" --pipeline-version 3.22.2
 ```
 
-Scaffolding produces a starting package, not a reviewed expert skill. Edit and complete
-that staged package before running:
+Edit and complete that staged package before running:
 
 ```bash
 uv run python "$scripts/validate_expert_skill.py" \
@@ -134,8 +114,6 @@ uv run python "$scripts/run_offline_evals.py" \
 ```
 
 For an update, compare the staged source-derived package against the existing package.
-Do not scaffold directly over a maintained or installed skill: that can overwrite curated
-content. A version label supplied to the scaffold does not verify the checkout's version.
 
 | Script in pipeline-expert-skill-creator/scripts | Role |
 | --- | --- |
@@ -147,8 +125,7 @@ content. A version label supplied to the scaffold does not verify the checkout's
 | run_offline_evals.py | Runs questions through a selected model CLI and produces local heuristic grades |
 
 Validation without a source bundle cannot establish complete coverage of that source.
-Offline evaluation means no real workflow execution; the model CLI may contact its service.
-Use an evaluation client without live analysis MCP connections. See the
+Offline evaluation means no real workflow execution. See the
 [expert evaluation README](../experts/README.md) for all-13 execution, output files,
 model selection, and grading limitations.
 
@@ -160,23 +137,6 @@ model selection, and grading limitations.
 | ~/.agents/skills/ on the client | User-wide Codex installation |
 | ~/.claude/skills/ on the client | User-wide Claude Code installation |
 | evaluation-output/ or a named external workspace | Generated answers, grades, and review records |
-
-Copy the complete selected skill directory, including SKILL.md, assets, and references.
-Evaluation questions are retained in the source package; ordinary analysis does not need
-to read them. Do not install a workspace, a single SKILL.md by itself, or a parent directory
-containing multiple packages as though it were one skill.
-
-For the contract builder, install all four pipeline-test-* packages so their instructions
-remain available. Install pipeline-smoke-evaluator separately for post-run review.
-The creator is independent of those test helpers. Use the
-[main installation instructions](../../README.md#install-on-the-client), replacing the
-expert source directory with the selected meta package.
-
-When updating an installed skill, move its existing directory to a dated backup outside
-the client's skill-search directories, then copy the reviewed package to the original
-destination. Avoid merging over an old package, which can leave obsolete files. Open a
-new client session and verify the selected skill before use. No server restart is needed
-for a client-only skill update.
 
 Keep these six maintained packages in a source release that supports skill authoring and
 evaluation. Runtime-only users can leave them uninstalled.
