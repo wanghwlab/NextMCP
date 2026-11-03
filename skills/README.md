@@ -17,26 +17,92 @@ Current layout is class-based:
 ## Relationship Map
 
 ```mermaid
+---
+config:
+  theme: base
+  htmlLabels: false
+  themeVariables:
+    fontFamily: Arial, sans-serif
+    fontSize: 16px
+    lineColor: "#475569"
+  flowchart:
+    useMaxWidth: true
+    nodeSpacing: 24
+    rankSpacing: 40
+    wrappingWidth: 210
+    curve: linear
+---
 flowchart TD
-    A["Versioned pipeline checkout or enabled MCP material inspection"] --> B["pipeline-expert-skill-creator"]
-    B --> C["skills/experts/<pipeline>-expert-skill/"]
-    C --> D["Client agent uses expert skill with nextmcp"]
+    A["`Versioned pipeline checkout or enabled MCP material inspection`"]
 
-    A --> E["pipeline-test-contract-builder"]
-    E --> F["pipeline-test-mode-classifier"]
-    E --> G["pipeline-test-config-localizer"]
-    E --> H["pipeline-test-converter"]
-    F --> I["tests/pipeline_support/<pipeline>/smoke.yaml"]
+    B["`pipeline-expert-skill-creator`"]
+
+    C["`skills/experts/
+    PIPELINE-expert-skill/`"]
+
+    D["`Client agent uses
+    expert skill with nextmcp`"]
+
+    E["`pipeline-test-contract-builder`"]
+
+    F["`pipeline-test-
+    mode-classifier`"]
+
+    G["`pipeline-test-
+    config-localizer`"]
+
+    H["`pipeline-test-
+    converter`"]
+
+    I["`tests/pipeline_support/
+    PIPELINE/smoke.yaml`"]
+
+    J["`tests/pipeline_support/
+    PIPELINE/smoke.task.md`"]
+
+    K["`Completed smoke run`"]
+
+    L["`Saved eval bundle`"]
+
+    M["`pipeline-smoke-evaluator`"]
+
+    N["`Simple smoke verdict`"]
+
+    A --> B
+    B --> C
+    C --> D
+
+    A --> E
+    E --> F
+    E --> G
+    E --> H
+
+    F --> I
     G --> I
     H --> I
-    H --> J["tests/pipeline_support/<pipeline>/smoke.task.md"]
+    H --> J
 
-    D --> K["Completed smoke run"]
-    K --> L["Saved eval bundle"]
-    I --> M["pipeline-smoke-evaluator"]
+    D --> K
+    K --> L
+
+    I --> M
     L --> M
-    M --> N["Simple smoke verdict"]
+    M --> N
+
+    classDef source fill:#F1F5F9,stroke:#64748B,color:#0F172A,stroke-width:1.5px;
+    classDef tool fill:#EFF6FF,stroke:#3B82F6,color:#172554,stroke-width:1.5px;
+    classDef file fill:#F0FDF4,stroke:#16A34A,color:#14532D,stroke-width:1.5px;
+    classDef execution fill:#FFF7ED,stroke:#EA580C,color:#7C2D12,stroke-width:1.5px;
+    classDef verdict fill:#F5F3FF,stroke:#7C3AED,color:#4C1D95,stroke-width:2px;
+
+    class A source;
+    class B,E,F,G,H,M tool;
+    class C,I,J,L file;
+    class D,K execution;
+    class N verdict;
 ```
+
+
 
 This flow has three main paths:
 
@@ -69,10 +135,10 @@ Current source packages:
 - `skills/meta/pipeline-test-converter/`
 - `skills/meta/pipeline-test-mode-classifier/`
 
-Use the existing `skills/` source packages as the starting point, or generate a new package with
-`skill-creator` plus `pipeline-expert-skill-creator`.
+**Use the existing `skills/` source packages as the starting point, or generate a new package with
+`skill-creator` plus `pipeline-expert-skill-creator`.**
 
 See the [expert package guide](experts/README.md) for current versions, offline questions,
-and the all-13 evaluation script. See the [meta skill guide](meta/README.md) for generation,
-updates, test preparation, and installation. Generated workspaces and saved responses are
-not source packages.
+and the all-13 evaluation script. 
+See the [meta skill guide](meta/README.md) for generation,
+updates, test preparation, and installation. 
