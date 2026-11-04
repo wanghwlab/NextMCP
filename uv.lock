@@ -782,7 +782,7 @@ wheels = [
 
 [[package]]
 name = "nextmcp"
-version = "0.5.11"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },
